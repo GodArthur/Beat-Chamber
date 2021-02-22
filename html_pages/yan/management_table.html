@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Table</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+	<!--===============================================================================================-->
+
+
+</head>
+
+<body>
+
+
+
+	<div class="limiter">
+
+		<div class="container-table">
+			<div class="icon-bar">
+				<a class="active" href="#"><i class="fa fa-user-edit"></i><br>
+					<h6>Clients</h6>
+				</a>
+				<a href="#"><i class="fa fa-music"></i><br>
+					<h6>Albums</h6>
+				</a>
+				<a href="#"><i class="fa fa-bullseye"></i><br>
+					<h6>Tracks</h6>
+				</a>
+				<a href="#"><i class="fa fa-file-alt"></i><br>
+					<h6>Orders</h6>
+				</a>
+				<a href="#"><i class="fa fa-star-half-alt"></i><br>
+					<h6>Reviews</h6>
+				</a>
+				<a href="#"><i class="fa fa-chart-bar"></i><br>
+					<h6>Reports</h6>
+				</a>
+				<a href="#"><i class="fa fa-broadcast-tower"></i><br>
+					<h6>RSS Feeds</h6>
+				</a>
+				<a href="#"><i class="fa fa-chart-line"></i><br>
+					<h6>Surveys</h6>
+				</a>
+				<a href="#"><i class="fa fa-ad"></i><br>
+					<h6>Ads</h6>
+				</a>
+			</div>
+			<div class="wrap-table">
+				<div class="table-title">
+					<div class="row">
+						<div class="col-sm-7 tabletitle">
+							<h2>Client Details</h2>
+						</div>
+						<div class="col-sm-4">
+							<form class="form-inline">
+								<input class="form-control mr-sm-2" type="search" placeholder="Search"
+									aria-label="Search">
+								<button class="btn btn-light btn-rounded" type="submit">Search</button>
+							</form>
+						</div>
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-light btn-rounded float-right" data-toggle="modal"
+							data-target="#modalForm">Add New Client</button>
+
+
+						</div>
+					</div>
+				</div>
+				<div class="table table-striped">
+					<table id="dtBasicExample">
+						<thead>
+							<tr class="table-head">
+								<th class="column1">Client Number</th>
+								<th class="column2">Title</th>
+								<th class="column3">First Name</th>
+								<th class="column4">Last Name</th>
+								<th class="column5">Cell telephone</th>
+								<th class="column6">Role</th>
+								<th class="column7">Edit</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="column1">102033111</td>
+								<td class="column2">Mr.</td>
+								<td class="column3">White</td>
+								<td class="column4">Walter</td>
+								<td class="column5">5140290321</td>
+								<td class="column6"><span class="badge badge-primary">Administrator</span></td>
+								<td class="column7"><a class="edit" title="Edit" data-toggle="modal"
+									data-target="#modalForm"><i class="material-icons">&#xE254;</i></a></td>
+							</tr>
+							<tr>
+								<td class="column1">102033111</td>
+								<td class="column2">Mr.</td>
+								<td class="column3">White</td>
+								<td class="column4">Walter</td>
+								<td class="column5">5140290321</td>
+								<td class="column6"><span class="badge badge-primary">Administrator</span></td>
+								<td class="column7"><a class="edit" title="Edit" data-toggle="modal"
+									data-target="#modalForm"><i class="material-icons">&#xE254;</i></a></td>
+							</tr>
+							<tr>
+								<td class="column1">102033111</td>
+								<td class="column2">Mr.</td>
+								<td class="column3">White</td>
+								<td class="column4">Walter</td>
+								<td class="column5">5140290321</td>
+								<td class="column6"><span class="badge badge-primary">Administrator</span></td>
+								<td class="column7"><a class="edit" title="Edit" data-toggle="modal"
+									data-target="#modalForm"><i class="material-icons">&#xE254;</i></a></td>
+							</tr>
+							<tr>
+								<td class="column1">102033111</td>
+								<td class="column2">Mr.</td>
+								<td class="column3">White</td>
+								<td class="column4">Walter</td>
+								<td class="column5">5140290321</td>
+								<td class="column6"><span class="badge badge-dark">Client</span></td>
+								<td class="column7"><a class="edit" title="Edit" data-toggle="modal"
+									data-target="#modalForm"><i class="material-icons">&#xE254;</i></a></td>
+							</tr>
+							<tr>
+								<td class="column1">102033111</td>
+								<td class="column2">Mr.</td>
+								<td class="column3">White</td>
+								<td class="column4">Walter</td>
+								<td class="column5">5140290321</td>
+								<td class="column6"><span class="badge badge-dark">Client</span></td>
+								<td class="column7"><a class="edit" title="Edit" data-toggle="modal"
+									data-target="#modalForm"><i class="material-icons">&#xE254;</i></a></td>
+							</tr>
+							<tr>
+								<td class="column1">102033111</td>
+								<td class="column2">Mr.</td>
+								<td class="column3">White</td>
+								<td class="column4">Walter</td>
+								<td class="column5">5140290321</td>
+								<td class="column6"><span class="badge badge-dark">Client</span></td>
+								<td class="column7"><a class="edit" title="Edit" data-toggle="modal"
+									data-target="#modalForm"><i class="material-icons">&#xE254;</i></a></td>
+							</tr>
+							<tr>
+								<td class="column1">102033111</td>
+								<td class="column2">Mr.</td>
+								<td class="column3">White</td>
+								<td class="column4">Walter</td>
+								<td class="column5">5140290321</td>
+								<td class="column6"><span class="badge badge-dark">Client</span></td>
+								<td class="column7"><a class="edit" title="Edit" data-toggle="modal"
+										data-target="#modalForm"><i class="material-icons">&#xE254;</i></a></td>
+							</tr>
+
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div id="modalForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+
+					<div class="modal-header text-center">
+						<h4 class="modal-title font-weight-bold">Edit Client</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form action="" method="POST" enctype="multipart/form-data" method="POST" id="ModalForm">
+						<div class="modal-body mx-4">
+
+							<div class="col-md-12 form-group form-inline">
+								<label for="editTitle" class="col-sm-2 col-form-label">Title</label>
+								<select class="col-sm-4 form-control" id="editTitle" name="title">
+									<option value="0">Mr.</option>
+									<option value="1">Mrs.</option>
+									<option value="2">Ms.</option>
+									<option value="3">Miss.</option>
+									<option value="4">Mx.</option>
+								</select>
+							</div>
+
+							<div class="col-md-12 form-group form-inline">
+								<label for="editFirstName" class="col-sm-2 col-form-label">First Name</label>
+								<input type="text" id="editFirstName" class="col-sm-10 form-control validate"
+									placeholder="First Name" required>
+							</div>
+							<div class="col-md-12 form-group form-inline">
+								<label for="editLastName" class="col-sm-2 col-form-label">Last Name</label>
+								<input type="text" id="editLastName" class="col-sm-10 form-control validate"
+									placeholder="Last Name" required>
+							</div>
+							<div class="col-md-12 form-group form-inline">
+								<label for="editEmail"class="col-sm-2 col-form-label">Email</label>
+								<input type="email" id="editEmail" class="col-sm-10 form-control validate"
+									placeholder="name@example.com" required>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<a class="btn btn-secondary" data-dismiss="modal">Close</a>
+							<a type="submit" id="SaveButton" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+
+</html>
