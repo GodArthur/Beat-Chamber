@@ -5,7 +5,7 @@
     <link type="text/css" rel="stylesheet" href="styles/webpage_style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Changa:wght@800&display=swap" rel="stylesheet"> 
-    <title>Template</title>
+    <title>Review Page</title>
 </head>
 <body>
     <header>
@@ -30,7 +30,39 @@
 			<img class="cart-icon" src="images/shopping-cart.png">
         </div>
     </nav>
-       <section>
+    <section>
+        <div>
+            <h2>Write a Review</h2>
+            <div id="album-list">
+                <div class="album-display-small">
+                    <img class="album-img-small" src="images/albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png">
+                    <p>If You're Reading This It's Too Late</p>
+                    <p>Drake</p>
+                </div>
+                
+                <div class=star-review>
+                <form>
+                    <input type="radio" name="onestar" value="1">
+                    <label for="1">1</label>
+                    <input type="radio" name="twostar" value="2">
+                    <label for="2">2</label>
+                    <input type="radio" name="threestar" value="3">
+                    <label for="3">3</label>
+                    <input type="radio" name="fourstar" value="4">
+                    <label for="4">4</label>
+                    <input type="radio" name="fivestar" value="5">
+                    <label for="5">5</label>
+                </form>
+                </div>
+                
+                <form class="review-textbox">
+                    <textarea rows = "5" cols = "60" name = "description" placeholder="Leave you review here..."></textarea><br>
+                    <input type = "submit" value = "submit" />
+                </form>
+            </div>
+        </div>
+    </section>
+	<section>
         <a href="https://www.crunchyroll.com/" target="_blank" rel="noopener noreferrer">
             <img class="horizontal-ad" src="images/ads/AnimeAd.PNG">
         </a>
@@ -43,7 +75,7 @@
         </p>
         <p>
             <a href="https://www.omnijava.com/">Omnijava</a>
-        </p>
+		</p>
     </footer>
 </body>
 </html>
