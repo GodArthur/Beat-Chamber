@@ -215,3 +215,14 @@ a:visited {
 #album-list {
     width: 70%;
 }
+
+/*massimo adding new css for review page*/
+.review-textbox{
+    float: left;
+    
+}
+
+.star-review{
+    width: 50%;
+    padding: 10px;
+}
