@@ -1,13 +1,13 @@
-/* 
-    Created on : Feb. 22, 2021, 2:49:55 p.m.
-    Author     : Susan Vuu - 1735488
-*/
-
 header, section, footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 10px;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
 }
 
 header {
@@ -38,6 +38,7 @@ a:visited {
 }
 
 .main-title{
+    font-family: 'Changa', sans-serif;
     font-size: 20px;
     text-transform: uppercase;
     margin: 0;
@@ -76,15 +77,21 @@ a:visited {
     color: white;
 }
 
+#first {
+    margin-left: auto;
+}
+
 .cart-icon {
     height: 50px;
     width: 50px;
-    margin-left: 200px;
+	margin-left: 50px;
+	margin-right: 10px;
 }
 
 .search-button {
     padding: 5px;
     float: right;
+    height: 56px;
 }
 
 .search-button-img {
@@ -96,12 +103,14 @@ a:visited {
     padding: 16px;
     font-size: 15px;
     float: right;
+    margin-left: 270px;
 }
 
 .background-image {
     background-image: url(../images/home_page_background.jpg);
+	/*background-image: url(../images/starwars_album_spons.jpg);*/
     background-size: 100% 100%;
-    height: 700px;
+    height: 400px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -123,6 +132,7 @@ a:visited {
 }
 
 .genre-title {
+    font-family: 'Changa', sans-serif;
     font-size: 30px;
 }
 
@@ -159,8 +169,43 @@ a:visited {
     height: 80%;
 }
 
-#first {
-    margin-left: auto;
+.img-display {
+    padding: 10px;
+    height: 500px;
+}
+
+.album-left-ad {
+    float: left;
+    height: 100%;
+}
+
+.album-right-ad {
+    float: right;
+    height: 100%;
+}
+
+.title-artist {
+    
+}
+
+.ratings {
+    display: flex;
+    justify-content: center;
+}
+
+.album-songs {
+    text-align: left;
+}
+
+.song-item {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.release-date {
+    display: flex;
+    justify-content: space-between;
 }
 
 #album-genre {
@@ -170,4 +215,15 @@ a:visited {
 
 #album-list {
     width: 70%;
+}
+
+/*massimo adding new css for review page*/
+.review-textbox{
+    float: left;
+    
+}
+
+.star-review{
+    width: 50%;
+    padding: 10px;
 }

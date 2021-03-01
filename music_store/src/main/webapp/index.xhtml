@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+   <h:head>
+        <h:outputStylesheet library="styles" name="main.css" />
+        <title>Home Page</title>
+   </h:head>
+   <h:body>
+        <header>
+            <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
+        </header>
+       <nav>
+           <div class="topnav">
+               <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
+               <h:link value="Music"/>
+               <h:link value="Contact"/>
+               <h:link value="About"/>
+               <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
+           
+           <h:form>
+               <h:commandButton styleClass="search-button" value="Search"/>
+               <h:inputText a:placeholder="Search for music" styleClass="search"/>
+           </h:form>
+           </div>
+       </nav>
+    </h:body>
+</html>
