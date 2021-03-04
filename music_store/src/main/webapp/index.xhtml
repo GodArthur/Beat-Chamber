@@ -5,27 +5,179 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
-   <h:head>
+    <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
         <title>Home Page</title>
-   </h:head>
-   <h:body>
+    </h:head>
+    <h:body>
         <header>
             <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
         </header>
-       <nav>
-           <div class="topnav">
-               <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
-               <h:link value="Music"/>
-               <h:link value="Contact"/>
-               <h:link value="About"/>
-               <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
-           
-           <h:form>
-               <h:commandButton styleClass="search-button" value="Search"/>
-               <h:inputText a:placeholder="Search for music" styleClass="search"/>
-           </h:form>
-           </div>
-       </nav>
+        <nav>
+            <div class="topnav">
+                <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
+                <h:link value="Music"/>
+                <h:link value="Contact"/>
+                <h:link value="About"/>
+                <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
+                <h:form>
+                    <h:commandButton styleClass="search-button" value="Search"/>
+                    <h:inputText a:placeholder="Search for music" styleClass="search"/>
+                </h:form>
+            </div>
+        </nav>
+        <section class="background-section">
+            <h:graphicImage library="images" name="starwars_album_spons.jpg" height="100%" width="100%" styleClass="background-image"/>
+            <!--div class="album-ad">
+                <h:outputText value="Star Wars: The Empire Strikes Back Remastered Out Now"/>
+            </div-->
+        </section>
+        <section>
+            <div class="album-section" id="album-genre">
+                <h2 class="genre-title">Classical</h2>
+                <p class="album-description">Ochestral music that is light, sometimes airy, with homophonic melodies.</p>
+            </div>
+            <div class="album-section" id="album-list">
+                <div class="album-display-small">
+                    <a href="album_page.html">
+                        <h:graphicImage library="images" name="albums/classical/10_small.jpg" styleClass="album-img-small"/>
+                    </a>
+                    <p>10</p>
+                    <p>The Piano Guys</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/classical/bones_in_the_ocean_small.jpg" styleClass="album-img-small"/>
+                    <p>Bones In The Ocean</p>
+                    <p>The Long Johns</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/classical/piano_piano_small.jpg" styleClass="album-img-small"/>
+                    <p>Piano Piano</p>
+                    <p>Jeremiah Fraites</p>
+                </div>
+                <div class="see-more-container">
+                    <button class="see-more-button">See More »</button>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="album-section" id="album-genre">
+                <h2 class="genre-title">Hip Hop</h2>
+                <p class="album-description">Enjoy rhyming in your music.</p>
+            </div>
+            <div class="album-section" id="album-list">
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png" styleClass="album-img-small"/>
+                    <p>If You're Reading This It's Too Late</p>
+                    <p>Drake</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/hip_hop/Ne-Yo_-_Year_of_The_Gentleman.png" styleClass="album-img-small"/>
+                    <p>Year Of The Gentleman</p>
+                    <p>Ne-Yo</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/hip_hop/Roddy_Ricch_-_Please_Excuse_Me_for_Being_Antisocial.png" styleClass="album-img-small"/>
+                    <p>Please Excuse Me For Being Antisocial</p>
+                    <p>Roddy Ricch</p>
+                </div>
+                <div class="see-more-container">
+                    <button class="see-more-button">See More »</button>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="album-section" id="album-genre">
+                <h2 class="genre-title">Jazz</h2>
+                <p class="album-description">Soulful music.</p>
+            </div>
+            <div class="album-section" id="album-list">
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/jazz/come_away_with_me.jpg" styleClass="album-img-small"/>
+                    <p>Come Away With Me</p>
+                    <p>Norah Jones</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/jazz/Louis-Armstrong-What-A-Wonderful-World.jpg" styleClass="album-img-small"/>
+                    <p>What a Wonderful World</p>
+                    <p>Louis Armstrong</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/jazz/wallflower.jpg" styleClass="album-img-small"/>
+                    <p>Wallflower</p>
+                    <p>Diana Krall</p>
+                </div>
+                <div class="see-more-container">
+                    <button class="see-more-button">See More »</button>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="album-section" id="album-genre">
+                <h2 class="genre-title">Movie Soundtracks</h2>
+                <p class="album-description">Top soundtracks from great movies.</p>
+            </div>
+            <div class="album-section" id="album-list">
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/movie_soundtracks/Darkknight_album_cover.jpg" styleClass="album-img-small"/>
+                    <p>The Dark Knight</p>
+                    <p>Hans Zimmer</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/movie_soundtracks/HarrypotterPS_album_cover.jpg" styleClass="album-img-small"/>
+                    <p>Harry Potter and The Sorcerer's Stone</p>
+                    <p>John Williams</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/movie_soundtracks/Spider-Man_Far_From_Home_album_cover.jpg" styleClass="album-img-small"/>
+                    <p>Spider-Man: Far From Home</p>
+                    <p>Michael Giacchino</p>
+                </div>
+                <div class="see-more-container">
+                    <button class="see-more-button">See More »</button>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="album-section" id="album-genre">
+                <h2 class="genre-title">Rock</h2>
+                <p class="album-description">Get music with a strong beat.</p>
+            </div>
+            <div class="album-section" id="album-list">
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/rock/BOSSANOVA.jpg" styleClass="album-img-small"/>
+                    <p>BOSSANOVA</p>
+                    <p>Pixies</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/rock/Dark_Side_of_the_Moon.png" styleClass="album-img-small"/>
+                    <p>The Dark Side of the Moon</p>
+                    <p>Pink Floyd</p>
+                </div>
+                <div class="album-display-small">
+                    <h:graphicImage library="images" name="albums/rock/okcomputer.png" styleClass="album-img-small"/>
+                    <p>Ok Computer</p>
+                    <p>Radiohead</p>
+                </div>
+                <div class="see-more-container">
+                    <button class="see-more-button">See More »</button>
+                </div>
+            </div>
+        </section>
+        <section>
+            <a href="https://www.crunchyroll.com/" target="_blank" rel="noopener noreferrer">
+                <h:graphicImage library="images" name="ads/AnimeAd.PNG" styleClass="horizontal-ad"/>
+            </a>
+        </section>
+        <footer>
+            <p>© 2021 Copyright Beat Chambers</p>
+            <h3>Links</h3>
+            <p>
+                <a href="https://www.dawsoncollege.qc.ca/">Dawson College</a>
+            </p>
+            <p>
+                <a href="https://www.omnijava.com/">Omnijava</a>
+            </p>
+        </footer>
     </h:body>
 </html>
