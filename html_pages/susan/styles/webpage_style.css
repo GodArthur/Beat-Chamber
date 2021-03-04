@@ -12,6 +12,11 @@ footer {
   padding: 10px;
 }
 
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
 header {
   height: 130px;
   background-color: black;
@@ -86,7 +91,8 @@ a:visited {
 .cart-icon {
   height: 50px;
   width: 50px;
-  margin-left: 200px;
+  margin-left: 50px;
+  margin-right: 10px;
 }
 
 .search-button {
@@ -103,12 +109,14 @@ a:visited {
   padding: 16px;
   font-size: 15px;
   float: right;
+  margin-left: 150px;
 }
 
 .background-image {
   background-image: url(../images/home_page_background.jpg);
+  /*background-image: url(../images/starwars_album_spons.jpg);*/
   background-size: 100% 100%;
-  height: 700px;
+  height: 400px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -212,4 +220,20 @@ a:visited {
 
 #album-list {
   width: 70%;
+}
+
+/***TRACKS PAGE***/
+
+video {
+  float: left;
+}
+
+/*massimo adding new css for review page*/
+.review-textbox {
+  float: left;
+}
+
+.star-review {
+  width: 50%;
+  padding: 10px;
 }
