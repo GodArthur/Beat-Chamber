@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="styles" name="main.css" />
+        <title>Home Page</title>
+    </h:head>
+    <h:body>
+        <header>
+            <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
+        </header>
+        <nav>
+            <div class="topnav">
+                <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
+                <h:link value="Music"/>
+                <h:link value="Contact"/>
+                <h:link value="About"/>
+                <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
+                <h:form>
+                    <h:commandButton styleClass="search-button" value="Search"/>
+                    <h:inputText a:placeholder="Search for music" styleClass="search"/>
+                </h:form>
+            </div>
+        </nav>
+        
+        <div class="about_section">
+			<h2 id="page_title">HELP PAGE</h2>
+			<br/>
+			<br/>
+			
+			<div>
+			<h2 class="sub_title">Home</h2>
+			<hr/>
+			<br/>
+			<p class="alignTextLeft">•By pressing on the Home nagivation bar option You will be redirected to the home page</p>
+			</div>
+			
+			<br/>
+			<br/>
+			<br/>
+			
+			<div>
+			<h2 class="sub_title">Music</h2>
+			<hr/>
+			<br/>
+			<p class="alignTextLeft">•By pressing on the Music nagivation bar option You will be redirected to the music page where you will have access to </p>
+			</div>
+			
+			<br/>
+			<br/>
+			<br/>
+			
+			<div>
+			<h2 class="sub_title">Contact</h2>
+			<hr/>
+			<br/>
+			<p class="alignTextLeft">•By pressing on the Contact nagivation bar option You will be redirected to the contact page where you will have access to the information to contact the Beat chamber team</p>
+			</div>
+			
+			<br/>
+			<br/>
+			<br/>
+			
+			<div>
+			<h2 class="sub_title">HELP</h2>
+			<hr/>
+			<br/>
+			<p class="alignTextLeft">•By pressing on the Help nagivation bar option nothing will happen because you already are currently on the page</p>
+			</div>
+			
+			<br/>
+			<br/>
+			<br/>
+			
+			<div>
+			<h2 class="sub_title">SEARCH</h2>
+			<hr/>
+			<br/>
+			<p class="alignTextLeft">•You can search for a song by name through the search bar </p>
+			</div>
+			
+			<br/>
+			<br/>
+			<br/>
+			
+			<div>
+			<h2 class="sub_title">CART</h2>
+			<hr/>
+			<br/>
+			<p class="alignTextLeft">•The cart will have the items that you hve added to it</p>
+			</div>
+			
+			<br/>
+			<br/>
+			<br/>
+			
+			<div>
+			<h2 class="sub_title">Logo</h2>
+			<hr/>
+			<br/>
+			<p class="alignTextLeft">•By click on the logo you will be redirected to the home page it is the same as the home button on the navigation bar</p>
+			</div>
+        </div>
+        
+    <footer>
+        <p>© 2021 Copyright Beat Chamber</p>
+        <h3>Links</h3>
+        <p>
+            <a href="https://www.dawsoncollege.qc.ca/">Dawson College</a>
+        </p>
+        <p>
+            <a href="https://www.omnijava.com/">Omnijava</a>
+        </p>
+    </footer>
+</h:body>
+</html>
