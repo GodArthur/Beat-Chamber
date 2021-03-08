@@ -7,7 +7,7 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
-        <title>Login</title>
+        <title>#{msgs.login}</title>
     </h:head>
     <h:body>
         <header>
@@ -29,30 +29,20 @@
 
         <section class="container-loginpage">
             <div class="container-login">
-                <h:form class="validate-form">
-                    <label class="login-title">
-                        LOG IN
-                    </label>
-
-                    <div class="form-group">
-                        <div class="validate-input" data-validate="Enter username">
-                            <h:inputText  class="login-input" id="username" value="#{user.username}" a:placeholder="Username"/>
-                        </div>
+                <h:form>
+                    <h:outputLabel class="login-title" value="#{msgs.titlelogin}"/>
+                    <div>
+                        <h:inputText  class="login-input" id="username" value="#{user.username}" a:placeholder="Username"/>
                     </div>
-                    <div class="form-group">
-                        <div class="validate-input" data-validate="Enter password">
-                            <h:inputSecret class="login-input" id="password" value="#{user.password}" a:placeholder="Password"/>
-                        </div>
+                    <div>
+                        <h:inputSecret class="login-input" id="password" value="#{user.password}" a:placeholder="Password"/>
                     </div>
                     <div class="container-checkbox">
                         <h:selectBooleanCheckbox value = "Remember Me" id = "chkRememberMe" />
-                            <label class="label-remember">
-                                Remember me
-                            </label>
+                        <h:outputLabel class="label-remember" value="#{msgs.remember}"/>
                     </div>
-
-                    <div class="col text-center">
-                        <h:commandButton type="submit" value="Login" action=""/>
+                    <div>
+                        <h:commandButton type="submit" value="#{msgs.login}"/>
                     </div>
                 </h:form>
             </div>
