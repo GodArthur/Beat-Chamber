@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="styles" name="main.css" />
+        <title>Login</title>
+    </h:head>
+    <h:body>
+        <header>
+            <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
+        </header>
+        <nav>
+            <div class="topnav">
+                <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
+                <h:link value="Music"/>
+                <h:link value="Contact"/>
+                <h:link value="About"/>
+                <h:form>
+                    <h:commandButton styleClass="search-button" value="Search"/>
+                    <h:inputText a:placeholder="Search for music" styleClass="search"/>
+                </h:form>
+                <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
+            </div>
+        </nav>
+
+        <section class="container-loginpage">
+            <div class="container-login">
+                <h:form class="validate-form">
+                    <label class="login-title">
+                        LOG IN
+                    </label>
+
+                    <div class="form-group">
+                        <div class="validate-input" data-validate="Enter username">
+                            <h:inputText  class="login-input" id="username" value="#{user.username}" a:placeholder="Username"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="validate-input" data-validate="Enter password">
+                            <h:inputSecret class="login-input" id="password" value="#{user.password}" a:placeholder="Password"/>
+                        </div>
+                    </div>
+                    <div class="container-checkbox">
+                        <h:selectBooleanCheckbox value = "Remember Me" id = "chkRememberMe" />
+                            <label class="label-remember">
+                                Remember me
+                            </label>
+                    </div>
+
+                    <div class="col text-center">
+                        <h:commandButton type="submit" value="Login" action=""/>
+                    </div>
+                </h:form>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2021 Copyright Beat Chambers</p>
+            <h3>Links</h3>
+            <p>
+                <a href="https://www.dawsoncollege.qc.ca/">Dawson College</a>
+            </p>
+            <p>
+                <a href="https://www.omnijava.com/">Omnijava</a>
+            </p>
+        </footer>
+    </h:body>
+</html>
