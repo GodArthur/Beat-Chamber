@@ -210,6 +210,30 @@ a:visited {
     justify-content: space-between;
 }
 
+/*Ibrahim was here*/
+.sub_title{
+	text-align: left;
+	font-size:170%;
+	color:white;
+}
+
+.alignTextLeft{
+	text-align: left;
+	color:white;
+}
+
+/*Ibrahim was here*/
+.about_section{
+	background-color: #333;
+	height:950px;
+}
+
+/*Ibrahim was here*/
+#page_title{
+	font-size:300%;
+	color:white;
+}
+
 .release-date {
     display: flex;
     justify-content: space-between;
