@@ -1,4 +1,4 @@
-package com.beatchamber.controller.exceptions;
+package com.beatchamber.exceptions;
 
 public class NonexistentEntityException extends Exception {
 
