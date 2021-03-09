@@ -24,4 +24,16 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd">
 
+        <!-- Internationalization -->
+    <application>
+        <locale-config>
+            <default-locale>en_CA</default-locale>
+            <supported-locale>en_CA</supported-locale>
+            <supported-locale>fr_CA</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name>com.beatchamber.bundles.messages</base-name>
+            <var>msgs</var>
+        </resource-bundle>
+    </application>
 </faces-config>
