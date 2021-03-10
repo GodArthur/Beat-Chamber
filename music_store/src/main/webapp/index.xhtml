@@ -6,26 +6,15 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
-        <h:outputStylesheet library="styles" name="main.css" />
+        <h:outputStylesheet library="styles" name="main.css"/>
         <title>Home Page</title>
     </h:head>
     <h:body>
-        <header>
-            <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
-        </header>
-        <nav>
-            <div class="topnav">
-                <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
-                <h:link value="Music"/>
-                <h:link value="Contact"/>
-                <h:link value="About"/>
-                <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
-                <h:form>
-                    <h:commandButton styleClass="search-button" value="Search"/>
-                    <h:inputText a:placeholder="Search for music" styleClass="search"/>
-                </h:form>
-            </div>
-        </nav>
+        <div>
+            <ui:insert name="header_and_navbar">
+                <ui:include src="/templates/header_and_navbar.xhtml"/>
+            </ui:insert>
+        </div>
         <section class="background-section">
             <h:graphicImage library="images" name="starwars_album_spons.jpg" height="100%" width="100%" styleClass="background-image"/>
             <!--div class="album-ad">
@@ -169,15 +158,10 @@
                 <h:graphicImage library="images" name="ads/AnimeAd.PNG" styleClass="horizontal-ad"/>
             </a>
         </section>
-        <footer>
-            <p>© 2021 Copyright Beat Chambers</p>
-            <h3>Links</h3>
-            <p>
-                <a href="https://www.dawsoncollege.qc.ca/">Dawson College</a>
-            </p>
-            <p>
-                <a href="https://www.omnijava.com/">Omnijava</a>
-            </p>
-        </footer>
+        <div>
+            <ui:insert name="footer">
+                <ui:include src="/templates/footer.xhtml"/>
+            </ui:insert>
+        </div>
     </h:body>
 </html>
