@@ -27,12 +27,9 @@
                 </h:form>
                 <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
             </div>
-        </nav>
-
+        </nav>      
 
         <section class="container-signup">
-
-
             <div class="form-block">
                 <div class="signup-title">
                     <h3>Registration Info</h3>
@@ -53,7 +50,7 @@
                         <div class="input-group col-sm-12">
                             <h:outputLabel class="form-label" value="#{msgs.email}"/>
                             <h:inputText class="input-style col-sm-9" id="email" 
-                                          a:type="email"  required="true"
+                                         a:type="email"  required="true"
                                          requiredMessage="#{msgs.emailRequired}"/>
                             <h:message for="email" styleClass="errorMessage" style="color:red"/>
                         </div>
@@ -75,14 +72,14 @@
                         <div class="input-group col-sm-6">
                             <h:outputLabel class="form-label" value="#{msgs.firstname}"/>
                             <h:inputText class="input-style" id="first_name" 
-                                          required="true"
+                                         required="true"
                                          requiredMessage="#{msgs.firstnameRequired}"/>
                             <h:message for="first_name" styleClass="errorMessage" style="color:red"/>
                         </div>
                         <div class="input-group col-sm-6">
                             <h:outputLabel class="form-label" value="#{msgs.lastname}"/>
                             <h:inputText class="input-style" id="last_name" 
-                                          required="true"
+                                         required="true"
                                          requiredMessage="#{msgs.lastnameRequired}"/>
                             <h:message for="last_name" styleClass="errorMessage" style="color:red"/>
                         </div>
@@ -90,12 +87,20 @@
 
                     <div class="row">
                         <div class="input-group col-sm-6">
-                            <h:outputLabel class="form-label" value="#{msgs.cellPhone}"/>
-                            <h:inputText class="input-style" id="cellPhone" />
+                            <h:outputLabel class="form-label" value="#{msgs.homePhone}"/>
+                            <h:inputText class="input-style" id="homePhone" 
+                                         converter="com.beatchamber.PhoneNumberConverter">
+                                <f:ajax event="blur" render="@this"/>
+                            </h:inputText>
+                            <h:message for="homePhone" styleClass="errorMessage" style="color:red"/>
                         </div>
                         <div class="input-group col-sm-6">
-                            <h:outputLabel class="form-label" value="#{msgs.homePhone}"/>
-                            <h:inputText class="input-style" id="homePhone" />
+                            <h:outputLabel class="form-label" value="#{msgs.cellPhone}"/>
+                            <h:inputText class="input-style" id="cellPhone" 
+                                         converter="com.beatchamber.PhoneNumberConverter">
+                                <f:ajax event="blur" render="@this"/>
+                            </h:inputText>
+                            <h:message for="cellPhone" styleClass="errorMessage" style="color:red"/>
                         </div>
                     </div>
 
@@ -112,7 +117,7 @@
                         <div class="input-group col-sm-12">
                             <h:outputLabel class="form-label" value="#{msgs.repassword}"/>
                             <h:inputSecret class="input-style col-sm-7" id="re-password" 
-                                            required="true" requiredMessage="#{msgs.repasswordRequired}"/>
+                                           required="true" requiredMessage="#{msgs.repasswordRequired}"/>
                             <h:message for="re-password" styleClass="errorMessage" style="color:red"/>
                         </div>
                     </div>
