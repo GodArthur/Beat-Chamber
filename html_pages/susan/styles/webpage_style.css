@@ -32,8 +32,10 @@ footer {
   background-color: black;
 }
 
-body {
+body,
+html {
   font-family: "Arial";
+  position: relative;
 }
 
 a {
@@ -222,10 +224,79 @@ a:visited {
   width: 70%;
 }
 
-/***TRACKS PAGE***/
+/*****TRACKS PAGE*****/
 
-video {
+#track-section {
+  height: 1000px;
+}
+
+#track-display {
+  height: 500px;
+  width: 50%;
   float: left;
+  position: relative;
+}
+
+#image-wrapper {
+  position: absolute;
+  top: 8%;
+  right: 20%;
+}
+
+#track-title {
+  font-family: "gotham";
+  font-size: larger;
+}
+
+#track-content {
+  float: left;
+  width: 50%;
+  height: 500px;
+  text-align: left;
+  position: relative;
+}
+
+#content-wrapper {
+  position: absolute;
+  left: 10%;
+  top: 22%;
+  width: 50%;
+  height: 40%;
+  border-style: solid;
+  padding: 30px;
+  padding-left: 50px;
+  background-color: rgb(73, 72, 72);
+}
+
+.track-content-title {
+  margin-top: 15px;
+  font-family: "gotham";
+  font-size: 20px;
+}
+
+button {
+  display: inline;
+}
+
+.item-extra {
+  text-align: left;
+  font-size: 20px;
+  margin: 12px;
+}
+
+#add-btn {
+  color: #5b3ec9;
+  margin-bottom: 10px;
+}
+
+.album-cover-group {
+  text-align: center;
+  margin-right: 40px;
+  display: inline-block;
+}
+
+#review-separator {
+  margin-top: 40px;
 }
 
 /*massimo adding new css for review page*/
