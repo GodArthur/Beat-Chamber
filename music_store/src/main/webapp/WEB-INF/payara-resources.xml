@@ -1,6 +1,7 @@
 <!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <!-- Search for the word UPDATE to find where changes are required -->
 <resources>
+    <!--Change this code CHANGEEEEEEEEEEEEEEEEE BELOW -->
     <jdbc-resource enabled="true" jndi-name="java:app/jdbc/jsf_password" object-type="user" pool-name="mysql_JSF_PASSWORD_userPool">
         <description/>
     </jdbc-resource>
