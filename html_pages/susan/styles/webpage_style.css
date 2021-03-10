@@ -227,7 +227,7 @@ a:visited {
 /*****TRACKS PAGE*****/
 
 #track-section {
-  height: 1000px;
+  height: 1500px;
 }
 
 #track-display {
@@ -239,12 +239,19 @@ a:visited {
 
 #image-wrapper {
   position: absolute;
-  top: 8%;
-  right: 20%;
+  top: 16%;
+  right: 12%;
+}
+
+#photoshoot-ad-wrapper {
+  left: 1px;
+  position: absolute;
+
+  top: 13%;
 }
 
 #track-title {
-  font-family: "gotham";
+  font-family: "edo sz";
   font-size: larger;
 }
 
@@ -297,6 +304,20 @@ button {
 
 #review-separator {
   margin-top: 40px;
+}
+
+#anime-ad-wrapper {
+  width: 700px;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 16%;
+}
+#anime-ad {
+  height: auto;
+  max-width: 100%;
 }
 
 /*massimo adding new css for review page*/
