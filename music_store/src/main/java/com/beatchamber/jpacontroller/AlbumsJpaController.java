@@ -36,6 +36,8 @@ import org.slf4j.LoggerFactory;
 @Named
 @SessionScoped
 public class AlbumsJpaController implements Serializable {
+    
+    /*
 
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
 
@@ -108,8 +110,9 @@ public class AlbumsJpaController implements Serializable {
                     oldAlbumNumberOfGenreToAlbumListGenreToAlbum = em.merge(oldAlbumNumberOfGenreToAlbumListGenreToAlbum);
                 }
             }
-        } catch (NotSupportedException | SystemException /*| RollbackException*/ | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
+        } catch (NotSupportedException | SystemException /*| RollbackException*/ /*| HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {*/
+    /*        
+    try {
                 utx.rollback();
                 LOG.error("Rollback");
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -213,6 +216,9 @@ public class AlbumsJpaController implements Serializable {
             }
         }
         em.getTransaction().commit();
+        
+        
+        */
 
         //ASK KEN ABOUT THIS
         /*} catch (Exception ex) {
@@ -225,7 +231,7 @@ public class AlbumsJpaController implements Serializable {
             }
             throw ex;
 
-        }*/
+        }
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException {
@@ -304,4 +310,6 @@ public class AlbumsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+        */
 }
+
