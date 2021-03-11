@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns = "http://www.w3.org/1999/xhtml"   
+   xmlns:h = "http://java.sun.com/jsf/html"
+   xmlns:ui = "http://java.sun.com/jsf/facelets"> 
+   
+    <h:head>
+        <title>Music Store</title>
+        <h:outputStylesheet library="styles" name="main.css"/>
+    </h:head>
+    <h:body> 
+       <div>
+          <ui:insert name = "header" >
+             <ui:include src = "/templates/header_and_navbar.xhtml" />
+          </ui:insert> 
+       </div>
+       <div>
+          <ui:insert name = "content" ></ui:insert>
+       </div>
+       <div>
+          <ui:insert name = "footer" >
+             <ui:include src = "/templates/footer.xhtml" />
+          </ui:insert>
+       </div>
+    </h:body>
+</html>
