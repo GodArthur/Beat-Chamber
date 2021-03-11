@@ -41,7 +41,6 @@ public class AlbumsJpaController implements Serializable {
     @Resource
     private UserTransaction utx;
 
-    //HAVE TO CHANGE THE P UNIT NAME ================================
     @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
 
@@ -226,7 +225,7 @@ public class AlbumsJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = albums.getAlbumNumber();
                 if (findAlbums(id) == null) {
-                    throw new NonexistentEntityException("The fish with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;
