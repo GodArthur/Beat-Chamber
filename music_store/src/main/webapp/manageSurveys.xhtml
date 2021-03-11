@@ -100,14 +100,6 @@
                         <h:outputText value="#{survey.title}"/>
                     </p:column>
 
-                    <p:column exportable="false" headerText="View" >
-                        <p:commandButton icon="pi pi-eye" 
-                                         oncomplete="PF('manageSurveyDialog').show()"
-                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
-                            <f:setPropertyActionListener value="#{survey}" target="#{crudView.selectedSurvey}"/>
-                            <!--                            <p:resetInput target=":form:manage-survey-content"/>-->
-                        </p:commandButton>
-                    </p:column>
 
                     <p:column exportable="false" headerText="Edit" >
                         <p:commandButton icon="pi pi-pencil" 
