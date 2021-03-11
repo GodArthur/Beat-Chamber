@@ -43,7 +43,7 @@ public class AlbumsJpaController implements Serializable {
     private UserTransaction utx;
 
     //HAVE TO CHANGE THE P UNIT NAME ================================
-    @PersistenceContext(unitName = "fishiesPU")
+    @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
 
     public AlbumsJpaController() {
