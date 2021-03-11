@@ -18,7 +18,6 @@ import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -43,7 +42,7 @@ public class AlbumsJpaController implements Serializable {
     private UserTransaction utx;
 
     //HAVE TO CHANGE THE P UNIT NAME ================================
-    @PersistenceContext(unitName = "fishiesPU")
+    @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
 
     public AlbumsJpaController() {
@@ -108,7 +107,9 @@ public class AlbumsJpaController implements Serializable {
                     oldAlbumNumberOfGenreToAlbumListGenreToAlbum = em.merge(oldAlbumNumberOfGenreToAlbumListGenreToAlbum);
                 }
             }
-        } catch (NotSupportedException | SystemException /*| RollbackException*/ | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+
+            utx.commit();
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
                 LOG.error("Rollback");
@@ -122,147 +123,160 @@ public class AlbumsJpaController implements Serializable {
 
     public void edit(Albums albums) throws IllegalOrphanException, NonexistentEntityException, Exception {
 
-        em = getEntityManager();
-        em.getTransaction().begin();
-        Albums persistentAlbums = em.find(Albums.class, albums.getAlbumNumber());
-        List<ArtistAlbums> artistAlbumsListOld = persistentAlbums.getArtistAlbumsList();
-        List<ArtistAlbums> artistAlbumsListNew = albums.getArtistAlbumsList();
-        List<Tracks> tracksListOld = persistentAlbums.getTracksList();
-        List<Tracks> tracksListNew = albums.getTracksList();
-        List<GenreToAlbum> genreToAlbumListOld = persistentAlbums.getGenreToAlbumList();
-        List<GenreToAlbum> genreToAlbumListNew = albums.getGenreToAlbumList();
-        List<String> illegalOrphanMessages = null;
-        for (ArtistAlbums artistAlbumsListOldArtistAlbums : artistAlbumsListOld) {
-            if (!artistAlbumsListNew.contains(artistAlbumsListOldArtistAlbums)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain ArtistAlbums " + artistAlbumsListOldArtistAlbums + " since its albumNumber field is not nullable.");
-            }
-        }
-        for (Tracks tracksListOldTracks : tracksListOld) {
-            if (!tracksListNew.contains(tracksListOldTracks)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Tracks " + tracksListOldTracks + " since its albumNumber field is not nullable.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
-        }
-        List<ArtistAlbums> attachedArtistAlbumsListNew = new ArrayList<ArtistAlbums>();
-        for (ArtistAlbums artistAlbumsListNewArtistAlbumsToAttach : artistAlbumsListNew) {
-            artistAlbumsListNewArtistAlbumsToAttach = em.getReference(artistAlbumsListNewArtistAlbumsToAttach.getClass(), artistAlbumsListNewArtistAlbumsToAttach.getTablekey());
-            attachedArtistAlbumsListNew.add(artistAlbumsListNewArtistAlbumsToAttach);
-        }
-        artistAlbumsListNew = attachedArtistAlbumsListNew;
-        albums.setArtistAlbumsList(artistAlbumsListNew);
-        List<Tracks> attachedTracksListNew = new ArrayList<Tracks>();
-        for (Tracks tracksListNewTracksToAttach : tracksListNew) {
-            tracksListNewTracksToAttach = em.getReference(tracksListNewTracksToAttach.getClass(), tracksListNewTracksToAttach.getTrackId());
-            attachedTracksListNew.add(tracksListNewTracksToAttach);
-        }
-        tracksListNew = attachedTracksListNew;
-        albums.setTracksList(tracksListNew);
-        List<GenreToAlbum> attachedGenreToAlbumListNew = new ArrayList<GenreToAlbum>();
-        for (GenreToAlbum genreToAlbumListNewGenreToAlbumToAttach : genreToAlbumListNew) {
-            genreToAlbumListNewGenreToAlbumToAttach = em.getReference(genreToAlbumListNewGenreToAlbumToAttach.getClass(), genreToAlbumListNewGenreToAlbumToAttach.getTablekey());
-            attachedGenreToAlbumListNew.add(genreToAlbumListNewGenreToAlbumToAttach);
-        }
-        genreToAlbumListNew = attachedGenreToAlbumListNew;
-        albums.setGenreToAlbumList(genreToAlbumListNew);
-        albums = em.merge(albums);
-        for (ArtistAlbums artistAlbumsListNewArtistAlbums : artistAlbumsListNew) {
-            if (!artistAlbumsListOld.contains(artistAlbumsListNewArtistAlbums)) {
-                Albums oldAlbumNumberOfArtistAlbumsListNewArtistAlbums = artistAlbumsListNewArtistAlbums.getAlbumNumber();
-                artistAlbumsListNewArtistAlbums.setAlbumNumber(albums);
-                artistAlbumsListNewArtistAlbums = em.merge(artistAlbumsListNewArtistAlbums);
-                if (oldAlbumNumberOfArtistAlbumsListNewArtistAlbums != null && !oldAlbumNumberOfArtistAlbumsListNewArtistAlbums.equals(albums)) {
-                    oldAlbumNumberOfArtistAlbumsListNewArtistAlbums.getArtistAlbumsList().remove(artistAlbumsListNewArtistAlbums);
-                    oldAlbumNumberOfArtistAlbumsListNewArtistAlbums = em.merge(oldAlbumNumberOfArtistAlbumsListNewArtistAlbums);
+        try {
+            utx.begin();
+            Albums persistentAlbums = em.find(Albums.class, albums.getAlbumNumber());
+            List<ArtistAlbums> artistAlbumsListOld = persistentAlbums.getArtistAlbumsList();
+            List<ArtistAlbums> artistAlbumsListNew = albums.getArtistAlbumsList();
+            List<Tracks> tracksListOld = persistentAlbums.getTracksList();
+            List<Tracks> tracksListNew = albums.getTracksList();
+            List<GenreToAlbum> genreToAlbumListOld = persistentAlbums.getGenreToAlbumList();
+            List<GenreToAlbum> genreToAlbumListNew = albums.getGenreToAlbumList();
+            List<String> illegalOrphanMessages = null;
+            for (ArtistAlbums artistAlbumsListOldArtistAlbums : artistAlbumsListOld) {
+                if (!artistAlbumsListNew.contains(artistAlbumsListOldArtistAlbums)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain ArtistAlbums " + artistAlbumsListOldArtistAlbums + " since its albumNumber field is not nullable.");
                 }
             }
-        }
-        for (Tracks tracksListNewTracks : tracksListNew) {
-            if (!tracksListOld.contains(tracksListNewTracks)) {
-                Albums oldAlbumNumberOfTracksListNewTracks = tracksListNewTracks.getAlbumNumber();
-                tracksListNewTracks.setAlbumNumber(albums);
-                tracksListNewTracks = em.merge(tracksListNewTracks);
-                if (oldAlbumNumberOfTracksListNewTracks != null && !oldAlbumNumberOfTracksListNewTracks.equals(albums)) {
-                    oldAlbumNumberOfTracksListNewTracks.getTracksList().remove(tracksListNewTracks);
-                    oldAlbumNumberOfTracksListNewTracks = em.merge(oldAlbumNumberOfTracksListNewTracks);
+            for (Tracks tracksListOldTracks : tracksListOld) {
+                if (!tracksListNew.contains(tracksListOldTracks)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Tracks " + tracksListOldTracks + " since its albumNumber field is not nullable.");
                 }
             }
-        }
-        for (GenreToAlbum genreToAlbumListOldGenreToAlbum : genreToAlbumListOld) {
-            if (!genreToAlbumListNew.contains(genreToAlbumListOldGenreToAlbum)) {
-                genreToAlbumListOldGenreToAlbum.setAlbumNumber(null);
-                genreToAlbumListOldGenreToAlbum = em.merge(genreToAlbumListOldGenreToAlbum);
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
-        }
-        for (GenreToAlbum genreToAlbumListNewGenreToAlbum : genreToAlbumListNew) {
-            if (!genreToAlbumListOld.contains(genreToAlbumListNewGenreToAlbum)) {
-                Albums oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum = genreToAlbumListNewGenreToAlbum.getAlbumNumber();
-                genreToAlbumListNewGenreToAlbum.setAlbumNumber(albums);
-                genreToAlbumListNewGenreToAlbum = em.merge(genreToAlbumListNewGenreToAlbum);
-                if (oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum != null && !oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum.equals(albums)) {
-                    oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum.getGenreToAlbumList().remove(genreToAlbumListNewGenreToAlbum);
-                    oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum = em.merge(oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum);
-                }
-            }
-        }
-        em.getTransaction().commit();
 
-        //ASK KEN ABOUT THIS
-        /*} catch (Exception ex) {
+            List<ArtistAlbums> attachedArtistAlbumsListNew = new ArrayList<ArtistAlbums>();
+            for (ArtistAlbums artistAlbumsListNewArtistAlbumsToAttach : artistAlbumsListNew) {
+                artistAlbumsListNewArtistAlbumsToAttach = em.getReference(artistAlbumsListNewArtistAlbumsToAttach.getClass(), artistAlbumsListNewArtistAlbumsToAttach.getTablekey());
+                attachedArtistAlbumsListNew.add(artistAlbumsListNewArtistAlbumsToAttach);
+            }
+            artistAlbumsListNew = attachedArtistAlbumsListNew;
+            albums.setArtistAlbumsList(artistAlbumsListNew);
+            List<Tracks> attachedTracksListNew = new ArrayList<Tracks>();
+            for (Tracks tracksListNewTracksToAttach : tracksListNew) {
+                tracksListNewTracksToAttach = em.getReference(tracksListNewTracksToAttach.getClass(), tracksListNewTracksToAttach.getTrackId());
+                attachedTracksListNew.add(tracksListNewTracksToAttach);
+            }
+            tracksListNew = attachedTracksListNew;
+            albums.setTracksList(tracksListNew);
+            List<GenreToAlbum> attachedGenreToAlbumListNew = new ArrayList<GenreToAlbum>();
+            for (GenreToAlbum genreToAlbumListNewGenreToAlbumToAttach : genreToAlbumListNew) {
+                genreToAlbumListNewGenreToAlbumToAttach = em.getReference(genreToAlbumListNewGenreToAlbumToAttach.getClass(), genreToAlbumListNewGenreToAlbumToAttach.getTablekey());
+                attachedGenreToAlbumListNew.add(genreToAlbumListNewGenreToAlbumToAttach);
+            }
+            genreToAlbumListNew = attachedGenreToAlbumListNew;
+            albums.setGenreToAlbumList(genreToAlbumListNew);
+            albums = em.merge(albums);
+            for (ArtistAlbums artistAlbumsListNewArtistAlbums : artistAlbumsListNew) {
+                if (!artistAlbumsListOld.contains(artistAlbumsListNewArtistAlbums)) {
+                    Albums oldAlbumNumberOfArtistAlbumsListNewArtistAlbums = artistAlbumsListNewArtistAlbums.getAlbumNumber();
+                    artistAlbumsListNewArtistAlbums.setAlbumNumber(albums);
+                    artistAlbumsListNewArtistAlbums = em.merge(artistAlbumsListNewArtistAlbums);
+                    if (oldAlbumNumberOfArtistAlbumsListNewArtistAlbums != null && !oldAlbumNumberOfArtistAlbumsListNewArtistAlbums.equals(albums)) {
+                        oldAlbumNumberOfArtistAlbumsListNewArtistAlbums.getArtistAlbumsList().remove(artistAlbumsListNewArtistAlbums);
+                        oldAlbumNumberOfArtistAlbumsListNewArtistAlbums = em.merge(oldAlbumNumberOfArtistAlbumsListNewArtistAlbums);
+                    }
+                }
+            }
+            for (Tracks tracksListNewTracks : tracksListNew) {
+                if (!tracksListOld.contains(tracksListNewTracks)) {
+                    Albums oldAlbumNumberOfTracksListNewTracks = tracksListNewTracks.getAlbumNumber();
+                    tracksListNewTracks.setAlbumNumber(albums);
+                    tracksListNewTracks = em.merge(tracksListNewTracks);
+                    if (oldAlbumNumberOfTracksListNewTracks != null && !oldAlbumNumberOfTracksListNewTracks.equals(albums)) {
+                        oldAlbumNumberOfTracksListNewTracks.getTracksList().remove(tracksListNewTracks);
+                        oldAlbumNumberOfTracksListNewTracks = em.merge(oldAlbumNumberOfTracksListNewTracks);
+                    }
+                }
+            }
+            for (GenreToAlbum genreToAlbumListOldGenreToAlbum : genreToAlbumListOld) {
+                if (!genreToAlbumListNew.contains(genreToAlbumListOldGenreToAlbum)) {
+                    genreToAlbumListOldGenreToAlbum.setAlbumNumber(null);
+                    genreToAlbumListOldGenreToAlbum = em.merge(genreToAlbumListOldGenreToAlbum);
+                }
+            }
+            for (GenreToAlbum genreToAlbumListNewGenreToAlbum : genreToAlbumListNew) {
+                if (!genreToAlbumListOld.contains(genreToAlbumListNewGenreToAlbum)) {
+                    Albums oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum = genreToAlbumListNewGenreToAlbum.getAlbumNumber();
+                    genreToAlbumListNewGenreToAlbum.setAlbumNumber(albums);
+                    genreToAlbumListNewGenreToAlbum = em.merge(genreToAlbumListNewGenreToAlbum);
+                    if (oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum != null && !oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum.equals(albums)) {
+                        oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum.getGenreToAlbumList().remove(genreToAlbumListNewGenreToAlbum);
+                        oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum = em.merge(oldAlbumNumberOfGenreToAlbumListNewGenreToAlbum);
+                    }
+                }
+            }
+            utx.commit();
+
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = albums.getAlbumNumber();
                 if (findAlbums(id) == null) {
-                    throw new NonexistentEntityException("The albums with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The fish with id " + id + " no longer exists.");
                 }
             }
             throw ex;
-
-        }*/
+        }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 
-        utx.begin();
-        Albums albums;
         try {
-            albums = em.getReference(Albums.class, id);
-            albums.getAlbumNumber();
-        } catch (EntityNotFoundException enfe) {
-            throw new NonexistentEntityException("The albums with id " + id + " no longer exists.", enfe);
-        }
-        List<String> illegalOrphanMessages = null;
-        List<ArtistAlbums> artistAlbumsListOrphanCheck = albums.getArtistAlbumsList();
-        for (ArtistAlbums artistAlbumsListOrphanCheckArtistAlbums : artistAlbumsListOrphanCheck) {
-            if (illegalOrphanMessages == null) {
-                illegalOrphanMessages = new ArrayList<String>();
+            utx.begin();
+            Albums albums;
+            try {
+                albums = em.getReference(Albums.class, id);
+                albums.getAlbumNumber();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The albums with id " + id + " no longer exists.", enfe);
             }
-            illegalOrphanMessages.add("This Albums (" + albums + ") cannot be destroyed since the ArtistAlbums " + artistAlbumsListOrphanCheckArtistAlbums + " in its artistAlbumsList field has a non-nullable albumNumber field.");
-        }
-        List<Tracks> tracksListOrphanCheck = albums.getTracksList();
-        for (Tracks tracksListOrphanCheckTracks : tracksListOrphanCheck) {
-            if (illegalOrphanMessages == null) {
-                illegalOrphanMessages = new ArrayList<String>();
+            List<String> illegalOrphanMessages = null;
+            List<ArtistAlbums> artistAlbumsListOrphanCheck = albums.getArtistAlbumsList();
+            for (ArtistAlbums artistAlbumsListOrphanCheckArtistAlbums : artistAlbumsListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Albums (" + albums + ") cannot be destroyed since the ArtistAlbums " + artistAlbumsListOrphanCheckArtistAlbums + " in its artistAlbumsList field has a non-nullable albumNumber field.");
             }
-            illegalOrphanMessages.add("This Albums (" + albums + ") cannot be destroyed since the Tracks " + tracksListOrphanCheckTracks + " in its tracksList field has a non-nullable albumNumber field.");
+            List<Tracks> tracksListOrphanCheck = albums.getTracksList();
+            for (Tracks tracksListOrphanCheckTracks : tracksListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Albums (" + albums + ") cannot be destroyed since the Tracks " + tracksListOrphanCheckTracks + " in its tracksList field has a non-nullable albumNumber field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            List<GenreToAlbum> genreToAlbumList = albums.getGenreToAlbumList();
+            for (GenreToAlbum genreToAlbumListGenreToAlbum : genreToAlbumList) {
+                genreToAlbumListGenreToAlbum.setAlbumNumber(null);
+                genreToAlbumListGenreToAlbum = em.merge(genreToAlbumListGenreToAlbum);
+            }
+            em.remove(albums);
+            utx.commit();
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+            throw ex;
         }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
-        }
-        List<GenreToAlbum> genreToAlbumList = albums.getGenreToAlbumList();
-        for (GenreToAlbum genreToAlbumListGenreToAlbum : genreToAlbumList) {
-            genreToAlbumListGenreToAlbum.setAlbumNumber(null);
-            genreToAlbumListGenreToAlbum = em.merge(genreToAlbumListGenreToAlbum);
-        }
-        em.remove(albums);
-        utx.commit();
     }
 
     public List<Albums> findAlbumsEntities() {
@@ -274,7 +288,6 @@ public class AlbumsJpaController implements Serializable {
     }
 
     private List<Albums> findAlbumsEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(Albums.class));
@@ -288,14 +301,12 @@ public class AlbumsJpaController implements Serializable {
     }
 
     public Albums findAlbums(Integer id) {
-        EntityManager em = getEntityManager();
 
         return em.find(Albums.class, id);
 
     }
 
     public int getAlbumsCount() {
-        EntityManager em = getEntityManager();
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         Root<Albums> rt = cq.from(Albums.class);
