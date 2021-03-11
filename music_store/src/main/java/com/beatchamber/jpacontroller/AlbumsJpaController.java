@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-public class AlbumsJpaController implements Serializable {}/*
+public class AlbumsJpaController implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
 
@@ -118,8 +118,8 @@ public class AlbumsJpaController implements Serializable {}/*
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
         }
-    } */
-/*
+    }
+
     public void edit(Albums albums) throws IllegalOrphanException, NonexistentEntityException, Exception {
 
         try {
@@ -314,4 +314,4 @@ public class AlbumsJpaController implements Serializable {}/*
         return ((Long) q.getSingleResult()).intValue();
     }
 
-}*/
+}
