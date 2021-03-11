@@ -214,7 +214,7 @@ public class AlbumsJpaController implements Serializable {
         }
         em.getTransaction().commit();
 
-        ASK KEN ABOUT THIS
+        //ASK KEN ABOUT THIS
         /*} catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
