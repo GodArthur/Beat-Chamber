@@ -216,16 +216,22 @@ a:visited {
 	font-size:170%;
 	color:white;
 }
-
+/*Ibrahim was here*/
 .alignTextLeft{
 	text-align: left;
-	color:white;
+	/*color:white;*/
+        color:black;
 }
 
 /*Ibrahim was here*/
 .about_section{
 	background-color: #333;
 	height:950px;
+}
+
+/*Ibrahim was here*/
+#aboutAccordion{
+    background-color: #333;
 }
 
 /*Ibrahim was here*/
