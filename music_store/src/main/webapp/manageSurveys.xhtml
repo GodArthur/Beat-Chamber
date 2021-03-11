@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet library="styles" name="main.css" />
+        <h:outputStylesheet library="webjars" name="bootstrap/4.3.1/css/bootstrap.min-jsf.css"/>
+        <h:outputStylesheet library="webjars" name="font-awesome/5.15.2/css/all.min-jsf.css" />
+        <title>#{msgs.managetitle}</title>
+    </h:head>
+    <h:body>
+        <header>
+            <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
+        </header>
+        <nav>
+            <div class="topnav">
+                <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
+                <h:link value="Music"/>
+                <h:link value="Contact"/>
+                <h:link value="About"/>
+                <h:form>
+                    <h:commandButton styleClass="search-button" value="Search"/>
+                    <h:inputText a:placeholder="Search for music" styleClass="search"/>
+                </h:form>
+                <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
+            </div>
+        </nav>
+
+
+
+
+
+
+
+        <div>
+            <div class="container-page">
+                <div class="icon-bar">
+                    <h:commandLink  id="userButton" >
+                        <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="albumButton" action="manageAlbum.xhtml" >
+                        <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="trackButton" action="manageAlbum.xhtml" >
+                        <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="orderButton" action="manageAlbum.xhtml" >
+                        <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="reviewButton" action="manageAlbum.xhtml" >
+                        <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="reportButton" action="manageAlbum.xhtml" >
+                        <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="rssButton" action="manageAlbum.xhtml" >
+                        <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="surveyButton" class="active" action="manageAlbum.xhtml" >
+                        <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
+                    </h:commandLink>
+                    <h:commandLink  id="adButton" action="manageAlbum.xhtml" >
+                        <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
+                    </h:commandLink>
+                </div>
+
+
+                <p:dataTable id="manage-surveys" widgetVar="dtSurveys" var="survey" value="#{theSurveys.surveys}"
+                             reflow="true" styleClass="container-table"
+                             paginator="true"
+                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div>
+                            <span class="table-title">
+                                Surveys
+                            </span>
+                            <span class="filter-container ui-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" 
+                                             onkeyup="PF('dtClients').filter()" placeholder="Search"/>
+                            </span>
+                            <span>
+                                <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{crudView.openNew}"
+                                                 oncomplete="PF('manageSurveyDialog').show()"
+                                                 styleClass="rounded-button ui-button-help float-right">
+                                </p:commandButton>
+                            </span>
+
+                        </div>
+                    </f:facet>
+
+                    <p:column style="width:calc(200px)" headerText="Id" sortBy="#{survey.surveyId}" >
+                        <h:outputText value="#{survey.surveyId}"/>
+                    </p:column>
+                    <p:column style="width:calc(900px)" headerText="Title" sortBy="#{survey.title}">
+                        <h:outputText value="#{survey.title}"/>
+                    </p:column>
+
+                    <p:column exportable="false" headerText="View" >
+                        <p:commandButton icon="pi pi-eye" 
+                                         oncomplete="PF('manageSurveyDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                            <f:setPropertyActionListener value="#{survey}" target="#{crudView.selectedSurvey}"/>
+                            <!--                            <p:resetInput target=":form:manage-survey-content"/>-->
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column exportable="false" headerText="Edit" >
+                        <p:commandButton icon="pi pi-pencil" 
+                                         oncomplete="PF('manageSurveyDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-help" process="@this">
+                            <f:setPropertyActionListener value="#{survey}" target="#{crudView.selectedSurvey}"/>
+<!--                            <p:resetInput target=":form:manage-survey-content"/>-->
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column exportable="false" headerText="Delete" >
+                        <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                         oncomplete="PF('deleteSurveyDialog').show()">
+                            <f:setPropertyActionListener value="#{survey}" target="#{crudView.selectedSurvey}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+
+
+
+        <p:dialog header="Survey Details" showEffect="fade" modal="true"
+                  widgetVar="manageSurveyDialog" responsive="true">
+            <p:outputPanel id="manage-survey-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty crudView.selectedSurvey}">
+
+                    <div class="p-field">
+                        <p:outputLabel for="name">Name</p:outputLabel>
+                        <p:inputText id="name" value="#{crudView.selectedSurvey.name}" required="true"/>
+                    </div>
+                </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Save" icon="pi pi-check" actionListener="#{crudView.saveSurvey}"
+                                 update="manage-survey-content" process="manage-survey-content @this"/>
+                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageSurveyDialog').hide()"
+                                 class="ui-button-secondary"/>
+            </f:facet>
+        </p:dialog>
+
+
+        <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
+                         message="Delete the product?" header="Confirm" severity="warn">
+            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{crudView.deleteProduct}"
+                             process="@this" oncomplete="PF('deleteProductDialog').hide()"/>
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('deleteProductDialog').hide()"/>
+        </p:confirmDialog>
+
+        <p:confirmDialog global="true" showEffect="fade" width="300">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                             icon="pi pi-times"/>
+        </p:confirmDialog>
+
+
+
+        <footer>
+            <p>© 2021 Copyright Beat Chambers</p>
+            <h3>Links</h3>
+            <p>
+                <a href="https://www.dawsoncollege.qc.ca/">Dawson College</a>
+            </p>
+            <p>
+                <a href="https://www.omnijava.com/">Omnijava</a>
+            </p>
+        </footer>
+    </h:body>
+</html>
