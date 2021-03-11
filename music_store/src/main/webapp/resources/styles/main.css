@@ -450,3 +450,8 @@ table-column:hover {
 .edit{
   cursor: pointer;
 }
+
+.ui-button-danger{
+    background:#000!important;
+    color:#fff!important;
+}

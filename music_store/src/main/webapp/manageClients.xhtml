@@ -11,7 +11,7 @@
         <h:outputStylesheet library="webjars" name="bootstrap/4.3.1/css/bootstrap.min-jsf.css"/>
         <h:outputStylesheet library="webjars" name="font-awesome/5.15.2/css/all.min-jsf.css" />
 
-        <title>#{msgs.login}</title>
+        <title>#{msgs.managetitle}</title>
     </h:head>
     <h:body>
         <header>
@@ -44,7 +44,7 @@
                         <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
                     </h:commandLink>
                     <h:commandLink  id="trackButton" action="manageAlbum.xhtml" >
-                        <i class="fas fa-bullseye fa-lg"></i><br/><h5>Tracks</h5>
+                        <i class="fas fa-fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
                     </h:commandLink>
                     <h:commandLink  id="orderButton" action="manageAlbum.xhtml" >
                         <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
@@ -56,7 +56,7 @@
                         <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
                     </h:commandLink>
                     <h:commandLink  id="rssButton" action="manageAlbum.xhtml" >
-                        <i class="fas fa-broadcast-tower fa-lg"></i><br/><h5>RSS Feeds</h5>
+                        <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
                     </h:commandLink>
                     <h:commandLink  id="surveyButton" action="manageAlbum.xhtml" >
                         <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
@@ -67,9 +67,9 @@
                 </div>
 
 
-                <p:dataTable id="manage-clients" widgetVar="dtClients" var="client" value="#{crudView.products}"
+                <p:dataTable id="manage-clients" widgetVar="dtClients" var="client" value="#{crudView.clients}"
                              reflow="true" styleClass="container-table"
-                             selection="#{crudView.selectedProducts}" rowKey="#{client.id}" paginator="true"
+                             selection="#{crudView.selectedClients}" rowKey="#{client.id}" paginator="true"
                              rows="10" rowSelectMode="add" paginatorPosition="bottom">
                     <f:facet name="header">
                         <div styleClass="background:black">
@@ -83,7 +83,7 @@
                             </span>
                             <span>
                                 <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{crudView.openNew}"
-                                                 oncomplete="PF('manageProductDialog').show()"
+                                                 oncomplete="PF('manageClientDialog').show()"
                                                  styleClass="rounded-button ui-button-help float-right">
                                 </p:commandButton>
                             </span>
@@ -92,37 +92,37 @@
                     </f:facet>
 
 
-                    <p:column headerText="Id" sortBy="#{product.code}" >
-                        <h:outputText value="#{product.code}"/>
+                    <p:column headerText="Id" sortBy="#{client.code}" >
+                        <h:outputText value="#{client.code}"/>
                     </p:column>
-                    <p:column headerText="UserName" sortBy="#{product.name}">
-                        <h:outputText value="#{product.name}"/>
+                    <p:column headerText="UserName" sortBy="#{client.name}">
+                        <h:outputText value="#{client.name}"/>
                     </p:column>
-                    <p:column headerText="Title" sortBy="#{product.name}">
-                        <h:outputText value="#{product.name}"/>
+                    <p:column headerText="Title" sortBy="#{client.name}">
+                        <h:outputText value="#{client.name}"/>
                     </p:column>
-                    <p:column headerText="First Name" sortBy="#{product.name}">
-                        <h:outputText value="#{product.name}"/>
+                    <p:column headerText="First Name" sortBy="#{client.name}">
+                        <h:outputText value="#{client.name}"/>
                     </p:column>
-                    <p:column headerText="Last Name" sortBy="#{product.name}">
-                        <h:outputText value="#{product.name}"/>
+                    <p:column headerText="Last Name" sortBy="#{client.name}">
+                        <h:outputText value="#{client.name}"/>
                     </p:column>
-                    <p:column headerText="Email" sortBy="#{product.name}">
-                        <h:outputText value="#{product.name}"/>
+                    <p:column headerText="Email" sortBy="#{client.name}">
+                        <h:outputText value="#{client.name}"/>
                     </p:column>
-                    <p:column headerText="Cell Phone" sortBy="#{product.price}">
-                        <h:outputText value="#{product.price}" converter="com.beatchamber.PhoneNumberConverter"/>
+                    <p:column headerText="Cell Phone" sortBy="#{client.price}">
+                        <h:outputText value="#{client.price}" converter="com.beatchamber.PhoneNumberConverter"/>
                     </p:column>
                     <p:column exportable="false">
-                        <p:commandButton icon="pi pi-pencil" update=":form:manage-product-content"
-                                         oncomplete="PF('manageProductDialog').show()"
+                        <p:commandButton icon="pi pi-pencil" update=":form:manage-client-content"
+                                         oncomplete="PF('manageClientDialog').show()"
                                          styleClass="edit-button rounded-button ui-button-success" process="@this">
-                            <f:setPropertyActionListener value="#{product}" target="#{crudView.selectedProduct}"/>
-                            <p:resetInput target=":form:manage-product-content"/>
+                            <f:setPropertyActionListener value="#{client}" target="#{crudView.selectedClient}"/>
+                            <p:resetInput target=":form:manage-client-content"/>
                         </p:commandButton>
                         <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
-                                         oncomplete="PF('deleteProductDialog').show()">
-                            <f:setPropertyActionListener value="#{product}" target="#{crudView.selectedProduct}"/>
+                                         oncomplete="PF('deleteClientDialog').show()">
+                            <f:setPropertyActionListener value="#{client}" target="#{crudView.selectedClient}"/>
                         </p:commandButton>
                     </p:column>
 

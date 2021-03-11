@@ -31,7 +31,7 @@
     </session-config>
     <welcome-file-list>
         <!--        <welcome-file>faces/review_page.xhtml</welcome-file>-->
-        <welcome-file>faces/manageClients.xhtml</welcome-file>
-        <!--            <welcome-file>faces/manageSurveys.xhtml</welcome-file>-->
+<!--        <welcome-file>faces/manageClients.xhtml</welcome-file>-->
+                    <welcome-file>faces/manageSurveys.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>
