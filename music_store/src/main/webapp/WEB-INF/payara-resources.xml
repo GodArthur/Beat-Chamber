@@ -2,7 +2,7 @@
 <!-- Search for the word UPDATE to find where changes are required -->
 <resources>
     <!--Change this code CHANGEEEEEEEEEEEEEEEEE BELOW -->
-    <jdbc-resource enabled="true" jndi-name="java:app/jdbc/jsf_password" object-type="user" pool-name="mysql_JSF_PASSWORD_userPool">
+    <jdbc-resource enabled="true" jndi-name="java:app/jdbc/beatChamber" object-type="user" pool-name="mysql_JSF_PASSWORD_userPool">
         <description/>
     </jdbc-resource>
     <jdbc-connection-pool datasource-classname="com.mysql.cj.jdbc.MysqlDataSource" 
@@ -11,8 +11,8 @@
                           pool-resize-quantity="2"
                           res-type="javax.sql.ConnectionPoolDataSource"
                           steady-pool-size="8">
-        <property name="User" value="user"/>
-        <property name="Password" value="pencil"/>
-        <property name="URL" value="jdbc:mysql://localhost:3306/JSF_PASSWORD?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;useSSL=false"/>
+        <property name="User" value="dawson"/>
+        <property name="Password" value="dawson123"/>
+        <property name="URL" value="jdbc:mysql://localhost:3306/beat_chamber?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;useSSL=false"/>
     </jdbc-connection-pool>
 </resources>
