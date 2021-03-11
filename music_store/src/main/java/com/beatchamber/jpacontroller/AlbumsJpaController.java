@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-public class AlbumsJpaController implements Serializable {
+public class AlbumsJpaController implements Serializable {}/*
 
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
 
@@ -107,8 +107,10 @@ public class AlbumsJpaController implements Serializable {
                     oldAlbumNumberOfGenreToAlbumListGenreToAlbum.getGenreToAlbumList().remove(genreToAlbumListGenreToAlbum);
                     oldAlbumNumberOfGenreToAlbumListGenreToAlbum = em.merge(oldAlbumNumberOfGenreToAlbumListGenreToAlbum);
                 }
-            }
-        } catch (NotSupportedException | SystemException /*| RollbackException*/ | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            }*/ 
+    
+    /*
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
                 LOG.error("Rollback");
@@ -118,8 +120,8 @@ public class AlbumsJpaController implements Serializable {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
         }
-    }
-
+    } */
+/*
     public void edit(Albums albums) throws IllegalOrphanException, NonexistentEntityException, Exception {
 
         em = getEntityManager();
@@ -226,8 +228,8 @@ public class AlbumsJpaController implements Serializable {
             throw ex;
 
         }*/
-    }
-
+    /*}*/
+/*
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException {
 
         utx.begin();
@@ -304,4 +306,4 @@ public class AlbumsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-}
+}*/
