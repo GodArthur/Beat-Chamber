@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <head>
+        <title>Album Page</title>
+        <h:outputStylesheet library="styles" name="main.css"/>
+    </head>
+    <body>
+        <ui:composition template="templates/master_template.xhtml">
+            <ui:define name="content">
+                <section class="album-display">
+                    <div class="img-display">
+                        <h:graphicImage library="images" name="ads/DogsAd.png" styleClass="album-left-ad"/>
+                        <h:graphicImage library="images" name="albums/classical/10_large.jpg"/>
+                        <h:graphicImage library="images" name="ads/AuroraAd.png" styleClass="album-right-ad"/>
+                    </div>
+                    <div class="title-artist">
+                        <h2 class="album-title">10</h2>
+                        <h2>The Piano Guys</h2>
+                    </div>
+                    <div class="ratings">
+                        <p>star star star star star</p>
+                    </div>
+                    <button>Add to Cart</button>
+                    <div class="album-songs">
+                        <hr/>
+                        <h3>Song List</h3>
+                        <div class="song-item">
+                            <p>1. You Say</p>
+                            <button>Add to Cart</button>
+                        </div>
+                        <div class="song-item">
+                            <p>2. Someone To You</p>
+                            <button>Add to Cart</button>
+                        </div>
+                        <div class="song-item">
+                            <p>3. Für Elise Jam</p>
+                            <button>Add to Cart</button>
+                        </div>
+                        <div class="song-item">
+                            <p>4. More Than a Feeling / Long Time</p>
+                            <button>Add to Cart</button>
+                        </div>
+                        <div class="release-date">
+                            <h3>Release Date</h3>
+                            <h3>October 23, 2020</h3>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Ratings</h2>
+                </section>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

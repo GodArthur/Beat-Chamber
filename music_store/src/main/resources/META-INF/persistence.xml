@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
   <!-- Define Persistence Unit -->
-  <persistence-unit name="my_persistence_unit">
+  <persistence-unit name="my_persistence_unit" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:app/jdbc/beat_chamber</jta-data-source>
     <class>com.beatchamber.entities.Tracks</class>
     <class>com.beatchamber.entities.GenreToTracks</class>
     <class>com.beatchamber.entities.InvoiceDetails</class>
@@ -19,5 +21,10 @@
     <class>com.beatchamber.entities.Clients</class>
     <class>com.beatchamber.entities.Surveys</class>
     <class>com.beatchamber.entities.Choices</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.logging.level.sql" value="FINE"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+    </properties>
   </persistence-unit>
 </persistence>
