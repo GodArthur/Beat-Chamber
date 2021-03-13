@@ -1,13 +1,14 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.entities.GenreToTracks;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.beatchamber.entities.Clients;
-import com.beatchamber.entities.CustomerReviews;
+import com.beatchamber.entities.Genres;
 import com.beatchamber.entities.Tracks;
+import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -31,9 +33,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-public class CustomerReviewsJpaController implements Serializable {
+public class GenreToTracksJpaController implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(CustomerReviewsJpaController.class);
+    private final static Logger LOG = LoggerFactory.getLogger(GenreToTracksJpaController.class);
 
     @Resource
     private UserTransaction utx;
@@ -41,35 +43,33 @@ public class CustomerReviewsJpaController implements Serializable {
     @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
 
-    public CustomerReviewsJpaController() {
+    public GenreToTracksJpaController() {
     }
 
-    public void create(CustomerReviews customerReviews) throws RollbackFailureException {
+    public void create(GenreToTracks genreToTracks) throws RollbackFailureException {
 
         try {
-
             utx.begin();
-            Clients clientNumber = customerReviews.getClientNumber();
-            if (clientNumber != null) {
-                clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
-                customerReviews.setClientNumber(clientNumber);
+            Genres genreId = genreToTracks.getGenreId();
+            if (genreId != null) {
+                genreId = em.getReference(genreId.getClass(), genreId.getGenreId());
+                genreToTracks.setGenreId(genreId);
             }
-            Tracks trackId = customerReviews.getTrackId();
+            Tracks trackId = genreToTracks.getTrackId();
             if (trackId != null) {
                 trackId = em.getReference(trackId.getClass(), trackId.getTrackId());
-                customerReviews.setTrackId(trackId);
+                genreToTracks.setTrackId(trackId);
             }
-            em.persist(customerReviews);
-            if (clientNumber != null) {
-                clientNumber.getCustomerReviewsList().add(customerReviews);
-                clientNumber = em.merge(clientNumber);
+            em.persist(genreToTracks);
+            if (genreId != null) {
+                genreId.getGenreToTracksList().add(genreToTracks);
+                genreId = em.merge(genreId);
             }
             if (trackId != null) {
-                trackId.getCustomerReviewsList().add(customerReviews);
+                trackId.getGenreToTracksList().add(genreToTracks);
                 trackId = em.merge(trackId);
             }
             utx.commit();
-
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
@@ -82,39 +82,38 @@ public class CustomerReviewsJpaController implements Serializable {
         }
     }
 
-    public void edit(CustomerReviews customerReviews) throws NonexistentEntityException, Exception {
+    public void edit(GenreToTracks genreToTracks) throws NonexistentEntityException, Exception {
 
         try {
-
             utx.begin();
-            CustomerReviews persistentCustomerReviews = em.find(CustomerReviews.class, customerReviews.getReviewNumber());
-            Clients clientNumberOld = persistentCustomerReviews.getClientNumber();
-            Clients clientNumberNew = customerReviews.getClientNumber();
-            Tracks trackIdOld = persistentCustomerReviews.getTrackId();
-            Tracks trackIdNew = customerReviews.getTrackId();
-            if (clientNumberNew != null) {
-                clientNumberNew = em.getReference(clientNumberNew.getClass(), clientNumberNew.getClientNumber());
-                customerReviews.setClientNumber(clientNumberNew);
+            GenreToTracks persistentGenreToTracks = em.find(GenreToTracks.class, genreToTracks.getTablekey());
+            Genres genreIdOld = persistentGenreToTracks.getGenreId();
+            Genres genreIdNew = genreToTracks.getGenreId();
+            Tracks trackIdOld = persistentGenreToTracks.getTrackId();
+            Tracks trackIdNew = genreToTracks.getTrackId();
+            if (genreIdNew != null) {
+                genreIdNew = em.getReference(genreIdNew.getClass(), genreIdNew.getGenreId());
+                genreToTracks.setGenreId(genreIdNew);
             }
             if (trackIdNew != null) {
                 trackIdNew = em.getReference(trackIdNew.getClass(), trackIdNew.getTrackId());
-                customerReviews.setTrackId(trackIdNew);
+                genreToTracks.setTrackId(trackIdNew);
             }
-            customerReviews = em.merge(customerReviews);
-            if (clientNumberOld != null && !clientNumberOld.equals(clientNumberNew)) {
-                clientNumberOld.getCustomerReviewsList().remove(customerReviews);
-                clientNumberOld = em.merge(clientNumberOld);
+            genreToTracks = em.merge(genreToTracks);
+            if (genreIdOld != null && !genreIdOld.equals(genreIdNew)) {
+                genreIdOld.getGenreToTracksList().remove(genreToTracks);
+                genreIdOld = em.merge(genreIdOld);
             }
-            if (clientNumberNew != null && !clientNumberNew.equals(clientNumberOld)) {
-                clientNumberNew.getCustomerReviewsList().add(customerReviews);
-                clientNumberNew = em.merge(clientNumberNew);
+            if (genreIdNew != null && !genreIdNew.equals(genreIdOld)) {
+                genreIdNew.getGenreToTracksList().add(genreToTracks);
+                genreIdNew = em.merge(genreIdNew);
             }
             if (trackIdOld != null && !trackIdOld.equals(trackIdNew)) {
-                trackIdOld.getCustomerReviewsList().remove(customerReviews);
+                trackIdOld.getGenreToTracksList().remove(genreToTracks);
                 trackIdOld = em.merge(trackIdOld);
             }
             if (trackIdNew != null && !trackIdNew.equals(trackIdOld)) {
-                trackIdNew.getCustomerReviewsList().add(customerReviews);
+                trackIdNew.getGenreToTracksList().add(genreToTracks);
                 trackIdNew = em.merge(trackIdNew);
             }
             utx.commit();
@@ -126,8 +125,8 @@ public class CustomerReviewsJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = customerReviews.getReviewNumber();
-                if (findCustomerReviews(id) == null) {
+                Integer id = genreToTracks.getTablekey();
+                if (findGenreToTracks(id) == null) {
                     throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
@@ -135,28 +134,28 @@ public class CustomerReviewsJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 
         try {
             utx.begin();
-            CustomerReviews customerReviews;
+            GenreToTracks genreToTracks;
             try {
-                customerReviews = em.getReference(CustomerReviews.class, id);
-                customerReviews.getReviewNumber();
+                genreToTracks = em.getReference(GenreToTracks.class, id);
+                genreToTracks.getTablekey();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The customerReviews with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The genreToTracks with id " + id + " no longer exists.", enfe);
             }
-            Clients clientNumber = customerReviews.getClientNumber();
-            if (clientNumber != null) {
-                clientNumber.getCustomerReviewsList().remove(customerReviews);
-                clientNumber = em.merge(clientNumber);
+            Genres genreId = genreToTracks.getGenreId();
+            if (genreId != null) {
+                genreId.getGenreToTracksList().remove(genreToTracks);
+                genreId = em.merge(genreId);
             }
-            Tracks trackId = customerReviews.getTrackId();
+            Tracks trackId = genreToTracks.getTrackId();
             if (trackId != null) {
-                trackId.getCustomerReviewsList().remove(customerReviews);
+                trackId.getGenreToTracksList().remove(genreToTracks);
                 trackId = em.merge(trackId);
             }
-            em.remove(customerReviews);
+            em.remove(genreToTracks);
             utx.commit();
         } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
@@ -168,41 +167,38 @@ public class CustomerReviewsJpaController implements Serializable {
         }
     }
 
-    public List<CustomerReviews> findCustomerReviewsEntities() {
-        return findCustomerReviewsEntities(true, -1, -1);
+    public List<GenreToTracks> findGenreToTracksEntities() {
+        return findGenreToTracksEntities(true, -1, -1);
     }
 
-    public List<CustomerReviews> findCustomerReviewsEntities(int maxResults, int firstResult) {
-        return findCustomerReviewsEntities(false, maxResults, firstResult);
+    public List<GenreToTracks> findGenreToTracksEntities(int maxResults, int firstResult) {
+        return findGenreToTracksEntities(false, maxResults, firstResult);
     }
 
-    private List<CustomerReviews> findCustomerReviewsEntities(boolean all, int maxResults, int firstResult) {
+    private List<GenreToTracks> findGenreToTracksEntities(boolean all, int maxResults, int firstResult) {
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(CustomerReviews.class));
+        cq.select(cq.from(GenreToTracks.class));
         Query q = em.createQuery(cq);
         if (!all) {
             q.setMaxResults(maxResults);
             q.setFirstResult(firstResult);
         }
         return q.getResultList();
-
     }
 
-    public CustomerReviews findCustomerReviews(Integer id) {
+    public GenreToTracks findGenreToTracks(Integer id) {
 
-        return em.find(CustomerReviews.class, id);
-
+        return em.find(GenreToTracks.class, id);
     }
 
-    public int getCustomerReviewsCount() {
+    public int getGenreToTracksCount() {
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        Root<CustomerReviews> rt = cq.from(CustomerReviews.class);
+        Root<GenreToTracks> rt = cq.from(GenreToTracks.class);
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
-
     }
 
 }

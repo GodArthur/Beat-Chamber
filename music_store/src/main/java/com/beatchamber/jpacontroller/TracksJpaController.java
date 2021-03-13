@@ -12,27 +12,43 @@ import java.util.List;
 import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.entities.GenreToTracks;
 import com.beatchamber.entities.Tracks;
-import com.beatchamber.jpacontroller.exceptions.IllegalOrphanException;
-import com.beatchamber.jpacontroller.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.IllegalOrphanException;
+import com.beatchamber.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.RollbackFailureException;
+import javax.annotation.Resource;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Massimo Di Girolamo
  */
+@Named
+@SessionScoped
 public class TracksJpaController implements Serializable {
 
-    public TracksJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
+    private final static Logger LOG = LoggerFactory.getLogger(TracksJpaController.class);
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    @Resource
+    private UserTransaction utx;
+
+    @PersistenceContext(unitName = "my_persistence_unit")
+    private EntityManager em;
+
+    public TracksJpaController() {
     }
 
-    public void create(Tracks tracks) {
+    public void create(Tracks tracks) throws RollbackFailureException {
         if (tracks.getInvoiceDetailsList() == null) {
             tracks.setInvoiceDetailsList(new ArrayList<InvoiceDetails>());
         }
@@ -42,10 +58,10 @@ public class TracksJpaController implements Serializable {
         if (tracks.getGenreToTracksList() == null) {
             tracks.setGenreToTracksList(new ArrayList<GenreToTracks>());
         }
-        EntityManager em = null;
+
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+
+            utx.begin();
             Albums albumNumber = tracks.getAlbumNumber();
             if (albumNumber != null) {
                 albumNumber = em.getReference(albumNumber.getClass(), albumNumber.getAlbumNumber());
@@ -101,19 +117,23 @@ public class TracksJpaController implements Serializable {
                     oldTrackIdOfGenreToTracksListGenreToTracks = em.merge(oldTrackIdOfGenreToTracksListGenreToTracks);
                 }
             }
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
+            utx.commit();
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+                LOG.error("Rollback");
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                LOG.error("Rollback2");
+
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
         }
     }
 
     public void edit(Tracks tracks) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        EntityManager em = null;
+
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Tracks persistentTracks = em.find(Tracks.class, tracks.getTrackId());
             Albums albumNumberOld = persistentTracks.getAlbumNumber();
             Albums albumNumberNew = tracks.getAlbumNumber();
@@ -216,28 +236,28 @@ public class TracksJpaController implements Serializable {
                     }
                 }
             }
-            em.getTransaction().commit();
-        } catch (Exception ex) {
+            utx.commit();
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = tracks.getTrackId();
                 if (findTracks(id) == null) {
-                    throw new NonexistentEntityException("The tracks with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
-        EntityManager em = null;
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicMixedException, HeuristicRollbackException {
+
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Tracks tracks;
             try {
                 tracks = em.getReference(Tracks.class, id);
@@ -274,11 +294,14 @@ public class TracksJpaController implements Serializable {
                 genreToTracksListGenreToTracks = em.merge(genreToTracksListGenreToTracks);
             }
             em.remove(tracks);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
+            utx.commit();
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
+            throw ex;
         }
     }
 
@@ -291,41 +314,32 @@ public class TracksJpaController implements Serializable {
     }
 
     private List<Tracks> findTracksEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Tracks.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Tracks.class));
+        Query q = em.createQuery(cq);
+        if (!all) {
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
         }
+        return q.getResultList();
+
     }
 
     public Tracks findTracks(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Tracks.class, id);
-        } finally {
-            em.close();
-        }
+
+        return em.find(Tracks.class, id);
+
     }
 
     public int getTracksCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Tracks> rt = cq.from(Tracks.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        Root<Tracks> rt = cq.from(Tracks.class);
+        cq.select(em.getCriteriaBuilder().count(rt));
+        Query q = em.createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+
     }
-    
+
 }
