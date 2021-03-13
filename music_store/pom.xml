@@ -46,6 +46,7 @@
             <artifactId>font-awesome</artifactId>
             <version>5.15.2</version>
         </dependency>
+
     </dependencies>
 
 </project>

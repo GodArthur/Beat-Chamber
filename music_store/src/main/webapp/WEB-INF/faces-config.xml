@@ -27,7 +27,7 @@
     <!-- Internationalization -->
     <application>
         <locale-config>
-            <default-locale>en_CA</default-locale>
+            <default-locale></default-locale>
             <supported-locale>en_CA</supported-locale>
             <supported-locale>fr_CA</supported-locale>
         </locale-config>
