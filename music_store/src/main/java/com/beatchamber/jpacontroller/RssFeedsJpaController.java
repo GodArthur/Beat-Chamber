@@ -1,9 +1,10 @@
 package com.beatchamber.jpacontroller;
 
-import com.beatchamber.entities.Ads;
+import com.beatchamber.entities.RssFeeds;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
@@ -30,9 +31,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-public class AdsJpaController implements Serializable {
+public class RssFeedsJpaController implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AdsJpaController.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RssFeedsJpaController.class);
 
     @Resource
     private UserTransaction utx;
@@ -40,16 +41,15 @@ public class AdsJpaController implements Serializable {
     @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
 
-    public AdsJpaController() {
+    public RssFeedsJpaController() {
     }
 
-    public void create(Ads ads) throws RollbackFailureException {
+    public void create(RssFeeds rssFeeds) throws RollbackFailureException {
 
         try {
             utx.begin();
-            em.persist(ads);
+            em.persist(rssFeeds);
             utx.commit();
-
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
@@ -62,13 +62,13 @@ public class AdsJpaController implements Serializable {
         }
     }
 
-    public void edit(Ads ads) throws NonexistentEntityException, Exception {
+    public void edit(RssFeeds rssFeeds) throws NonexistentEntityException, Exception {
 
         try {
-            utx.begin();
-            ads = em.merge(ads);
-            utx.commit();
 
+            utx.begin();
+            rssFeeds = em.merge(rssFeeds);
+            utx.commit();
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
@@ -77,9 +77,9 @@ public class AdsJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = ads.getAdId();
-                if (findAds(id) == null) {
-                    throw new NonexistentEntityException("The ad with id " + id + " no longer exists.");
+                Integer id = rssFeeds.getRssId();
+                if (findRssFeeds(id) == null) {
+                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -90,16 +90,15 @@ public class AdsJpaController implements Serializable {
 
         try {
             utx.begin();
-            Ads ads;
+            RssFeeds rssFeeds;
             try {
-                ads = em.getReference(Ads.class, id);
-                ads.getAdId();
+                rssFeeds = em.getReference(RssFeeds.class, id);
+                rssFeeds.getRssId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The ads with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The rssFeeds with id " + id + " no longer exists.", enfe);
             }
-            em.remove(ads);
+            em.remove(rssFeeds);
             utx.commit();
-
         } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
@@ -110,18 +109,18 @@ public class AdsJpaController implements Serializable {
         }
     }
 
-    public List<Ads> findAdsEntities() {
-        return findAdsEntities(true, -1, -1);
+    public List<RssFeeds> findRssFeedsEntities() {
+        return findRssFeedsEntities(true, -1, -1);
     }
 
-    public List<Ads> findAdsEntities(int maxResults, int firstResult) {
-        return findAdsEntities(false, maxResults, firstResult);
+    public List<RssFeeds> findRssFeedsEntities(int maxResults, int firstResult) {
+        return findRssFeedsEntities(false, maxResults, firstResult);
     }
 
-    private List<Ads> findAdsEntities(boolean all, int maxResults, int firstResult) {
+    private List<RssFeeds> findRssFeedsEntities(boolean all, int maxResults, int firstResult) {
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Ads.class));
+        cq.select(cq.from(RssFeeds.class));
         Query q = em.createQuery(cq);
         if (!all) {
             q.setMaxResults(maxResults);
@@ -130,15 +129,15 @@ public class AdsJpaController implements Serializable {
         return q.getResultList();
     }
 
-    public Ads findAds(Integer id) {
+    public RssFeeds findRssFeeds(Integer id) {
 
-        return em.find(Ads.class, id);
+        return em.find(RssFeeds.class, id);
     }
 
-    public int getAdsCount() {
+    public int getRssFeedsCount() {
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        Root<Ads> rt = cq.from(Ads.class);
+        Root<RssFeeds> rt = cq.from(RssFeeds.class);
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
