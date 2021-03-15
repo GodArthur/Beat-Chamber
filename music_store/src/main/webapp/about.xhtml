@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
+<!-- http://localhost:8080/music_store/ -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
         <title>Home Page</title>
@@ -27,6 +29,40 @@
             </div>
         </nav>
         
+            
+        
+        <p:accordionPanel widgetVar="basic" >
+        
+            <p:tab title="Home" class="aboutAccordion">
+                <p class="alignTextLeft">•By pressing on the Home nagivation bar option You will be redirected to the home page</p>
+            </p:tab>
+            
+            <p:tab title="Music">
+                <p class="alignTextLeft">•By pressing on the Music nagivation bar option You will be redirected to the music page where you will have access to</p>
+            </p:tab>
+            
+            <p:tab title="Contact">
+                <p class="alignTextLeft">•By pressing on the Contact nagivation bar option You will be redirected to the contact page where you will have access to the information to contact the Beat chamber team</p>
+            </p:tab>
+                
+            <p:tab title="HELP">
+                <p class="alignTextLeft">•By pressing on the Help nagivation bar option nothing will happen because you already are currently on the page</p>
+            </p:tab>
+            
+            <p:tab title="SEARCH">
+                <p class="alignTextLeft">•You can search for a song by name through the search bar</p>
+            </p:tab>
+            
+            <p:tab title="CART">
+                <p class="alignTextLeft">•The cart will have the items that you hve added to it</p>
+            </p:tab>
+            
+            <p:tab title="Logo">
+                <p class="alignTextLeft">•By click on the logo you will be redirected to the home page it is the same as the home button on the navigation bar</p>
+            </p:tab>
+                
+        </p:accordionPanel>
+            <!--
         <div class="about_section">
 			<h2 id="page_title">HELP PAGE</h2>
 			<br/>
@@ -104,7 +140,7 @@
 			<br/>
 			<p class="alignTextLeft">•By click on the logo you will be redirected to the home page it is the same as the home button on the navigation bar</p>
 			</div>
-        </div>
+        </div>-->
         
     <footer>
         <p>© 2021 Copyright Beat Chamber</p>
