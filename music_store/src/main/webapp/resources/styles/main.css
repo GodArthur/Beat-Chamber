@@ -447,17 +447,8 @@ table-column:hover {
 }
 
 
-.modal-header{
-  background: linear-gradient(108deg, rgba(19,184,190,1) 0%, rgba(117,37,255,1) 100%);
-  color: white;
-  border-radius: 35px;
+.ui-dialog .ui-dialog-titlebar{
+  background: linear-gradient(108deg, rgba(19,184,190,1) 0%, rgba(117,37,255,1) 100%)!important;
+  color:#000!important;
 }
 
-.edit{
-  cursor: pointer;
-}
-
-.ui-button-danger{
-    background:#000!important;
-    color:#fff!important;
-}

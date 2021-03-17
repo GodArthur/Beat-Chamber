@@ -10,7 +10,6 @@
         <h:outputStylesheet library="styles" name="main.css" />
         <h:outputStylesheet library="webjars" name="bootstrap/4.3.1/css/bootstrap.min-jsf.css"/>
         <h:outputStylesheet library="webjars" name="font-awesome/5.15.2/css/all.min-jsf.css" />
-
         <title>#{msgs.managetitle}</title>
     </h:head>
     <h:body>
@@ -37,102 +36,146 @@
         <div>
             <div class="container-page">
                 <div class="icon-bar">
-                    <h:commandLink  id="userButton" class="active">
+                    <h:link id="clinetButton" class="active" outcome="manageClients">
                         <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="albumButton" action="manageAlbum.xhtml" >
+                    </h:link>
+                    <h:link  id="albumButton" outcome="manageClients" >
                         <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="trackButton" action="manageAlbum.xhtml" >
-                        <i class="fas fa-fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="orderButton" action="manageAlbum.xhtml" >
+                    </h:link>
+                    <h:link  id="trackButton" outcome="manageClients" >
+                        <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
+                    </h:link>
+                    <h:link  id="orderButton" outcome="manageClients" >
                         <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="reviewButton" action="manageAlbum.xhtml" >
+                    </h:link>
+                    <h:link  id="reviewButton" outcome="manageClients" >
                         <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="reportButton" action="manageAlbum.xhtml" >
+                    </h:link>
+                    <h:link  id="reportButton" outcome="manageClients" >
                         <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="rssButton" action="manageAlbum.xhtml" >
+                    </h:link>
+                    <h:link  id="rssButton" outcome="manageClients" >
                         <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="surveyButton" action="manageAlbum.xhtml" >
-                        <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
-                    </h:commandLink>
-                    <h:commandLink  id="adButton" action="manageAlbum.xhtml" >
+                    </h:link>
+                    <h:link  id="clientButton" outcome="manageClients" >
+                        <i class="fas fa-chart-line fa-lg"></i><br/><h5>Clients</h5>
+                    </h:link>
+                    <h:link  id="adButton" outcome="manageClients" >
                         <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
-                    </h:commandLink>
+                    </h:link>
                 </div>
 
 
-                <p:dataTable id="manage-clients" widgetVar="dtClients" var="client" value="#{crudView.clients}"
-                             reflow="true" styleClass="container-table"
-                             selection="#{crudView.selectedClients}" rowKey="#{client.id}" paginator="true"
-                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
-                    <f:facet name="header">
-                        <div styleClass="background:black">
-                            <span class="table-title">
-                                Client Details
-                            </span>
-                            <span class="filter-container ui-input-icon-left">
-                                <i class="pi pi-search"></i>
-                                <p:inputText id="globalFilter" 
-                                             onkeyup="PF('dtClients').filter()" placeholder="Search"/>
-                            </span>
-                            <span>
-                                <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{crudView.openNew}"
-                                                 oncomplete="PF('manageClientDialog').show()"
-                                                 styleClass="rounded-button ui-button-help float-right">
-                                </p:commandButton>
-                            </span>
+                <h:form id="form" class="container-table">
+                    <p:growl id="messages" showDetail="true"/>
+                    <p:dataTable id="dt-clients" widgetVar="dtClients" var="client" value="#{theClients.clients}"
+                                 reflow="true" 
+                                 selection="#{theClients.selectedClients}" rowKey="#{client.clientNumber}" paginator="true"
+                                 rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div>
+                                <span class="table-title">
+                                    Clients
+                                </span>
+                                <span class="filter-container ui-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" 
+                                                 onkeyup="PF('dtClients').filter()" placeholder="Search"/>
+                                </span>
+                                <span>
+                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theClients.openNew}"
+                                                     update=":form:manage-client-content" 
+                                                     oncomplete="PF('manageClientDialog').show()"
+                                                     styleClass="rounded-button ui-button-help float-right">
+                                        <p:resetInput target=":form:manage-client-content"/>
+                                    </p:commandButton>
+                                </span>
+                            </div>
+                        </f:facet>
 
-                        </div>
-                    </f:facet>
+
+                        <p:column style="width:calc(50px)" headerText="Id" sortBy="#{client.clientNumber}" >
+                            <h:outputText value="#{client.clientNumber}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="UserName" sortBy="#{client.username}">
+                            <h:outputText value="#{client.username}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Title" sortBy="#{client.title}">
+                            <h:outputText value="#{client.title}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="First Name" sortBy="#{client.firstName}">
+                            <h:outputText value="#{client.firstName}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Last Name" sortBy="#{client.lastName}">
+                            <h:outputText value="#{client.lastName}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Email" sortBy="#{client.name}">
+                            <h:outputText value="#{client.name}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Cell Phone" sortBy="#{client.cellPhone}">
+                            <h:outputText value="#{client.cellPhone}" converter="com.beatchamber.PhoneNumberConverter"/>
+                        </p:column>
+
+                        <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-client-content"
+                                             oncomplete="PF('manageClientDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-help" process="@this">
+                                <f:setPropertyActionListener value="#{client}" target="#{theClients.selectedClient}"/>
+                                <p:resetInput target=":form:manage-client-content"/>
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:column style="width:calc(50px)" exportable="false" headerText="Delete" >
+                            <p:commandButton class="rounded-button" icon="pi pi-trash" process="@this"
+                                             oncomplete="PF('deleteClientDialog').show()">
+                                <f:setPropertyActionListener value="#{client}" target="#{theClients.selectedClient}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
 
 
-                    <p:column headerText="Id" sortBy="#{client.code}" >
-                        <h:outputText value="#{client.code}"/>
-                    </p:column>
-                    <p:column headerText="UserName" sortBy="#{client.name}">
-                        <h:outputText value="#{client.name}"/>
-                    </p:column>
-                    <p:column headerText="Title" sortBy="#{client.name}">
-                        <h:outputText value="#{client.name}"/>
-                    </p:column>
-                    <p:column headerText="First Name" sortBy="#{client.name}">
-                        <h:outputText value="#{client.name}"/>
-                    </p:column>
-                    <p:column headerText="Last Name" sortBy="#{client.name}">
-                        <h:outputText value="#{client.name}"/>
-                    </p:column>
-                    <p:column headerText="Email" sortBy="#{client.name}">
-                        <h:outputText value="#{client.name}"/>
-                    </p:column>
-                    <p:column headerText="Cell Phone" sortBy="#{client.price}">
-                        <h:outputText value="#{client.price}" converter="com.beatchamber.PhoneNumberConverter"/>
-                    </p:column>
-                    <p:column exportable="false">
-                        <p:commandButton icon="pi pi-pencil" update=":form:manage-client-content"
-                                         oncomplete="PF('manageClientDialog').show()"
-                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
-                            <f:setPropertyActionListener value="#{client}" target="#{crudView.selectedClient}"/>
-                            <p:resetInput target=":form:manage-client-content"/>
-                        </p:commandButton>
-                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
-                                         oncomplete="PF('deleteClientDialog').show()">
-                            <f:setPropertyActionListener value="#{client}" target="#{crudView.selectedClient}"/>
-                        </p:commandButton>
-                    </p:column>
+                    <p:dialog header="Client Details" showEffect="fade" modal="true"
+                              widgetVar="manageClientDialog" responsive="true" >
+                        <p:outputPanel id="manage-client-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty theClients.selectedClient}">
+                                <div class="ui-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col-12">
+                                        <p:outputLabel for="title">Title</p:outputLabel>
+                                        <p:inputTextarea id="title" value="#{theClients.selectedClient.title}" required="true"/>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
 
-                </p:dataTable>
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theClients.saveClient}"
+                                             update="manage-client-content" process="manage-client-content @this"/>
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageClientDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
 
+
+                    <p:confirmDialog widgetVar="deleteClientDialog" showEffect="fade" width="300"
+                                     message="Delete the client?" header="Confirm" severity="warn">
+                        <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{theClients.deleteClient}"
+                                         process="@this" oncomplete="PF('deleteClientDialog').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteClientDialog').hide()"/>
+                    </p:confirmDialog>
+
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" 
+                                         icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+
+                </h:form>
 
             </div>
-
-
         </div>
+
 
         <footer>
             <p>© 2021 Copyright Beat Chambers</p>
