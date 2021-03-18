@@ -570,3 +570,20 @@ insert into Clients (client_number, title, last_name, first_name, company_name, 
 insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (8, 'Ms', 'Speariett', 'Petronilla', 'Vidoo', '0208 Cardinal Road', '95 Stang Pass', 'Fox Creek', 'Nova Scotia', 'Canada', 'E4B 3F4', '1432345437', '6058761228', 'pspeariett7@g.co', 'pspeariett7', 'F9lBbU8Z');
 insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (9, 'Mrs', 'La Rosa', 'Major', 'Eazzy', '8 Lighthouse Bay Center', '58266 Monterey Crossing', 'St. Thomas', 'Manitoba', 'Canada', 'N5R 5S2', '1409864159', '8383574253', 'mlarosa8@stanford.edu', 'mlarosa8', '2lYiNfaEIn');
 insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (10, 'Mrs', 'MacKay', 'Kristo', 'Divanoodle', '21 Kingsford Terrace', '28024 Sunbrook Place', 'Sherwood Park', 'Prince Edward Island', 'Canada', 'T8A 7J3', '5445848160', '8396753263', 'kmackay9@harvard.edu', 'kmackay9', 'WPgoKZW0cJh');
+
+
+/* website for pst gst and hst https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-by-province/*/
+insert into provinces (province_id,choice_name,pst,gst,hst) values
+(1,'Alberta',5,5,0),
+(2,'British Columbia',7,5,0),
+(3,'Manitoba',7,5,0),
+(4,'New Brunswick',0,0,15),
+(5,'Newfoundland and Labrador',0,0,15),
+(6,'Northwest Territories',0,5,0),
+(7,'Nova Scotia',0,0,15),
+(8,'Nunavut',0,5,0),
+(9,'Ontario',0,0,13),
+(10,'Prince Edward',0,0,15),
+(11,'Quebec',9.975,5,0),
+(12,'Saskatchewan',6,5,0),
+(13,'Yukon',0,5,5);

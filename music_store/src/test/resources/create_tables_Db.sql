@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS Clients;
 DROP TABLE IF EXISTS genre_to_album;
 DROP TABLE IF EXISTS genre_to_tracks;
 DROP TABLE IF EXISTS genres;
+DROP TABLE IF EXISTS provinces;
 
 
 
@@ -211,6 +212,14 @@ FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
 );
 
 
+/* provinces */
+create table provinces(
+province_id int primary key auto_increment,
+choice_name varchar(30) not null,
+pst double not null,
+gst double not null,
+hst double not null
+);
 
 
 
