@@ -30,7 +30,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/manageClients.xhtml</welcome-file>
+        <welcome-file>faces/manageSurveys.xhtml</welcome-file>
 <!--        <welcome-file>index.xhtml</welcome-file>-->
     </welcome-file-list>
 

@@ -42,28 +42,28 @@
                     <h:link id="clinetButton" outcome="manageClients">
                         <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
                     </h:link>
-                    <h:link  id="albumButton" outcome="manageSurveys" >
+                    <h:link  id="albumButton" >
                         <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
                     </h:link>
-                    <h:link  id="trackButton" outcome="manageSurveys" >
+                    <h:link  id="trackButton" >
                         <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
                     </h:link>
-                    <h:link  id="orderButton" outcome="manageSurveys" >
+                    <h:link  id="orderButton" >
                         <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
                     </h:link>
-                    <h:link  id="reviewButton" outcome="manageSurveys" >
+                    <h:link  id="reviewButton" >
                         <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
                     </h:link>
-                    <h:link  id="reportButton" outcome="manageSurveys" >
+                    <h:link  id="reportButton" >
                         <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
                     </h:link>
-                    <h:link  id="rssButton" outcome="manageSurveys" >
+                    <h:link  id="rssButton" >
                         <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
                     </h:link>
                     <h:link  id="surveyButton" class="active" outcome="manageSurveys" >
                         <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
                     </h:link>
-                    <h:link  id="adButton" outcome="manageSurveys" >
+                    <h:link  id="adButton" >
                         <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
                     </h:link>
                 </div>
@@ -123,13 +123,61 @@
 
 
                     <p:dialog header="Survey Details" showEffect="fade" modal="true"
-                              widgetVar="manageSurveyDialog" responsive="true" >
+                              widgetVar="manageSurveyDialog" responsive="true" width="500px" height="450px">
                         <p:outputPanel id="manage-survey-content" class="ui-fluid">
                             <p:outputPanel rendered="#{not empty theSurveys.selectedSurvey}">
-                                <div class="ui-fluid p-formgrid p-grid">
-                                    <div class="p-field p-col-12">
-                                        <p:outputLabel for="title">Title</p:outputLabel>
-                                        <p:inputTextarea id="title" value="#{theSurveys.selectedSurvey.title}" required="true"/>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel for="title" value="Title"/>
+                                    <p:inputTextarea id="title"  value="#{theSurveys.selectedSurvey.title}" required="true"/>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="option1" value="Option1"/>
+                                        <p:inputText id="option1" value="#{theSurveys.choices[0].choiceName}"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="vote1" value="Votes"/>
+                                        <p:inputText id="vote1" value="#{theSurveys.choices[0].votes}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="option2" value="Option2"/>
+                                        <p:inputText id="option2" value="#{theSurveys.choices[1].choiceName}"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="vote2" value="Votes"/>
+                                        <p:inputText id="vote2" value="#{theSurveys.choices[1].votes}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="option3" value="Option3"/>
+                                        <p:inputText id="option3" value="#{theSurveys.choices[2].choiceName}"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="vote3" value="Votes"/>
+                                        <p:inputText id="vote3" value="#{theSurveys.choices[2].votes}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="option4" value="Option4"/>
+                                        <p:inputText id="option4" value="#{theSurveys.choices[3].choiceName}"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="vote4" value="Votes"/>
+                                        <p:inputText id="vote4" value="#{theSurveys.choices[3].votes}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="option5" value="Option5"/>
+                                        <p:inputText id="option5" value="#{theSurveys.choices[4].choiceName}"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="vote5" value="Votes"/>
+                                        <p:inputText id="vote5" value="#{theSurveys.choices[4].votes}"/>
                                     </div>
                                 </div>
                             </p:outputPanel>
@@ -144,7 +192,7 @@
                     </p:dialog>
 
 
-                    <p:confirmDialog widgetVar="deleteSurveyDialog" showEffect="fade" width="300"
+                    <p:confirmDialog widgetVar="deleteSurveyDialog" showEffect="fade"
                                      message="Delete the survey?" header="Confirm" severity="warn">
                         <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{theSurveys.deleteSurvey}"
                                          process="@this" oncomplete="PF('deleteSurveyDialog').hide()"/>
@@ -152,7 +200,7 @@
                                          onclick="PF('deleteSurveyDialog').hide()"/>
                     </p:confirmDialog>
 
-                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:confirmDialog global="true" showEffect="fade">
                         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" 
                                          icon="pi pi-check"/>
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"

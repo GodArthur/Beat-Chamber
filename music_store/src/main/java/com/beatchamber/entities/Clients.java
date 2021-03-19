@@ -108,12 +108,14 @@ public class Clients implements Serializable {
     private String postalCode;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 13)
     @Column(name = "home_phone")
-    private int homePhone;
+    private String homePhone;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 13)
     @Column(name = "cell_phone")
-    private int cellPhone;
+    private String cellPhone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
@@ -121,7 +123,6 @@ public class Clients implements Serializable {
     @Column(name = "email")
     private String email;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 40)
     @Column(name = "genre_of_last_search")
     private String genreOfLastSearch;
@@ -136,12 +137,10 @@ public class Clients implements Serializable {
     @Column(name = "password")
     private String password;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 32)
     @Column(name = "salt")
     private String salt;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 32)
     @Column(name = "hash")
     private String hash;
@@ -157,7 +156,7 @@ public class Clients implements Serializable {
         this.clientNumber = clientNumber;
     }
 
-    public Clients(Integer clientNumber, String title, String lastName, String firstName, String companyName, String address1, String address2, String city, String province, String country, String postalCode, int homePhone, int cellPhone, String email, String genreOfLastSearch, String username, String password, String salt, String hash) {
+    public Clients(Integer clientNumber, String title, String lastName, String firstName, String companyName, String address1, String address2, String city, String province, String country, String postalCode, String homePhone, String cellPhone, String email, String genreOfLastSearch, String username, String password, String salt, String hash) {
         this.clientNumber = clientNumber;
         this.title = title;
         this.lastName = lastName;
@@ -267,19 +266,19 @@ public class Clients implements Serializable {
         this.postalCode = postalCode;
     }
 
-    public int getHomePhone() {
+    public String getHomePhone() {
         return homePhone;
     }
 
-    public void setHomePhone(int homePhone) {
+    public void setHomePhone(String homePhone) {
         this.homePhone = homePhone;
     }
 
-    public int getCellPhone() {
+    public String getCellPhone() {
         return cellPhone;
     }
 
-    public void setCellPhone(int cellPhone) {
+    public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
     }
 

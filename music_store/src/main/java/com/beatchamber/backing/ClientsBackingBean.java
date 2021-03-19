@@ -6,15 +6,24 @@
 package com.beatchamber.backing;
 
 import com.beatchamber.entities.Clients;
+import com.beatchamber.exceptions.IllegalOrphanException;
+import com.beatchamber.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * @author 1733570 Yan
  */
 @Named("theClients")
-@RequestScoped
+@SessionScoped
 public class ClientsBackingBean implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(ClientsBackingBean.class);
@@ -58,12 +67,19 @@ public class ClientsBackingBean implements Serializable {
     }
 
     public void saveClient() {
-        if (this.selectedClient.getTitle() == null) {
-//            this.selectedClient.setCode(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
-            this.clients.add(this.selectedClient);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Added"));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Updated"));
+        try {
+            if (this.selectedClient.getClientNumber() == null) {
+                clientsJpaController.create(this.selectedClient);
+                this.clients.add(this.selectedClient);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Added"));
+            } else {
+                clientsJpaController.edit(this.selectedClient);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Updated"));
+            }
+        } catch (RollbackFailureException | IllegalOrphanException | NonexistentEntityException ex) {
+            java.util.logging.Logger.getLogger(ClientsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(ClientsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         PrimeFaces.current().executeScript("PF('manageClientDialog').hide()");
@@ -71,6 +87,11 @@ public class ClientsBackingBean implements Serializable {
     }
 
     public void deleteClient() {
+        try {
+            clientsJpaController.destroy(this.selectedClient.getClientNumber());
+        } catch (IllegalOrphanException | NonexistentEntityException | NotSupportedException | SystemException | RollbackFailureException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
+            java.util.logging.Logger.getLogger(ClientsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.clients.remove(this.selectedClient);
         this.selectedClient = null;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Removed"));
