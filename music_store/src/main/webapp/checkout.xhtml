@@ -21,16 +21,26 @@ and open the template in the editor.
 				<h:form>
                                     
                                     <h:outputLabel class="inforLb" for="creditC">#{msgs.askCard}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="creditC" value="" required="true" requiredMessage="Username is required"/><br/><br/>
+                                    <h:inputText class="input_info" id="creditC" value="#{payment.card}" required="true" requiredMessage="Username is required" >
+                                        <f:converter converterId="com.beatChamber.CreditCardConverter" />
+                                        <f:validator validatorId="com.beatChamber.CreditCardValidator" />
+                                    </h:inputText>
+                                    <br/><br/>
 
                                     <h:outputLabel class="inforLb" for="expDate">#{msgs.askDate}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="expDate" value="" required="true" /><br/><br/>
+                                    <h:inputText class="input_info" id="expDate" value="" required="true" >
+                                        <f:convertDateTime pattern="MM/yyyy" />
+                                    </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="cvv">#{msgs.askCvv}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="cvv" value="" required="true" /><br/><br/>
+                                    <h:inputText class="input_info" id="cvv" value="" required="true" >
+                                        <f:validateLength minimum = "3" maximum = "4" />
+                                    </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="nameCard">#{msgs.askName}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="nameCard" value="" required="true" /><br/><br/>
+                                    <h:inputText class="input_info" id="nameCard" value="" required="true" >
+                                        <f:validateRegex pattern = "[A-Za-z]" />
+                                    </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="address">#{msgs.askAddress}</h:outputLabel>  
                                     <h:inputText class="input_info" id="address" value="" required="true" /><br/><br/>
@@ -38,8 +48,11 @@ and open the template in the editor.
                                     <h:outputLabel class="inforLb" for="City">#{msgs.askCity}</h:outputLabel>  
                                     <h:inputText class="input_info" id="City" value="" required="true" /><br/><br/>
 
-                                    <h:outputLabel class="City" for="province">#{msgs.askProvince}</h:outputLabel>  
-                                    <h:selectOneMenu value="">
+                                    <h:outputLabel class="City" for="province">#{msgs.askProvince}
+                                        
+                                    </h:outputLabel>  
+                                    <h:selectOneMenu value="#{provincechoice.name}">
+                                        <f:ajax event="change" render="echo" />
                                       <f:selectItem itemValue="1" itemLabel="Alberta" />
                                       <f:selectItem itemValue="2" itemLabel="British Columbia" />
                                       <f:selectItem itemValue="3" itemLabel="Manitoba" />   
@@ -58,6 +71,7 @@ and open the template in the editor.
                                     <br/>
                                     <br/>
                                     <br/>
+                                    <h:outputText id="echo" value="#{provincechoice.name}" />
                                     <h:commandButton styleClass="validationBTN" value="Complete Checkout" type="button"/>
 
 				</h:form>

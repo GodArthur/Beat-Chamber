@@ -118,7 +118,7 @@ public class Choices implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Choices[ choiceId=" + choiceId + " ]";
+        return "com.beatchamber.entities.Choices[ choiceId=" + choiceId + " ]";
     }
     
 }
