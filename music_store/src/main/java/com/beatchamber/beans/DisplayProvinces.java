@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.beatchamber.beans;
 
 import com.beatchamber.jpacontroller.ProvincesJpaController;
@@ -19,7 +14,11 @@ import javax.persistence.Persistence;
 @RequestScoped
 public class DisplayProvinces {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("my_persistence_unit");
-    ProvincesJpaController dbProvince = new ProvincesJpaController(emf);
+    
+    //CHANGED THIS TO AVOID ERROR
+    //ProvincesJpaController dbProvince = new ProvincesJpaController(emf);
+    
+    ProvincesJpaController dbProvince = new ProvincesJpaController();
     
     public String getPst(int id){
         String pstValue = "";
