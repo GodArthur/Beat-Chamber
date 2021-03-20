@@ -52,7 +52,9 @@ and open the template in the editor.
                                         
                                     </h:outputLabel>  
                                     <h:selectOneMenu value="#{provincechoice.name}">
-                                        <f:ajax event="change" render="echo" />
+                                        <f:ajax event="change" render="renderPst" />
+                                        <f:ajax event="change" render="renderHst" />
+                                        <f:ajax event="change" render="renderGst" />
                                       <f:selectItem itemValue="1" itemLabel="Alberta" />
                                       <f:selectItem itemValue="2" itemLabel="British Columbia" />
                                       <f:selectItem itemValue="3" itemLabel="Manitoba" />   
@@ -71,7 +73,8 @@ and open the template in the editor.
                                     <br/>
                                     <br/>
                                     <br/>
-                                    <h:outputText id="echo" value="#{provincechoice.name}" />
+                                    
+                                    
                                     <h:commandButton styleClass="validationBTN" value="Complete Checkout" type="button"/>
 
 				</h:form>
@@ -82,12 +85,14 @@ and open the template in the editor.
 				<h1>#{msgs.showItems}</h1><br/><br/><br/><br/>
 				<hr class="hrColor" />
 				<h4>#{msgs.subTotal}</h4><br/>
-				<h4>#{msgs.ship}</h4><br/>
-				<h4>#{msgs.pst}</h4><br/>
-				<h4>#{msgs.gst}</h4><br/>
-				<h4>#{msgs.hst}</h4><br/>
+				<h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provinceManager.getPst(provincechoice.name)}"  /> %</h4><br/>
+                                <h4>#{msgs.gst} <h:outputText id="renderGst" value="#{provinceManager.getGst(provincechoice.name)}"  /> %</h4><br/>
+				<h4>#{msgs.hst} <h:outputText id="renderHst" value="#{provinceManager.getHst(provincechoice.name)}"  /> %</h4><br/>
 				<hr class="hrColor"/>
-				<h2>#{msgs.total}</h2>
+                                <br/>
+                                <br/>
+                                <br/>
+				<h1>#{msgs.total}</h1>
 			</div>
 			
 		</div>
