@@ -6,7 +6,7 @@
 package com.beatchamber.jpacontroller;
 
 import com.beatchamber.entities.Provinces;
-import com.beatchamber.jpacontroller.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
