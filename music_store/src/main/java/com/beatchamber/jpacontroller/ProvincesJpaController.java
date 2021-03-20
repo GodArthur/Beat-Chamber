@@ -45,12 +45,12 @@ public class ProvincesJpaController implements Serializable {
     }
 
     public void create(Provinces provinces) throws RollbackFailureException {
-        
+
         try {
             utx.begin();
             em.persist(provinces);
             utx.commit();
-            
+
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
@@ -87,7 +87,7 @@ public class ProvincesJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
-        
+
         try {
             utx.begin();
             Provinces provinces;
@@ -119,40 +119,29 @@ public class ProvincesJpaController implements Serializable {
 
     private List<Provinces> findProvincesEntities(boolean all, int maxResults, int firstResult) {
 
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Provinces.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Provinces.class));
+        Query q = em.createQuery(cq);
+        if (!all) {
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
         }
+        return q.getResultList();
     }
 
     public Provinces findProvinces(Integer id) {
 
-        try {
-            return em.find(Provinces.class, id);
-        } finally {
-            em.close();
-        }
+        return em.find(Provinces.class, id);
+
     }
 
     public int getProvincesCount() {
 
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Provinces> rt = cq.from(Provinces.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        Root<Provinces> rt = cq.from(Provinces.class);
+        cq.select(em.getCriteriaBuilder().count(rt));
+        Query q = em.createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }
