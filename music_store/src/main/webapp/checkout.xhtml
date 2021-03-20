@@ -19,7 +19,6 @@ and open the template in the editor.
 			<div id="information">
 			
 				<h:form>
-                                    
                                     <h:outputLabel class="inforLb" for="creditC">#{msgs.askCard}</h:outputLabel>  
                                     <h:inputText class="input_info" id="creditC" value="#{payment.card}" required="true" requiredMessage="Username is required" >
                                         <f:converter converterId="com.beatChamber.CreditCardConverter" />
@@ -93,6 +92,7 @@ and open the template in the editor.
                                 <br/>
                                 <br/>
 				<h1>#{msgs.total}</h1>
+                                <p>#{cookies.count}</p>
 			</div>
 			
 		</div>
