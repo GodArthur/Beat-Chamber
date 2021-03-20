@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.beatchamber.entities;
 
 import java.io.Serializable;
@@ -109,7 +114,7 @@ public class Genres implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Genres[ genreId=" + genreId + " ]";
+        return "com.beatchamber.entities.Genres[ genreId=" + genreId + " ]";
     }
     
 }

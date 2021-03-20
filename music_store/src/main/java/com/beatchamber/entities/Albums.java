@@ -254,7 +254,7 @@ public class Albums implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Albums[ albumNumber=" + albumNumber + " ]";
+        return "com.beatchamber.entities.Albums[ albumNumber=" + albumNumber + " ]";
     }
     
 }

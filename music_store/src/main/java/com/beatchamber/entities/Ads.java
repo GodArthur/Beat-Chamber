@@ -107,7 +107,7 @@ public class Ads implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Ads[ adId=" + adId + " ]";
+        return "com.beatchamber.entities.Ads[ adId=" + adId + " ]";
     }
     
 }

@@ -47,7 +47,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Clients.findByUsername", query = "SELECT c FROM Clients c WHERE c.username = :username"),
     @NamedQuery(name = "Clients.findByPassword", query = "SELECT c FROM Clients c WHERE c.password = :password"),
     @NamedQuery(name = "Clients.findBySalt", query = "SELECT c FROM Clients c WHERE c.salt = :salt"),
-    @NamedQuery(name = "Clients.findByhashkey", query = "SELECT c FROM Clients c WHERE c.hashkey = :hashkey")})
+    @NamedQuery(name = "Clients.findByHash", query = "SELECT c FROM Clients c WHERE c.hash = :hash")})
 public class Clients implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,49 +71,31 @@ public class Clients implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "first_name")
     private String firstName;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "company_name")
     private String companyName;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "address1")
     private String address1;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "address2")
     private String address2;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Column(name = "city")
     private String city;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Column(name = "province")
     private String province;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "country")
     private String country;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Column(name = "postal_code")
     private String postalCode;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Column(name = "home_phone")
     private String homePhone;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Column(name = "cell_phone")
     private String cellPhone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -122,8 +104,7 @@ public class Clients implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "email")
     private String email;
-    @Basic(optional = false)
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "genre_of_last_search")
     private String genreOfLastSearch;
     @Basic(optional = false)
@@ -136,14 +117,12 @@ public class Clients implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "password")
     private String password;
-    @Basic(optional = false)
-    @Size(min = 1, max = 32)
+    @Size(max = 32)
     @Column(name = "salt")
     private String salt;
-    @Basic(optional = false)
-    @Size(min = 1, max = 32)
-    @Column(name = "hashkey")
-    private String hashkey;
+    @Size(max = 32)
+    @Column(name = "hash")
+    private String hash;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
     private List<CustomerReviews> customerReviewsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
@@ -156,26 +135,14 @@ public class Clients implements Serializable {
         this.clientNumber = clientNumber;
     }
 
-    public Clients(Integer clientNumber, String title, String lastName, String firstName, String companyName, String address1, String address2, String city, String province, String country, String postalCode, String homePhone, String cellPhone, String email, String genreOfLastSearch, String username, String password, String salt, String hashkey) {
+    public Clients(Integer clientNumber, String title, String lastName, String firstName, String email, String username, String password) {
         this.clientNumber = clientNumber;
         this.title = title;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.companyName = companyName;
-        this.address1 = address1;
-        this.address2 = address2;
-        this.city = city;
-        this.province = province;
-        this.country = country;
-        this.postalCode = postalCode;
-        this.homePhone = homePhone;
-        this.cellPhone = cellPhone;
         this.email = email;
-        this.genreOfLastSearch = genreOfLastSearch;
         this.username = username;
         this.password = password;
-        this.salt = salt;
-        this.hashkey = hashkey;
     }
 
     public Integer getClientNumber() {
@@ -322,12 +289,12 @@ public class Clients implements Serializable {
         this.salt = salt;
     }
 
-    public String getHashkey() {
-        return hashkey;
+    public String getHash() {
+        return hash;
     }
 
-    public void setHashkey(String hashkey) {
-        this.hashkey = hashkey;
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public List<CustomerReviews> getCustomerReviewsList() {
@@ -368,7 +335,7 @@ public class Clients implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Clients[ clientNumber=" + clientNumber + " ]";
+        return "com.beatchamber.entities.Clients[ clientNumber=" + clientNumber + " ]";
     }
     
 }
