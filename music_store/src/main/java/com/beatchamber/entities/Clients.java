@@ -47,7 +47,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Clients.findByUsername", query = "SELECT c FROM Clients c WHERE c.username = :username"),
     @NamedQuery(name = "Clients.findByPassword", query = "SELECT c FROM Clients c WHERE c.password = :password"),
     @NamedQuery(name = "Clients.findBySalt", query = "SELECT c FROM Clients c WHERE c.salt = :salt"),
-    @NamedQuery(name = "Clients.findByHash", query = "SELECT c FROM Clients c WHERE c.hash = :hash")})
+    @NamedQuery(name = "Clients.findByhashkey", query = "SELECT c FROM Clients c WHERE c.hashkey = :hashkey")})
 public class Clients implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -108,12 +108,12 @@ public class Clients implements Serializable {
     private String postalCode;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 13)
+    @Size(min = 1, max = 20)
     @Column(name = "home_phone")
     private String homePhone;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 13)
+    @Size(min = 1, max = 20)
     @Column(name = "cell_phone")
     private String cellPhone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -142,8 +142,8 @@ public class Clients implements Serializable {
     private String salt;
     @Basic(optional = false)
     @Size(min = 1, max = 32)
-    @Column(name = "hash")
-    private String hash;
+    @Column(name = "hashkey")
+    private String hashkey;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
     private List<CustomerReviews> customerReviewsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
@@ -156,7 +156,7 @@ public class Clients implements Serializable {
         this.clientNumber = clientNumber;
     }
 
-    public Clients(Integer clientNumber, String title, String lastName, String firstName, String companyName, String address1, String address2, String city, String province, String country, String postalCode, String homePhone, String cellPhone, String email, String genreOfLastSearch, String username, String password, String salt, String hash) {
+    public Clients(Integer clientNumber, String title, String lastName, String firstName, String companyName, String address1, String address2, String city, String province, String country, String postalCode, String homePhone, String cellPhone, String email, String genreOfLastSearch, String username, String password, String salt, String hashkey) {
         this.clientNumber = clientNumber;
         this.title = title;
         this.lastName = lastName;
@@ -175,7 +175,7 @@ public class Clients implements Serializable {
         this.username = username;
         this.password = password;
         this.salt = salt;
-        this.hash = hash;
+        this.hashkey = hashkey;
     }
 
     public Integer getClientNumber() {
@@ -322,12 +322,12 @@ public class Clients implements Serializable {
         this.salt = salt;
     }
 
-    public String getHash() {
-        return hash;
+    public String getHashkey() {
+        return hashkey;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setHashkey(String hashkey) {
+        this.hashkey = hashkey;
     }
 
     public List<CustomerReviews> getCustomerReviewsList() {

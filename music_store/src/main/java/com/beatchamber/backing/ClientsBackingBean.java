@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author 1733570 Yan
+ * @author 1733570 Yan Tang
  */
 @Named("theClients")
 @SessionScoped
@@ -69,6 +69,8 @@ public class ClientsBackingBean implements Serializable {
     public void saveClient() {
         try {
             if (this.selectedClient.getClientNumber() == null) {
+                this.selectedClient.setPassword("123456");
+                this.convertPhoneFormat();
                 clientsJpaController.create(this.selectedClient);
                 this.clients.add(this.selectedClient);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Added"));
@@ -96,5 +98,16 @@ public class ClientsBackingBean implements Serializable {
         this.selectedClient = null;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-clients");
+    }
+
+    private void convertPhoneFormat() {
+        String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") " 
+                + this.selectedClient.getCellPhone().substring(3, 6) + "-" 
+                + this.selectedClient.getCellPhone().substring(6, 10);
+        this.selectedClient.setCellPhone(stringCellPhone);
+        String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") " 
+                + this.selectedClient.getHomePhone().substring(3, 6) + "-" 
+                + this.selectedClient.getHomePhone().substring(6, 10);
+        this.selectedClient.setHomePhone(stringHomePhone);
     }
 }

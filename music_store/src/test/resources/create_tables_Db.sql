@@ -127,14 +127,14 @@ city varchar(20) not null,
 province varchar(20) not null,
 country varchar(40) not null,
 postal_code varchar(20) not null,
-home_phone varchar(13) not null,
-cell_phone varchar(13) not null,
+home_phone varchar(20) not null,
+cell_phone varchar(20) not null,
 email varchar(40) not null,
 genre_of_last_search varchar(40),
 username varchar(40) not null,
 password varchar(40) not null,
 salt varchar(32),
-hash varchar(32)
+hashkey varchar(32)
 );
 
 /* Customer_reviews */

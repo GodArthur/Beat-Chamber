@@ -72,7 +72,7 @@
                     <p:growl id="messages" showDetail="true"/>
                     <p:dataTable id="dt-surveys" widgetVar="dtSurveys" var="survey" value="#{theSurveys.surveys}"
                                  reflow="true" 
-                                 selection="#{theSurveys.selectedSurveys}" rowKey="#{survey.surveyId}" paginator="true"
+                                 selection="#{theSurveys.selectedSurvey}" rowKey="#{survey.surveyId}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom">
                         <f:facet name="header">
                             <div>
@@ -85,7 +85,7 @@
                                                  onkeyup="PF('dtSurveys').filter()" placeholder="Search"/>
                                 </span>
                                 <span>
-                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theSurveys.openNew}"
+                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theSurveys.openNew()}"
                                                      update=":form:manage-survey-content" 
                                                      oncomplete="PF('manageSurveyDialog').show()"
                                                      styleClass="rounded-button ui-button-help float-right">
@@ -125,66 +125,66 @@
                     <p:dialog header="Survey Details" showEffect="fade" modal="true"
                               widgetVar="manageSurveyDialog" responsive="true" width="500px" height="450px">
                         <p:outputPanel id="manage-survey-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{not empty theSurveys.selectedSurvey}">
+                            <p:outputPanel rendered="#{ not empty theSurveys.selectedSurvey}" >
                                 <div class="p-field p-col-12">
                                     <p:outputLabel for="title" value="Title"/>
                                     <p:inputTextarea id="title"  value="#{theSurveys.selectedSurvey.title}" required="true"/>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <p:outputLabel for="option1" value="Option1"/>
-                                        <p:inputText id="option1" value="#{theSurveys.choices[0].choiceName}"/>
+                                        <p:outputLabel for="option1" rendered="#{theSurveys.choice1 != null}" value="Option1"/>
+                                        <p:inputText id="option1" rendered="#{theSurveys.choice1 != null}" value="#{theSurveys.choice1.choiceName}"/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p:outputLabel for="vote1" value="Votes"/>
-                                        <p:inputText id="vote1" value="#{theSurveys.choices[0].votes}"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p:outputLabel for="option2" value="Option2"/>
-                                        <p:inputText id="option2" value="#{theSurveys.choices[1].choiceName}"/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p:outputLabel for="vote2" value="Votes"/>
-                                        <p:inputText id="vote2" value="#{theSurveys.choices[1].votes}"/>
+                                        <p:outputLabel for="vote1" rendered="#{theSurveys.choice1 != null}" value="Votes"/>
+                                        <p:inputText id="vote1" rendered="#{theSurveys.choice1 != null}" value="#{theSurveys.choice1.votes}"/>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <p:outputLabel for="option3" value="Option3"/>
-                                        <p:inputText id="option3" value="#{theSurveys.choices[2].choiceName}"/>
+                                        <p:outputLabel for="option2" rendered="#{theSurveys.choice2 != null}" value="Option2"/>
+                                        <p:inputText id="option2" rendered="#{theSurveys.choice2 != null}" value="#{theSurveys.choice2.choiceName}"/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p:outputLabel for="vote3" value="Votes"/>
-                                        <p:inputText id="vote3" value="#{theSurveys.choices[2].votes}"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p:outputLabel for="option4" value="Option4"/>
-                                        <p:inputText id="option4" value="#{theSurveys.choices[3].choiceName}"/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p:outputLabel for="vote4" value="Votes"/>
-                                        <p:inputText id="vote4" value="#{theSurveys.choices[3].votes}"/>
+                                        <p:outputLabel for="vote2" rendered="#{theSurveys.choice2 != null}" value="Votes"/>
+                                        <p:inputText id="vote2" rendered="#{theSurveys.choice2 != null}" value="#{theSurveys.choice2.votes}"/>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <p:outputLabel for="option5" value="Option5"/>
-                                        <p:inputText id="option5" value="#{theSurveys.choices[4].choiceName}"/>
+                                        <p:outputLabel for="option3" rendered="#{theSurveys.choice3 != null}" value="Option3"/>
+                                        <p:inputText id="option3" rendered="#{theSurveys.choice3 != null}" value="#{theSurveys.choice3.choiceName}"/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p:outputLabel for="vote5" value="Votes"/>
-                                        <p:inputText id="vote5" value="#{theSurveys.choices[4].votes}"/>
+                                        <p:outputLabel for="vote3" rendered="#{theSurveys.choice3 != null}" value="Votes"/>
+                                        <p:inputText id="vote3" rendered="#{theSurveys.choice3 != null}" value="#{theSurveys.choice3.votes}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="option4" rendered="#{theSurveys.choice4 != null}" value="Option4"/>
+                                        <p:inputText id="option4" rendered="#{theSurveys.choice4 != null}" value="#{theSurveys.choice4.choiceName}"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="vote4" rendered="#{theSurveys.choice4 != null}" value="Votes"/>
+                                        <p:inputText id="vote4" rendered="#{theSurveys.choice4 != null}" value="#{theSurveys.choice4.votes}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="option5" rendered="#{theSurveys.choice5 != null}" value="Option5"/>
+                                        <p:inputText id="option5" rendered="#{theSurveys.choice5 != null}" value="#{theSurveys.choice5.choiceName}"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p:outputLabel for="vote5" rendered="#{theSurveys.choice5 != null}" value="Votes"/>
+                                        <p:inputText id="vote5" rendered="#{theSurveys.choice5 != null}" value="#{theSurveys.choice5.votes}"/>
                                     </div>
                                 </div>
                             </p:outputPanel>
                         </p:outputPanel>
 
                         <f:facet name="footer">
-                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theSurveys.saveSurvey}"
+                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theSurveys.saveSurvey()}"
                                              update="manage-survey-content" process="manage-survey-content @this"/>
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageSurveyDialog').hide()"
                                              class="ui-button-secondary"/>

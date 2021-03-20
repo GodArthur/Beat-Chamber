@@ -557,7 +557,7 @@ insert into Survey_to_Choice(survey_id,choice_id) values
 /* survey#7 */
 (7,28),
 (7,29),
-(7,31),
+(7,30),
 (7,31);
 
 insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (1, 'Mr', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'mcollingridge0@lycos.com', 'mcollingridge0', 's461Gb4Cm');

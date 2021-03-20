@@ -82,6 +82,14 @@
                                     <p:inputText id="globalFilter" 
                                                  onkeyup="PF('dtClients').filter()" placeholder="Search"/>
                                 </span>
+                                <span>
+                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theClients.openNew()}"
+                                                     update=":form:manage-client-content" 
+                                                     oncomplete="PF('manageClientDialog').show()"
+                                                     styleClass="rounded-button ui-button-help float-right">
+                                        <p:resetInput target=":form:manage-client-content"/>
+                                    </p:commandButton>
+                                </span>
                             </div>
                         </f:facet>
 
