@@ -95,7 +95,7 @@ public class SurveyToChoice implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.SurveyToChoice[ tablekey=" + tablekey + " ]";
+        return "com.beatchamber.entities.SurveyToChoice[ tablekey=" + tablekey + " ]";
     }
     
 }

@@ -7,6 +7,8 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
+        <!--Style for the star radio buttons -->
+        <h:outputStylesheet library="stylesheet" name="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
         <title>Review Page</title>
     </h:head>
     <h:body>
@@ -26,12 +28,6 @@
                 <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
             </div>
         </nav>
-        <section class="background-section">
-            <h:graphicImage library="images" name="starwars_album_spons.jpg" height="100%" width="100%" styleClass="background-image"/>
-            <!--div class="album-ad">
-                <h:outputText value="Star Wars: The Empire Strikes Back Remastered Out Now"/>
-            </div-->
-        </section>
         
         <section>
         <div>
@@ -43,14 +39,19 @@
                     <p>Drake</p>
                 </div>
                 
-                <div class="star-review">
+                <div class="stars">
                 <form>
                     <h:selectOneRadio value="#{user.favColor1}">
-                        <f:selectItem itemValue="one" itemLabel="1 Star"/>
-                        <f:selectItem itemValue="two" itemLabel="2 Stars"/>
-                        <f:selectItem itemValue="three" itemLabel="3 Stars"/>
-                        <f:selectItem itemValue="four" itemLabel="4 Stars"/>
-                        <f:selectItem itemValue="five" itemLabel="5 Stars"/>
+                        <input class="star star-5" id="star-5" type="radio" name="star"/>
+                        <label class="star star-5" for="star-5"></label>
+                        <input class="star star-4" id="star-4" type="radio" name="star"/>
+                        <label class="star star-4" for="star-4"></label>
+                        <input class="star star-3" id="star-3" type="radio" name="star"/>
+                        <label class="star star-3" for="star-3"></label>
+                        <input class="star star-2" id="star-2" type="radio" name="star"/>
+                        <label class="star star-2" for="star-2"></label>
+                        <input class="star star-1" id="star-1" type="radio" name="star"/>
+                        <label class="star star-1" for="star-1"></label>
                     </h:selectOneRadio>
                 </form>
                 </div>

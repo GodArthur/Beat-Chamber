@@ -95,7 +95,7 @@ public class GenreToAlbum implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.GenreToAlbum[ tablekey=" + tablekey + " ]";
+        return "com.beatchamber.entities.GenreToAlbum[ tablekey=" + tablekey + " ]";
     }
     
 }

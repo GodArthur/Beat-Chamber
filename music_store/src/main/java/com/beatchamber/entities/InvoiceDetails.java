@@ -142,7 +142,7 @@ public class InvoiceDetails implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.InvoiceDetails[ tablekey=" + tablekey + " ]";
+        return "com.beatchamber.entities.InvoiceDetails[ tablekey=" + tablekey + " ]";
     }
     
 }

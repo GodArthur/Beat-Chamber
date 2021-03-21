@@ -115,7 +115,7 @@ public class Artists implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Artists[ artistId=" + artistId + " ]";
+        return "com.beatchamber.entities.Artists[ artistId=" + artistId + " ]";
     }
     
 }

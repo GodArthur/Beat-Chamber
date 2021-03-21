@@ -95,7 +95,7 @@ public class ArtistAlbums implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.ArtistAlbums[ tablekey=" + tablekey + " ]";
+        return "com.beatchamber.entities.ArtistAlbums[ tablekey=" + tablekey + " ]";
     }
     
 }

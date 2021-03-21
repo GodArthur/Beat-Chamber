@@ -114,7 +114,7 @@ public class Genres implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Genres[ genreId=" + genreId + " ]";
+        return "com.beatchamber.entities.Genres[ genreId=" + genreId + " ]";
     }
     
 }

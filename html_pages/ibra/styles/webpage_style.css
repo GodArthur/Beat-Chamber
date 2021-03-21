@@ -132,6 +132,67 @@ a:visited {
     justify-content: center;
     align-items: center;
 }
+/*Ibrahim was here*/
+#information{
+	border-style: solid;
+	width:auto;
+	height:100%;
+	display: inline-block;
+	overflow: auto ;
+	color:#5b3ec9;
+}
+
+/*Ibrahim was here*/
+#validationBTN{
+	border: 1px solid #5b3ec9;
+	height:50px;
+	background-color:#5b3ec9;
+	color:black;
+	font-size: 20px;
+	font-weight:bold;
+	opacity: 0.5;
+	transition: 0.3s;
+}
+
+/*Ibrahim was here*/
+#validationBTN:hover {
+	opacity: 1
+	}
+
+/*Ibrahim was here*/
+.hrColor{
+	background-color:#5b3ec9;
+	height: 1px; 
+	border: 0;
+}
+
+
+/*Ibrahim was here*/
+.input_info{
+	border: 1px solid #5b3ec9;
+}
+
+/*Ibrahim was here*/
+#show_prices{
+	border-style: solid;
+	width:200px;
+	height:100%;
+	display: inline-block;
+	overflow: auto ;
+	text-align:left;
+	color:#5b3ec9;
+}
+/*Ibrahim was here*/
+.checkout{
+	overflow: hidden;
+	width:100%;
+}
+/*Ibrahim was here*/
+.inforLb{
+	display: inline-block;
+    text-align: left;
+    width: 150px;
+}
 
 .container-404 {
     height: 700px;

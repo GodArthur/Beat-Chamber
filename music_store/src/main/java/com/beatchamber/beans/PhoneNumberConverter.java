@@ -21,40 +21,42 @@ import org.slf4j.LoggerFactory;
  */
 @FacesConverter("com.beatchamber.PhoneNumberConverter")
 public class PhoneNumberConverter implements Converter, Serializable {
+
     private final static Logger LOG = LoggerFactory.getLogger(PhoneNumberConverter.class);
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component,
-        String stringValue) throws ConverterException {
+            String stringValue) throws ConverterException {
 
-        if (stringValue == null || stringValue.trim().length() == 0)
-         return null;
+        if (stringValue == null || stringValue.trim().length() == 0) {
+            return null;
+        }
 
         String rawNumber = stringValue.replaceAll("[^0-9]", "");
-        PhoneNumber phoneNumber =null;
-        if (rawNumber.length() != 10){
+        PhoneNumber phoneNumber = null;
+        if (rawNumber.length() != 10) {
             throw new ConverterException(new FacesMessage(
-            "Phone number must be 10 numeric characters"));
-        }
-        else{
+                    "Phone number must be 10 numeric characters"));
+        } else {
             phoneNumber = new PhoneNumber(rawNumber.substring(0, 3),
-            rawNumber.substring(3, 6), rawNumber.substring(6));}
+                    rawNumber.substring(3, 6), rawNumber.substring(6));
+        }
 
         return phoneNumber;
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component,
-      Object value) throws ConverterException{
+            Object value) throws ConverterException {
         if (!(value instanceof PhoneNumber)) {
             throw new ConverterException();
         }
-        
+
         PhoneNumber phoneNumber = (PhoneNumber) value;
 
         String stringValue = "(" + phoneNumber.getAreaCode() + ") "
-        + phoneNumber.getPrefix() + "-" + phoneNumber.getLineNumber();
-      
+                + phoneNumber.getPrefix() + "-" + phoneNumber.getLineNumber();
+
         return stringValue;
     }
 }

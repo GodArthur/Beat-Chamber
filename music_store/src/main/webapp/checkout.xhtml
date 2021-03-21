@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="templates/master_template.xhtml">
+            <ui:define name="content">
+                
+                <div id="checkout">
+			
+			<div id="information">
+			
+				<h:form>
+                                    <h:outputLabel class="inforLb" for="creditC">#{msgs.askCard}</h:outputLabel>  
+                                    <h:inputText class="input_info" id="creditC" value="#{payment.card}" required="true" requiredMessage="Username is required" >
+                                        <f:converter converterId="com.beatChamber.CreditCardConverter" />
+                                        <f:validator validatorId="com.beatChamber.CreditCardValidator" />
+                                    </h:inputText>
+                                    <br/><br/>
+
+                                    <h:outputLabel class="inforLb" for="expDate">#{msgs.askDate}</h:outputLabel>  
+                                    <h:inputText class="input_info" id="expDate" value="" required="true" >
+                                        <f:convertDateTime pattern="MM/yyyy" />
+                                    </h:inputText><br/><br/>
+
+                                    <h:outputLabel class="inforLb" for="cvv">#{msgs.askCvv}</h:outputLabel>  
+                                    <h:inputText class="input_info" id="cvv" value="" required="true" >
+                                        <f:validateLength minimum = "3" maximum = "4" />
+                                    </h:inputText><br/><br/>
+
+                                    <h:outputLabel class="inforLb" for="nameCard">#{msgs.askName}</h:outputLabel>  
+                                    <h:inputText class="input_info" id="nameCard" value="" required="true" >
+                                        <f:validateRegex pattern = "[A-Za-z]" />
+                                    </h:inputText><br/><br/>
+
+                                    <h:outputLabel class="inforLb" for="address">#{msgs.askAddress}</h:outputLabel>  
+                                    <h:inputText class="input_info" id="address" value="" required="true" /><br/><br/>
+
+                                    <h:outputLabel class="inforLb" for="City">#{msgs.askCity}</h:outputLabel>  
+                                    <h:inputText class="input_info" id="City" value="" required="true" /><br/><br/>
+
+                                    <h:outputLabel class="City" for="province">#{msgs.askProvince}
+                                        
+                                    </h:outputLabel>  
+                                    <h:selectOneMenu value="#{provincechoice.name}">
+                                        <f:ajax event="change" render="renderPst" />
+                                        <f:ajax event="change" render="renderHst" />
+                                        <f:ajax event="change" render="renderGst" />
+                                      <f:selectItem itemValue="1" itemLabel="Alberta" />
+                                      <f:selectItem itemValue="2" itemLabel="British Columbia" />
+                                      <f:selectItem itemValue="3" itemLabel="Manitoba" />   
+                                      <f:selectItem itemValue="4" itemLabel="New Brunswick" />   
+                                      <f:selectItem itemValue="5" itemLabel="Newfoundland and Labrador" />   
+                                      <f:selectItem itemValue="6" itemLabel="Northwest Territories" />   
+                                      <f:selectItem itemValue="7" itemLabel="Nova Scotia" />   
+                                      <f:selectItem itemValue="8" itemLabel="Nunavut" />   
+                                      <f:selectItem itemValue="9" itemLabel="Ontario" />   
+                                      <f:selectItem itemValue="10" itemLabel="Prince Edward Island" />   
+                                      <f:selectItem itemValue="11" itemLabel="Quebec" />   
+                                      <f:selectItem itemValue="12" itemLabel="Saskatchewan" />   
+                                      <f:selectItem itemValue="13" itemLabel="Yukon" />   
+                                   </h:selectOneMenu>
+
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    
+                                    
+                                    <h:commandButton styleClass="validationBTN" value="Complete Checkout" type="button"/>
+
+				</h:form>
+
+			</div>
+
+			<div id="show_prices">
+				<h1>#{msgs.showItems}</h1><br/><br/><br/><br/>
+				<hr class="hrColor" />
+				<h4>#{msgs.subTotal}</h4><br/>
+				<h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provinceManager.getPst(provincechoice.name)}"  /> %</h4><br/>
+                                <h4>#{msgs.gst} <h:outputText id="renderGst" value="#{provinceManager.getGst(provincechoice.name)}"  /> %</h4><br/>
+				<h4>#{msgs.hst} <h:outputText id="renderHst" value="#{provinceManager.getHst(provincechoice.name)}"  /> %</h4><br/>
+				<hr class="hrColor"/>
+                                <br/>
+                                <br/>
+                                <br/>
+				<h1>#{msgs.total}</h1>
+                                <p>#{cookies.count}</p>
+			</div>
+			
+		</div>
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

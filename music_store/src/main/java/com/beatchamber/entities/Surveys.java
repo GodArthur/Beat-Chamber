@@ -104,7 +104,7 @@ public class Surveys implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Surveys[ surveyId=" + surveyId + " ]";
+        return "com.beatchamber.entities.Surveys[ surveyId=" + surveyId + " ]";
     }
     
 }

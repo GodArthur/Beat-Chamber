@@ -162,7 +162,7 @@ public class CustomerReviews implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.CustomerReviews[ reviewNumber=" + reviewNumber + " ]";
+        return "com.beatchamber.entities.CustomerReviews[ reviewNumber=" + reviewNumber + " ]";
     }
     
 }

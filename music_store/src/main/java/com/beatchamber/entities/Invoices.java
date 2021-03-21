@@ -190,7 +190,7 @@ public class Invoices implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.Invoices[ saleNumber=" + saleNumber + " ]";
+        return "com.beatchamber.entities.Invoices[ saleNumber=" + saleNumber + " ]";
     }
     
 }

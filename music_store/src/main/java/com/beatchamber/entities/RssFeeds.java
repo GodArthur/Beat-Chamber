@@ -92,7 +92,7 @@ public class RssFeeds implements Serializable {
 
     @Override
     public String toString() {
-        return "com.beatchamber.testing.RssFeeds[ rssId=" + rssId + " ]";
+        return "com.beatchamber.entities.RssFeeds[ rssId=" + rssId + " ]";
     }
     
 }

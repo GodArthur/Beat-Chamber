@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
+<!-- Front page of the website. Also acts as the welcome page. @Author Susan Vuu - 1735488 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -10,15 +10,45 @@
         <title>Home Page</title>
     </h:head>
     <h:body>
+        <!-- Base template of the page -->
         <ui:composition template="templates/master_template.xhtml">
+            <!-- Promotion banner -->
             <ui:define name="content">
                 <section class="background-section">
                     <h:graphicImage library="images" name="starwars_album_spons.jpg" height="100%" width="100%" styleClass="background-image"/>
                 </section>
+                <!-- Recommended section -->
                 <section>
                     <div class="album-section" id="album-genre">
-                        <h2 class="genre-title">Classical</h2>
-                        <p class="album-description">Ochestral music that is light, sometimes airy, with homophonic melodies.</p>
+                        <h2 class="genre-title">#{msgs.recommended}</h2>
+                        <p class="album-description">#{msgs.recommendedDesc}</p>
+                    </div>
+                    <div class="album-section" id="album-list">
+                        <div class="album-display-small">
+                            <a href="faces/album_page.xhtml">
+                                <!--Temporary use of image tag until we use JPA-->
+                                <h:graphicImage library="images" name="albums/classical/10_small.jpg" styleClass="album-img-small"/>
+                            </a>
+                            <p>10</p>
+                            <p>The Piano Guys</p>
+                        </div>
+                        <div class="album-display-small">
+                            <h:graphicImage library="images" name="albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png" styleClass="album-img-small"/>
+                            <p>If You're Reading This It's Too Late</p>
+                            <p>Drake</p>
+                        </div>
+                        <div class="album-display-small">
+                            <h:graphicImage library="images" name="albums/rock/BOSSANOVA.jpg" styleClass="album-img-small"/>
+                            <p>BOSSANOVA</p>
+                            <p>Pixies</p>
+                        </div>
+                    </div>
+                </section>
+                <!-- List of albums -->
+                <section>
+                    <div class="album-section" id="album-genre">
+                        <h2 class="genre-title">#{msgs.classical}</h2>
+                        <p class="album-description">#{msgs.classicalDesc}</p>
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
@@ -40,14 +70,14 @@
                             <p>Jeremiah Fraites</p>
                         </div>
                         <div class="see-more-container">
-                            <button class="see-more-button">See More »</button>
+                            <button class="see-more-button">#{msgs.seeMore}</button>
                         </div>
                     </div>
                 </section>
                 <section>
                     <div class="album-section" id="album-genre">
-                        <h2 class="genre-title">Hip Hop</h2>
-                        <p class="album-description">Enjoy rhyming in your music.</p>
+                        <h2 class="genre-title">#{msgs.hipHop}</h2>
+                        <p class="album-description">#{msgs.hipHopDesc}</p>
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
@@ -66,14 +96,14 @@
                             <p>Roddy Ricch</p>
                         </div>
                         <div class="see-more-container">
-                            <button class="see-more-button">See More »</button>
+                            <button class="see-more-button">#{msgs.seeMore}</button>
                         </div>
                     </div>
                 </section>
                 <section>
                     <div class="album-section" id="album-genre">
-                        <h2 class="genre-title">Jazz</h2>
-                        <p class="album-description">Soulful music.</p>
+                        <h2 class="genre-title">J>#{msgs.jazz}</h2>
+                        <p class="album-description">>#{msgs.jazzDesc}</p>
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
@@ -92,14 +122,14 @@
                             <p>Diana Krall</p>
                         </div>
                         <div class="see-more-container">
-                            <button class="see-more-button">See More »</button>
+                            <button class="see-more-button">#{msgs.seeMore}</button>
                         </div>
                     </div>
                 </section>
                 <section>
                     <div class="album-section" id="album-genre">
-                        <h2 class="genre-title">Movie Soundtracks</h2>
-                        <p class="album-description">Top soundtracks from great movies.</p>
+                        <h2 class="genre-title">#{msgs.movieSoundtracks}</h2>
+                        <p class="album-description">#{msgs.movieSoundtracksDesc}</p>
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
@@ -118,14 +148,14 @@
                             <p>Michael Giacchino</p>
                         </div>
                         <div class="see-more-container">
-                            <button class="see-more-button">See More »</button>
+                            <button class="see-more-button">#{msgs.seeMore}</button>
                         </div>
                     </div>
                 </section>
                 <section>
                     <div class="album-section" id="album-genre">
-                        <h2 class="genre-title">Rock</h2>
-                        <p class="album-description">Get music with a strong beat.</p>
+                        <h2 class="genre-title">#{msgs.rock}</h2>
+                        <p class="album-description">#{msgs.rockDesc}</p>
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
@@ -144,10 +174,11 @@
                             <p>Radiohead</p>
                         </div>
                         <div class="see-more-container">
-                            <button class="see-more-button">See More »</button>
+                            <button class="see-more-button">#{msgs.seeMore}</button>
                         </div>
                     </div>
                 </section>
+                <!-- Horizontal ad -->
                 <section>
                     <a href="https://www.crunchyroll.com/" target="_blank" rel="noopener noreferrer">
                         <h:graphicImage library="images" name="ads/AnimeAd.PNG" styleClass="horizontal-ad"/>

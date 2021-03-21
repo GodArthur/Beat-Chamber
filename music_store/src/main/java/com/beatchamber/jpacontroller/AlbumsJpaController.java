@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 @Named
 @SessionScoped
 
-public class AlbumsJpaController implements Serializable {}/*
+public class AlbumsJpaController implements Serializable {
 
 
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
@@ -43,7 +43,6 @@ public class AlbumsJpaController implements Serializable {}/*
     @Resource
     private UserTransaction utx;
 
-    //HAVE TO CHANGE THE P UNIT NAME ================================
     @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
 
@@ -123,8 +122,8 @@ public class AlbumsJpaController implements Serializable {}/*
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
         }
-    } */
-/*
+    }
+
     public void edit(Albums albums) throws IllegalOrphanException, NonexistentEntityException, Exception {
 
         try {
@@ -232,7 +231,7 @@ public class AlbumsJpaController implements Serializable {}/*
             if (msg == null || msg.length() == 0) {
                 Integer id = albums.getAlbumNumber();
                 if (findAlbums(id) == null) {
-                    throw new NonexistentEntityException("The fish with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -324,5 +323,7 @@ public class AlbumsJpaController implements Serializable {}/*
     }
 
 
-}*/
+}
+
+
 
