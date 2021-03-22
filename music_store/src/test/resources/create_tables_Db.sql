@@ -5,6 +5,7 @@ CREATE DATABASE beat_chamber;
 USE beat_chamber;
 
 DROP USER IF EXISTS dawson@localhost;
+CREATE USER 
 CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
 GRANT ALL ON beat_chamber.* TO dawson@'localhost';
 
