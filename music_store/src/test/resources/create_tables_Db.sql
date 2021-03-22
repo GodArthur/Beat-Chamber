@@ -243,5 +243,5 @@ hst double not null
 );
 
 
-
+Select * FROM Provinces;
 

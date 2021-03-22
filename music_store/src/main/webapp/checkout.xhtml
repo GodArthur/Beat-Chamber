@@ -85,10 +85,10 @@ and open the template in the editor.
 				<h1>#{msgs.showItems}</h1><br/><br/><br/><br/>
 				<hr class="hrColor" />
 				<h4>#{msgs.subTotal}</h4><br/>
-                                <!--<h4>#{msgs.pst} <h:outputText id="renderPst" value="#{ProvincesJpaController.findProvinces(provincechoice.name).getChoiceName()}"  /> %</h4><br/>-->
-                                <h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provincechoice.name}"/> %</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderGst" value="#{ProvincesJpaController.findProvinces(provincechoice.name).gst}"  /> %</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderHst" value="#{ProvincesJpaController.findProvinces(provincechoice.name).hst}"  /> %</h4><br/>
+                                <!--<h4>#{msgs.pst} <h:outputText id="renderPst" value="#{ProvincesJpaController.findProvinces(provincechoice.SelectionId).getChoiceName()}"  /> %</h4><br/>-->
+                                <h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(provincechoice.name).pst}"/> %</h4><br/>
+                                <h4>#{msgs.pst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(provincechoice.name).pst}"  /> %</h4><br/>
+                                <h4>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(provincechoice.name).hst}"  /> %</h4><br/>
 				<hr class="hrColor"/>
                                 <br/>
                                 <br/>

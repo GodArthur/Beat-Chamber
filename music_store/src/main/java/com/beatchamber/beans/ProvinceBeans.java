@@ -17,19 +17,21 @@ import javax.inject.Named;
 @RequestScoped
 public class ProvinceBeans implements Serializable {
 
-    private String name;
+    private int name = 1;
 
     
-    public void setName(String Name) {
+    public void setName(int Name) {
         this.name = Name;
     }
 
-    public String getName() {
+    public int getName() {
         return this.name;
     }
+    
+    
 
     @Override
     public String toString() {
-        return this.name;
+        return this.name+"";
     }
 }
