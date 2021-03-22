@@ -4,9 +4,30 @@ CREATE DATABASE beat_chamber;
 
 USE beat_chamber;
 
-DROP USER IF EXISTS dawson@localhost;
-CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
-GRANT ALL ON beat_chamber.* TO dawson@'localhost';
+DROP DATABASE IF EXISTS CSgb1w21;
+CREATE DATABASE CSgb1w21;
+USE CSgb1w21;
+DROP USER IF EXISTS CSgb1w21@localhost;
+CREATE USER CSgb1w21@'localhost' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+
+GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
+
+GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
+
+ 
+
+DROP DATABASE IF EXISTS CSgb1w21test;
+
+CREATE DATABASE CSgb1w21test;
+
+USE CSgb1w21test;
+
+DROP USER IF EXISTS CSgb1w21@localhost;
+CREATE USER CSgb1w21@'localhost' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+GRANT ALL ON CSgb1w21test.* TO CSgb1w21@'localhost';
+GRANT ALL ON CSgb1w21test.* TO CSgb1w21@'%';
 
 /* remove tables if they are alredy present */
 DROP TABLE IF EXISTS Ads;
