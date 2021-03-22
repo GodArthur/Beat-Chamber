@@ -478,6 +478,103 @@ label.star:before {
     }
 }
 
+
+/*****TRACKS PAGE By Korjon Chang-Jones*****/
+
+#track-section {
+  height: 1500px;
+}
+
+#track-display {
+  height: 500px;
+  width: 50%;
+  float: left;
+  position: relative;
+}
+
+#image-wrapper {
+  position: absolute;
+  top: 16%;
+  right: 12%;
+}
+
+#photoshoot-ad-wrapper {
+  left: 1px;
+  position: absolute;
+
+  top: 13%;
+}
+
+#track-title {
+  font-family: "edo sz";
+  font-size: larger;
+}
+
+#track-content {
+  float: left;
+  width: 50%;
+  height: 500px;
+  text-align: left;
+  position: relative;
+}
+
+#content-wrapper {
+  position: absolute;
+  left: 10%;
+  top: 22%;
+  width: 50%;
+  height: 53%;
+  border-style: solid;
+  padding: 30px;
+  padding-left: 50px;
+  background-color: rgb(73, 72, 72);
+}
+
+.track-content-title {
+  margin-top: 15px;
+  font-family: "gotham";
+  font-size: 20px;
+}
+
+button {
+  display: inline;
+}
+
+.item-extra {
+  text-align: left;
+  font-size: 20px;
+  margin: 12px;
+}
+
+#add-btn {
+  color: #5b3ec9;
+  margin-bottom: 10px;
+}
+
+.album-cover-group {
+  text-align: center;
+  margin-right: 40px;
+  display: inline-block;
+}
+
+#review-separator {
+  margin-top: 40px;
+}
+
+#anime-ad-wrapper {
+  width: 700px;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 16%;
+}
+#anime-ad {
+  height: auto;
+  max-width: 100%;
+}
+
 /* yan added for management page*/
 
 .container-page {
@@ -531,7 +628,7 @@ label.star:before {
   font-family: 'Open Sans', sans-serif;
   font-size: 30px;
   font-weight: bold;
-  margin-right: 750px;
+  margin-right: 650px;
   color:#fff;
 }
 
@@ -549,11 +646,11 @@ table-column:hover {
 }
 
 
-.modal-header{
-  background: linear-gradient(108deg, rgba(19,184,190,1) 0%, rgba(117,37,255,1) 100%);
-  color: white;
-  border-radius: 35px;
+.ui-dialog .ui-dialog-titlebar{
+  background: linear-gradient(108deg, rgba(19,184,190,1) 0%, rgba(117,37,255,1) 100%)!important;
+  color:#000!important;
 }
+
 
 .edit{
   cursor: pointer;
@@ -562,4 +659,6 @@ table-column:hover {
 .ui-button-danger{
     background:#000!important;
     color:#fff!important;
+
 }
+

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="styles" name="main.css"/>
+        <title>Track Page</title>
+    </h:head>
+    <h:body>
+        <header>
+            <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
+        </header>
+        <nav>
+            <div class="topnav">
+                <h:link value="Home" outcome="index.xhtml" styleClass="active" id="first"/>
+                <h:link value="Music"/>
+                <h:link value="Contact"/>
+                <h:link value="About"/>
+                <h:form>
+                    <h:commandButton styleClass="search-button" value="Search"/>
+                    <h:inputText a:placeholder="Search for music" styleClass="search"/>
+                </h:form>
+                <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
+            </div>
+        </nav>
+
+        <section id="track-section">
+
+            <div id="track-display">
+                
+                <div id="photoshoot-ad-wrapper">
+                    <div id="photo-ad">
+                        <h:graphicImage library="images" name="photoshoot.gif" width="200" height="360"/>
+                    </div>
+                </div>
+                
+                <div id="image-wrapper">
+
+                    <h:graphicImage id="track-img" library="images" name="albums/hip_hop/Roddy_Ricch_-_Please_Excuse_Me_for_Being_Antisocial.png" width="320" height="320"/> 
+                    <p id="track-title">Boom Boom Room</p>
+                </div>
+            </div>
+
+            <div id="track-content">
+                <div id="content-wrapper">
+
+                    <ol>
+                        <li class="track-content-title"><div class="song-item"><p>The Box</p><button>Add to Cart</button></div></li>
+                        <li class="track-content-title"><div class="song-item"><p>Boom Boom room</p><button>Add to Cart</button></div></li>
+                        <li class="track-content-title"><div class="song-item"><p>Roll Dice</p><button>Add to Cart</button></div></li>
+                        <li class="track-content-title"><div class="song-item"><p>High Fashion</p><button>Add to Cart</button></div></li>
+                        <li class="track-content-title"><div class="song-item"><p>Bacc Seat</p><button>Add to Cart</button></div></li>
+                    </ol>
+                </div>
+            </div>
+            <button id="add-btn">Add to Cart</button>
+            <hr />
+            <p class="item-extra">Customers who viewed this item also viewed</p>
+            <div id="viewed-items-container">
+                <div class="album-cover-group">
+                    <div>
+                        <a href="https://www.youtube.com/watch?v=vZmNlvfrL4U">
+                            <h:graphicImage
+                                library="images"
+                                name="albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png"
+                                width="270"
+                                height="270"
+                                />
+                        </a>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=vZmNlvfrL4U"
+                       >If You're Reading This It's too Late</a
+                    >
+                </div>
+
+                <div class="album-cover-group">
+                    <div>
+                        <a href="https://www.youtube.com/watch?v=k6M5C-oKw9k">
+                            <h:graphicImage
+                                library="images"
+                                name="albums/hip_hop/Ne-Yo_-_Year_of_The_Gentleman.png"
+                                width="270"
+                                height="270"
+                                />
+                        </a>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=k6M5C-oKw9k"
+                       >Year of The Gentleman</a
+                    >
+                </div>
+
+                <div class="album-cover-group">
+                    <div>
+                        <a href="https://www.youtube.com/watch?v=ykMHDKB0-1o">
+                            <h:graphicImage
+                                library="images"
+                                name="albums/hip_hop/travis-scott-astroworld-cover-art.png"
+                                width="270"
+                                height="270"
+                                />
+                        </a>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=ykMHDKB0-1o">ASTROWORLD</a>
+                </div>
+            </div>
+
+            <hr id="review-separator" />
+            <p class="item-extra">Customer Reviews</p>
+            <p>There are currently no reviews</p>
+            <h:link value="Add Review" outcome="review_page.xhtml">
+
+            <div id="anime-ad-wrapper">
+                <a
+                    href="https://www.crunchyroll.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >
+                    <h:graphicImage id="anime-ad" library="images" name="AnimeAd.PNG" />
+                </a>
+            </div>
+        </section>
+
+        <div>
+            <ui:insert name="footer">
+                <ui:include src="/templates/footer.xhtml"/>
+            </ui:insert>
+        </div>
+</h:body>
+</html>

@@ -236,40 +236,28 @@ public class ClientsJpaController implements Serializable {
 
     private List<Clients> findClientsEntities(boolean all, int maxResults, int firstResult) {
 
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Clients.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Clients.class));
+        Query q = em.createQuery(cq);
+        if (!all) {
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
         }
+        return q.getResultList();
     }
 
     public Clients findClients(Integer id) {
 
-        try {
-            return em.find(Clients.class, id);
-        } finally {
-            em.close();
-        }
+        return em.find(Clients.class, id);
     }
 
     public int getClientsCount() {
 
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Clients> rt = cq.from(Clients.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        Root<Clients> rt = cq.from(Clients.class);
+        cq.select(em.getCriteriaBuilder().count(rt));
+        Query q = em.createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
     }
 
 }

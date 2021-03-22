@@ -36,7 +36,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
+
 public class AlbumsJpaController implements Serializable {
+
 
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
 
@@ -109,9 +111,11 @@ public class AlbumsJpaController implements Serializable {
                 }
             }
 
+
             utx.commit();
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
+
                 utx.rollback();
                 LOG.error("Rollback");
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -215,7 +219,9 @@ public class AlbumsJpaController implements Serializable {
                     }
                 }
             }
+
             utx.commit();
+
 
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
@@ -231,6 +237,8 @@ public class AlbumsJpaController implements Serializable {
                 }
             }
             throw ex;
+
+
         }
     }
 
@@ -311,6 +319,7 @@ public class AlbumsJpaController implements Serializable {
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
+<<<<<<< HEAD
     
     /**
      * @param id
@@ -349,3 +358,6 @@ public class AlbumsJpaController implements Serializable {
         return albumPath.concat("_large.jpg");
     }
 }
+
+
+
