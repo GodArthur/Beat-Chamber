@@ -1,19 +1,36 @@
+/* Creating the database */
+DROP DATABASE IF EXISTS beat_chamber;
+CREATE DATABASE beat_chamber;
 
-
+USE beat_chamber;
 
 DROP USER IF EXISTS dawson@localhost;
+CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
+GRANT ALL ON beat_chamber.* TO dawson@'localhost';
 
-DROP DATABASE IF EXISTS CSgb1w21;
-CREATE DATABASE CSgb1w21;
-USE CSgb1w21;
-DROP USER IF EXISTS CSgb1w21@localhost;
+/*DROP USER IF EXISTS dawson@localhost;
+CREATE DATABASE beat_chamber;
 
-CREATE USER CSgb1w21@'localhost' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
-CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+USE beat_chamber;
 
-GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
+DROP USER IF EXISTS dawson@localhost;
+CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
+GRANT ALL ON beat_chamber.* TO dawson@'localhost';*/
+/*
+#DROP DATABASE IF EXISTS CSgb1w21;
+#CREATE DATABASE CSgb1w21;
+#USE CSgb1w21;
+#DROP USER IF EXISTS CSgb1w21@localhost;
 
-GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
+#CREATE USER CSgb1w21@'localhost' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+#CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+
+#GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
+
+#GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
+
+#DROP DATABASE IF EXISTS beat_chamber;*/
+
 
 /* remove tables if they are alredy present */
 DROP TABLE IF EXISTS Ads;
@@ -230,7 +247,7 @@ hst double not null
 
 
 
-
+/*
 DROP DATABASE IF EXISTS CSgb1w21test;
 
 CREATE DATABASE CSgb1w21test;
@@ -243,7 +260,7 @@ CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQ
 GRANT ALL ON CSgb1w21test.* TO CSgb1w21@'localhost';
 GRANT ALL ON CSgb1w21test.* TO CSgb1w21@'%';
 
-/* remove tables if they are alredy present */
+/* remove tables if they are alredy present 
 DROP TABLE IF EXISTS Ads;
 DROP TABLE IF EXISTS RSS_Feeds;
 DROP TABLE IF EXISTS Invoice_Details;
@@ -265,13 +282,13 @@ DROP TABLE IF EXISTS provinces;
 
 
 
-/* Artists */
+/* Artists 
 create table Artists (
 artist_id int not null primary key auto_increment,
 artist_name varchar(40) not null
 );
 
-/* artists_to_tracks */
+/* artists_to_tracks 
 create table Artists_to_tracks(
 tablekey int primary key auto_increment ,
 artist_id int not null,
@@ -279,7 +296,7 @@ track_id int,
 FOREIGN KEY (artist_id) REFERENCES Artists(artist_id)
 );
 
-/* Albums */
+/* Albums 
 create table Albums (
 album_number int not null primary key auto_increment,
 album_title varchar(50) not null,
@@ -296,7 +313,7 @@ removal_date boolean
 
 
 
-/* Tracks */
+/* Tracks 
 create table Tracks (
 track_id int not null primary key auto_increment,
 album_number int not null,
@@ -316,13 +333,13 @@ FOREIGN KEY (album_number) REFERENCES Albums(album_number)
 );
 
 
-/*  genres */
+/*  genres 
 create table genres(
 genre_id int primary key auto_increment,
 genre_name varchar(40) not null unique
 );
 
-/* genre_to_tracks */
+/* genre_to_tracks 
 create table genre_to_tracks(
 tablekey int primary key auto_increment,
 track_id int,
@@ -331,7 +348,7 @@ FOREIGN KEY (track_id) REFERENCES Tracks(track_id),
 FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
 );
 
-/* genre_to_album */
+/* genre_to_album 
 create table genre_to_album(
 tablekey int primary key auto_increment,
 album_number int,
@@ -341,7 +358,7 @@ FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
 );
 
 
-/* Artist_Albums */
+/* Artist_Albums 
 create table Artist_Albums(
 tablekey int primary key auto_increment,
 artist_id int not null ,
@@ -350,7 +367,7 @@ FOREIGN KEY (artist_id) REFERENCES Artists(artist_id),
 FOREIGN KEY (album_number) REFERENCES Albums(album_number)
 );
 
-/* Clients */
+/* Clients 
 create table Clients (
 client_number int primary key auto_increment,
 title varchar(40) not null,
@@ -373,7 +390,7 @@ salt varchar(32),
 hash varchar(32)
 );
 
-/* Customer_reviews */
+/* Customer_reviews 
 create table Customer_reviews(
 review_number int not null primary key auto_increment,
 track_id int not null,
@@ -386,7 +403,7 @@ FOREIGN KEY (track_id) REFERENCES Tracks(track_id),
 FOREIGN KEY (client_number) REFERENCES Clients(client_number)
 );
 
-/* Invoices */
+/* Invoices 
 create table invoices(
 sale_number int not null primary key auto_increment,
 sale_date datetime not null,
@@ -399,7 +416,7 @@ total_gross_value double not null,
 FOREIGN KEY (client_number) REFERENCES Clients(client_number)
 );
 
-/* invoice details */
+/* invoice details 
 create table Invoice_Details(
 tablekey int primary key auto_increment,
 sale_number int not null,
@@ -411,33 +428,33 @@ FOREIGN KEY (sale_number) REFERENCES invoices(sale_number),
 FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
 );
 
-/* Ads */
+/* Ads 
 create table Ads (
 ad_id int primary key auto_increment,
 file_name varchar(60) not null,
 link varchar(100) not null
 );
 
-/* RSS_Feeds */
+/* RSS_Feeds 
 create table RSS_Feeds (
 rss_id int primary key auto_increment,
 link varchar(100) not null
 );
 
-/* Surveys */
+/* Surveys 
 create table Surveys (
 survey_id int primary key auto_increment,
 title varchar(80) not null
 );
 
-/* Choices */
+/* Choices 
 create table Choices (
 choice_id int primary key auto_increment,
 choice_name varchar(40) not null,
 votes int not null
 );
 
-/* Survey_to_Choice */
+/* Survey_to_Choice 
 create table Survey_to_Choice (
 tablekey int primary key auto_increment,
 survey_id int,
@@ -447,15 +464,14 @@ FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
 );
 
 
-/* provinces */
+/* provinces 
 create table provinces(
 province_id int primary key auto_increment,
 choice_name varchar(30) not null,
 pst double not null,
 gst double not null,
 hst double not null
-);
+);*/
 
 
-Select * FROM Provinces;
 
