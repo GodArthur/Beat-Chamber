@@ -30,12 +30,10 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>review_page.xhtml</welcome-file>
 
-        <!--welcome-file>faces/signup.xhtml</welcome-file-->
-        <!--        <welcome-file>faces/review_page.xhtml</welcome-file>-->
-<!--        <welcome-file>faces/manageClients.xhtml</welcome-file>-->
-        <!--welcome-file>faces/manageSurveys.xhtml</welcome-file-->
+        <welcome-file>faces/manageSurveys.xhtml</welcome-file>
+<!--        <welcome-file>index.xhtml</welcome-file>-->
+<!--        <welcome-file>review_page.xhtml</welcome-file>-->
     </welcome-file-list>
 
     
