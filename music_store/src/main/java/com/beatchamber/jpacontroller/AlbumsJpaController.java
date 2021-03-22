@@ -6,10 +6,12 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.beatchamber.entities.Artists;
 import com.beatchamber.entities.ArtistAlbums;
 import java.util.ArrayList;
 import java.util.List;
 import com.beatchamber.entities.Tracks;
+import com.beatchamber.entities.Genres;
 import com.beatchamber.entities.GenreToAlbum;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
@@ -304,25 +306,56 @@ public class AlbumsJpaController implements Serializable {
             q.setFirstResult(firstResult);
         }
         return q.getResultList();
-
     }
 
     public Albums findAlbums(Integer id) {
-
         return em.find(Albums.class, id);
-
     }
 
     public int getAlbumsCount() {
-
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         Root<Albums> rt = cq.from(Albums.class);
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-
-
+    
+    /**
+     * @param id
+     * @return The artist of the specific album
+     */
+    public Artists getAlbumArtist(Integer id){
+        //Get the album first
+        Albums foundAlbum = em.find(Albums.class, id);
+        //Get the album's artist
+        return foundAlbum.getArtistAlbumsList().get(0).getArtistId();
+    }
+    
+    /**
+     * @param id
+     * @param isSmall
+     * @return The path of the album's image, either big or small
+     */
+    public String getAlbumPath(Integer id, boolean isSmall){
+        Albums foundAlbum = em.find(Albums.class, id);
+        //Find the genre the album belongs to. Each album images are separated by genre
+        List<GenreToAlbum> genreList = foundAlbum.getGenreToAlbumList();
+        Genres firstGenre = genreList.get(0).getGenreId();
+        String genreName = firstGenre.getGenreName().replace(" ", "_");
+        
+        //Starting album path
+        String startingPath = "albums/" + genreName.toLowerCase() + "/";
+        //The album name included in the path
+        String albumName = foundAlbum.getAlbumTitle().replace(" ", "_").toLowerCase();
+        //Probably a better way with regex but unsure
+        String trimmedAlbumName = albumName.replace(".", "").replace("'", "").replace(":", "");
+        String albumPath = startingPath.concat(trimmedAlbumName);
+        //Rest of album path
+        if(isSmall){
+            return albumPath.concat("_small.jpg");
+        }
+        return albumPath.concat("_large.jpg");
+    }
 }
 
 

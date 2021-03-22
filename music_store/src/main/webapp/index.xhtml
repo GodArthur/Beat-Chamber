@@ -25,22 +25,22 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <a href="faces/album_page.xhtml">
+                            <a href="#{album.sendAlbum('21')}">
                                 <!--Temporary use of image tag until we use JPA-->
-                                <h:graphicImage library="images" name="albums/classical/10_small.jpg" styleClass="album-img-small"/>
+                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(21, true)}" styleClass="album-img-small"/>
+                                <p>#{albumsJpaController.findAlbums(21).albumTitle}</p>
+                                <p>#{albumsJpaController.getAlbumArtist(21).artistName}</p>
                             </a>
-                            <p>10</p>
-                            <p>The Piano Guys</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png" styleClass="album-img-small"/>
-                            <p>If You're Reading This It's Too Late</p>
-                            <p>Drake</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(4, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(4).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(4).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/rock/BOSSANOVA.jpg" styleClass="album-img-small"/>
-                            <p>BOSSANOVA</p>
-                            <p>Pixies</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(6, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(6).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(6).artistName}</p>
                         </div>
                     </div>
                 </section>
@@ -52,22 +52,22 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <a href="faces/album_page.xhtml">
+                            <a href="album_page.xhtml">
                                 <!--Temporary use of image tag until we use JPA-->
-                                <h:graphicImage library="images" name="albums/classical/10_small.jpg" styleClass="album-img-small"/>
+                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(21, true)}" styleClass="album-img-small"/>
+                                <p>#{albumsJpaController.findAlbums(21).albumTitle}</p>
+                                <p>#{albumsJpaController.getAlbumArtist(21).artistName}</p>
                             </a>
-                            <p>10</p>
-                            <p>The Piano Guys</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/classical/bones_in_the_ocean_small.jpg" styleClass="album-img-small"/>
-                            <p>Bones In The Ocean</p>
-                            <p>The Long Johns</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(22, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(22).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(22).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/classical/piano_piano_small.jpg" styleClass="album-img-small"/>
-                            <p>Piano Piano</p>
-                            <p>Jeremiah Fraites</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(20, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(20).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(20).artistName}</p>
                         </div>
                         <div class="see-more-container">
                             <button class="see-more-button">#{msgs.seeMore}</button>
@@ -81,19 +81,19 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png" styleClass="album-img-small"/>
-                            <p>If You're Reading This It's Too Late</p>
-                            <p>Drake</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(4, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(4).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(4).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/hip_hop/Ne-Yo_-_Year_of_The_Gentleman.png" styleClass="album-img-small"/>
-                            <p>Year Of The Gentleman</p>
-                            <p>Ne-Yo</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(2, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(2).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(2).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/hip_hop/Roddy_Ricch_-_Please_Excuse_Me_for_Being_Antisocial.png" styleClass="album-img-small"/>
-                            <p>Please Excuse Me For Being Antisocial</p>
-                            <p>Roddy Ricch</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(1, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(1).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(1).artistName}</p>
                         </div>
                         <div class="see-more-container">
                             <button class="see-more-button">#{msgs.seeMore}</button>
@@ -107,19 +107,19 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/jazz/come_away_with_me.jpg" styleClass="album-img-small"/>
-                            <p>Come Away With Me</p>
-                            <p>Norah Jones</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(16, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(16).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(16).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/jazz/Louis-Armstrong-What-A-Wonderful-World.jpg" styleClass="album-img-small"/>
-                            <p>What a Wonderful World</p>
-                            <p>Louis Armstrong</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(17, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(17).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(17).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/jazz/wallflower.jpg" styleClass="album-img-small"/>
-                            <p>Wallflower</p>
-                            <p>Diana Krall</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(19, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(19).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(19).artistName}</p>
                         </div>
                         <div class="see-more-container">
                             <button class="see-more-button">#{msgs.seeMore}</button>
@@ -133,19 +133,19 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/movie_soundtracks/Darkknight_album_cover.jpg" styleClass="album-img-small"/>
-                            <p>The Dark Knight</p>
-                            <p>Hans Zimmer</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(11, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(11).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(11).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/movie_soundtracks/HarrypotterPS_album_cover.jpg" styleClass="album-img-small"/>
-                            <p>Harry Potter and The Sorcerer's Stone</p>
-                            <p>John Williams</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(14, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(14).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(14).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/movie_soundtracks/Spider-Man_Far_From_Home_album_cover.jpg" styleClass="album-img-small"/>
-                            <p>Spider-Man: Far From Home</p>
-                            <p>Michael Giacchino</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(15, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(15).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(15).artistName}</p>
                         </div>
                         <div class="see-more-container">
                             <button class="see-more-button">#{msgs.seeMore}</button>
@@ -159,19 +159,19 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/rock/BOSSANOVA.jpg" styleClass="album-img-small"/>
-                            <p>BOSSANOVA</p>
-                            <p>Pixies</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(6, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(6).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(6).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/rock/Dark_Side_of_the_Moon.png" styleClass="album-img-small"/>
-                            <p>The Dark Side of the Moon</p>
-                            <p>Pink Floyd</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(8, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(8).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(8).artistName}</p>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="albums/rock/okcomputer.png" styleClass="album-img-small"/>
-                            <p>Ok Computer</p>
-                            <p>Radiohead</p>
+                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(10, true)}" styleClass="album-img-small"/>
+                            <p>#{albumsJpaController.findAlbums(10).albumTitle}</p>
+                            <p>#{albumsJpaController.getAlbumArtist(10).artistName}</p>
                         </div>
                         <div class="see-more-container">
                             <button class="see-more-button">#{msgs.seeMore}</button>
