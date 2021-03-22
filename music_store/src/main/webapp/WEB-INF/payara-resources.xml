@@ -12,6 +12,6 @@
                           steady-pool-size="8">
         <property name="User" value="dawson"/>
         <property name="Password" value="dawson123"/>
-        <property name="URL" value="jdbc:mysql://localhost:3306/beat_chamber?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;useSSL=false"/>
+        <property name="URL" value="jdbc:mysql://localhost:3306/beat_chamber?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;useSSL=false&amp;serverTimezone=UTC"/>
     </jdbc-connection-pool>
 </resources>

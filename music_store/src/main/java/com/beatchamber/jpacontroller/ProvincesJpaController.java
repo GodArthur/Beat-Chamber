@@ -1,78 +1,95 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.beatchamber.jpacontroller;
 
 import com.beatchamber.entities.Provinces;
-import com.beatchamber.jpacontroller.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.IllegalOrphanException;
+import com.beatchamber.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.Resource;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author kibra
+ * @author kibra and Massimo Di Girolamo
  */
+@Named
+@SessionScoped
 public class ProvincesJpaController implements Serializable {
 
-    public ProvincesJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
+    private final static Logger LOG = LoggerFactory.getLogger(ProvincesJpaController.class);
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    @Resource
+    private UserTransaction utx;
+
+    @PersistenceContext(unitName = "my_persistence_unit")
+    private EntityManager em;
+
+    public ProvincesJpaController() {
     }
 
-    public void create(Provinces provinces) {
-        EntityManager em = null;
+    public void create(Provinces provinces) throws RollbackFailureException {
+
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             em.persist(provinces);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
+            utx.commit();
+
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+                LOG.error("Rollback");
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                LOG.error("Rollback2");
+
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
         }
     }
 
     public void edit(Provinces provinces) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
+
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             provinces = em.merge(provinces);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
+            utx.commit();
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = provinces.getProvinceId();
                 if (findProvinces(id) == null) {
-                    throw new NonexistentEntityException("The provinces with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
-        EntityManager em = null;
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Provinces provinces;
             try {
                 provinces = em.getReference(Provinces.class, id);
@@ -81,11 +98,14 @@ public class ProvincesJpaController implements Serializable {
                 throw new NonexistentEntityException("The provinces with id " + id + " no longer exists.", enfe);
             }
             em.remove(provinces);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
+            utx.commit();
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+                utx.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
+            throw ex;
         }
     }
 
@@ -98,41 +118,30 @@ public class ProvincesJpaController implements Serializable {
     }
 
     private List<Provinces> findProvincesEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Provinces.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Provinces.class));
+        Query q = em.createQuery(cq);
+        if (!all) {
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
         }
+        return q.getResultList();
     }
 
     public Provinces findProvinces(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Provinces.class, id);
-        } finally {
-            em.close();
-        }
+
+        return em.find(Provinces.class, id);
+
     }
 
     public int getProvincesCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Provinces> rt = cq.from(Provinces.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        Root<Provinces> rt = cq.from(Provinces.class);
+        cq.select(em.getCriteriaBuilder().count(rt));
+        Query q = em.createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }

@@ -7,30 +7,30 @@ insert into genres (genre_name) values
 ;
 
 insert into Albums (album_title,release_date,recording_label,total_tracks,entry_date,cost_price,list_price,sale_price,removal_status,removal_date) values 
-('Please Excuse Me For Being Antisocial','2019-12-06','Atlantic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Year Of The Gentleman','2008-08-11','Def Jam Japan',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('After Hours','2020-03-20','XO and Republic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('If Youre Reading This Its Too Late','2015-02-13','OVO Sound',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('ASTROWORLD','2018-09-03','Epic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('BOSSANOVA','1990-08-13','4AD',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('NEVERMIND','1991-09-24','Geffen Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('THE DARK SIDE OF THE MOON','1973-03-01','Capitol Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('TUBULAR BELLS','1973-05-25','Virgin Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('OK COMPUTER','1997-5-21','Parlophone',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('the dark knight','2008-07-15','Reprise Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('The Mandalorian Season 2 vol.2','2020-12-18','WALT DISNEY RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Star Wars: The Empire Strikes Back album','1980-05-16','RSO Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Harry Potter and The Sorcerer s Stone','2001-10-30','Warner Sunset RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Spider-man: Far From Home','2019-06-28','Sony Classical',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Come Away With Me','2002-02-26','Blue Note Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('What A Wonderful World','1967-08-1','Universal Music Group',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Time Out','1959-12-14','cbs',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Wallflower','2015-02-03','Virgin Records America Inc',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Piano Piano','2021-01-22','Dualtone Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('10','2020-10-23','Sony Music Masterworks',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Bones in the Ocean','2013-05-27','The Longest Johns',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Pure Piano Improv','2015-12-04','Musser Music',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Tree of Life','2013-07-16','Lakeshore Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null);
+('Please Excuse Me For Being Antisocial','2019-12-06','Atlantic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--1
+('Year Of The Gentleman','2008-08-11','Def Jam Japan',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--2
+('After Hours','2020-03-20','XO and Republic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--3
+('If You''re Reading This It''s Too Late','2015-02-13','OVO Sound',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--4
+('ASTROWORLD','2018-09-03','Epic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--5
+('BOSSANOVA','1990-08-13','4AD',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--6
+('NEVERMIND','1991-09-24','Geffen Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--7
+('THE DARK SIDE OF THE MOON','1973-03-01','Capitol Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--8
+('TUBULAR BELLS','1973-05-25','Virgin Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--9
+('OK COMPUTER','1997-5-21','Parlophone',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--10
+('The Dark Knight','2008-07-15','Reprise Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--11
+('The Mandalorian Season 2 vol.2','2020-12-18','WALT DISNEY RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--12
+('Star Wars: The Empire Strikes Back','1980-05-16','RSO Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--13
+('Harry Potter and The Sorcerer''s Stone','2001-10-30','Warner Sunset RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--14
+('Spider-man: Far From Home','2019-06-28','Sony Classical',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--15
+('Come Away With Me','2002-02-26','Blue Note Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--16
+('What A Wonderful World','1967-08-1','Universal Music Group',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--17
+('Time Out','1959-12-14','cbs',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--18
+('Wallflower','2015-02-03','Virgin Records America Inc',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--19
+('Piano Piano','2021-01-22','Dualtone Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--20
+('10','2020-10-23','Sony Music Masterworks',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--21
+('Bones in the Ocean','2013-05-27','The Longest Johns',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--22
+('Pure Piano Improv','2015-12-04','Musser Music',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--23
+('Tree of Life','2013-07-16','Lakeshore Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null);--24
 
 
 insert into Artists (artist_name) values
@@ -43,22 +43,22 @@ insert into Artists (artist_name) values
 ('Nirvana'), /* NEVERMIND  7*/
 ('Pink Floyd'), /* THE DARK SIDE OF THE MOON 8*/
 ('Mike Oldfield'), /* TUBULAR BELLS 9*/
-('Radiohead'), /* OK COMPUTER */
-('Hans Zimmer'),/* The Dark Knight */
-('James Newton Howard'), /* The Dark Knight */
-('Ludwig Göransson'),/* The Mandalorian Season 2 vol.2 */
-('Orchestre symphonique de Londres'), /* Star Wars: The Empire Strikes Back album artist */
-('John Williams'), /* Harry Potter and The Sorcerer s Stone */ 
-('Michael Giacchino'), /* Spider-man: Far From Home */
-('Norah Jones'), /* COME AWAY WITH ME */
-('Louis Armstrong'),/* WHAT A WONDERFUL WORLD */
-('Dave Brubeck'), /* TIME OUT */
-('Diana Krall'),/* WALLFLOWER  */
-('Jeremiah Fraites'), /* Piano Piano 10*/
-('The Piano Guys'), /* 10 */
-('The Long Johns'), /* Bones in the Ocean */
-('Brandon Musser'), /* Pure Piano Improv, Pt.2 */
-('Audiomachine') /* Tree of Life */;
+('Radiohead'), /* OK COMPUTER 10*/
+('Hans Zimmer'),/* The Dark Knight 11*/
+('James Newton Howard'), /* The Dark Knight 12*/
+('Ludwig Göransson'),/* The Mandalorian Season 2 vol.2 13*/
+('Orchestre symphonique de Londres'), /* Star Wars: The Empire Strikes Back album artist 14*/
+('John Williams'), /* Harry Potter and The Sorcerer s Stone 15*/ 
+('Michael Giacchino'), /* Spider-man: Far From Home 16*/
+('Norah Jones'), /* COME AWAY WITH ME 17*/
+('Louis Armstrong'),/* WHAT A WONDERFUL WORLD 18*/
+('Dave Brubeck'), /* TIME OUT 19*/
+('Diana Krall'),/* WALLFLOWER  20*/
+('Jeremiah Fraites'), /* Piano Piano 21*/
+('The Piano Guys'), /* 10 22*/
+('The Long Johns'), /* Bones in the Ocean 23*/
+('Brandon Musser'), /* Pure Piano Improv, Pt.2 24*/
+('Audiomachine') /* Tree of Life 25*/;
 
 
 
@@ -557,19 +557,20 @@ insert into Survey_to_Choice(survey_id,choice_id) values
 /* survey#7 */
 (7,28),
 (7,29),
-(7,31),
+(7,30),
 (7,31);
 
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (1, 'Mr', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '5462674199', '7621592854', 'mcollingridge0@lycos.com', 'mcollingridge0', 's461Gb4Cm');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (2, 'Mr', 'Riggey', 'Phillis', 'Dabvine', '12 Pankratz Avenue', '1796 Coleman Lane', 'Deep River', 'Alberta', 'Canada', 'M4J 4T3', '9745861706', '5791136429', 'priggey1@netvibes.com', 'priggey1', 'SFHAQdqWTaa');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (3, 'Mrs', 'Widdop', 'Zeke', 'Zoovu', '61 Veith Street', '738 Schurz Hill', 'Dieppe', 'New Brunswick', 'Canada', 'E1A 4S3', '8795736174', '2643858093', 'zwiddop2@mlb.com', 'zwiddop2', 'UErBWw');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (4, 'Miss', 'Disdel', 'Elysia', 'Livefish', '02 Holy Cross Pass', '94 Sutherland Center', 'Clarence-Rockland', 'Ontario', 'Canada', 'K4K F5S', '4553784970', '2022393454', 'edisdel3@tripod.com', 'edisdel3', 'y8u9GMfhyNU');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (5, 'Mr', 'Brokenbrow', 'Farrel', 'Jabberbean', '09161 Mitchell Pass', '761 Dexter Avenue', 'Saskatoon', 'Quebec', 'Canada', 'S7W 3G4', '1123723925', '9633142333', 'fbrokenbrow4@mozilla.com', 'fbrokenbrow4', 'ZhvTGcWID');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (6, 'Miss', 'Charlot', 'Kalina', 'Podcat', '94 Iowa Park', '988 Weeping Birch Junction', 'Papineauville', 'Yukon', 'Canada', 'G5N 5S3', '9726748773', '7685001272', 'kcharlot5@webmd.com', 'kcharlot5', '5Gq5J1');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (7, 'Mr', 'Dilon', 'Mab', 'Trudoo', '8 Artisan Plaza', '98384 Alpine Drive', 'Pincher Creek', 'New Brunswick', 'Canada', 'J0J 6J6', '9745859826', '2362867175', 'mdilon6@delicious.com', 'mdilon6', 'pXRGzPE');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (8, 'Ms', 'Speariett', 'Petronilla', 'Vidoo', '0208 Cardinal Road', '95 Stang Pass', 'Fox Creek', 'Nova Scotia', 'Canada', 'E4B 3F4', '1432345437', '6058761228', 'pspeariett7@g.co', 'pspeariett7', 'F9lBbU8Z');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (9, 'Mrs', 'La Rosa', 'Major', 'Eazzy', '8 Lighthouse Bay Center', '58266 Monterey Crossing', 'St. Thomas', 'Manitoba', 'Canada', 'N5R 5S2', '1409864159', '8383574253', 'mlarosa8@stanford.edu', 'mlarosa8', '2lYiNfaEIn');
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values (10, 'Mrs', 'MacKay', 'Kristo', 'Divanoodle', '21 Kingsford Terrace', '28024 Sunbrook Place', 'Sherwood Park', 'Prince Edward Island', 'Canada', 'T8A 7J3', '5445848160', '8396753263', 'kmackay9@harvard.edu', 'kmackay9', 'WPgoKZW0cJh');
+insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password) values 
+(1, 'Mr', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'mcollingridge0@lycos.com', 'mcollingridge0', 's461Gb4Cm'),
+(2, 'Mr', 'Riggey', 'Phillis', 'Dabvine', '12 Pankratz Avenue', '1796 Coleman Lane', 'Deep River', 'Alberta', 'Canada', 'M4J 4T3', '(974)586-1706', '(579)113-6429', 'priggey1@netvibes.com', 'priggey1', 'SFHAQdqWTaa'),
+(3, 'Mrs', 'Widdop', 'Zeke', 'Zoovu', '61 Veith Street', '738 Schurz Hill', 'Dieppe', 'New Brunswick', 'Canada', 'E1A 4S3', '(879)573-6174', '(264)385-8093', 'zwiddop2@mlb.com', 'zwiddop2', 'UErBWw'),
+(4, 'Miss', 'Disdel', 'Elysia', 'Livefish', '02 Holy Cross Pass', '94 Sutherland Center', 'Clarence-Rockland', 'Ontario', 'Canada', 'K4K F5S', '(455)378-4970', '(202)239-3454', 'edisdel3@tripod.com', 'edisdel3', 'y8u9GMfhyNU'),
+(5, 'Mr', 'Brokenbrow', 'Farrel', 'Jabberbean', '09161 Mitchell Pass', '761 Dexter Avenue', 'Saskatoon', 'Quebec', 'Canada', 'S7W 3G4', '(112)372-3925', '(963)314-2333', 'fbrokenbrow4@mozilla.com', 'fbrokenbrow4', 'ZhvTGcWID'),
+(6, 'Miss', 'Charlot', 'Kalina', 'Podcat', '94 Iowa Park', '988 Weeping Birch Junction', 'Papineauville', 'Yukon', 'Canada', 'G5N 5S3', '(972)674-8773', '(768)500-1272', 'kcharlot5@webmd.com', 'kcharlot5', '5Gq5J1'),
+(7, 'Mr', 'Dilon', 'Mab', 'Trudoo', '8 Artisan Plaza', '98384 Alpine Drive', 'Pincher Creek', 'New Brunswick', 'Canada', 'J0J 6J6', '(974)585-9826', '(236)286-7175', 'mdilon6@delicious.com', 'mdilon6', 'pXRGzPE'),
+(8, 'Ms', 'Speariett', 'Petronilla', 'Vidoo', '0208 Cardinal Road', '95 Stang Pass', 'Fox Creek', 'Nova Scotia', 'Canada', 'E4B 3F4', '(143)234-5437', '(605)876-1228', 'pspeariett7@g.co', 'pspeariett7', 'F9lBbU8Z'),
+(9, 'Mrs', 'La Rosa', 'Major', 'Eazzy', '8 Lighthouse Bay Center', '58266 Monterey Crossing', 'St. Thomas', 'Manitoba', 'Canada', 'N5R 5S2', '(140)986-4159', '(838)357-4253', 'mlarosa8@stanford.edu', 'mlarosa8', '2lYiNfaEIn'),
+(10, 'Mrs', 'MacKay', 'Kristo', 'Divanoodle', '21 Kingsford Terrace', '28024 Sunbrook Place', 'Sherwood Park', 'Prince Edward Island', 'Canada', 'T8A 7J3', '(544)584-8160', '(839)675-3263', 'kmackay9@harvard.edu', 'kmackay9', 'WPgoKZW0cJh');
 
 
 /* website for pst gst and hst https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-by-province/*/
