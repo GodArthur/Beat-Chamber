@@ -319,7 +319,6 @@ public class AlbumsJpaController implements Serializable {
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-<<<<<<< HEAD
     
     /**
      * @param id
