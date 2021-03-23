@@ -74,6 +74,6 @@ public class CheckoutBean implements Serializable {
     
     @Override
     public String toString() {
-        return "bean";
+        return this.CardNumber;
     }
 }

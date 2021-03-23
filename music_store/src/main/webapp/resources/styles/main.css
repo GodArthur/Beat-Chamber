@@ -22,6 +22,10 @@ section {
     height: 400px;
 }
 
+html{
+    height:100%;
+}
+
 footer {
     background-color: black;
 }
@@ -308,7 +312,6 @@ a:visited {
 	height: 1px; 
 	border: 0;
 }
-
 
 /*Ibrahim was here*/
 .input_info{

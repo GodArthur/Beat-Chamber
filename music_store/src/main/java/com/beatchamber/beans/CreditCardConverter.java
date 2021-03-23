@@ -75,10 +75,21 @@ public class CreditCardConverter implements Converter, Serializable {
         // length 15: xxxx xxxxxx xxxxx
         // length 16: xxxx xxxx xxxx xxxx
         // length 22: xxxxxx xxxxxxxx xxxxxxxx
-        if (!(value instanceof CreditCard)) {
-            throw new ConverterException();
+        if(!(value instanceof String)){
+            if (!(value instanceof CreditCard)) {
+                System.out.println(value.getClass().getSimpleName() + " " + value + "*******************************************************");
+
+                throw new ConverterException();
+            }
         }
-        String v = ((CreditCard) value).toString();
+        String v = "";
+        if((value instanceof String)){
+            v = (String)value;
+        }
+        else{
+            v = ((CreditCard) value).toString();
+        }
+        
         String sep = separator;
         if (sep == null) {
             sep = " ";

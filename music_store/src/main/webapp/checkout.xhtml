@@ -34,11 +34,11 @@ and open the template in the editor.
 
                                     <h:outputLabel class="inforLb" for="cvv">#{msgs.askCvv}</h:outputLabel>  
                                     <h:inputText class="input_info" id="cvv" value="#{checkoutData.cvv}" required="true" requiredMessage="#{msgs.cvvMessage}">
-                                        <f:validateLength minimum = "3" maximum = "4" />
+                                        <f:validateLength minimum = "3" maximum = "4"  />
                                     </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="nameCard">#{msgs.askName}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="nameCard" value="#{checkoutData.cardNumber}" required="true" requiredMessage="#{msgs.nameMessage}" />
+                                    <h:inputText class="input_info" id="nameCard" value="#{checkoutData.name}" required="true" requiredMessage="#{msgs.nameMessage}" />
                                         <!--<f:validateRegex pattern = "[A-Za-z]" />
                                     </h:inputText>--><br/><br/>
 
@@ -75,7 +75,7 @@ and open the template in the editor.
                                     <br/>
                                     
                                     
-                                    <h:commandButton action="checkout" styleClass="validationBTN" value="Complete Checkout" type="submit"/>
+                                    <h:commandButton action="index.xhtml" styleClass="validationBTN" value="Complete Checkout" type="submit"/>
 
 				</h:form>
 
