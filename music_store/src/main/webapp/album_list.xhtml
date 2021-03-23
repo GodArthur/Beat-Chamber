@@ -16,6 +16,7 @@
                 <section class="album-list-title">
                     <h1>List of Available Albums</h1>
                 </section>
+                <!-- PrimeFaces's DataView to display all the current albums -->
                 <p:dataView var="albumGrid" value="#{albumsJpaController.findAlbumsEntities()}" 
                             multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                     <p:dataViewGridItem>
@@ -35,8 +36,21 @@
                         </div>
                     </p:dataViewGridItem>
                     <p:dataViewListItem>
-                        <div>
-                            <p:graphicImage name="#{albumsJpaController.getAlbumPath(albumGrid.albumNumber, true)}" library="images" styleClass="album-img-small"/>
+                        <div class="album-list-display">
+                            <p:graphicImage name="#{albumsJpaController.getAlbumPath(albumGrid.albumNumber, true)}" library="images" styleClass="album-list-img"/>
+                            <div class="album-list-info">
+                                <div>#{albumGrid.albumTitle}</div>
+                                <div>#{albumsJpaController.getAlbumArtist(albumGrid.albumNumber).artistName}</div>
+                                <h:form class="album-rating">
+                                    <p:rating readonly="true" value="4"/>
+                                </h:form>
+                                <div class="album-list-price">
+                                    <h:outputText value="#{albumGrid.listPrice}" styleClass="album-price">
+                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                    </h:outputText>
+                                    <p:button value="Add to Cart" icon="pi pi-shopping-cart"/>
+                                </div>
+                            </div>
                         </div>
                     </p:dataViewListItem>
                 </p:dataView>
