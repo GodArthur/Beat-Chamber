@@ -340,6 +340,11 @@ a:visited {
     width: 150px;
 }
 
+/*Ibrahim was here btw this line of code will hide the messages on top of the page*/
+#javax_faces_developmentstage_messages{
+    display: none;
+}
+
 .release-date {
     display: flex;
     justify-content: space-between;
