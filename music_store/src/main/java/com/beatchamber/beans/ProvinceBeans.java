@@ -17,7 +17,7 @@ import javax.inject.Named;
 @RequestScoped
 public class ProvinceBeans implements Serializable {
 
-    private int name = 1;
+    private int name = -1;
 
     
     public void setName(int Name) {
