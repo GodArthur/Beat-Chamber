@@ -83,7 +83,13 @@ public class LoginBean implements Serializable {
                 LOG.info("Successful login");
                 loggedIn = true;
                 //return navigationBean.toWelcome();
-                return "index.xhtml";
+                if(client.getTitle().equals("Manager")){
+                    return "manageClients.xhtml"; 
+                }
+                else{
+                    return "index.xhtml";
+                }
+                
             }
         }
         LOG.info("Unsuccessful login");

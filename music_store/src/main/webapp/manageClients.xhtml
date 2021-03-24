@@ -95,13 +95,14 @@
 
 
                         <p:column style="width:calc(20px)" headerText="ID" sortBy="#{client.clientNumber}" >
-                            <h:outputText value="#{client.clientNumber}"/>
+                            <h:outputText value="#{client.clientNumber}" />
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="UserName" sortBy="#{client.username}">
                             <h:outputText value="#{client.username}"/>
                         </p:column>
-                        <p:column style="width:calc(30px)" headerText="Title" sortBy="#{client.title}">
-                            <h:outputText value="#{client.title}"/>
+                        <p:column style="width:calc(40px)" headerText="Title" sortBy="#{client.title}">
+                            <h:outputText value="#{client.title}" 
+                                          styleClass="#{client.title.equals('Manager')} ? badge badge-dark : badge badge-primary"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="First Name" sortBy="#{client.firstName}">
                             <h:outputText value="#{client.firstName}"/>
@@ -146,10 +147,8 @@
                                     <p:outputLabel for="userTitle" value="Title"/>
                                     <p:selectOneMenu id="userTitle" value="#{theClients.selectedClient.title}" required="true"> 
                                         <f:selectItem itemLabel="#{theClients.selectedClient.title}" itemValue="#{theClients.selectedClient.title}"/>
-                                        <f:selectItem itemValue = "Mr" itemLabel = "Mr" /> 
-                                        <f:selectItem itemValue = "Mrs" itemLabel = "Mrs" /> 
-                                        <f:selectItem itemValue = "Ms" itemLabel = "Ms" /> 
-                                        <f:selectItem itemValue = "Miss" itemLabel = "Miss" />   
+                                        <f:selectItem itemValue = "Consumer" itemLabel = "Consumer" /> 
+                                        <f:selectItem itemValue = "Manager" itemLabel = "Manager" />  
                                     </p:selectOneMenu>  
                                 </div>
                                 <div class="row">
