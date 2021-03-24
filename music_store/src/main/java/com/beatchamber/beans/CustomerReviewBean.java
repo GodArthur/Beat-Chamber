@@ -36,7 +36,7 @@ public class CustomerReviewBean implements Serializable {
         return this.track_id;
     }
     
-    public void setTrack_id(int trackId){
+    public void setTrack_id(Integer trackId){
         this.track_id = trackId;
     }
     
