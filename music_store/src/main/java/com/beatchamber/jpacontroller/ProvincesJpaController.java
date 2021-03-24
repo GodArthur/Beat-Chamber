@@ -127,13 +127,16 @@ public class ProvincesJpaController implements Serializable {
         }
         return q.getResultList();
     }
-
+    
     public Provinces findProvinces(Integer id) {
-
+        if(id == -1 ){
+            return em.find(Provinces.class, 1);
+        }
         return em.find(Provinces.class, id);
-
     }
+    
 
+    
     public int getProvincesCount() {
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();

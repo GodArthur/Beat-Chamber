@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <!-- Front page of the website. Also acts as the welcome page. @Author Susan Vuu - 1735488 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css"/>
         <title>Home Page</title>
@@ -25,8 +23,7 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <a href="#{album.sendAlbum('21')}">
-                                <!--Temporary use of image tag until we use JPA-->
+                            <a href="#{album.sendAlbum(21)}">
                                 <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(21, true)}" styleClass="album-img-small"/>
                                 <p>#{albumsJpaController.findAlbums(21).albumTitle}</p>
                                 <p>#{albumsJpaController.getAlbumArtist(21).artistName}</p>
@@ -52,22 +49,25 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <a href="album_page.xhtml">
-                                <!--Temporary use of image tag until we use JPA-->
+                            <h:link outcome="#{album.sendAlbum(21)}">
                                 <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(21, true)}" styleClass="album-img-small"/>
                                 <p>#{albumsJpaController.findAlbums(21).albumTitle}</p>
                                 <p>#{albumsJpaController.getAlbumArtist(21).artistName}</p>
+                            </h:link>
+                        </div>
+                        <div class="album-display-small">
+                            <a href="#{album.sendAlbum(22)}">
+                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(22, true)}" styleClass="album-img-small"/>
+                                <p>#{albumsJpaController.findAlbums(22).albumTitle}</p>
+                                <p>#{albumsJpaController.getAlbumArtist(22).artistName}</p>
                             </a>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(22, true)}" styleClass="album-img-small"/>
-                            <p>#{albumsJpaController.findAlbums(22).albumTitle}</p>
-                            <p>#{albumsJpaController.getAlbumArtist(22).artistName}</p>
-                        </div>
-                        <div class="album-display-small">
-                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(20, true)}" styleClass="album-img-small"/>
-                            <p>#{albumsJpaController.findAlbums(20).albumTitle}</p>
-                            <p>#{albumsJpaController.getAlbumArtist(20).artistName}</p>
+                            <a href="#{album.sendAlbum(20)}">
+                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(20, true)}" styleClass="album-img-small"/>
+                                <p>#{albumsJpaController.findAlbums(20).albumTitle}</p>
+                                <p>#{albumsJpaController.getAlbumArtist(20).artistName}</p>
+                            </a>
                         </div>
                         <div class="see-more-container">
                             <button class="see-more-button">#{msgs.seeMore}</button>
@@ -81,19 +81,25 @@
                     </div>
                     <div class="album-section" id="album-list">
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(4, true)}" styleClass="album-img-small"/>
-                            <p>#{albumsJpaController.findAlbums(4).albumTitle}</p>
-                            <p>#{albumsJpaController.getAlbumArtist(4).artistName}</p>
+                            <a href="#{album.sendAlbum(4)}">
+                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(4, true)}" styleClass="album-img-small"/>
+                                <p>#{albumsJpaController.findAlbums(4).albumTitle}</p>
+                                <p>#{albumsJpaController.getAlbumArtist(4).artistName}</p>
+                            </a>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(2, true)}" styleClass="album-img-small"/>
-                            <p>#{albumsJpaController.findAlbums(2).albumTitle}</p>
-                            <p>#{albumsJpaController.getAlbumArtist(2).artistName}</p>
+                            <a href="#{album.sendAlbum(2)}">
+                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(2, true)}" styleClass="album-img-small"/>
+                                <p>#{albumsJpaController.findAlbums(2).albumTitle}</p>
+                                <p>#{albumsJpaController.getAlbumArtist(2).artistName}</p>
+                            </a>
                         </div>
                         <div class="album-display-small">
-                            <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(1, true)}" styleClass="album-img-small"/>
-                            <p>#{albumsJpaController.findAlbums(1).albumTitle}</p>
-                            <p>#{albumsJpaController.getAlbumArtist(1).artistName}</p>
+                            <h:link outcome="#{album.sendAlbum(1)}">
+                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(1, true)}" styleClass="album-img-small"/>
+                                <p>#{albumsJpaController.findAlbums(1).albumTitle}</p>
+                                <p>#{albumsJpaController.getAlbumArtist(1).artistName}</p>
+                            </h:link>
                         </div>
                         <div class="see-more-container">
                             <button class="see-more-button">#{msgs.seeMore}</button>
