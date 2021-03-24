@@ -2,7 +2,8 @@
 <!-- Header and navbar for the master template @Author Susan Vuu - 1735488 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
     <body>
         <header>
             <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
@@ -13,7 +14,17 @@
                 <h:link value="#{msgs.browseMusic}"/>
                 <h:link value="#{msgs.about}" outcome="about.xhtml"/>
                 <h:link value="#{msgs.changeLanguage}"/>
-                <h:link value="#{msgs.loginRegister}"/>
+                <h:link value="#{msgs.loginRegister}" outcome="login.xhtml"
+                        rendered="#{!loginBean.loggedIn}"/>
+                <h:form>
+                    <p:growl id="messages" showDetail="true"/>
+                    <h:outputText value="#{msgs.welcome} #{loginBean.username}" styleClass="welcome-label"
+                                  rendered="#{loginBean.loggedIn}"/>
+                    <h:commandLink id="logout" action="#{loginBean.doLogout}"
+                                   rendered="#{loginBean.loggedIn}">
+                        <i class="pi pi-fw pi-power-off"></i>
+                    </h:commandLink>
+                </h:form>
                 <h:form>
                     <h:commandButton styleClass="search-button" value="#{msgs.search}"/>
                     <h:inputText a:placeholder="#{msgs.searchMusic}" styleClass="search"/>

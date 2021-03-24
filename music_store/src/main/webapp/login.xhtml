@@ -32,18 +32,15 @@
                 <h:form>
                     <h:outputLabel class="login-title" value="#{msgs.titlelogin}"/>
                     <div>
-                        <h:inputText  class="login-input" id="username" value="#{user.username}" a:placeholder="Username"/>
+                        <h:inputText  class="login-input" id="username" 
+                                      value="#{loginBean.username}" a:placeholder="Username"/>
+                        <h:inputSecret class="login-input" id="password" 
+                                       value="#{loginBean.password}" a:placeholder="Password"/>
+                        <h:messages />
+                        <h:commandButton id="button" value="#{msgs.login}" class="loginButton"
+                                         action="#{loginBean.doLogin}"/>
                     </div>
-                    <div>
-                        <h:inputSecret class="login-input" id="password" value="#{user.password}" a:placeholder="Password"/>
-                    </div>
-                    <div class="container-checkbox">
-                        <h:selectBooleanCheckbox value = "Remember Me" id = "chkRememberMe" />
-                        <h:outputLabel class="label-remember" value="#{msgs.remember}"/>
-                    </div>
-                    <div>
-                        <h:commandButton type="submit" value="#{msgs.login}"/>
-                    </div>
+                    <h:commandLink id="clink" action="signup.xhtml" value="#{msgs.register}" />
                 </h:form>
             </div>
         </section>

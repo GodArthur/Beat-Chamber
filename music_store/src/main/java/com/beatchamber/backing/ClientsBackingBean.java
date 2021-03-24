@@ -101,12 +101,12 @@ public class ClientsBackingBean implements Serializable {
     }
 
     private void convertPhoneFormat() {
-        String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") " 
-                + this.selectedClient.getCellPhone().substring(3, 6) + "-" 
+        String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") "
+                + this.selectedClient.getCellPhone().substring(3, 6) + "-"
                 + this.selectedClient.getCellPhone().substring(6, 10);
         this.selectedClient.setCellPhone(stringCellPhone);
-        String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") " 
-                + this.selectedClient.getHomePhone().substring(3, 6) + "-" 
+        String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") "
+                + this.selectedClient.getHomePhone().substring(3, 6) + "-"
                 + this.selectedClient.getHomePhone().substring(6, 10);
         this.selectedClient.setHomePhone(stringHomePhone);
     }
