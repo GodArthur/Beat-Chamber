@@ -244,6 +244,25 @@ a:visited {
     font-weight: bold;
 }
 
+.album-list-display {
+    display: inline-block;
+}
+
+.album-list-info {
+    margin-top: 10px;
+    float: right;
+}
+
+.album-list-img {
+    margin: 10px;
+    max-height: 300px;
+    max-width: 300px;
+}
+
+.album-list-price {
+    
+}
+
 /*Ibrahim was here*/
 .sub_title{
 	text-align: left;
