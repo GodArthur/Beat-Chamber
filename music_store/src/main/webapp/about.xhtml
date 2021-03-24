@@ -32,37 +32,39 @@
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
                 <div id="wholePage">
-                <p:accordionPanel widgetVar="basic" >
+                <div id="displayedInformation">
+                    <p:accordionPanel widgetVar="basic" >
 
-                    <p:tab title="Home" class="aboutAccordion">
-                        <p class="alignTextLeft">#{msgs.about_home}</p>
-                    </p:tab>
+                        <p:tab title="Home" class="aboutAccordion">
+                            <p class="alignTextLeft">#{msgs.about_home}</p>
+                        </p:tab>
 
-                    <p:tab title="Music">
-                        <p class="alignTextLeft">#{msgs.about_music}</p>
-                    </p:tab>
+                        <p:tab title="Music">
+                            <p class="alignTextLeft">#{msgs.about_music}</p>
+                        </p:tab>
 
-                    <p:tab title="Contact">
-                        <p class="alignTextLeft">#{msgs.about_contact}</p>
-                    </p:tab>
+                        <p:tab title="Contact">
+                            <p class="alignTextLeft">#{msgs.about_contact}</p>
+                        </p:tab>
 
-                    <p:tab title="HELP">
-                        <p class="alignTextLeft">#{msgs.about_help}e</p>
-                    </p:tab>
+                        <p:tab title="HELP">
+                            <p class="alignTextLeft">#{msgs.about_help}e</p>
+                        </p:tab>
 
-                    <p:tab title="SEARCH">
-                        <p class="alignTextLeft">#{msgs.about_search}</p>
-                    </p:tab>
+                        <p:tab title="SEARCH">
+                            <p class="alignTextLeft">#{msgs.about_search}</p>
+                        </p:tab>
 
-                    <p:tab title="CART">
-                        <p class="alignTextLeft">#{msgs.about_cart}</p>
-                    </p:tab>
+                        <p:tab title="CART">
+                            <p class="alignTextLeft">#{msgs.about_cart}</p>
+                        </p:tab>
 
-                    <p:tab title="Logo">
-                        <p class="alignTextLeft">#{msgs.about_logo}</p>
-                    </p:tab>
+                        <p:tab title="Logo">
+                            <p class="alignTextLeft">#{msgs.about_logo}</p>
+                        </p:tab>
 
-                </p:accordionPanel>
+                    </p:accordionPanel>
+                </div>
                     <!--
                 <div class="about_section">
                                 <h2 id="page_title">HELP PAGE</h2>
