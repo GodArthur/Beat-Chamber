@@ -36,8 +36,8 @@
                 <div class="album-display-small">
                     <h:graphicImage library="images" name="albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png" styleClass="album-img-small"/>
                     <!--<p>If You're Reading This It's Too Late</p>-->
-                    <p></p>
-                    <p>Drake</p>
+                    <p>#{tracks.trackTitle}</p>
+                    <p>#{albumsJpaController.getAlbumArtist(album.albumId)}</p>
                 </div>
                 
                 <div class="stars">
