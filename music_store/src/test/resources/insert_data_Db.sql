@@ -1,4 +1,5 @@
-USE CSgb1w21;
+/*USE CSgb1w21;*/
+USE beat_chamber;
 
 insert into genres (genre_name) values
 ('Hip Hop'),
@@ -591,7 +592,7 @@ insert into provinces (province_id,choice_name,pst,gst,hst) values
 (12,'Saskatchewan',6,5,0),
 (13,'Yukon',0,5,5);
 
-
+/*
 
 USE CSgb1w21test;
 
@@ -631,31 +632,31 @@ insert into Albums (album_title,release_date,recording_label,total_tracks,entry_
 
 
 insert into Artists (artist_name) values
-('Roddy Ricch'), /* Please Excuse Me For Being Antisocial 1*/
-('Ne-Yo'), /* Year Of The Gentleman  2*/
-('The Weeknd'), /* After Hours 3*/
-('Drake'), /* If Youre Reading This It's Too Late 4*/
-('Travis Scott'), /* ASTROWORLD 5*/
-('Pixies'), /* BOSSANOVA 6*/
-('Nirvana'), /* NEVERMIND  7*/
-('Pink Floyd'), /* THE DARK SIDE OF THE MOON 8*/
-('Mike Oldfield'), /* TUBULAR BELLS 9*/
-('Radiohead'), /* OK COMPUTER 10*/
-('Hans Zimmer'),/* The Dark Knight 11*/
-('James Newton Howard'), /* The Dark Knight 12*/
-('Ludwig Göransson'),/* The Mandalorian Season 2 vol.2 13*/
-('Orchestre symphonique de Londres'), /* Star Wars: The Empire Strikes Back album artist 14*/
-('John Williams'), /* Harry Potter and The Sorcerer s Stone 15*/ 
-('Michael Giacchino'), /* Spider-man: Far From Home 16*/
-('Norah Jones'), /* COME AWAY WITH ME 17*/
-('Louis Armstrong'),/* WHAT A WONDERFUL WORLD 18*/
-('Dave Brubeck'), /* TIME OUT 19*/
-('Diana Krall'),/* WALLFLOWER  20*/
-('Jeremiah Fraites'), /* Piano Piano 21*/
-('The Piano Guys'), /* 10 22*/
-('The Long Johns'), /* Bones in the Ocean 23*/
-('Brandon Musser'), /* Pure Piano Improv, Pt.2 24*/
-('Audiomachine') /* Tree of Life 25*/;
+('Roddy Ricch'), /* Please Excuse Me For Being Antisocial 1
+('Ne-Yo'), /* Year Of The Gentleman  
+('The Weeknd'), /* After Hours 3
+('Drake'), /* If Youre Reading This It's Too Late 4
+('Travis Scott'), /* ASTROWORLD 5
+('Pixies'), /* BOSSANOVA 6
+('Nirvana'), /* NEVERMIND  7
+('Pink Floyd'), /* THE DARK SIDE OF THE MOON 8
+('Mike Oldfield'), /* TUBULAR BELLS 9
+('Radiohead'), /* OK COMPUTER 10
+('Hans Zimmer'),/* The Dark Knight 11
+('James Newton Howard'), /* The Dark Knight 12
+('Ludwig Göransson'),/* The Mandalorian Season 2 vol.2 13
+('Orchestre symphonique de Londres'), /* Star Wars: The Empire Strikes Back album artist 14
+('John Williams'), /* Harry Potter and The Sorcerer s Stone 15
+('Michael Giacchino'), /* Spider-man: Far From Home 16
+('Norah Jones'), /* COME AWAY WITH ME 17
+('Louis Armstrong'),/* WHAT A WONDERFUL WORLD 18
+('Dave Brubeck'), /* TIME OUT 19
+('Diana Krall'),/* WALLFLOWER  20
+('Jeremiah Fraites'), /* Piano Piano 21
+('The Piano Guys'), /* 10 22
+('The Long Johns'), /* Bones in the Ocean 23
+('Brandon Musser'), /* Pure Piano Improv, Pt.2 24
+('Audiomachine') /* Tree of Life 25;
 
 
 
@@ -1065,46 +1066,46 @@ insert into surveys(title) values
 ('What is the best season of Legend of Korra?');
 
 insert into Choices(choice_name,votes) values
-/* survey#1 */
+/* survey#1 
 ('0-25',0),
 ('25-100',0),
 ('101-500',0),
 ('501-1000',0),
 ('1000 or more ',0),
 
-/* survey#2 */
+/* survey#2 
 ('None',0),
 ('1',0),
 ('2',0),
 ('300',0),
 ('more than 300',0),
 
-/* survey#3 */
+/* survey#3 
 ('Blue',0),
 ('Red',0),
 ('Purple',0),
 ('Other',0),
 
-/* survey#4 */
+/* survey#4 
 ('1 foot',0),
 ('4 foot',0),
 ('5 foot',0),
 ('12 foot',0),
 
-/* survey#5 */
+/* survey#5 
 ('The Dark Knight',0),
 ('Shawshank Redemption',0),
 ('Spider-man: Into The Spider-verse',0),
 ('Godfather',0),
 ('Other (The wrong answer)',0),
 
-/* survey#6 */
+/* survey#6 
 ('Wolf',0),
 ('Moose',0),
 ('Bear',0),
 ('Mongoose',0),
 
-/* survey#7 */
+/* survey#7 
 ('Season 1',0),
 ('Season 2',0),
 ('Season 3',0),
@@ -1112,46 +1113,46 @@ insert into Choices(choice_name,votes) values
 
 insert into Survey_to_Choice(survey_id,choice_id) values
 
-/* survey#1 */
+/* survey#1 
 (1,1),
 (1,2),
 (1,3),
 (1,4),
 (1,5),
 
-/* survey#2 */
+/* survey#2 
 (2,6),
 (2,7),
 (2,8),
 (2,9),
 (2,10),
 
-/* survey#3 */
+/* survey#3 
 (3,11),
 (3,12),
 (3,13),
 (3,14),
 
-/* survey#4 */
+/* survey#4 
 (4,15),
 (4,16),
 (4,17),
 (4,18),
 
-/* survey#5 */
+/* survey#5 
 (5,19),
 (5,20),
 (5,21),
 (5,22),
 (5,23),
 
-/* survey#6 */
+/* survey#6 
 (6,24),
 (6,25),
 (6,26),
 (6,27),
 
-/* survey#7 */
+/* survey#7 
 (7,28),
 (7,29),
 (7,30),
@@ -1170,7 +1171,7 @@ insert into Clients (client_number, title, last_name, first_name, company_name, 
 (10, 'Mrs', 'MacKay', 'Kristo', 'Divanoodle', '21 Kingsford Terrace', '28024 Sunbrook Place', 'Sherwood Park', 'Prince Edward Island', 'Canada', 'T8A 7J3', '(544)584-8160', '(839)675-3263', 'kmackay9@harvard.edu', 'kmackay9', 'WPgoKZW0cJh');
 
 
-/* website for pst gst and hst https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-by-province/*/
+/* website for pst gst and hst https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-by-province
 insert into provinces (province_id,choice_name,pst,gst,hst) values
 (1,'Alberta',5,5,0),
 (2,'British Columbia',7,5,0),
@@ -1185,3 +1186,15 @@ insert into provinces (province_id,choice_name,pst,gst,hst) values
 (11,'Quebec',9.975,5,0),
 (12,'Saskatchewan',6,5,0),
 (13,'Yukon',0,5,5);
+
+insert into Ads (ad_id,file_name,link) values
+(1,'Anime','https://www.crunchyroll.com/'),
+(2,'Aurora','https://en.wikipedia.org/wiki/Aurora'),
+(3,'Beans','https://en.wikipedia.org/wiki/Bean'),
+(4,'Cats','https://www.petfinder.com/pet-adoption/cat-adoption/'),
+(5,'Cheese','https://cheese.com/'),
+(6,'Dogs','https://www.petfinder.com/pet-adoption/dog-adoption/'),
+(7,'iPhone','https://www.apple.com/iphone-12/'),
+(8,'Japan','https://en.wikipedia.org/wiki/Japan'),
+(9,'Mobile games','https://www.apple.com/app-store/'),
+(10,'Online classes','https://zoom.us/');*/

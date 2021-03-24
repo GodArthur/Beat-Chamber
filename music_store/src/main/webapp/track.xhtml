@@ -57,9 +57,9 @@
                     </ol>
                 </div>
             </div>
-            <button id="add-btn">Add to Cart</button>
+            <button id="add-btn">#{msgs.addToCart}</button>
             <hr />
-            <p class="item-extra">Customers who viewed this item also viewed</p>
+            <p class="item-extra">#{msgs.otherViewed}</p>
             <div id="viewed-items-container">
                 <div class="album-cover-group">
                     <div>
@@ -109,9 +109,9 @@
             </div>
 
             <hr id="review-separator" />
-            <p class="item-extra">Customer Reviews</p>
+            <p class="item-extra">#{msgs.custReviews}</p>
             <p>There are currently no reviews</p>
-            <h:commandButton value="Add Review" action="review_page"/>
+            <h:commandButton value=#{msgs.addReview} action="review_page"/>
 
             <div id="anime-ad-wrapper">
                 <a

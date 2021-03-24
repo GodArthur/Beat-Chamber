@@ -19,33 +19,34 @@ and open the template in the editor.
 			<div id="information">
 			
 				<h:form>
+                                    <p:growl  id="growl" showDetail="false" sticky="true" class="pop"/>  
                                     <h:outputLabel class="inforLb" for="creditC">#{msgs.askCard}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="creditC" value="#{payment.card}" required="true" requiredMessage="Username is required" >
+                                    <h:inputText class="input_info" id="creditC" value="#{checkoutData.cardNumber}" required="true" requiredMessage="#{msgs.creaditCardNumMessage}" >
                                         <f:converter converterId="com.beatChamber.CreditCardConverter" />
                                         <f:validator validatorId="com.beatChamber.CreditCardValidator" />
                                     </h:inputText>
                                     <br/><br/>
 
                                     <h:outputLabel class="inforLb" for="expDate">#{msgs.askDate}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="expDate" value="" required="true" >
+                                    <h:inputText class="input_info" id="expDate" value="#{checkoutData.date}" required="true" requiredMessage="#{msgs.expiryDateMessage}" >
                                         <f:convertDateTime pattern="MM/yyyy" />
                                     </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="cvv">#{msgs.askCvv}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="cvv" value="" required="true" >
-                                        <f:validateLength minimum = "3" maximum = "4" />
+                                    <h:inputText class="input_info" id="cvv" value="#{checkoutData.cvv}" required="true" requiredMessage="#{msgs.cvvMessage}">
+                                        <f:validateLength minimum = "3" maximum = "4"  />
                                     </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="nameCard">#{msgs.askName}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="nameCard" value="" required="true" >
-                                        <f:validateRegex pattern = "[A-Za-z]" />
-                                    </h:inputText><br/><br/>
+                                    <h:inputText class="input_info" id="nameCard" value="#{checkoutData.name}" required="true" requiredMessage="#{msgs.nameMessage}" />
+                                        <!--<f:validateRegex pattern = "[A-Za-z]" />
+                                    </h:inputText>--><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="address">#{msgs.askAddress}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="address" value="" required="true" /><br/><br/>
+                                    <h:inputText class="input_info" id="address" value="#{checkoutData.address}" required="true" requiredMessage="#{msgs.addressMessage}"/><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="City">#{msgs.askCity}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="City" value="" required="true" /><br/><br/>
+                                    <h:inputText class="input_info" id="City" value="#{checkoutData.city}" required="true" requiredMessage="#{msgs.cityMessage}"/><br/><br/>
 
                                     <h:outputLabel class="City" for="province">#{msgs.askProvince}
                                         
@@ -74,21 +75,19 @@ and open the template in the editor.
                                     <br/>
                                     
                                     
-                                    <h:commandButton styleClass="validationBTN" value="Complete Checkout" type="button"/>
+                                    <h:commandButton action="index.xhtml" styleClass="validationBTN" value="Complete Checkout" type="submit"/>
 
 				</h:form>
 
 			</div>
 
 			<div id="show_prices">
-                                <p>#{ProvincesJpaController.findProvinces(1)}</p>
 				<h1>#{msgs.showItems}</h1><br/><br/><br/><br/>
 				<hr class="hrColor" />
 				<h4>#{msgs.subTotal}</h4><br/>
-                                <!--<h4>#{msgs.pst} <h:outputText id="renderPst" value="#{ProvincesJpaController.findProvinces(provincechoice.name).getChoiceName()}"  /> %</h4><br/>-->
-                                <h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provincechoice.name}"/> %</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderGst" value="#{ProvincesJpaController.findProvinces(provincechoice.name).gst}"  /> %</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderHst" value="#{ProvincesJpaController.findProvinces(provincechoice.name).hst}"  /> %</h4><br/>
+                                <h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(provincechoice.name).pst}"  /> %</h4><br/>
+                                <h4>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(provincechoice.name).gst}"  /> %</h4><br/>
+                                <h4>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(provincechoice.name).hst}"  /> %</h4><br/>
 				<hr class="hrColor"/>
                                 <br/>
                                 <br/>
