@@ -6,6 +6,7 @@
 package com.beatchamber.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -49,19 +50,13 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Tracks.findByHst", query = "SELECT t FROM Tracks t WHERE t.hst = :hst")})
 public class Tracks implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "track_id")
-    private Integer trackId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 40)
     @Column(name = "track_title")
     private String trackTitle;
     @Basic(optional = false)
-    @NotNull
+    @NotNull()
     @Size(min = 1, max = 10)
     @Column(name = "play_length")
     private String playLength;
@@ -107,6 +102,14 @@ public class Tracks implements Serializable {
     @NotNull
     @Column(name = "hst")
     private double hst;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId")
+    private Collection<OrderTrack> orderTrackCollection;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "track_id")
+    private Integer trackId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId")
     private List<InvoiceDetails> invoiceDetailsList;
     @JoinColumn(name = "album_number", referencedColumnName = "album_number")
@@ -212,37 +215,6 @@ public class Tracks implements Serializable {
         this.entryDate = entryDate;
     }
 
-    public boolean getRemoved() {
-        return removed;
-    }
-
-    public void setRemoved(boolean removed) {
-        this.removed = removed;
-    }
-
-    public double getPst() {
-        return pst;
-    }
-
-    public void setPst(double pst) {
-        this.pst = pst;
-    }
-
-    public double getGst() {
-        return gst;
-    }
-
-    public void setGst(double gst) {
-        this.gst = gst;
-    }
-
-    public double getHst() {
-        return hst;
-    }
-
-    public void setHst(double hst) {
-        this.hst = hst;
-    }
 
     public List<InvoiceDetails> getInvoiceDetailsList() {
         return invoiceDetailsList;
@@ -299,6 +271,46 @@ public class Tracks implements Serializable {
     @Override
     public String toString() {
         return "com.beatchamber.entities.Tracks[ trackId=" + trackId + " ]";
+    }
+
+    public boolean getRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
+
+    public double getPst() {
+        return pst;
+    }
+
+    public void setPst(double pst) {
+        this.pst = pst;
+    }
+
+    public double getGst() {
+        return gst;
+    }
+
+    public void setGst(double gst) {
+        this.gst = gst;
+    }
+
+    public double getHst() {
+        return hst;
+    }
+
+    public void setHst(double hst) {
+        this.hst = hst;
+    }
+
+    public Collection<OrderTrack> getOrderTrackCollection() {
+        return orderTrackCollection;
+    }
+
+    public void setOrderTrackCollection(Collection<OrderTrack> orderTrackCollection) {
+        this.orderTrackCollection = orderTrackCollection;
     }
     
 }
