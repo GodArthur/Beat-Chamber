@@ -36,4 +36,46 @@
             <var>msgs</var>
         </resource-bundle>
     </application>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>redirectToIndex</from-outcome>
+            <to-view-id>index.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>toLogin</from-outcome>
+            <to-view-id>login.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>redirectToLogin</from-outcome>
+            <to-view-id>login.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>redirectToAbout</from-outcome>
+            <to-view-id>about.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>redirectToAlbumList</from-outcome>
+            <to-view-id>album_list.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>redirectToManagement</from-outcome>
+            <to-view-id>management_pages/manageClients.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

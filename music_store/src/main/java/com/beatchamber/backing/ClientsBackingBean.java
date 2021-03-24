@@ -11,6 +11,7 @@ import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -60,6 +61,12 @@ public class ClientsBackingBean implements Serializable {
 
     public void setSelectedClient(Clients selectedClient) {
         this.selectedClient = selectedClient;
+    }
+
+    public List<Boolean> isManager() {
+        List<Boolean> isManagerList = new ArrayList<>();
+        this.clients.forEach(item -> isManagerList.add(item.getTitle().equals("Manager")));
+        return isManagerList;
     }
 
     public void openNew() {

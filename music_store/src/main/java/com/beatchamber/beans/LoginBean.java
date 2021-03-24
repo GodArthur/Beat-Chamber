@@ -11,8 +11,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -28,8 +30,10 @@ public class LoginBean implements Serializable {
 
     private String username;
     private String password;
+    private Clients client;
 
     private boolean loggedIn;
+    private boolean isManager;
 
     @Inject
     private ClientsJpaController clientsJpaController;
@@ -53,12 +57,28 @@ public class LoginBean implements Serializable {
         this.password = password;
     }
 
+    public Clients getClient() {
+        return client;
+    }
+
+    public void setClient(Clients client) {
+        this.client = client;
+    }
+
     public boolean isLoggedIn() {
         return loggedIn;
     }
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public boolean isManager() {
+        return isManager;
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
     }
 
     public List<Clients> getClients() {
@@ -73,23 +93,25 @@ public class LoginBean implements Serializable {
      */
     public String doLogin() {
         List<Clients> clientsList = getClients();
-        for (Clients client : clientsList) {
-            String dbUsername = client.getUsername();
-            String dbEmail = client.getEmail();
-            String dbPassword = client.getPassword();
+        for (Clients clientItem : clientsList) {
+            String dbUsername = clientItem.getUsername();
+            String dbEmail = clientItem.getEmail();
+            String dbPassword = clientItem.getPassword();
 
             // Successful login
-            if ((dbUsername.equals(username)||dbEmail.equals(username)) && dbPassword.equals(password)) {
+            if ((dbUsername.equals(username) || dbEmail.equals(username)) && dbPassword.equals(password)) {
                 LOG.info("Successful login");
                 loggedIn = true;
-                //return navigationBean.toWelcome();
-                if(client.getTitle().equals("Manager")){
-                    return "manageClients.xhtml"; 
+                this.client = clientItem;
+
+                if (client.getTitle().equals("Manager")) {
+                    this.isManager = true;
+                    return "redirectToManagement";
+                } else {
+                    this.isManager = false;
+                    return "redirectToIndex";
                 }
-                else{
-                    return "index.xhtml";
-                }
-                
+
             }
         }
         LOG.info("Unsuccessful login");
@@ -101,7 +123,7 @@ public class LoginBean implements Serializable {
 
         // To to login page
         //return navigationBean.toLogin();
-        return "login.xhtml";
+        return "toLogin";
 
     }
 
@@ -120,8 +142,7 @@ public class LoginBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage("errors", msg);
 
         LOG.info("Successful logout");
-        // return navigationBean.redirectToLogin();
-        return "index.xhtml";
+        return "redirectToIndex";
     }
 
 }
