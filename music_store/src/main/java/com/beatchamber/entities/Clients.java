@@ -6,6 +6,7 @@
 package com.beatchamber.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -50,19 +51,13 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Clients.findByHash", query = "SELECT c FROM Clients c WHERE c.hash = :hash")})
 public class Clients implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "client_number")
-    private Integer clientNumber;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 40)
     @Column(name = "title")
     private String title;
     @Basic(optional = false)
-    @NotNull
+    @NotNull()
     @Size(min = 1, max = 40)
     @Column(name = "last_name")
     private String lastName;
@@ -100,20 +95,21 @@ public class Clients implements Serializable {
     private String cellPhone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
-    @NotNull
+    @NotNull()
     @Size(min = 1, max = 40)
     @Column(name = "email")
     private String email;
     @Size(max = 40)
     @Column(name = "genre_of_last_search")
     private String genreOfLastSearch;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 40)
     @Column(name = "username")
     private String username;
     @Basic(optional = false)
-    @NotNull
+    @NotNull()
     @Size(min = 1, max = 40)
     @Column(name = "password")
     private String password;
@@ -123,6 +119,14 @@ public class Clients implements Serializable {
     @Size(max = 32)
     @Column(name = "hash")
     private String hash;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
+    private Collection<Orders> ordersCollection;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "client_number")
+    private Integer clientNumber;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
     private List<CustomerReviews> customerReviewsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
@@ -153,13 +157,6 @@ public class Clients implements Serializable {
         this.clientNumber = clientNumber;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getLastName() {
         return lastName;
@@ -184,6 +181,91 @@ public class Clients implements Serializable {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getHomePhone() {
+        return homePhone;
+    }
+
+    public void setHomePhone(String homePhone) {
+        this.homePhone = homePhone;
+    }
+
+    public String getCellPhone() {
+        return cellPhone;
+    }
+
+    public void setCellPhone(String cellPhone) {
+        this.cellPhone = cellPhone;
+    }
+
+
+    public String getGenreOfLastSearch() {
+        return genreOfLastSearch;
+    }
+
+    public void setGenreOfLastSearch(String genreOfLastSearch) {
+        this.genreOfLastSearch = genreOfLastSearch;
+    }
+
+
+    public List<CustomerReviews> getCustomerReviewsList() {
+        return customerReviewsList;
+    }
+
+    public void setCustomerReviewsList(List<CustomerReviews> customerReviewsList) {
+        this.customerReviewsList = customerReviewsList;
+    }
+
+    public List<Invoices> getInvoicesList() {
+        return invoicesList;
+    }
+
+    public void setInvoicesList(List<Invoices> invoicesList) {
+        this.invoicesList = invoicesList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (clientNumber != null ? clientNumber.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Clients)) {
+            return false;
+        }
+        Clients other = (Clients) object;
+        if ((this.clientNumber == null && other.clientNumber != null) || (this.clientNumber != null && !this.clientNumber.equals(other.clientNumber))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.beatchamber.entities.Clients[ clientNumber=" + clientNumber + " ]";
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 
     public String getAddress1() {
         return address1;
@@ -225,29 +307,6 @@ public class Clients implements Serializable {
         this.country = country;
     }
 
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getHomePhone() {
-        return homePhone;
-    }
-
-    public void setHomePhone(String homePhone) {
-        this.homePhone = homePhone;
-    }
-
-    public String getCellPhone() {
-        return cellPhone;
-    }
-
-    public void setCellPhone(String cellPhone) {
-        this.cellPhone = cellPhone;
-    }
 
     public String getEmail() {
         return email;
@@ -255,14 +314,6 @@ public class Clients implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getGenreOfLastSearch() {
-        return genreOfLastSearch;
-    }
-
-    public void setGenreOfLastSearch(String genreOfLastSearch) {
-        this.genreOfLastSearch = genreOfLastSearch;
     }
 
     public String getUsername() {
@@ -297,45 +348,12 @@ public class Clients implements Serializable {
         this.hash = hash;
     }
 
-    public List<CustomerReviews> getCustomerReviewsList() {
-        return customerReviewsList;
+    public Collection<Orders> getOrdersCollection() {
+        return ordersCollection;
     }
 
-    public void setCustomerReviewsList(List<CustomerReviews> customerReviewsList) {
-        this.customerReviewsList = customerReviewsList;
-    }
-
-    public List<Invoices> getInvoicesList() {
-        return invoicesList;
-    }
-
-    public void setInvoicesList(List<Invoices> invoicesList) {
-        this.invoicesList = invoicesList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (clientNumber != null ? clientNumber.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Clients)) {
-            return false;
-        }
-        Clients other = (Clients) object;
-        if ((this.clientNumber == null && other.clientNumber != null) || (this.clientNumber != null && !this.clientNumber.equals(other.clientNumber))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.beatchamber.entities.Clients[ clientNumber=" + clientNumber + " ]";
+    public void setOrdersCollection(Collection<Orders> ordersCollection) {
+        this.ordersCollection = ordersCollection;
     }
     
 }
