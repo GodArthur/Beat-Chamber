@@ -47,7 +47,6 @@ public class CustomerReviewsJpaController implements Serializable {
     public void create(CustomerReviews customerReviews) throws RollbackFailureException {
 
         try {
-
             utx.begin();
             Clients clientNumber = customerReviews.getClientNumber();
             if (clientNumber != null) {

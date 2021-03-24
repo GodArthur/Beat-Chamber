@@ -19,6 +19,7 @@
                 <!-- PrimeFaces's DataView to display all the current albums -->
                 <p:dataView var="albumGrid" value="#{albumsJpaController.findAlbumsEntities()}" 
                             multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                    <!-- Grid View -->
                     <p:dataViewGridItem>
                         <div class="album-grid-display">
                             <p:graphicImage name="#{albumsJpaController.getAlbumPath(albumGrid.albumNumber, true)}" library="images" styleClass="album-grid-img"/>
@@ -35,6 +36,7 @@
                             <p:button value="Add to Cart" icon="pi pi-shopping-cart"/>
                         </div>
                     </p:dataViewGridItem>
+                    <!-- List View -->
                     <p:dataViewListItem>
                         <div class="album-list-display">
                             <p:graphicImage name="#{albumsJpaController.getAlbumPath(albumGrid.albumNumber, true)}" library="images" styleClass="album-list-img"/>
