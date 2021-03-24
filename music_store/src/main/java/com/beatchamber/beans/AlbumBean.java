@@ -1,9 +1,11 @@
 package com.beatchamber.beans;
 
 import java.io.Serializable;
+import java.util.Map;
 import javax.annotation.ManagedBean;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 
@@ -27,8 +29,10 @@ public class AlbumBean implements Serializable {
         this.albumId = albumId;
     }
     
-    public String sendAlbum(Integer albumId){
-        this.albumId = albumId;
+    public String sendAlbum(){
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
+        this.albumId = Integer.parseInt(params.get("albumId"));
         return "album_page.xhtml";
     }
 }
