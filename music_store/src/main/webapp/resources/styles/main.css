@@ -1,3 +1,4 @@
+/*Home page by Susan*/
 header, section, footer {
     background-color: #333;
     color: white;
@@ -19,6 +20,10 @@ header {
 
 section {
     height: 400px;
+}
+
+html{
+    height:100%;
 }
 
 footer {
@@ -172,27 +177,24 @@ a:visited {
     border-color: #8c9cff;
 }
 
+/*Album page by Susan*/
 .album-display {
     height: 80%;
 }
 
 .img-display {
     padding: 10px;
-    height: 500px;
+    height: 50%;
 }
 
 .album-left-ad {
     float: left;
-    height: 100%;
+    max-height: 500px;
 }
 
 .album-right-ad {
     float: right;
-    height: 100%;
-}
-
-.title-artist {
-    
+    max-height: 500px;
 }
 
 .ratings {
@@ -208,6 +210,38 @@ a:visited {
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
+}
+
+/*Album list page*/
+.album-list-title {
+    height: 10%;
+}
+
+.album-grid-display {
+    padding: 10px;
+    text-align: center;
+}
+
+.album-grid-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 250px;
+    max-width: 250px;
+}
+
+.album-grid-info {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.album-rating {
+    margin-bottom: 10px;
+}
+
+.album-price {
+    padding: 10px;
+    font-weight: bold;
 }
 
 /*Ibrahim was here*/
@@ -279,7 +313,6 @@ a:visited {
 	border: 0;
 }
 
-
 /*Ibrahim was here*/
 .input_info{
 	border: 1px solid #5b3ec9;
@@ -308,6 +341,11 @@ a:visited {
 	display: inline-block;
     text-align: left;
     width: 150px;
+}
+
+/*Ibrahim was here btw this line of code will hide the messages on top of the page*/
+#javax_faces_developmentstage_messages{
+    display: none;
 }
 
 .release-date {

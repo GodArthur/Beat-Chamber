@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
@@ -128,13 +127,16 @@ public class ProvincesJpaController implements Serializable {
         }
         return q.getResultList();
     }
-
+    
     public Provinces findProvinces(Integer id) {
-
+        if(id == -1 ){
+            return em.find(Provinces.class, 1);
+        }
         return em.find(Provinces.class, id);
-
     }
+    
 
+    
     public int getProvincesCount() {
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();

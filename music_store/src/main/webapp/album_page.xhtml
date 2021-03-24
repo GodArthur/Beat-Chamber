@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Album Page</title>
         <h:outputStylesheet library="styles" name="main.css"/>
@@ -16,16 +16,17 @@
                     <!-- Album and ads -->
                     <div class="img-display">
                         <h:graphicImage library="images" name="ads/DogsAd.png" styleClass="album-left-ad"/>
-                        <h:graphicImage library="images" name="albums/classical/10_large.jpg"/>
+                        <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}"/>
                         <h:graphicImage library="images" name="ads/AuroraAd.png" styleClass="album-right-ad"/>
                     </div>
                     <!-- Album description -->
-                    <div class="title-artist">
-                        <h2 class="album-title">10</h2>
-                        <h2>The Piano Guys</h2>
-                    </div>
-                    <div class="ratings">
-                        <p>star star star star star</p>
+                    <div class="album-info">
+                        <h2 class="album-title">#{albumsJpaController.findAlbums(album.albumId).albumTitle}</h2>
+                        <h2>#{albumsJpaController.getAlbumArtist(album.albumId).artistName}</h2>
+                        <div>#{albumsJpaController.findAlbums(album.albumId).listPrice}</div>
+                        <h:form>
+                            <p:rating readonly="true" value="4"/>
+                        </h:form>
                     </div>
                     <button>#{msgs.addToCart}</button>
                     <button>#{msgs.viewTracks}</button>
@@ -36,9 +37,6 @@
                     <p>#{msgs.noReviews}</p>
                     <a href="review_page.xhtml"><button>#{msgs.addReview}</button></a>
                 </section>
-                <p>
-                    #{album.albumId}
-                </p>
             </ui:define>
         </ui:composition>
     </h:body>
