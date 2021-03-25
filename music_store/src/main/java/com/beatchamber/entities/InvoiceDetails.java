@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.beatchamber.entities;
 
 import java.io.Serializable;
@@ -24,7 +19,7 @@ import javax.validation.constraints.NotNull;
  * @author kibra
  */
 @Entity
-@Table(name = "invoice_details", catalog = "beat_chamber", schema = "")
+@Table(name = "invoice_details", catalog = "CSgb1w21", schema = "")
 @NamedQueries({
     @NamedQuery(name = "InvoiceDetails.findAll", query = "SELECT i FROM InvoiceDetails i"),
     @NamedQuery(name = "InvoiceDetails.findByTablekey", query = "SELECT i FROM InvoiceDetails i WHERE i.tablekey = :tablekey"),
