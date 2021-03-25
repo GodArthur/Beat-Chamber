@@ -36,9 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-
 public class AlbumsJpaController implements Serializable {
-
 
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
 
@@ -219,9 +217,7 @@ public class AlbumsJpaController implements Serializable {
                     }
                 }
             }
-
             utx.commit();
-
 
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
