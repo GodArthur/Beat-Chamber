@@ -1,5 +1,6 @@
-package com.beatchamber.beans;
+package com.beatchamber.beans.validator;
 
+import com.beatchamber.beans.CreditCard;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * performs the Luhn test
  *
  */
-@FacesValidator("com.beatChamber.CreditCardValidator")
+@FacesValidator("CreditCardValidator")
 public class CreditCardValidator implements Validator {
 
     private final static Logger LOG = LoggerFactory.getLogger(CreditCardValidator.class);
@@ -32,6 +33,11 @@ public class CreditCardValidator implements Validator {
         } else {
             cardNumber = value.toString().replaceAll("\\D", ""); // remove
         }																	// non-digits
+        if(cardNumber.length()==0){
+            FacesMessage message = com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","creaditCardNumMessage",null);
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(message);
+        }
         if (!luhnCheck(cardNumber)) {
             FacesMessage message = com.beatchamber.util.Messages.getMessage(
                     "com.beatchamber.bundles.messages", "badLuhnCheck", null);

@@ -22,6 +22,9 @@
     <class>com.beatchamber.entities.Surveys</class>
     <class>com.beatchamber.entities.Choices</class>
     <class>com.beatchamber.entities.Provinces</class>
+    <class>com.beatchamber.entities.Orders</class>
+    <class>com.beatchamber.entities.OrderTrack</class>
+    <class>com.beatchamber.entities.OrderAlbum</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="eclipselink.logging.level.sql" value="FINE"/>

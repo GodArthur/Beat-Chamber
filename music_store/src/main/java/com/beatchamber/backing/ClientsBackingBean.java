@@ -11,6 +11,7 @@ import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -62,6 +63,12 @@ public class ClientsBackingBean implements Serializable {
         this.selectedClient = selectedClient;
     }
 
+    public List<Boolean> isManager() {
+        List<Boolean> isManagerList = new ArrayList<>();
+        this.clients.forEach(item -> isManagerList.add(item.getTitle().equals("Manager")));
+        return isManagerList;
+    }
+
     public void openNew() {
         this.selectedClient = new Clients();
     }
@@ -101,12 +108,12 @@ public class ClientsBackingBean implements Serializable {
     }
 
     private void convertPhoneFormat() {
-        String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") " 
-                + this.selectedClient.getCellPhone().substring(3, 6) + "-" 
+        String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") "
+                + this.selectedClient.getCellPhone().substring(3, 6) + "-"
                 + this.selectedClient.getCellPhone().substring(6, 10);
         this.selectedClient.setCellPhone(stringCellPhone);
-        String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") " 
-                + this.selectedClient.getHomePhone().substring(3, 6) + "-" 
+        String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") "
+                + this.selectedClient.getHomePhone().substring(3, 6) + "-"
                 + this.selectedClient.getHomePhone().substring(6, 10);
         this.selectedClient.setHomePhone(stringHomePhone);
     }

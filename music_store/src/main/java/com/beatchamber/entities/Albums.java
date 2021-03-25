@@ -6,6 +6,7 @@
 package com.beatchamber.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -45,19 +46,13 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Albums.findByRemovalDate", query = "SELECT a FROM Albums a WHERE a.removalDate = :removalDate")})
 public class Albums implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "album_number")
-    private Integer albumNumber;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "album_title")
     private String albumTitle;
     @Basic(optional = false)
-    @NotNull
+    @NotNull()
     @Column(name = "release_date")
     @Temporal(TemporalType.DATE)
     private Date releaseDate;
@@ -91,6 +86,14 @@ public class Albums implements Serializable {
     @NotNull
     @Column(name = "removal_status")
     private boolean removalStatus;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "albumId")
+    private Collection<OrderAlbum> orderAlbumCollection;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "album_number")
+    private Integer albumNumber;
     @Column(name = "removal_date")
     private Boolean removalDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "albumNumber")
@@ -255,6 +258,14 @@ public class Albums implements Serializable {
     @Override
     public String toString() {
         return "com.beatchamber.entities.Albums[ albumNumber=" + albumNumber + " ]";
+    }
+
+    public Collection<OrderAlbum> getOrderAlbumCollection() {
+        return orderAlbumCollection;
+    }
+
+    public void setOrderAlbumCollection(Collection<OrderAlbum> orderAlbumCollection) {
+        this.orderAlbumCollection = orderAlbumCollection;
     }
     
 }

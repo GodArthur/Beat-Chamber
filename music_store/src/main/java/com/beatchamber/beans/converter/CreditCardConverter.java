@@ -1,5 +1,6 @@
-package com.beatchamber.beans;
+package com.beatchamber.beans.converter;
 
+import com.beatchamber.beans.CreditCard;
 import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
@@ -77,7 +78,6 @@ public class CreditCardConverter implements Converter, Serializable {
         // length 22: xxxxxx xxxxxxxx xxxxxxxx
         if(!(value instanceof String)){
             if (!(value instanceof CreditCard)) {
-                System.out.println(value.getClass().getSimpleName() + " " + value + "*******************************************************");
 
                 throw new ConverterException();
             }

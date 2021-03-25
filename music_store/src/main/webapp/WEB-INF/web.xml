@@ -35,6 +35,5 @@
         <!--welcome-file>checkout.xhtml</welcome-file-->
         <!--<welcome-file>review_page.xhtml</welcome-file> -->
     </welcome-file-list>
-
     
 </web-app>

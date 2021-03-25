@@ -47,10 +47,13 @@ DROP TABLE IF EXISTS Artists;
 DROP TABLE IF EXISTS Albums;
 DROP TABLE IF EXISTS Invoices;
 DROP TABLE IF EXISTS Clients;
-DROP TABLE IF EXISTS genre_to_album;
-DROP TABLE IF EXISTS genre_to_tracks;
-DROP TABLE IF EXISTS genres;
-DROP TABLE IF EXISTS provinces;
+DROP TABLE IF EXISTS Genre_to_album;
+DROP TABLE IF EXISTS Genre_to_tracks;
+DROP TABLE IF EXISTS Genres;
+DROP TABLE IF EXISTS Provinces;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS Order_track;
+DROP TABLE IF EXISTS Order_album;
 
 
 
@@ -237,7 +240,7 @@ FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
 
 
 /* provinces */
-create table provinces(
+create table Provinces(
 province_id int primary key auto_increment,
 choice_name varchar(30) not null,
 pst double not null,
@@ -245,7 +248,27 @@ gst double not null,
 hst double not null
 );
 
+/* Orders */
+create table Orders(
+order_id int primary key auto_increment,
+client_number int not null,
+order_date date,
+FOREIGN KEY (client_number) REFERENCES Clients(client_number)
+);
 
+/* Order_track */
+create table order_track(
+order_id int primary key auto_increment,
+track_id int not null,
+FOREIGN KEY (track_id) REFERENCES tracks(track_id)
+);
+
+/* order_album */
+create table order_album(
+order_id int primary key auto_increment,
+album_id int not null,
+FOREIGN KEY (album_id) REFERENCES albums(album_number)
+);
 
 
 DROP DATABASE IF EXISTS CSgb1w21test;

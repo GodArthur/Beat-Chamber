@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -75,7 +74,7 @@ public class ArtistsToTracksJpaController implements Serializable {
 
     public void edit(ArtistsToTracks artistsToTracks) throws NonexistentEntityException, Exception {
 
-        try {  
+        try {
             utx.begin();
             ArtistsToTracks persistentArtistsToTracks = em.find(ArtistsToTracks.class, artistsToTracks.getTablekey());
             Artists artistIdOld = persistentArtistsToTracks.getArtistId();
@@ -149,40 +148,29 @@ public class ArtistsToTracksJpaController implements Serializable {
 
     private List<ArtistsToTracks> findArtistsToTracksEntities(boolean all, int maxResults, int firstResult) {
 
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(ArtistsToTracks.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(ArtistsToTracks.class));
+        Query q = em.createQuery(cq);
+        if (!all) {
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
         }
+        return q.getResultList();
+
     }
 
     public ArtistsToTracks findArtistsToTracks(Integer id) {
+        return em.find(ArtistsToTracks.class, id);
 
-        try {
-            return em.find(ArtistsToTracks.class, id);
-        } finally {
-            em.close();
-        }
     }
 
     public int getArtistsToTracksCount() {
 
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<ArtistsToTracks> rt = cq.from(ArtistsToTracks.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        Root<ArtistsToTracks> rt = cq.from(ArtistsToTracks.class);
+        cq.select(em.getCriteriaBuilder().count(rt));
+        Query q = em.createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }
