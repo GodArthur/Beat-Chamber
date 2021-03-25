@@ -87,18 +87,18 @@ and open the template in the editor.
 			</div>
 
 			<div id="show_prices">
-				<h1>#{msgs.showItems}</h1><br/><br/><br/><br/>
+				<h2>#{msgs.showItems}</h2><br/><br/>
 				<hr class="hrColor" />
-				<h4>#{msgs.subTotal}</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %</h4><br/>
-                                <h4>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %</h4><br/>
+				<h5>#{msgs.subTotal}</h5><br/>
+                                <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %</h5><br/>
+                                <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %</h5><br/>
+                                <h5>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %</h5><br/>
 				<hr class="hrColor"/>
                                 <br/>
-                                <br/>
-                                <br/>
+                                <p>#{cookies.createCookie("one", "3")}</p>
+                                <p>#{cookies.findvalue("one")}</p>
 				<h1>#{msgs.total}</h1>
-                                <p>#{cookies.count}</p>
+
 			</div>
 			
 		</div>
