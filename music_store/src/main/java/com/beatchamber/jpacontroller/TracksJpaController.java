@@ -12,6 +12,7 @@ import java.util.List;
 import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.entities.GenreToTracks;
 import com.beatchamber.entities.Tracks;
+import com.beatchamber.entities.Albums;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
@@ -20,6 +21,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.ParameterExpression;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -33,7 +36,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
-@Named
+@Named("tracksController")
 @SessionScoped
 public class TracksJpaController implements Serializable {
 
@@ -325,12 +328,35 @@ public class TracksJpaController implements Serializable {
         return q.getResultList();
 
     }
+    
+       
+    /**
+     * Method finds all Tracks based on a specific album
+     * @param albumId
+     * @param trackId
+     * @return 
+     */
+    public List<Tracks> findTracksByAlbum(Integer albumId){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        
+        CriteriaQuery<Tracks> cq = cb.createQuery(Tracks.class);
+        Root<Tracks> rt = cq.from(Tracks.class);
+        cq.where(cb.equal(rt.get("albumNumber").get("albumNumber"), albumId));
+        cq.select(rt);
+        Query q = em.createQuery(cq);
+        
+        return q.getResultList();
+        
+    }
+         
 
     public Tracks findTracks(Integer id) {
 
         return em.find(Tracks.class, id);
 
     }
+ 
 
     public int getTracksCount() {
 

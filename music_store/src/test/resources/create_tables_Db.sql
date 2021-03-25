@@ -32,7 +32,7 @@ GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
 DROP DATABASE IF EXISTS beat_chamber;
 
 
-/* remove tables if they are alredy present */
+/* remove tables if they are already present */
 DROP TABLE IF EXISTS Ads;
 DROP TABLE IF EXISTS RSS_Feeds;
 DROP TABLE IF EXISTS Invoice_Details;
