@@ -12,8 +12,6 @@ import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.annotation.Resource;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
@@ -29,9 +27,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
-@Named
-@SessionScoped
-public class OrderAlbumJpaController implements Serializable {
+public class OrderAlbumJpaController implements Serializable {/*
 
     private final static Logger LOG = LoggerFactory.getLogger(OrderAlbumJpaController.class);
 
@@ -173,4 +169,4 @@ public class OrderAlbumJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
 
     }
-}
+*/}

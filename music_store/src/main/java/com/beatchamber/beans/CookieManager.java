@@ -6,7 +6,6 @@
 package com.beatchamber.beans;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +25,7 @@ public class CookieManager {
     FacesContext context = FacesContext.getCurrentInstance();
     Map<String,Object> cookies = new HashMap();
     
-    public Map getAllCookies(){
-        return FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
-    }
+
     
     /**
      * This method will return the number of Cookies that are made
