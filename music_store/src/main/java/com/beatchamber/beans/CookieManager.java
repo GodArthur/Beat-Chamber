@@ -5,8 +5,10 @@
  */
 package com.beatchamber.beans;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -99,6 +101,16 @@ public class CookieManager {
      */
     public void clearCookie(String key){
         createCookie(key,"");
+    }
+    
+    
+    public List<String> getx(){
+        List<String> test = new ArrayList<String>();
+        test.add("1");
+        test.add("2");
+        test.add("3");
+        test.add("4");
+        return test;
     }
     
     
