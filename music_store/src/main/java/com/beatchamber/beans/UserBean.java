@@ -11,10 +11,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -24,9 +22,9 @@ import javax.inject.Named;
  */
 @Named
 @SessionScoped
-public class LoginBean implements Serializable {
+public class UserBean implements Serializable {
 
-    private static final Logger LOG = Logger.getLogger(LoginBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(UserBean.class.getName());
 
     private String username;
     private String password;
@@ -82,7 +80,6 @@ public class LoginBean implements Serializable {
     }
 
     public List<Clients> getClients() {
-
         return clientsJpaController.findClientsEntities();
     }
 
@@ -122,7 +119,6 @@ public class LoginBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
 
         // To to login page
-        //return navigationBean.toLogin();
         return "toLogin";
 
     }

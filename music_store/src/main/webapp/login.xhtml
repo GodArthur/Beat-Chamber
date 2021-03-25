@@ -21,12 +21,12 @@
                             <h:outputLabel class="login-title" value="#{msgs.titlelogin}"/>
                             <div>
                                 <h:inputText  class="login-input" id="username" 
-                                              value="#{loginBean.username}" a:placeholder="Username"/>
+                                              value="#{userBean.username}" a:placeholder="Username"/>
                                 <h:inputSecret class="login-input" id="password" 
-                                               value="#{loginBean.password}" a:placeholder="Password"/>
+                                               value="#{userBean.password}" a:placeholder="Password"/>
                                 <h:messages />
                                 <h:commandButton id="button" value="#{msgs.login}" class="loginButton"
-                                                 action="#{loginBean.doLogin}"/>
+                                                 action="#{userBean.doLogin}"/>
                             </div>
                             <div>
                                  <h:outputLabel value="#{msgs.createAccount}"/>

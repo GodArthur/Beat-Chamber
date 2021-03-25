@@ -16,9 +16,9 @@
                 <h:link value="#{msgs.about}" outcome="redirectToAbout"/>
                 <h:link value="#{msgs.changeLanguage}"/>
                 <h:link value="#{msgs.loginRegister}" outcome="redirectToLogin"
-                        rendered="#{!loginBean.loggedIn}"/>
+                        rendered="#{!userBean.loggedIn}"/>
                 <h:link value="#{msgs.management}" outcome="redirectToManagement"
-                        rendered="#{loginBean.loggedIn and loginBean.manager}"/>
+                        rendered="#{userBean.loggedIn and userBean.manager}"/>
                 
                 <h:form>
                     <h:commandButton styleClass="search-button" value="#{msgs.search}"/>
@@ -26,10 +26,10 @@
                 </h:form>
                 <h:form>
                     <p:growl id="messages" showDetail="true"/>
-                    <h:outputText value="#{msgs.welcome} #{loginBean.username}" styleClass="welcome-label"
-                                  rendered="#{loginBean.loggedIn}"/>
-                    <h:commandLink id="logout" action="#{loginBean.doLogout}"
-                                   rendered="#{loginBean.loggedIn}">
+                    <h:outputText value="#{msgs.welcome} #{userBean.username}" styleClass="welcome-label"
+                                  rendered="#{userBean.loggedIn}"/>
+                    <h:commandLink id="logout" action="#{userBean.doLogout}"
+                                   rendered="#{userBean.loggedIn}">
                         <i class="pi pi-fw pi-power-off"></i>
                     </h:commandLink>
                 </h:form>

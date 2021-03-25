@@ -82,6 +82,7 @@ public class ClientsBackingBean implements Serializable {
                 this.clients.add(this.selectedClient);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Added"));
             } else {
+                this.convertPhoneFormat();
                 clientsJpaController.edit(this.selectedClient);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Updated"));
             }
@@ -108,13 +109,17 @@ public class ClientsBackingBean implements Serializable {
     }
 
     private void convertPhoneFormat() {
-        String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") "
-                + this.selectedClient.getCellPhone().substring(3, 6) + "-"
-                + this.selectedClient.getCellPhone().substring(6, 10);
-        this.selectedClient.setCellPhone(stringCellPhone);
-        String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") "
-                + this.selectedClient.getHomePhone().substring(3, 6) + "-"
-                + this.selectedClient.getHomePhone().substring(6, 10);
-        this.selectedClient.setHomePhone(stringHomePhone);
+        if (this.selectedClient.getCellPhone() != null && !this.selectedClient.getCellPhone().equals("")) {
+            String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") "
+                    + this.selectedClient.getCellPhone().substring(3, 6) + "-"
+                    + this.selectedClient.getCellPhone().substring(6, 10);
+            this.selectedClient.setCellPhone(stringCellPhone);
+        }
+        if (this.selectedClient.getHomePhone() != null && !this.selectedClient.getHomePhone().equals("")) {
+            String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") "
+                    + this.selectedClient.getHomePhone().substring(3, 6) + "-"
+                    + this.selectedClient.getHomePhone().substring(6, 10);
+            this.selectedClient.setHomePhone(stringHomePhone);
+        }
     }
 }

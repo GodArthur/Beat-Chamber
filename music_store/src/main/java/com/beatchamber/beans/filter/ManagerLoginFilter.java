@@ -1,6 +1,9 @@
-package com.beatchamber.beans;
+package com.beatchamber.beans.filter;
 
+import com.beatchamber.beans.UserBean;
 import java.io.IOException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,21 +20,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Filter checks if LoginBean has loginIn property set to true. If it is not set
+ * Filter checks if UserBean has loginIn property set to true. If it is not set
  * then request is being redirected to the login.xhml page.
  *
- * @author itcuties http://www.itcuties.com/j2ee/jsf-2-login-filter-example/
- *
- * Changed to annotation rather than a filter mapping in the web.xml
- *
+ * @author 1733570 Yan Tang
  */
-@WebFilter(filterName = "LoginFilter", urlPatterns = {"/management_pages/*"})
-public class LoginFilter implements Filter {
+@WebFilter(filterName = "ManagerLoginFilter", urlPatterns = {"/management_pages/*"})
+public class ManagerLoginFilter implements Filter {
 
-    private final static Logger LOG = LoggerFactory.getLogger(LoginFilter.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ManagerLoginFilter.class);
 
     @Inject
-    private LoginBean loginBean; // As an instance variable
+    private UserBean userBean; // As an instance variable
 
     /**
      * Checks if user is logged in. If not it redirects to the login.xhtml page.
@@ -45,15 +45,15 @@ public class LoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        // Get the loginBean from session attribute
+        // Get the userBean from session attribute
 
         LOG.info("In the filter");
 
-        // For the first application request there is no loginBean in the
+        // For the first application request there is no userBean in the
         // session so user needs to log in
-        // For other requests loginBean is present but we need to check if user
+        // For other requests userBean is present but we need to check if user
         // has logged in successfully
-        if (loginBean == null || !loginBean.isLoggedIn()) {
+        if (userBean == null || !userBean.isLoggedIn() || !userBean.isManager()) {
             LOG.info("User not logged in");
 
             String contextPath = ((HttpServletRequest) request)
@@ -62,7 +62,7 @@ public class LoginFilter implements Filter {
                     + "/login.xhtml");
         } else {
             LOG.info("User logged in: "
-                    + loginBean.getUsername());
+                    + userBean.getUsername());
             chain.doFilter(request, response);
         }
     }
