@@ -1,11 +1,13 @@
 package com.beatchamber.beans;
 
+import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.Map;
 import javax.annotation.ManagedBean;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 
@@ -22,6 +24,7 @@ public class AlbumBean implements Serializable {
     private int albumId;
     
     public int getAlbumId(){
+        
         return this.albumId;
     }
     
@@ -35,4 +38,6 @@ public class AlbumBean implements Serializable {
         this.albumId = Integer.parseInt(params.get("albumId"));
         return "album_page.xhtml";
     }
+
 }
+
