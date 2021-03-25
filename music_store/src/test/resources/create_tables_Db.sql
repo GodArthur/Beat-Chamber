@@ -17,19 +17,19 @@ DROP USER IF EXISTS dawson@localhost;
 CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
 GRANT ALL ON beat_chamber.* TO dawson@'localhost';*/
 /*
-#DROP DATABASE IF EXISTS CSgb1w21;
-#CREATE DATABASE CSgb1w21;
-#USE CSgb1w21;
-#DROP USER IF EXISTS CSgb1w21@localhost;
+DROP DATABASE IF EXISTS CSgb1w21;
+CREATE DATABASE CSgb1w21;
+USE CSgb1w21;
+DROP USER IF EXISTS CSgb1w21@localhost;
 
-#CREATE USER CSgb1w21@'localhost' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
-#CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+CREATE USER CSgb1w21@'localhost' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
+CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQUIRE NONE;
 
-#GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
+GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
 
-#GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
+GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
 
-#DROP DATABASE IF EXISTS beat_chamber;*/
+DROP DATABASE IF EXISTS beat_chamber;
 
 
 /* remove tables if they are alredy present */
@@ -270,7 +270,7 @@ album_id int not null,
 FOREIGN KEY (album_id) REFERENCES albums(album_number)
 );
 
-/*
+
 DROP DATABASE IF EXISTS CSgb1w21test;
 
 CREATE DATABASE CSgb1w21test;

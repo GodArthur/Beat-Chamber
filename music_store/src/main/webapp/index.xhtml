@@ -112,7 +112,7 @@
                                     <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(20, true)}" styleClass="album-img-small"/>
                                     <p>#{albumsJpaController.findAlbums(20).albumTitle}</p>
                                     <p>#{albumsJpaController.getAlbumArtist(20).artistName}</p>
-                                </h:commandLink>>
+                                </h:commandLink>
                             </div>
                             <div class="see-more-container">
                                 <button class="see-more-button">#{msgs.seeMore}</button>
@@ -156,7 +156,7 @@
                     </section>
                     <section>
                         <div class="album-section" id="album-genre">
-                            <h2 class="genre-title">J>#{msgs.jazz}</h2>
+                            <h2 class="genre-title">#{msgs.jazz}</h2>
                             <p class="album-description">>#{msgs.jazzDesc}</p>
                         </div>
                         <div class="album-section" id="album-list">

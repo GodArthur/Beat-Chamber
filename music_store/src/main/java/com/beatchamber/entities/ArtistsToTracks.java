@@ -23,7 +23,7 @@ import javax.persistence.Table;
  * @author kibra
  */
 @Entity
-@Table(name = "artists_to_tracks", catalog = "beat_chamber", schema = "")
+@Table(name = "artists_to_tracks", catalog = "CSgb1w21", schema = "")
 @NamedQueries({
     @NamedQuery(name = "ArtistsToTracks.findAll", query = "SELECT a FROM ArtistsToTracks a"),
     @NamedQuery(name = "ArtistsToTracks.findByTablekey", query = "SELECT a FROM ArtistsToTracks a WHERE a.tablekey = :tablekey"),
