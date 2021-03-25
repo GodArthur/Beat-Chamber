@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Album Page</title>
         <h:outputStylesheet library="styles" name="main.css"/>
@@ -23,19 +24,23 @@
                     <div class="album-info">
                         <h2 class="album-title">#{albumsJpaController.findAlbums(album.albumId).albumTitle}</h2>
                         <h2>#{albumsJpaController.getAlbumArtist(album.albumId).artistName}</h2>
+                        <a href="../java/com/beatchamber/beans/AlbumBean.java"></a>
                         <div>#{albumsJpaController.findAlbums(album.albumId).listPrice}</div>
                         <h:form>
                             <p:rating readonly="true" value="4"/>
                         </h:form>
                     </div>
                     <button>#{msgs.addToCart}</button>
-                    <button>#{msgs.viewTracks}</button>
+                    <a href="track.xhtml"><button>#{msgs.viewTracks}</button></a>
                 </section>
                 <!-- Review section -->
                 <section>
                     <h2>#{msgs.reviews}</h2>
                     <p>#{msgs.noReviews}</p>
-                    <a href="review_page.xhtml"><button>#{msgs.addReview}</button></a>
+                    <h:commandLink action="#{tracks.sendDefaultTrack}">
+                        <f:param name="albumId" value="#{album.albumId}"/>
+                        <button>#{msgs.addReview}</button>
+                    </h:commandLink>
                 </section>
             </ui:define>
         </ui:composition>
