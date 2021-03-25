@@ -31,13 +31,11 @@
         
         <section>
         <div>
-            <h2>Write a Review</h2>
+            <h2>Write a Review for "#{albumsJpaController.findAlbums(album.albumId).albumTitle}"</h2>
             <div id="album-list">
                 <div class="album-display-small">
-                    <h:graphicImage library="images" name="albums/hip_hop/Drake_-_If_You're_Reading_This_It's_Too_Late.png" styleClass="album-img-small"/>
-                    <!--<p>If You're Reading This It's Too Late</p>-->
-                    <p>#{tracks.trackTitle}</p>
-                    <p>#{albumsJpaController.getAlbumArtist(album.albumId)}</p>
+                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}" styleClass="album-img-small"/>
+                    <p>#{albumsJpaController.getAlbumArtist(album.albumId).artistName}</p>
                 </div>
                 
                 <div class="stars">
