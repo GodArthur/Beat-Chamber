@@ -38,5 +38,6 @@ public class AlbumBean implements Serializable {
         this.albumId = Integer.parseInt(params.get("albumId"));
         return "album_page.xhtml";
     }
-    
+
 }
+
