@@ -38,7 +38,7 @@ public class CustomerReviewsJpaController implements Serializable {
     @Resource
     private UserTransaction utx;
 
-    @PersistenceContext(unitName = "my_persistence_unit")
+    @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
 
     public CustomerReviewsJpaController() {
