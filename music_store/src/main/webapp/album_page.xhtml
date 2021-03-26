@@ -31,17 +31,21 @@
                         </h:form>
                     </div>
                     <button>#{msgs.addToCart}</button>
-                    <a href="track.xhtml"><button>#{msgs.viewTracks}</button></a>
+                    <h:form>
+                        <h:commandLink action="#{tracks.sendDefaultTrack}">
+                            <f:param name="albumId" value="#{album.albumId}"/>
+                            <button>#{msgs.viewTracks}</button>
+                        </h:commandLink>
+                    </h:form>
                 </section>
                 <!-- Review section -->
                 <section>
                     <h2>#{msgs.reviews}</h2>
                     <!--Adding code to display the reviews that have been approved -->
                     <p>#{msgs.noReviews}</p>
-                    <h:commandLink action="#{tracks.sendDefaultTrack}">
-                        <f:param name="albumId" value="#{album.albumId}"/>
-                        <button>#{msgs.addReview}</button>
-                    </h:commandLink>
+
+                    <a href="review_page.xhtml"><button>#{msgs.addReview}</button></a>
+
                 </section>
             </ui:define>
         </ui:composition>

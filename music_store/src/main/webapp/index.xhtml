@@ -14,26 +14,21 @@
         <ui:composition template="templates/master_template.xhtml">
             <!-- Promotion banner -->
             <ui:define name="content">
-                <section class="background-section">
-                    <h:graphicImage library="images" name="starwars_album_spons.jpg" height="100%" width="100%" styleClass="background-image"/>
-                </section>
                 <h:form>
                     <!-- Recommended section. Will be used for cookies -->
-                    <section>
-                        <div class="album-section" id="album-genre">
-                            <h2 class="genre-title">#{msgs.recommended}</h2>
-                            <p class="album-description">#{msgs.recommendedDesc}</p>
-                        </div>
-                        <div class="album-section" id="album-list">
-                            <div class="album-display-small">
+                    <section class="recommended">
+                        <h2 class="genre-title">#{msgs.welcomeGreeting}</h2>
+                        <p class="album-description">#{msgs.recommendedDesc}</p>
+                        <div class="recommended-list">
+                            <div class="recommended-album">
                                 <h:commandLink action="#{album.sendAlbum}">
-                                    <f:param name="albumId" value="21"/>
-                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(21, true)}" styleClass="album-img-small"/>
-                                    <p>#{albumsJpaController.findAlbums(21).albumTitle}</p>
-                                    <p>#{albumsJpaController.getAlbumArtist(21).artistName}</p>
+                                    <f:param name="albumId" value="2"/>
+                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(2, true)}" styleClass="album-img-small"/>
+                                    <p>#{albumsJpaController.findAlbums(2).albumTitle}</p>
+                                    <p>#{albumsJpaController.getAlbumArtist(2).artistName}</p>
                                 </h:commandLink>
                             </div>
-                            <div class="album-display-small">
+                            <div class="recommended-album">
                                 <h:commandLink action="#{album.sendAlbum}">
                                     <f:param name="albumId" value="4"/>
                                     <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(4, true)}" styleClass="album-img-small"/>
@@ -41,12 +36,28 @@
                                     <p>#{albumsJpaController.getAlbumArtist(4).artistName}</p>
                                 </h:commandLink>
                             </div>
-                            <div class="album-display-small">
+                            <div class="recommended-album">
                                 <h:commandLink action="#{album.sendAlbum}">
-                                    <f:param name="albumId" value="6"/>
-                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(6, true)}" styleClass="album-img-small"/>
-                                    <p>#{albumsJpaController.findAlbums(6).albumTitle}</p>
-                                    <p>#{albumsJpaController.getAlbumArtist(6).artistName}</p>
+                                    <f:param name="albumId" value="3"/>
+                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(3, true)}" styleClass="album-img-small"/>
+                                    <p>#{albumsJpaController.findAlbums(3).albumTitle}</p>
+                                    <p>#{albumsJpaController.getAlbumArtist(3).artistName}</p>
+                                </h:commandLink>
+                            </div>
+                            <div class="recommended-album">
+                                <h:commandLink action="#{album.sendAlbum}">
+                                    <f:param name="albumId" value="1"/>
+                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(1, true)}" styleClass="album-img-small"/>
+                                    <p>#{albumsJpaController.findAlbums(1).albumTitle}</p>
+                                    <p>#{albumsJpaController.getAlbumArtist(1).artistName}</p>
+                                </h:commandLink>
+                            </div>
+                            <div class="recommended-album">
+                                <h:commandLink action="#{album.sendAlbum}">
+                                    <f:param name="albumId" value="5"/>
+                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(5, true)}" styleClass="album-img-small"/>
+                                    <p>#{albumsJpaController.findAlbums(5).albumTitle}</p>
+                                    <p>#{albumsJpaController.getAlbumArtist(5).artistName}</p>
                                 </h:commandLink>
                             </div>
                         </div>
@@ -115,7 +126,7 @@
                                     <p>#{albumsJpaController.getAlbumArtist(20).artistName}</p>
                                 </h:commandLink>
                             </div>
-                            <div class="see-more-container">
+                            <div class="see-more-container right">
                                 <button class="see-more-button">#{msgs.seeMore}</button>
                             </div>
                         </div>
@@ -150,7 +161,7 @@
                                     <p>#{albumsJpaController.getAlbumArtist(1).artistName}</p>
                                 </h:commandLink>
                             </div>
-                            <div class="see-more-container">
+                            <div class="see-more-container right">
                                 <button class="see-more-button">#{msgs.seeMore}</button>
                             </div>
                         </div>
@@ -167,7 +178,7 @@
                             <h2>#{surveysJpaController.findSurveys(1).title}</h2>
                             <h:selectOneRadio>
                                 <c:forEach var="choice" items="#{surveysJpaController.getSurveyChoices(1)}">
-                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName}"/>
+                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName}" class="choice-radio-btn"/>
                                 </c:forEach>
                             </h:selectOneRadio>
                         </div>
@@ -202,7 +213,7 @@
                                     <p>#{albumsJpaController.getAlbumArtist(19).artistName}</p>
                                 </h:commandLink>
                             </div>
-                            <div class="see-more-container">
+                            <div class="see-more-container right">
                                 <button class="see-more-button">#{msgs.seeMore}</button>
                             </div>
                         </div>
@@ -237,7 +248,7 @@
                                     <p>#{albumsJpaController.getAlbumArtist(15).artistName}</p>
                                 </h:commandLink>
                             </div>
-                            <div class="see-more-container">
+                            <div class="see-more-container right">
                                 <button class="see-more-button">#{msgs.seeMore}</button>
                             </div>
                         </div>
@@ -272,7 +283,7 @@
                                     <p>#{albumsJpaController.getAlbumArtist(10).artistName}</p>
                                 </h:commandLink>
                             </div>
-                            <div class="see-more-container">
+                            <div class="see-more-container right">
                                 <button class="see-more-button">#{msgs.seeMore}</button>
                             </div>
                         </div>

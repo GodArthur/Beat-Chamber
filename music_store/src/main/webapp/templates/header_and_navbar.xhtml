@@ -16,10 +16,14 @@
         </header>
         <nav>
             <div class="topnav">
-                <h:link value="#{msgs.home}" outcome="redirectToIndex" styleClass="active" id="first"/>
+                <h:link value="#{msgs.home}" outcome="redirectToIndex"/>
                 <h:link value="#{msgs.browseMusic}" outcome="redirectToAlbumList"/>
                 <h:link value="#{msgs.about}" outcome="redirectToAbout"/>
-                <h:link value="#{msgs.changeLanguage}"/>
+                <h:form>
+                    <h:commandLink action="#{localeChanger.changeLocale()}">
+                        #{msgs.changeLanguage}
+                    </h:commandLink>
+                </h:form>
                 <h:link value="#{msgs.loginRegister}" outcome="redirectToLogin"
                         rendered="#{!theLoginRegister.loggedIn}"/>
                 <h:link value="#{msgs.management}" outcome="redirectToManagement"
@@ -28,7 +32,7 @@
                 <h:form>
                     <h:commandLink>
                         <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
-                        <h:outputLabel>0</h:outputLabel>
+                        <h:outputLabel>#{cookies.findNumberOfItemsInCart()}</h:outputLabel>
                     </h:commandLink>
                 </h:form>
 
