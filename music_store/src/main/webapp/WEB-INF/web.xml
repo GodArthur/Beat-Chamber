@@ -32,7 +32,7 @@
     <welcome-file-list>
 
         
-        <welcome-file>track.xhtml</welcome-file>
+        <welcome-file>checkout.xhtml</welcome-file>
 
     </welcome-file-list>
     
