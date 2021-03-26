@@ -20,7 +20,7 @@
                         <div id="album-list">
                             <div class="album-display-small">
                                 <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}" styleClass="album-img-small"/>
-                                <p>#{albumsJpaController.getAlbumArtist(album.albumId).artistName}</p>
+                                <p>#{tracks.trackTitle}</p>
                             </div>
 
                             <div class="stars">
