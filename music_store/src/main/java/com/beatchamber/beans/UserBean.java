@@ -33,6 +33,8 @@ public class UserBean implements Serializable {
     private String username;
     private String password;
     private String passwordConfirm;
+    private PhoneNumber homePhoneNumber;
+    private PhoneNumber cellPhoneNumber;
 
     private Clients client;
 
@@ -67,6 +69,22 @@ public class UserBean implements Serializable {
 
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
+    }
+
+    public PhoneNumber getHomePhoneNumber() {
+        return homePhoneNumber;
+    }
+
+    public void setHomePhoneNumber(PhoneNumber phoneNumber) {
+        this.homePhoneNumber = phoneNumber;
+    }
+
+    public PhoneNumber getCellPhoneNumber() {
+        return cellPhoneNumber;
+    }
+
+    public void setCellPhoneNumber(PhoneNumber phoneNumber) {
+        this.cellPhoneNumber = phoneNumber;
     }
 
     public Clients getClient() {
@@ -162,27 +180,22 @@ public class UserBean implements Serializable {
             Object value) {
 
         LOG.debug("validatePasswordCorrect");
-        
+
         // Retrieve the value passed to this method
         String confirmPassword = (String) value;
 
         // Retrieve the temporary value from the password field
         UIInput passwordInput = (UIInput) component.findComponent("password");
-//        String password = (String) passwordInput.getLocalValue();
+        String password = (String) passwordInput.getLocalValue();
 
-//        if (password == null || confirmPassword == null || !password.equals(confirmPassword)) {
-//            String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['nomatch']}", String.class);
-//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
-//            throw new ValidatorException(msg);
-//        }
-        if (client.getPassword() == null || confirmPassword == null || !client.getPassword().equals(confirmPassword)) {
+        if (password == null || confirmPassword == null || !password.equals(confirmPassword)) {
             LOG.debug("validatePasswordCorrect: " + client.getPassword() + " and " + confirmPassword);
             String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['nomatch']}", String.class);
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
             throw new ValidatorException(msg);
         }
     }
-    
+
     /**
      * The method verifies that the Login name is not already in the database
      *
@@ -199,15 +212,23 @@ public class UserBean implements Serializable {
         String username = (String) value;
 
         LOG.debug("validateUniquePassword: " + username);
-        if (clientsJpaController.findUser(username) != null) {
+
+        if (clientsJpaController.findClients(username) != null) {
             String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicate']}", String.class);
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
             throw new ValidatorException(msg);
         }
     }
-    
-    public void doCreateUser(){
-        
+
+    public String doCreateUser() throws Exception {
+        this.client.setTitle("Consumer");
+        this.client.setHomePhone(this.homePhoneNumber.toString());
+        this.client.setCellPhone(this.cellPhoneNumber.toString());
+        clientsJpaController.create(this.client);
+        loggedIn = true;
+        this.username = this.client.getUsername();
+        this.client = new Clients();
+        return "redirectToIndex";
     }
 
 }

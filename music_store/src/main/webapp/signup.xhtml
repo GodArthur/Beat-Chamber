@@ -26,16 +26,14 @@
                             <h:panelGrid columns="3" cellpadding="1" border="0" cellspacing="10"
                                          title="#{msgs.signup}" columnClasses="firstColumn,secondColumn,thirdColumn"
                                          rowClasses="rowHeight, rowHeight">
-                                <h:outputLabel class="form-label" for="username" value="#{msgs.username}"/>
+                                <h:outputLabel class="signupform-label" for="username" value="#{msgs.username}"/>
                                 <h:inputText class="input-style" id="username" 
-                                             value="#{userBean.username}"
-                                             required="true" requiredMessage="#{msgs.usernameRequired}"
-                                             validator="#{userBean.validateUniqueUser}">
-                                </h:inputText>
+                                             value="#{userBean.client.username}"
+                                             required="true" requiredMessage="#{msgs.usernameRequired}"/>
                                 <h:message for="username" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="form-label" value="#{msgs.email}"/>
+                                <h:outputLabel class="signupform-label" value="#{msgs.email}"/>
                                 <h:inputText class="input-style" id="email" 
                                              value="#{userBean.client.email}"
                                              a:type="email"  required="true"
@@ -43,105 +41,109 @@
                                 <h:message for="email" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="form-label" value="#{msgs.password}"/>
-                                <h:inputSecret class="input-style col-sm-9" id="password" 
+                                <h:outputLabel class="signupform-label" value="#{msgs.password}"/>
+                                <h:inputSecret class="input-style" id="password" 
                                                value="#{userBean.client.password}"
                                                required="true" requiredMessage="#{msgs.passwordRequired}"/>
                                 <h:message for="password" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="form-label" value="#{msgs.repassword}"/>
-                                <h:inputSecret class="input-style col-sm-7" id="re-password"
+                                <h:outputLabel class="signupform-label" value="#{msgs.repassword}"/>
+                                <h:inputSecret class="input-style" id="re-password"
                                                value="#{userBean.passwordConfirm}"
                                                required="true" requiredMessage="#{msgs.repasswordRequired}"
                                                validator="#{userBean.validatePasswordCorrect}"/>
                                 <h:message for="re-password" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="form-label" value="#{msgs.firstname}"/>
+                                <h:outputLabel class="signupform-label" value="#{msgs.firstname}"/>
                                 <h:inputText class="input-style" id="first_name" 
                                              value="#{userBean.client.firstName}"
                                              required="true"
                                              requiredMessage="#{msgs.firstnameRequired}"/>
                                 <h:message for="first_name" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="form-label" value="#{msgs.lastname}"/>
+                                <h:outputLabel class="signupform-label" value="#{msgs.lastname}"/>
                                 <h:inputText class="input-style" id="last_name" 
                                              value="#{userBean.client.lastName}"
                                              required="true"
                                              requiredMessage="#{msgs.lastnameRequired}"/>
                                 <h:message for="last_name" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="form-label" value="#{msgs.homePhone}"/>
+                                <h:outputLabel class="signupform-label" value="#{msgs.homePhone}"/>
                                 <h:inputText class="input-style" id="homePhone" 
+                                             value="#{userBean.homePhoneNumber}"
                                              converter="com.beatchamber.PhoneNumberConverter">
                                     <f:ajax event="blur" render="@this"/>
                                 </h:inputText>
                                 <h:message for="homePhone" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="form-label" value="#{msgs.cellPhone}"/>
+                                <h:outputLabel class="signupform-label" value="#{msgs.cellPhone}"/>
                                 <h:inputText class="input-style" id="cellPhone" 
+                                             value="#{userBean.cellPhoneNumber}"
                                              converter="com.beatchamber.PhoneNumberConverter">
                                     <f:ajax event="blur" render="@this"/>
                                 </h:inputText>
                                 <h:message for="cellPhone" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="form-label" value="#{msgs.company}"/>
-                                <h:inputText class="input-style col-sm-9" id="company" 
+                                <h:outputLabel class="signupform-label" value="#{msgs.company}"/>
+                                <h:inputText class="input-style" id="company" 
                                              value="#{userBean.client.companyName}"/>
                                 <h:message for="company" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="form-label" value="#{msgs.address1}"/>
-                                <h:inputText class="input-style col-sm-9" id="address1" 
+                                <h:outputLabel class="signupform-label" value="#{msgs.address1}"/>
+                                <h:inputText class="input-style" id="address1" 
                                              value="#{userBean.client.address1}"/>
                                 <h:message for="address1" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="form-label" value="#{msgs.address2}"/>
-                                <h:inputText class="input-style col-sm-9" id="address2" 
+                                <h:outputLabel class="signupform-label" value="#{msgs.address2}"/>
+                                <h:inputText class="input-style" id="address2" 
                                              value="#{userBean.client.address2}"/>
                                 <h:message for="address2" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="form-label" value="#{msgs.country}"/>
-                                <h:selectOneMenu class="input-style col-sm-9" id="country" > 
-                                    <f:selectItem itemValue = "1" itemLabel = "Canada" /> 
+                                <h:outputLabel class="signupform-label" value="#{msgs.country}"/>
+                                <h:selectOneMenu class="input-style" id="country" 
+                                                 value="#{userBean.client.country}"> 
+                                    <f:selectItem itemValue = "Canada" itemLabel = "Canada" /> 
                                 </h:selectOneMenu>  
                                 <h:message for="country" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="form-label" value="#{msgs.province}"/>
-                                <h:selectOneMenu class="input-style col-sm-9" id="province">
-                                    <f:selectItem itemValue="1" itemLabel="Alberta" />
-                                    <f:selectItem itemValue="2" itemLabel="British Columbia" />
-                                    <f:selectItem itemValue="3" itemLabel="Manitoba" />   
-                                    <f:selectItem itemValue="4" itemLabel="New Brunswick" />   
-                                    <f:selectItem itemValue="5" itemLabel="Newfoundland and Labrador" />   
-                                    <f:selectItem itemValue="6" itemLabel="Northwest Territories" />   
-                                    <f:selectItem itemValue="7" itemLabel="Nova Scotia" />   
-                                    <f:selectItem itemValue="8" itemLabel="Nunavut" />   
-                                    <f:selectItem itemValue="9" itemLabel="Ontario" />   
-                                    <f:selectItem itemValue="10" itemLabel="Prince Edward Island" />   
-                                    <f:selectItem itemValue="11" itemLabel="Quebec" />   
-                                    <f:selectItem itemValue="12" itemLabel="Saskatchewan" />   
-                                    <f:selectItem itemValue="13" itemLabel="Yukon" />   
+                                <h:outputLabel class="signupform-label" value="#{msgs.province}"/>
+                                <h:selectOneMenu class="input-style" id="province"
+                                                 style="text-align:center;"
+                                                 value="#{userBean.client.province}">
+                                    <f:selectItem itemValue="Alberta" itemLabel="Alberta" />
+                                    <f:selectItem itemValue="British Columbia" itemLabel="British Columbia" />
+                                    <f:selectItem itemValue="Manitoba" itemLabel="Manitoba" />   
+                                    <f:selectItem itemValue="New Brunswick" itemLabel="New Brunswick" />   
+                                    <f:selectItem itemValue="Newfoundland and Labrador" itemLabel="Newfoundland and Labrador" />   
+                                    <f:selectItem itemValue="Northwest Territories" itemLabel="Northwest Territories" />   
+                                    <f:selectItem itemValue="Nova Scotia" itemLabel="Nova Scotia" />   
+                                    <f:selectItem itemValue="Nunavut" itemLabel="Nunavut" />   
+                                    <f:selectItem itemValue="Ontario" itemLabel="Ontario" />   
+                                    <f:selectItem itemValue="Prince Edward Island" itemLabel="Prince Edward Island" />   
+                                    <f:selectItem itemValue="Quebec" itemLabel="Quebec" />   
+                                    <f:selectItem itemValue="Saskatchewan" itemLabel="Saskatchewan" />   
+                                    <f:selectItem itemValue="Yukon" itemLabel="Yukon" />   
                                 </h:selectOneMenu>
                                 <h:message for="province" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="form-label" value="#{msgs.city}"/>
+                                <h:outputLabel class="signupform-label" value="#{msgs.city}"/>
                                 <h:inputText class="input-style" id="city" 
                                              value="#{userBean.client.city}"/>
                                 <h:message for="city" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="form-label" value="#{msgs.postalCode}"/>
+                                <h:outputLabel class="signupform-label" value="#{msgs.postalCode}"/>
                                 <h:inputText class="input-style" id="postalCode" 
                                              value="#{userBean.client.postalCode}"/>
                                 <h:message for="postalCode" styleClass="errorMessage" style="color:red"/>
-
-                                <p:commandButton type="submit" update="form" class="btn btn-block"
-                                                 action="#{userBean.doCreateUser()}" 
-                                                 value="#{msgs.register}"/>
                             </h:panelGrid>
+                            <p:commandButton type="submit" update="form" class="btn btn-block"
+                                             action="#{userBean.doCreateUser()}" 
+                                             value="#{msgs.register}"/>
                         </h:form>
                     </div>
 

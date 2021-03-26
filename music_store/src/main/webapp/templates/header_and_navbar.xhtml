@@ -25,7 +25,6 @@
                 <h:link value="#{msgs.management}" outcome="redirectToManagement"
                         rendered="#{userBean.loggedIn and userBean.manager}"/>               
                 <h:form>
-                    <p:growl id="messages" showDetail="true"/>
                     <h:outputText value="#{msgs.welcome} #{userBean.username}" styleClass="welcome-label"
                                   rendered="#{userBean.loggedIn}"/>
                     <h:commandLink id="logout" action="#{userBean.doLogout}"

@@ -41,6 +41,6 @@ public class PhoneNumber implements Serializable {
 
     @Override
     public String toString() {
-        return areaCode + "-" + prefix + "-" + lineNumber;
+        return "("+areaCode+")" + prefix + "-" + lineNumber;
     }
 }
