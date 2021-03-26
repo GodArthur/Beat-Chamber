@@ -41,7 +41,7 @@
                 <div id="image-wrapper">
 
                     <h:graphicImage id="track-img" library="images" name="albums/hip_hop/Roddy_Ricch_-_Please_Excuse_Me_for_Being_Antisocial.png" width="320" height="320"/> 
-                    <p id="track-title">Boom Boom Room</p>
+                    <p id="track-title">#{tracks.trackId}</p>
                 </div>
             </div>
 
@@ -49,17 +49,25 @@
                 <div id="content-wrapper">
 
                     <ol>
-                        <li class="track-content-title"><div class="song-item"><p>The Box</p><button>Add to Cart</button></div></li>
-                        <li class="track-content-title"><div class="song-item"><p>Boom Boom room</p><button>Add to Cart</button></div></li>
-                        <li class="track-content-title"><div class="song-item"><p>Roll Dice</p><button>Add to Cart</button></div></li>
-                        <li class="track-content-title"><div class="song-item"><p>High Fashion</p><button>Add to Cart</button></div></li>
-                        <li class="track-content-title"><div class="song-item"><p>Bacc Seat</p><button>Add to Cart</button></div></li>
+                        <li class="track-content-title">
+                            <div class="song-item">
+                                <h:commandLink action="#{sendTrack}">
+                                    <f:param name="trackId" value="#{tracksController.findTracksByAlbum(album.albumId)[0].trackId}"/>
+                                    <p>#{tracksController.findTracksByAlbum(album.albumId)[0].trackTitle}</p>
+                                </h:commandLink>    
+                                <button>#{msgs.addToCart}</button>
+                            </div>
+                        </li>
+                        <li class="track-content-title"><div class="song-item"><p>#{tracksController.findTracksByAlbum(album.albumId)[4].trackTitle}</p><button>#{msgs.addToCart}</button></div></li>
+                        <li class="track-content-title"><div class="song-item"><p>Roll Dice</p><button>#{msgs.addToCart}</button></div></li>
+                        <li class="track-content-title"><div class="song-item"><p>High Fashion</p><button>#{msgs.addToCart}</button></div></li>
+                        <li class="track-content-title"><div class="song-item"><p>Bacc Seat</p><button>#{msgs.addToCart}</button></div></li>
                     </ol>
                 </div>
             </div>
-            <button id="add-btn">Add to Cart</button>
+            <button id="add-btn">#{msgs.addToCart}</button>
             <hr />
-            <p class="item-extra">Customers who viewed this item also viewed</p>
+            <p class="item-extra">#{msgs.otherViewed}</p>
             <div id="viewed-items-container">
                 <div class="album-cover-group">
                     <div>
@@ -109,9 +117,9 @@
             </div>
 
             <hr id="review-separator" />
-            <p class="item-extra">Customer Reviews</p>
+            <p class="item-extra">#{msgs.custReviews}</p>
             <p>There are currently no reviews</p>
-            <h:commandButton value="Add Review" action="review_page"/>
+            <a href="review_page.xhtml"><button>#{msgs.addReview}</button></a>
 
             <div id="anime-ad-wrapper">
                 <a
