@@ -3,7 +3,7 @@ header, section, footer {
     background-color: #333;
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 30px;
 }
 
 *{
@@ -20,6 +20,7 @@ header {
 
 section {
     height: 400px;
+    border-bottom: solid black;
 }
 
 html{
@@ -42,6 +43,14 @@ a:visited {
     color: #a58cff;
 }
 
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
 .main-title{
     font-family: 'Changa', sans-serif;
     font-size: 20px;
@@ -60,16 +69,22 @@ a:visited {
     display: flex;
     justify-content: center;
     position: relative;
+    padding: 10px;
 }
 
 .topnav a {
     float: left;
     color: #f2f2f2;
     text-align: center;
+    margin-left: 5px;
+    margin-right: 5px;
     padding: 16px 15px;
     text-decoration: none;
     font-size: 20px;
     display: inline-block;
+    border-style: solid;
+    border-color: purple;
+    border-radius: 20px;
 }
 
 .topnav a:hover {
@@ -77,25 +92,20 @@ a:visited {
     color: black;
 }
 
-.topnav a.active {
-    background-color: #5b3ec9;
-    color: white;
-}
-
-#first {
-    margin-left: auto;
-}
-
 .cart-icon {
-    height: 50px;
-    width: 50px;
-	margin-left: 50px;
-	margin-right: 10px;
+    height: 35px;
+    margin-right: 10px;
+}
+
+.search-form {
+    background-color: #1a1a1a;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
 }
 
 .search-button {
     padding: 5px;
-    float: right;
     height: 56px;
 }
 
@@ -105,10 +115,15 @@ a:visited {
 }
 
 .search {
+    width: 75%;
     padding: 16px;
     font-size: 15px;
-    float: right;
-    margin-left: 130px;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+.search-dropdown {
+    margin-right: 10px;
 }
 
 .background-section {
@@ -133,13 +148,24 @@ a:visited {
     height: 700px;
 }
 
-.horizontal-ad {
-    height: 50%;
+.ad {
+    height: 100%;
+}
+
+.left-ad-display {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 100%;
+    float: left;
+}
+
+#lower-ad {
+    height: 200px;
 }
 
 .album-section {
     float: left;
-    height: 400px;
+    height: 350px;
     width: 29%;
 }
 
@@ -175,6 +201,15 @@ a:visited {
     font-size: 15px;
     border-radius: 10px;
     border-color: #8c9cff;
+}
+
+.survey-display{
+    background-color: #1a1a1a;
+    display: flow-root;
+}
+
+.survey-choice::before {
+    content: "\A";
 }
 
 /*Album page by Susan*/
@@ -691,10 +726,6 @@ button {
 .icon-bar a:hover {
   background-color: #000; 
   color: #f5f5f5;
-}
-
-.active {
-  background-color: #8709a7; 
 }
 
 .ui-datatable-header{
