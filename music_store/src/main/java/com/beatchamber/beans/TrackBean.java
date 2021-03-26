@@ -19,9 +19,7 @@ import org.slf4j.LoggerFactory;
 @Named("tracks")
 @SessionScoped
 public class TrackBean implements Serializable{
-    
-    private final static Logger LOG = LoggerFactory.getLogger(TrackBean.class);
-    
+        
     private int trackId;
     private String trackTitle;
     private String musicCategory;
@@ -33,11 +31,13 @@ public class TrackBean implements Serializable{
         
     }
     
+    
     public TrackBean(int trackId, String trackTitle, String musicCategory){
         this.trackId = trackId;
         this.trackTitle = trackTitle;
         this.musicCategory = musicCategory;
     }
+    
 
     public int getTrackId() {
         return trackId;
@@ -73,10 +73,16 @@ public class TrackBean implements Serializable{
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
         this.trackId = Integer.parseInt(params.get("trackId"));
+        
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
         
         return "track.xhtml";
         
+    }
+    
+    public String sendReview(){
+        this.trackId = 1;
+        return "track.xhtml";
     }
     
     /**
@@ -93,11 +99,9 @@ public class TrackBean implements Serializable{
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
         int albumId = Integer.parseInt(params.get("albumId"));
-        this.trackId = tracksController.findTracksByAlbum(albumId).size();
+        this.trackId = tracksController.findTracksByAlbum(albumId).get(0).getTrackId();
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
         
-        System.out.println("TRACK TITLE: " + trackTitle);
-
         return "track.xhtml";
     }
     
