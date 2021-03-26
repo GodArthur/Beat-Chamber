@@ -40,7 +40,7 @@
                 <h:form>
                     <h:commandLink>
                         <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
-                        <h:outputLabel>0</h:outputLabel>
+                        <h:outputLabel>#{cookies.findNumberOfItemsInCart()}</h:outputLabel>
                     </h:commandLink>
                 </h:form>
             </div>
