@@ -6,9 +6,9 @@ USE beat_chamber;
 
 DROP USER IF EXISTS dawson@localhost;
 CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
-GRANT ALL ON beat_chamber.* TO dawson@'localhost';
+GRANT ALL ON beat_chamber.* TO dawson@'localhost'; */
 
-/*
+
 DROP DATABASE IF EXISTS CSgb1w21;
 CREATE DATABASE CSgb1w21;
 USE CSgb1w21;

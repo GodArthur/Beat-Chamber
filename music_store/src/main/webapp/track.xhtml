@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <!-- Lst of other tracks in the album -->
+            <!-- List of other tracks in the album -->
             <div id="track-content">
                 <div id="content-wrapper">
                     <ol>
@@ -167,12 +167,6 @@
             <p class="item-extra">#{msgs.custReviews}</p>
             <p>There are currently no reviews</p>
             <a href="review_page.xhtml"><button>#{msgs.addReview}</button></a>
-            <h:form>
-                <h:commandLink action="#{tracks.sendReview}">
-                    <f:param name="albumId" value="#{album.albumId}"/>
-                    <button>new review</button>
-                </h:commandLink>
-            </h:form>
 
             <div id="anime-ad-wrapper">
                 <a
