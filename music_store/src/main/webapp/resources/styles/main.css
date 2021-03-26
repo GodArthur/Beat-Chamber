@@ -302,7 +302,7 @@ a:visited {
 #information{
 	border-style: solid;
 	width:auto;
-	height:450px;
+	height:550px;
 	display: inline-block;
 	overflow: auto ;
 	color:#5b3ec9;
@@ -341,7 +341,7 @@ a:visited {
 #show_prices{
 	border-style: solid;
 	width:20%;
-        height:450px;
+        height:550px;
 	display: inline-block;
 	overflow: auto ;
 	text-align:left;
