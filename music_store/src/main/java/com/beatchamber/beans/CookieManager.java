@@ -64,9 +64,14 @@ public class CookieManager {
      * Adds the id to the cart if the id is not already in the cart
      * @param id 
      */
-    public void addItemToCart(String id){
-        if(!isItemInCart(id)){
-            createCookie(cartKey,findValue(cartKey)+","+id);
+    public void addItemToCart(String idOfItem){
+        if(!isItemInCart(idOfItem)){
+            if(isCartEmpty()){
+                createCookie(cartKey,idOfItem);
+            }
+            else{
+                createCookie(cartKey,findValue(cartKey)+","+idOfItem);
+            }
         }
     }
     
@@ -100,15 +105,31 @@ public class CookieManager {
         createCookie(key,"");
     }
     
-    
-    public List<String> getx(){
-        List<String> test = new ArrayList<String>();
-        test.add("1");
-        test.add("2");
-        test.add("3");
-        test.add("4");
-        return test;
+    /**
+     * This method will return the number of items in the cart
+     * @return String 
+     */
+    public String findNumberOfItemsInCart(){
+        if(isCartEmpty()){
+            return "0";
+        }
+        int count=0;
+        for(String item:getAllIdFromCart()){
+            if(item.length() > 0){
+                count++;
+                
+            }
+        }
+        
+        return count+"";
     }
+    
+    private String[] getAllIdFromCart(){
+        String dataResult = findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
+        return dataResult.split(",");
+    }
+    
+    
     
     
 }
