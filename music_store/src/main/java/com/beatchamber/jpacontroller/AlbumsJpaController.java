@@ -319,6 +319,7 @@ public class AlbumsJpaController implements Serializable {
     /**
      * @param id
      * @return The artist of the specific album
+     * @author Susan Vuu
      */
     public Artists getAlbumArtist(Integer id){
         //Get the album first
@@ -331,6 +332,7 @@ public class AlbumsJpaController implements Serializable {
      * @param id
      * @param isSmall
      * @return The path of the album's image, either big or small
+     * @author Susan Vuu
      */
     public String getAlbumPath(Integer id, boolean isSmall){
         Albums foundAlbum = em.find(Albums.class, id);
@@ -345,12 +347,12 @@ public class AlbumsJpaController implements Serializable {
         String albumName = foundAlbum.getAlbumTitle().replace(" ", "_").toLowerCase();
         //Probably a better way with regex but unsure
         String trimmedAlbumName = albumName.replace(".", "").replace("'", "").replace(":", "");
-        String albumPath = startingPath.concat(trimmedAlbumName);
+        String albumPath = startingPath + trimmedAlbumName;
         //Rest of album path
         if(isSmall){
-            return albumPath.concat("_small.jpg");
+            return albumPath + "_small.jpg";
         }
-        return albumPath.concat("_large.jpg");
+        return albumPath + "_large.jpg";
     }
 }
 

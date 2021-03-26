@@ -144,4 +144,25 @@ public class AdsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+    /**
+     * @param id The ad id
+     * @return The ad's path
+     */
+    public String getAdPath(int id){
+        Ads foundAd = em.find(Ads.class, id);
+        
+        //Starting path
+        String startingPath = "ads/";
+        String adName = foundAd.getFileName().replace(" ", "_").toLowerCase();
+        //Return the whole path
+        return startingPath + adName + ".png";
+    }
+    
+    /**
+     * @param id
+     * @return The link of the ad
+     */
+    public String getAdLink(int id){
+        return em.find(Ads.class, id).getLink();
+    }
 }
