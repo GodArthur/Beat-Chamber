@@ -9,7 +9,8 @@ and open the template in the editor.
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
@@ -87,18 +88,19 @@ and open the template in the editor.
 			</div>
 
 			<div id="show_prices">
-				<h1>#{msgs.showItems}</h1><br/><br/><br/><br/>
+				<h2>#{msgs.showItems}</h2><br/>
+                                <c:forEach var="item" items="#{cookies.getx()}">
+                                          <p>#{item}</p>
+                                </c:forEach>
 				<hr class="hrColor" />
-				<h4>#{msgs.subTotal}</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %</h4><br/>
-                                <h4>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %</h4><br/>
-                                <h4>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %</h4><br/>
+				<h5>#{msgs.subTotal}</h5><br/>
+                                <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %</h5><br/>
+                                <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %</h5><br/>
+                                <h5>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %</h5><br/>
 				<hr class="hrColor"/>
                                 <br/>
-                                <br/>
-                                <br/>
 				<h1>#{msgs.total}</h1>
-                                <p>#{cookies.count}</p>
+
 			</div>
 			
 		</div>

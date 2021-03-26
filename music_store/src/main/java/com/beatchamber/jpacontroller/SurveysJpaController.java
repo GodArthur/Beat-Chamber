@@ -1,5 +1,6 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.entities.Choices;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -199,4 +200,21 @@ public class SurveysJpaController implements Serializable {
 
     }
 
+    /**
+     * @param surveyId
+     * @return The choices associated with the survey
+     * @author Susan Vuu
+     */
+    public List<Choices> getSurveyChoices(Integer surveyId){
+        Surveys foundSurvey = em.find(Surveys.class, surveyId);
+        List<SurveyToChoice> surveyToChoices = foundSurvey.getSurveyToChoiceList();
+        List<Choices> choicesList = new ArrayList<>();
+        
+        //Put the choices in the list
+        surveyToChoices.forEach(surveyToChoice -> {
+            choicesList.add(surveyToChoice.getChoiceId());
+        });
+        
+        return choicesList;
+    }
 }
