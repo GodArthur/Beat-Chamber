@@ -260,4 +260,7 @@ public class ClientsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+    public Clients findUser(String username) {
+        return em.find(Clients.class, username);
+    }
 }

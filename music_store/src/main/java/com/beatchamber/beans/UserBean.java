@@ -12,9 +12,13 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -24,10 +28,12 @@ import javax.inject.Named;
 @SessionScoped
 public class UserBean implements Serializable {
 
-    private static final Logger LOG = Logger.getLogger(UserBean.class.getName());
+    private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(UserBean.class);
 
     private String username;
     private String password;
+    private String passwordConfirm;
+
     private Clients client;
 
     private boolean loggedIn;
@@ -55,7 +61,18 @@ public class UserBean implements Serializable {
         this.password = password;
     }
 
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
     public Clients getClient() {
+        if (client == null) {
+            client = new Clients();
+        }
         return client;
     }
 
@@ -114,7 +131,7 @@ public class UserBean implements Serializable {
         LOG.info("Unsuccessful login");
 
         // Set login ERROR
-        FacesMessage msg = new FacesMessage("The username or rhe password is incorrect", "ERROR MSG");
+        FacesMessage msg = new FacesMessage("The username or the password is incorrect", "ERROR MSG");
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         FacesContext.getCurrentInstance().addMessage(null, msg);
 
@@ -139,6 +156,58 @@ public class UserBean implements Serializable {
 
         LOG.info("Successful logout");
         return "redirectToIndex";
+    }
+
+    public void validatePasswordCorrect(FacesContext context, UIComponent component,
+            Object value) {
+
+        LOG.debug("validatePasswordCorrect");
+        
+        // Retrieve the value passed to this method
+        String confirmPassword = (String) value;
+
+        // Retrieve the temporary value from the password field
+        UIInput passwordInput = (UIInput) component.findComponent("password");
+//        String password = (String) passwordInput.getLocalValue();
+
+//        if (password == null || confirmPassword == null || !password.equals(confirmPassword)) {
+//            String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['nomatch']}", String.class);
+//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
+//            throw new ValidatorException(msg);
+//        }
+        if (client.getPassword() == null || confirmPassword == null || !client.getPassword().equals(confirmPassword)) {
+            LOG.debug("validatePasswordCorrect: " + client.getPassword() + " and " + confirmPassword);
+            String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['nomatch']}", String.class);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
+            throw new ValidatorException(msg);
+        }
+    }
+    
+    /**
+     * The method verifies that the Login name is not already in the database
+     *
+     * @param context
+     * @param component
+     * @param value
+     */
+    public void validateUniqueUser(FacesContext context, UIComponent component,
+            Object value) {
+
+        LOG.debug("validateUniquePassword");
+
+        // Retrieve the value passed to this method
+        String username = (String) value;
+
+        LOG.debug("validateUniquePassword: " + username);
+        if (clientsJpaController.findUser(username) != null) {
+            String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicate']}", String.class);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
+            throw new ValidatorException(msg);
+        }
+    }
+    
+    public void doCreateUser(){
+        
     }
 
 }
