@@ -1188,12 +1188,12 @@ insert into provinces (province_id,choice_name,pst,gst,hst) values
 
 insert into Ads (ad_id,file_name,link) values
 (1,'Anime','https://www.crunchyroll.com/'),
-(2,'Aurora','https://en.wikipedia.org/wiki/Aurora'),
-(3,'Beans','https://en.wikipedia.org/wiki/Bean'),
-(4,'Cats','https://www.petfinder.com/pet-adoption/cat-adoption/'),
-(5,'Cheese','https://cheese.com/'),
-(6,'Dogs','https://www.petfinder.com/pet-adoption/dog-adoption/'),
-(7,'iPhone','https://www.apple.com/iphone-12/'),
-(8,'Japan','https://en.wikipedia.org/wiki/Japan'),
-(9,'Mobile games','https://www.apple.com/app-store/'),
+(2,'Beans','https://en.wikipedia.org/wiki/Bean'),
+(3,'Cats','https://www.petfinder.com/pet-adoption/cat-adoption/'),
+(4,'Mobile games','https://www.apple.com/app-store/'),
+(5,'iPhone','https://www.apple.com/iphone-12/'),
+(6,'Cheese','https://cheese.com/'),
+(7,'Japan','https://en.wikipedia.org/wiki/Japan'),
+(8,'Aurora','https://en.wikipedia.org/wiki/Aurora'),
+(9,'Dogs','https://www.petfinder.com/pet-adoption/dog-adoption/'),
 (10,'Online classes','https://zoom.us/');*/

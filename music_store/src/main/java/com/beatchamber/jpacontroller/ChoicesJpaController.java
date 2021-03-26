@@ -207,5 +207,4 @@ public class ChoicesJpaController implements Serializable {
             em.close();
         }
     }
-    
 }

@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css"/>
         <title>Home Page</title>
@@ -155,9 +156,26 @@
                         </div>
                     </section>
                     <section>
+                        <!-- Vertical ad -->
+                        <div class="left-ad-display">
+                            <h:outputLink value="#{adsJpaController.getAdLink(6)}" target="_blank">
+                                <h:graphicImage library="images" name="#{adsJpaController.getAdPath(6)}" styleClass="ad left"/>
+                            </h:outputLink>
+                        </div>
+                        <!-- Survey display -->
+                        <div class="survey-display">
+                            <h2>#{surveysJpaController.findSurveys(1).title}</h2>
+                            <h:selectOneRadio>
+                                <c:forEach var="choice" items="#{surveysJpaController.getSurveyChoices(1)}">
+                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName}"/>
+                                </c:forEach>
+                            </h:selectOneRadio>
+                        </div>
+                    </section>
+                    <section>
                         <div class="album-section" id="album-genre">
                             <h2 class="genre-title">#{msgs.jazz}</h2>
-                            <p class="album-description">>#{msgs.jazzDesc}</p>
+                            <p class="album-description">#{msgs.jazzDesc}</p>
                         </div>
                         <div class="album-section" id="album-list">
                             <div class="album-display-small">
@@ -260,12 +278,14 @@
                         </div>
                     </section>
                 </h:form>
-                <!-- Horizontal ad -->
-                <section>
-                    <a href="https://www.crunchyroll.com/" target="_blank" rel="noopener noreferrer">
-                        <h:graphicImage library="images" name="ads/AnimeAd.PNG" styleClass="horizontal-ad"/>
-                    </a>
-                </section>
+                <h:form>
+                    <!-- Horizontal ad -->
+                    <section id="lower-ad">
+                        <h:outputLink value="#{adsJpaController.getAdLink(1)}" target="_blank">
+                            <h:graphicImage library="images" name="#{adsJpaController.getAdPath(1)}" styleClass="ad"/>
+                        </h:outputLink>
+                    </section>
+                </h:form>
             </ui:define>
         </ui:composition>
     </h:body>

@@ -20,6 +20,11 @@ import javax.inject.Named;
 public class AlbumBean implements Serializable {
     
     private int albumId;
+
+    //Default constructor required
+    public AlbumBean() {
+        this.albumId = 0;
+    }
     
     public int getAlbumId(){
         return this.albumId;
