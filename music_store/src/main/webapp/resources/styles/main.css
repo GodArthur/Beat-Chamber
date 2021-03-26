@@ -43,6 +43,18 @@ a:visited {
     color: #a58cff;
 }
 
+table {
+    text-align: left;
+}
+
+tr {
+    display: block;
+}
+
+td {
+    display: block;
+}
+
 .left {
     float: left;
 }
@@ -137,13 +149,6 @@ a:visited {
     height: 500px;
 }
 
-.album-ad {
-    position: relative;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-
 .container-404 {
     height: 700px;
 }
@@ -163,6 +168,11 @@ a:visited {
     height: 200px;
 }
 
+.recommended {
+    height: 500px;
+    justify-content: center;
+}
+
 .album-section {
     float: left;
     height: 350px;
@@ -172,6 +182,14 @@ a:visited {
 .genre-title {
     font-family: 'Changa', sans-serif;
     font-size: 30px;
+}
+
+.recommended-list {
+    display: inline-flex;
+}
+
+.recommended-album {
+    padding: 10px;
 }
 
 .album-display-small {
@@ -204,12 +222,13 @@ a:visited {
 }
 
 .survey-display{
+    padding: 10px;
     background-color: #1a1a1a;
     display: flow-root;
 }
 
-.survey-choice::before {
-    content: "\A";
+.choice-radio-btn {
+    display: block;
 }
 
 /*Album page by Susan*/

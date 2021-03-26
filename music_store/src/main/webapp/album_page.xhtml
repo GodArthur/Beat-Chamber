@@ -38,10 +38,12 @@
                     <h2>#{msgs.reviews}</h2>
                     <!--Adding code to display the reviews that have been approved -->
                     <p>#{msgs.noReviews}</p>
-                    <h:commandLink action="#{tracks.sendDefaultTrack}">
-                        <f:param name="albumId" value="#{album.albumId}"/>
-                        <button>#{msgs.addReview}</button>
-                    </h:commandLink>
+                    <h:form>
+                        <h:commandLink action="#{tracks.sendDefaultTrack}">
+                            <f:param name="albumId" value="#{album.albumId}"/>
+                            <button>#{msgs.addReview}</button>
+                        </h:commandLink>
+                    </h:form>
                 </section>
             </ui:define>
         </ui:composition>
