@@ -5,8 +5,8 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.beatchamber.entities.Artists;
-import com.beatchamber.entities.ArtistsToTracks;
+import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
@@ -31,37 +31,38 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-public class ArtistsToTracksJpaController implements Serializable {
+public class OrderAlbumJpaController implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ArtistsToTracksJpaController.class);
+    private final static Logger LOG = LoggerFactory.getLogger(OrderAlbumJpaController.class);
 
     @Resource
     private UserTransaction utx;
 
-    @PersistenceContext(unitName = "music_store_persistence")
+    @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
 
-    public ArtistsToTracksJpaController() {
+    public OrderAlbumJpaController() {
     }
 
-    public void create(ArtistsToTracks artistsToTracks) throws RollbackFailureException {
+    public void create(OrderAlbum orderAlbum) throws RollbackFailureException {
 
         try {
 
             utx.begin();
-            Artists artistId = artistsToTracks.getArtistId();
-            if (artistId != null) {
-                artistId = em.getReference(artistId.getClass(), artistId.getArtistId());
-                artistsToTracks.setArtistId(artistId);
+            Albums albumId = orderAlbum.getAlbumId();
+            if (albumId != null) {
+                albumId = em.getReference(albumId.getClass(), albumId.getAlbumNumber());
+                orderAlbum.setAlbumId(albumId);
             }
-            em.persist(artistsToTracks);
-            if (artistId != null) {
-                artistId.getArtistsToTracksList().add(artistsToTracks);
-                artistId = em.merge(artistId);
+            em.persist(orderAlbum);
+            if (albumId != null) {
+                albumId.getOrderAlbumCollection().add(orderAlbum);
+                albumId = em.merge(albumId);
             }
             utx.commit();
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
+
                 utx.rollback();
                 LOG.error("Rollback");
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -72,25 +73,25 @@ public class ArtistsToTracksJpaController implements Serializable {
         }
     }
 
-    public void edit(ArtistsToTracks artistsToTracks) throws NonexistentEntityException, Exception {
+    public void edit(OrderAlbum orderAlbum) throws NonexistentEntityException, Exception {
 
         try {
             utx.begin();
-            ArtistsToTracks persistentArtistsToTracks = em.find(ArtistsToTracks.class, artistsToTracks.getTablekey());
-            Artists artistIdOld = persistentArtistsToTracks.getArtistId();
-            Artists artistIdNew = artistsToTracks.getArtistId();
-            if (artistIdNew != null) {
-                artistIdNew = em.getReference(artistIdNew.getClass(), artistIdNew.getArtistId());
-                artistsToTracks.setArtistId(artistIdNew);
+            OrderAlbum persistentOrderAlbum = em.find(OrderAlbum.class, orderAlbum.getOrderId());
+            Albums albumIdOld = persistentOrderAlbum.getAlbumId();
+            Albums albumIdNew = orderAlbum.getAlbumId();
+            if (albumIdNew != null) {
+                albumIdNew = em.getReference(albumIdNew.getClass(), albumIdNew.getAlbumNumber());
+                orderAlbum.setAlbumId(albumIdNew);
             }
-            artistsToTracks = em.merge(artistsToTracks);
-            if (artistIdOld != null && !artistIdOld.equals(artistIdNew)) {
-                artistIdOld.getArtistsToTracksList().remove(artistsToTracks);
-                artistIdOld = em.merge(artistIdOld);
+            orderAlbum = em.merge(orderAlbum);
+            if (albumIdOld != null && !albumIdOld.equals(albumIdNew)) {
+                albumIdOld.getOrderAlbumCollection().remove(orderAlbum);
+                albumIdOld = em.merge(albumIdOld);
             }
-            if (artistIdNew != null && !artistIdNew.equals(artistIdOld)) {
-                artistIdNew.getArtistsToTracksList().add(artistsToTracks);
-                artistIdNew = em.merge(artistIdNew);
+            if (albumIdNew != null && !albumIdNew.equals(albumIdOld)) {
+                albumIdNew.getOrderAlbumCollection().add(orderAlbum);
+                albumIdNew = em.merge(albumIdNew);
             }
             utx.commit();
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
@@ -101,8 +102,8 @@ public class ArtistsToTracksJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = artistsToTracks.getTablekey();
-                if (findArtistsToTracks(id) == null) {
+                Integer id = orderAlbum.getOrderId();
+                if (findOrderAlbum(id) == null) {
                     throw new com.beatchamber.exceptions.NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
@@ -110,24 +111,25 @@ public class ArtistsToTracksJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, com.beatchamber.exceptions.NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+    public void destroy(Integer id) throws IllegalOrphanException, com.beatchamber.exceptions.NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException, NonexistentEntityException {
 
         try {
             utx.begin();
-            ArtistsToTracks artistsToTracks;
+            OrderAlbum orderAlbum;
             try {
-                artistsToTracks = em.getReference(ArtistsToTracks.class, id);
-                artistsToTracks.getTablekey();
+                orderAlbum = em.getReference(OrderAlbum.class, id);
+                orderAlbum.getOrderId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The artistsToTracks with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The orderAlbum with id " + id + " no longer exists.", enfe);
             }
-            Artists artistId = artistsToTracks.getArtistId();
-            if (artistId != null) {
-                artistId.getArtistsToTracksList().remove(artistsToTracks);
-                artistId = em.merge(artistId);
+            Albums albumId = orderAlbum.getAlbumId();
+            if (albumId != null) {
+                albumId.getOrderAlbumCollection().remove(orderAlbum);
+                albumId = em.merge(albumId);
             }
-            em.remove(artistsToTracks);
+            em.remove(orderAlbum);
             utx.commit();
+
         } catch (NotSupportedException | SystemException | com.beatchamber.exceptions.NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
@@ -138,39 +140,37 @@ public class ArtistsToTracksJpaController implements Serializable {
         }
     }
 
-    public List<ArtistsToTracks> findArtistsToTracksEntities() {
-        return findArtistsToTracksEntities(true, -1, -1);
+    public List<OrderAlbum> findOrderAlbumEntities() {
+        return findOrderAlbumEntities(true, -1, -1);
     }
 
-    public List<ArtistsToTracks> findArtistsToTracksEntities(int maxResults, int firstResult) {
-        return findArtistsToTracksEntities(false, maxResults, firstResult);
+    public List<OrderAlbum> findOrderAlbumEntities(int maxResults, int firstResult) {
+        return findOrderAlbumEntities(false, maxResults, firstResult);
     }
 
-    private List<ArtistsToTracks> findArtistsToTracksEntities(boolean all, int maxResults, int firstResult) {
+    private List<OrderAlbum> findOrderAlbumEntities(boolean all, int maxResults, int firstResult) {
 
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(ArtistsToTracks.class));
+        cq.select(cq.from(OrderAlbum.class));
         Query q = em.createQuery(cq);
         if (!all) {
             q.setMaxResults(maxResults);
             q.setFirstResult(firstResult);
         }
         return q.getResultList();
-
     }
 
-    public ArtistsToTracks findArtistsToTracks(Integer id) {
-        return em.find(ArtistsToTracks.class, id);
-
+    public OrderAlbum findOrderAlbum(Integer id) {
+        return em.find(OrderAlbum.class, id);
     }
 
-    public int getArtistsToTracksCount() {
-
+    public int getOrderAlbumCount() {
+        
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        Root<ArtistsToTracks> rt = cq.from(ArtistsToTracks.class);
+        Root<OrderAlbum> rt = cq.from(OrderAlbum.class);
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
-    }
 
+    }
 }

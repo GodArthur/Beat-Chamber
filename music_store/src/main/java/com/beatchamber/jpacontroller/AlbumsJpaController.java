@@ -36,16 +36,14 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-
 public class AlbumsJpaController implements Serializable {
-
 
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
 
     @Resource
     private UserTransaction utx;
 
-    @PersistenceContext(unitName = "my_persistence_unit")
+    @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
 
     public AlbumsJpaController() {
@@ -219,9 +217,7 @@ public class AlbumsJpaController implements Serializable {
                     }
                 }
             }
-
             utx.commit();
-
 
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
