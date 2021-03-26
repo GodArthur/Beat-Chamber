@@ -1,6 +1,6 @@
 package com.beatchamber.beans.filter;
 
-import com.beatchamber.beans.UserBean;
+import com.beatchamber.backing.LoginRegisterBackingBean;
 import java.io.IOException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Filter checks if UserBean has loginIn property set to true. If it is not set
+ * Filter checks if LoginRegisterBackingBean has loginIn property set to true. If it is not set
  * then request is being redirected to the login.xhml page.
  *
  * @author 1733570 Yan Tang
@@ -31,7 +31,7 @@ public class ManagerLoginFilter implements Filter {
     private final static Logger LOG = LoggerFactory.getLogger(ManagerLoginFilter.class);
 
     @Inject
-    private UserBean userBean; // As an instance variable
+    private LoginRegisterBackingBean loginRegisterBackingBean; // As an instance variable
 
     /**
      * Checks if user is logged in. If not it redirects to the login.xhtml page.
@@ -45,15 +45,15 @@ public class ManagerLoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        // Get the userBean from session attribute
+        // Get the loginRegisterBackingBean from session attribute
 
         LOG.info("In the filter");
 
-        // For the first application request there is no userBean in the
+        // For the first application request there is no loginRegisterBackingBean in the
         // session so user needs to log in
-        // For other requests userBean is present but we need to check if user
+        // For other requests loginRegisterBackingBean is present but we need to check if user
         // has logged in successfully
-        if (userBean == null || !userBean.isLoggedIn() || !userBean.isManager()) {
+        if (loginRegisterBackingBean == null || !loginRegisterBackingBean.isLoggedIn() || !loginRegisterBackingBean.isManager()) {
             LOG.info("User not logged in");
 
             String contextPath = ((HttpServletRequest) request)
@@ -62,7 +62,7 @@ public class ManagerLoginFilter implements Filter {
                     + "/login.xhtml");
         } else {
             LOG.info("User logged in: "
-                    + userBean.getUsername());
+                    + loginRegisterBackingBean.getUsername());
             chain.doFilter(request, response);
         }
     }

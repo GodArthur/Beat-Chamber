@@ -562,9 +562,6 @@ label.star:before {
   border-radius: 15px;
 }
 
-.signupform-label {
-  text-align:left;
-}
 
 .input-style {
   outline: none;
@@ -704,8 +701,6 @@ button {
   overflow: hidden;
 }
 
-
-
 .icon-bar {
   width: 100%; 
   background-color:rgb(236, 232, 232);
@@ -739,20 +734,6 @@ button {
   margin-right: 650px;
   color:#fff;
 }
-
-.table-column{
-  font-family: 'Open Sans', sans-serif;
-  font-size: 15px;
-  color: #313131;
-  line-height: 1;
-}
-
-
-table-column:hover {
-  font-weight: 700;
-  color: #000000;
-}
-
 
 .ui-dialog .ui-dialog-titlebar{
   background: linear-gradient(108deg, rgba(19,184,190,1) 0%, rgba(117,37,255,1) 100%)!important;

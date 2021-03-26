@@ -113,10 +113,10 @@ public class Clients implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "password")
     private String password;
-    @Size(max = 32)
+    @Size(max = 100)
     @Column(name = "salt")
     private String salt;
-    @Size(max = 32)
+    @Size(max = 512)
     @Column(name = "hash")
     private String hash;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")

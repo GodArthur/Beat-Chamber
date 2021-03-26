@@ -21,21 +21,23 @@
                 <h:link value="#{msgs.about}" outcome="redirectToAbout"/>
                 <h:link value="#{msgs.changeLanguage}"/>
                 <h:link value="#{msgs.loginRegister}" outcome="redirectToLogin"
-                        rendered="#{!userBean.loggedIn}"/>
+                        rendered="#{!theLoginRegister.loggedIn}"/>
                 <h:link value="#{msgs.management}" outcome="redirectToManagement"
-                        rendered="#{userBean.loggedIn and userBean.manager}"/>               
-                <h:form>
-                    <h:outputText value="#{msgs.welcome} #{userBean.username}" styleClass="welcome-label"
-                                  rendered="#{userBean.loggedIn}"/>
-                    <h:commandLink id="logout" action="#{userBean.doLogout}"
-                                   rendered="#{userBean.loggedIn}">
-                        <i class="pi pi-fw pi-power-off"></i>
-                    </h:commandLink>
-                </h:form>
+                        rendered="#{theLoginRegister.loggedIn and theLoginRegister.manager}"/>               
+
                 <h:form>
                     <h:commandLink>
                         <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
                         <h:outputLabel>0</h:outputLabel>
+                    </h:commandLink>
+                </h:form>
+
+                <h:form>
+                    <h:outputText value="#{msgs.welcome} #{theLoginRegister.username}" styleClass="welcome-label"
+                                  rendered="#{theLoginRegister.loggedIn}"/>
+                    <h:commandLink id="logout" action="#{theLoginRegister.doLogout}"
+                                   rendered="#{theLoginRegister.loggedIn}">
+                        <i class="pi pi-fw pi-power-off"></i>
                     </h:commandLink>
                 </h:form>
             </div>

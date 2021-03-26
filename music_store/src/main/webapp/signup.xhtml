@@ -26,94 +26,95 @@
                             <h:panelGrid columns="3" cellpadding="1" border="0" cellspacing="10"
                                          title="#{msgs.signup}" columnClasses="firstColumn,secondColumn,thirdColumn"
                                          rowClasses="rowHeight, rowHeight">
-                                <h:outputLabel class="signupform-label" for="username" value="#{msgs.username}"/>
+                                <p:outputLabel style="font-size: 18px" for="username" value="#{msgs.username}"/>
                                 <h:inputText class="input-style" id="username" 
-                                             value="#{userBean.client.username}"
-                                             required="true" requiredMessage="#{msgs.usernameRequired}"/>
+                                             value="#{theLoginRegister.client.username}"
+                                             required="true" requiredMessage="#{msgs.usernameRequired}"
+                                             validator="#{theLoginRegister.validateUniqueUser}"/>
                                 <h:message for="username" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.email}"/>
+                                <p:outputLabel style="font-size: 18px" for="email" value="#{msgs.email}"/>
                                 <h:inputText class="input-style" id="email" 
-                                             value="#{userBean.client.email}"
+                                             value="#{theLoginRegister.client.email}"
                                              a:type="email"  required="true"
                                              requiredMessage="#{msgs.emailRequired}"/>
                                 <h:message for="email" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.password}"/>
+                                <p:outputLabel style="font-size: 18px" for="password" value="#{msgs.password}"/>
                                 <h:inputSecret class="input-style" id="password" 
-                                               value="#{userBean.client.password}"
+                                               value="#{theLoginRegister.client.password}"
                                                required="true" requiredMessage="#{msgs.passwordRequired}"/>
                                 <h:message for="password" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.repassword}"/>
+                                <p:outputLabel style="font-size: 18px" for="re-password" value="#{msgs.repassword}"/>
                                 <h:inputSecret class="input-style" id="re-password"
-                                               value="#{userBean.passwordConfirm}"
+                                               value="#{theLoginRegister.passwordConfirm}"
                                                required="true" requiredMessage="#{msgs.repasswordRequired}"
-                                               validator="#{userBean.validatePasswordCorrect}"/>
+                                               validator="#{theLoginRegister.validatePasswordCorrect}"/>
                                 <h:message for="re-password" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.firstname}"/>
+                                <p:outputLabel style="font-size: 18px" for="first_name" value="#{msgs.firstname}"/>
                                 <h:inputText class="input-style" id="first_name" 
-                                             value="#{userBean.client.firstName}"
+                                             value="#{theLoginRegister.client.firstName}"
                                              required="true"
                                              requiredMessage="#{msgs.firstnameRequired}"/>
                                 <h:message for="first_name" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.lastname}"/>
+                                <p:outputLabel style="font-size: 18px" for="last_name" value="#{msgs.lastname}"/>
                                 <h:inputText class="input-style" id="last_name" 
-                                             value="#{userBean.client.lastName}"
+                                             value="#{theLoginRegister.client.lastName}"
                                              required="true"
                                              requiredMessage="#{msgs.lastnameRequired}"/>
                                 <h:message for="last_name" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.homePhone}"/>
+                                <p:outputLabel style="font-size: 18px"  for="homePhone" value="#{msgs.homePhone}"/>
                                 <h:inputText class="input-style" id="homePhone" 
-                                             value="#{userBean.homePhoneNumber}"
+                                             value="#{theLoginRegister.homePhoneNumber}"
                                              converter="com.beatchamber.PhoneNumberConverter">
                                     <f:ajax event="blur" render="@this"/>
                                 </h:inputText>
                                 <h:message for="homePhone" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.cellPhone}"/>
+                                <p:outputLabel style="font-size: 18px" for="cellPhone" value="#{msgs.cellPhone}"/>
                                 <h:inputText class="input-style" id="cellPhone" 
-                                             value="#{userBean.cellPhoneNumber}"
+                                             value="#{theLoginRegister.cellPhoneNumber}"
                                              converter="com.beatchamber.PhoneNumberConverter">
                                     <f:ajax event="blur" render="@this"/>
                                 </h:inputText>
                                 <h:message for="cellPhone" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.company}"/>
+                                <p:outputLabel style="font-size: 18px" for="company" value="#{msgs.company}"/>
                                 <h:inputText class="input-style" id="company" 
-                                             value="#{userBean.client.companyName}"/>
+                                             value="#{theLoginRegister.client.companyName}"/>
                                 <h:message for="company" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.address1}"/>
+                                <p:outputLabel style="font-size: 18px" for="address1" value="#{msgs.address1}"/>
                                 <h:inputText class="input-style" id="address1" 
-                                             value="#{userBean.client.address1}"/>
+                                             value="#{theLoginRegister.client.address1}"/>
                                 <h:message for="address1" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.address2}"/>
+                                <p:outputLabel style="font-size: 18px" for="address2" value="#{msgs.address2}"/>
                                 <h:inputText class="input-style" id="address2" 
-                                             value="#{userBean.client.address2}"/>
+                                             value="#{theLoginRegister.client.address2}"/>
                                 <h:message for="address2" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.country}"/>
+                                <p:outputLabel style="font-size: 18px" for="country" value="#{msgs.country}"/>
                                 <h:selectOneMenu class="input-style" id="country" 
-                                                 value="#{userBean.client.country}"> 
+                                                 value="#{theLoginRegister.client.country}"> 
                                     <f:selectItem itemValue = "Canada" itemLabel = "Canada" /> 
                                 </h:selectOneMenu>  
                                 <h:message for="country" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.province}"/>
+                                <p:outputLabel style="font-size: 18px" for="province" value="#{msgs.province}"/>
                                 <h:selectOneMenu class="input-style" id="province"
                                                  style="text-align:center;"
-                                                 value="#{userBean.client.province}">
+                                                 value="#{theLoginRegister.client.province}">
                                     <f:selectItem itemValue="Alberta" itemLabel="Alberta" />
                                     <f:selectItem itemValue="British Columbia" itemLabel="British Columbia" />
                                     <f:selectItem itemValue="Manitoba" itemLabel="Manitoba" />   
@@ -131,18 +132,18 @@
                                 <h:message for="province" styleClass="errorMessage" style="color:red"/>
 
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.city}"/>
+                                <p:outputLabel style="font-size: 18px" for="city" value="#{msgs.city}"/>
                                 <h:inputText class="input-style" id="city" 
-                                             value="#{userBean.client.city}"/>
+                                             value="#{theLoginRegister.client.city}"/>
                                 <h:message for="city" styleClass="errorMessage" style="color:red"/>
 
-                                <h:outputLabel class="signupform-label" value="#{msgs.postalCode}"/>
+                                <p:outputLabel style="font-size: 18px" for="postalCode" value="#{msgs.postalCode}"/>
                                 <h:inputText class="input-style" id="postalCode" 
-                                             value="#{userBean.client.postalCode}"/>
+                                             value="#{theLoginRegister.client.postalCode}"/>
                                 <h:message for="postalCode" styleClass="errorMessage" style="color:red"/>
                             </h:panelGrid>
-                            <p:commandButton type="submit" update="form" class="btn btn-block"
-                                             action="#{userBean.doCreateUser()}" 
+                            <p:commandButton type="submit" update="form" 
+                                             action="#{theLoginRegister.doCreateUser()}" 
                                              value="#{msgs.register}"/>
                         </h:form>
                     </div>
