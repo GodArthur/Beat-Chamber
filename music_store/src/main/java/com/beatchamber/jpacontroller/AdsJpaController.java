@@ -155,7 +155,7 @@ public class AdsJpaController implements Serializable {
         String startingPath = "ads/";
         String adName = foundAd.getFileName().replace(" ", "_").toLowerCase();
         //Return the whole path
-        return startingPath + adName + "_ad.png";
+        return startingPath + adName + ".png";
     }
     
     /**
