@@ -1,4 +1,4 @@
-/*USE CSgb1w21;*/
+USE CSgb1w21;
 --USE beat_chamber;
 
 insert into genres (genre_name) values

@@ -394,7 +394,7 @@ td {
 /*Ibrahim was here*/
 #show_prices{
 	border-style: solid;
-	width:20%;
+	width:30%;
         height:550px;
 	display: inline-block;
 	overflow: auto ;

@@ -91,18 +91,18 @@ and open the template in the editor.
 				<h2>#{msgs.showItems}</h2><br/>
                                 <p>
                                 <h5>#{msgs.albumsboughtTitle}</h5>
-                                <c:forEach var="albumItem" items="#{checkoutData.getx()}">
-                                    #{albumItem}<br/>
+                                <c:forEach var="albumItem" items="#{albumsJpaController.retrieveAllAlbumsInTheCart()}">
+                                    #{albumItem.albumTitle} #{albumItem.costPrice}$<br/>
                                 </c:forEach>
                                 </p>
                                 <h5>#{msgs.trackboughtTitle}</h5>
                                 <p>
-                                    <c:forEach var="trackItem" items="#{checkoutData.retrieveAllAlbumsInTheCart()}">
-                                        #{trackItem}<br/>
+                                    <c:forEach var="trackItem" items="#{tracksController.retrieveAllTracksInTheCart()}">
+                                        #{trackItem.trackTitle} #{trackItem.costPrice}$<br/>
                                 </c:forEach>
                                 </p>
 				<hr class="hrColor" />
-				<h5>#{msgs.subTotal}</h5><br/>
+                                <h5>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice)}</h5><br/>
                                 <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %</h5><br/>
                                 <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %</h5><br/>
                                 <h5>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %</h5><br/>

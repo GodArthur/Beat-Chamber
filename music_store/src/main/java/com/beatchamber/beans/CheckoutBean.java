@@ -30,6 +30,7 @@ public class CheckoutBean implements Serializable {
     private String address = "";
     private String city = "";
     private String province = "-1";
+    private double totalPrice = 0;
     private ArrayList<Albums> listOfAlbumsInTheCart = new ArrayList<Albums>();
     private ArrayList<Tracks> listOfTracksInTheCart = new ArrayList<Tracks>();
 
@@ -95,7 +96,7 @@ public class CheckoutBean implements Serializable {
     /*overiding the toString method*/
     @Override
     public String toString() {
-        return "pop";
+        return "";
     }
     
     public String getCartSize(){
@@ -149,8 +150,20 @@ public class CheckoutBean implements Serializable {
      */
     public ArrayList<Tracks> retrieveAllTracksInTheCart(){
         SetListOfItems();
-        System.out.println( listOfTracksInTheCart.size()+ "  :size**************************************");
         return this.listOfTracksInTheCart;
+    }
+    
+    public String computePrices(String trackTotal,String albumTotal){
+        return ((convertStringToDouble(trackTotal)+convertStringToDouble(albumTotal)) +"");
+    }
+    
+    /**
+     * This method will convert a string into a double
+     * @param data
+     * @return double
+     */
+    private double convertStringToDouble(String data){
+        return Double.parseDouble(data);
     }
     
     public List<String> getx(){
