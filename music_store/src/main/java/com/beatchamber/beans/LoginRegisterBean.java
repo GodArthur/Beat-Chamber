@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.beatchamber.backing;
+package com.beatchamber.beans;
 
-import com.beatchamber.beans.PhoneNumber;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.Serializable;
@@ -35,9 +34,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named("theLoginRegister")
 @SessionScoped
-public class LoginRegisterBackingBean implements Serializable {
+public class LoginRegisterBean implements Serializable {
 
-    private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(LoginRegisterBackingBean.class);
+    private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(LoginRegisterBean.class);
 
     private Integer ClientId;
     private String username;

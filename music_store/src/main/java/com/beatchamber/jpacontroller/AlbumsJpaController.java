@@ -310,6 +310,9 @@ public class AlbumsJpaController implements Serializable {
     public Albums findAlbums(Integer id) {
         return em.find(Albums.class, id);
     }
+    public Albums findAlbums(Integer id,EntityManager em2) {
+        return em2.find(Albums.class, id);
+    }
 
     public int getAlbumsCount() {
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();

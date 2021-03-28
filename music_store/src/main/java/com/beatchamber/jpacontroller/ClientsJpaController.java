@@ -250,6 +250,11 @@ public class ClientsJpaController implements Serializable {
 
         return em.find(Clients.class, id);
     }
+    
+    public Clients findClients(Integer id,EntityManager em2) {
+
+        return em2.find(Clients.class, id);
+    }
 
     public int getClientsCount() {
 

@@ -11,41 +11,41 @@
         <title>#{msgs.managetitle}</title>
     </h:head>
     <h:body>
-        <!-- Base template of the page -->
-        <ui:composition template="../templates/master_template.xhtml">
-            <!-- Promotion banner -->
-            <ui:define name="content">
-                <div>
-                    <div class="container-page">
-                        <div class="icon-bar">
-                            <h:link id="clinetButton" class="activedTag" >
-                                <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
-                            </h:link>
-                            <h:link  id="albumButton" >
-                                <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
-                            </h:link>
-                            <h:link  id="trackButton" >
-                                <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
-                            </h:link>
-                            <h:link  id="orderButton"  >
-                                <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
-                            </h:link>
-                            <h:link  id="reviewButton"  >
-                                <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
-                            </h:link>
-                            <h:link  id="reportButton"  >
-                                <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
-                            </h:link>
-                            <h:link  id="rssButton"  >
-                                <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
-                            </h:link>
-                            <h:link  id="surveyButton" outcome="manageSurveys">
-                                <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
-                            </h:link>
-                            <h:link  id="adButton" >
-                                <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
-                            </h:link>
-                        </div>
+            <!-- Base template of the page -->
+            <ui:composition template="../templates/master_template.xhtml">
+                <!-- Promotion banner -->
+                <ui:define name="content">
+                    <div>
+                        <div class="container-page">
+                            <div class="icon-bar">
+                                <h:link id="clinetButton" class="activedTag" >
+                                    <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
+                                </h:link>
+                                <h:link  id="albumButton" >
+                                    <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
+                                </h:link>
+                                <h:link  id="trackButton" >
+                                    <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
+                                </h:link>
+                                <h:link  id="orderButton" outcome="manageOrders" >
+                                    <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
+                                </h:link>
+                                <h:link  id="reviewButton"  >
+                                    <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
+                                </h:link>
+                                <h:link  id="reportButton"  >
+                                    <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
+                                </h:link>
+                                <h:link  id="rssButton"  >
+                                    <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
+                                </h:link>
+                                <h:link  id="surveyButton" outcome="manageSurveys">
+                                    <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
+                                </h:link>
+                                <h:link  id="adButton" >
+                                    <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
+                                </h:link>
+                            </div>
 
                         <h:form id="form" class="container-table">
                             <p:growl id="messages" showDetail="true"/>

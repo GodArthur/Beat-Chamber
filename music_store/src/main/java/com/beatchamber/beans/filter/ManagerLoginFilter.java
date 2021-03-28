@@ -1,6 +1,6 @@
 package com.beatchamber.beans.filter;
 
-import com.beatchamber.backing.LoginRegisterBackingBean;
+import com.beatchamber.beans.LoginRegisterBean;
 import java.io.IOException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -31,7 +31,7 @@ public class ManagerLoginFilter implements Filter {
     private final static Logger LOG = LoggerFactory.getLogger(ManagerLoginFilter.class);
 
     @Inject
-    private LoginRegisterBackingBean loginRegisterBackingBean; // As an instance variable
+    private LoginRegisterBean loginRegisterBean; // As an instance variable
 
     /**
      * Checks if user is logged in. If not it redirects to the login.xhtml page.
@@ -53,7 +53,7 @@ public class ManagerLoginFilter implements Filter {
         // session so user needs to log in
         // For other requests loginRegisterBackingBean is present but we need to check if user
         // has logged in successfully
-        if (loginRegisterBackingBean == null || !loginRegisterBackingBean.isLoggedIn() || !loginRegisterBackingBean.isManager()) {
+        if (loginRegisterBean == null || !loginRegisterBean.isLoggedIn() || !loginRegisterBean.isManager()) {
             LOG.info("User not logged in");
 
             String contextPath = ((HttpServletRequest) request)
@@ -62,7 +62,7 @@ public class ManagerLoginFilter implements Filter {
                     + "/login.xhtml");
         } else {
             LOG.info("User logged in: "
-                    + loginRegisterBackingBean.getUsername());
+                    + loginRegisterBean.getUsername());
             chain.doFilter(request, response);
         }
     }
