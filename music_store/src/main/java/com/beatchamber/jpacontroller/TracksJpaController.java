@@ -1,5 +1,6 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.beans.CookieManager;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -47,6 +48,8 @@ public class TracksJpaController implements Serializable {
 
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
+    
+    private ArrayList<Tracks> listOfTracksInTheCart = new ArrayList<Tracks>();
 
     public TracksJpaController() {
     }
@@ -368,5 +371,64 @@ public class TracksJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
 
     }
+    
+    private void SetListOfItems(){
+        listOfTracksInTheCart.clear();
+        String[] data = getAllIdFromCart();
+        for(String item:data){
+            if(item.length()>0){
+                if(!item.toLowerCase().contains("a")){
+                    listOfTracksInTheCart.add(findTracks(parseStringToInt(item)));
+                }
+            }
+        }
+    }
+    
+    /**
+     * This method will allow us to get the list of tracks that are in the cart
+     * @return ArrayList of tracks
+     * @author Ibrahim
+     */
+    public ArrayList<Tracks> retrieveAllTracksInTheCart(){
+        SetListOfItems();
+        return this.listOfTracksInTheCart;
+    }
+    
+    /**
+     * This method will return an array of the id from tracks the cart 
+     * @return String[]
+     * @author Ibrahim
+     */
+    private String[] getAllIdFromCart(){
+        CookieManager cookies = new CookieManager();
+        String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
+        return dataResult.split(",");
+    }
+    
+    /**
+     * This method will return the total price of the tracks that are in the cart
+     * @return String
+     * @author Ibrahim
+     */
+    public String getTotalPrice(){
+        SetListOfItems();
+        double total=0;
+        for(Tracks item:listOfTracksInTheCart){
+            total = total + item.getCostPrice();
+        }
+        return total + "";
+    }
+    
+    /**
+     * This method will return the int value of the string
+     * @param strToParse
+     * @return int
+     * @author Ibrahim
+     */
+    private int parseStringToInt(String strToParse){
+        return Integer.parseInt(strToParse);
+    }
+    
+    
 
 }

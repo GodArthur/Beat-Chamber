@@ -5,14 +5,17 @@
  */
 package com.beatchamber.beans;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -73,6 +76,49 @@ public class CookieManager {
                 createCookie(cartKey,findValue(cartKey)+","+idOfItem);
             }
         }
+    }
+    
+    public String checkIfAlbumIsInCart(String idToCheck){
+        for(String item:getAllIdFromCart()){
+            if(item.equals("a"+idToCheck)){
+                return "";
+            }
+            
+        }
+        return "none";
+    }
+    
+    public String checkIfTrackIsInCart(String idToCheck){
+        for(String item:getAllIdFromCart()){
+            if(item.equals(idToCheck)){
+                return "";
+            }
+            
+        }
+        return "none";
+    }
+    
+    public void reload() throws IOException {
+    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+    ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+}
+    
+    public void removeItemFromCart(String idToRemove) throws InterruptedException{
+        String newCookieList = "";
+        if(!isCartEmpty()){
+            try {
+                for (String item:getAllIdFromCart()) {
+                    if(!item.equals(idToRemove)){
+                        newCookieList = newCookieList + item + "," ;
+                    }
+                }
+                createCookie(cartKey,newCookieList);
+                reload();
+            } catch (IOException ex) {
+                Logger.getLogger(CookieManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }
     
     /**

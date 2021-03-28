@@ -268,4 +268,12 @@ public class Albums implements Serializable {
         this.orderAlbumCollection = orderAlbumCollection;
     }
     
+    public String getFormatedDate(){
+        return this.releaseDate.toInstant().toString().split("T")[0];
+    }
+    
+    public String getCookieId(){
+        return "a"+this.albumNumber;
+    }
+    
 }
