@@ -82,6 +82,7 @@ public class OrdersJpaController implements Serializable {
     public void edit(Orders orders) throws NonexistentEntityException, Exception {
 
         try {
+
             utx.begin();
             Orders persistentOrders = em.find(Orders.class, orders.getOrderId());
             Clients clientNumberOld = persistentOrders.getClientNumber();
@@ -110,14 +111,14 @@ public class OrdersJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = orders.getOrderId();
                 if (findOrders(id) == null) {
-                    throw new com.beatchamber.exceptions.NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, com.beatchamber.exceptions.NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException, NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 
         try {
             utx.begin();
@@ -135,7 +136,7 @@ public class OrdersJpaController implements Serializable {
             }
             em.remove(orders);
             utx.commit();
-        } catch (NotSupportedException | SystemException | com.beatchamber.exceptions.NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -147,62 +148,6 @@ public class OrdersJpaController implements Serializable {
 
     public List<Orders> findOrdersEntities() {
         return findOrdersEntities(true, -1, -1);
-    }
-    
-    /**
-     * This method will return the number of orders placed and also the number id 
-     * @return int
-     */
-    public int findTotalOrders() {
-        return findOrdersEntities(true, -1, -1).size();
-    }
-    
-    public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
-        //set variables
-        ClientsJpaController clientController = new ClientsJpaController();
-        OrderAlbumJpaController orderAlbumController = new OrderAlbumJpaController();
-        OrderTrackJpaController orderTrackController = new OrderTrackJpaController();
-        Orders order = new Orders();
-        Date date = new Date();
-        AlbumsJpaController albumController = new AlbumsJpaController();
-        TracksJpaController trackController = new TracksJpaController();
-        int newOrderId = findTotalOrders()+1;
-        //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
-        //creating the order
-        order.setOrderDate(date);
-        order.setClientNumber(clientController.findClients(ClientNumber,em));
-        order.setOrderId(newOrderId);
-        try {
-            create(order);
-        } catch (RollbackFailureException ex) {
-            java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //creating the orderAlbums
-        for (Albums item:albumList) {
-            OrderAlbum orderAlbum =  new OrderAlbum();
-            orderAlbum.setAlbumId(albumController.findAlbums(item.getAlbumNumber(),em));
-            orderAlbum.setOrderId(newOrderId);
-            try {
-                orderAlbumController.create(orderAlbum,em,utx);
-            } catch (RollbackFailureException ex) {
-                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        //creating the orderTrack
-        for(Tracks item:trackList){
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(newOrderId);
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId(),em));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        return "index.xhtml";
     }
 
     public List<Orders> findOrdersEntities(int maxResults, int firstResult) {
@@ -223,15 +168,16 @@ public class OrdersJpaController implements Serializable {
 
     public Orders findOrders(Integer id) {
         return em.find(Orders.class, id);
-
     }
 
     public int getOrdersCount() {
+
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         Root<Orders> rt = cq.from(Orders.class);
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
+
     }
 
 }
