@@ -373,8 +373,7 @@ public class TracksJpaController implements Serializable {
     }
     
     private void SetListOfItems(){
-        TracksJpaController trackController = new TracksJpaController();
-        
+        listOfTracksInTheCart.clear();
         String[] data = getAllIdFromCart();
         for(String item:data){
             if(item.length()>0){
@@ -395,12 +394,22 @@ public class TracksJpaController implements Serializable {
         return this.listOfTracksInTheCart;
     }
     
+    /**
+     * This method will return an array of the id from tracks the cart 
+     * @return String[]
+     * @author Ibrahim
+     */
     private String[] getAllIdFromCart(){
         CookieManager cookies = new CookieManager();
         String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
         return dataResult.split(",");
     }
     
+    /**
+     * This method will return the total price of the tracks that are in the cart
+     * @return String
+     * @author Ibrahim
+     */
     public String getTotalPrice(){
         SetListOfItems();
         double total=0;

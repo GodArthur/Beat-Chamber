@@ -7,13 +7,15 @@ package com.beatchamber.beans;
 
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Tracks;
-import com.beatchamber.jpacontroller.AlbumsJpaController;
-import com.beatchamber.jpacontroller.TracksJpaController;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -29,10 +31,12 @@ public class CheckoutBean implements Serializable {
     private String name = "";
     private String address = "";
     private String city = "";
-    private String province = "-1";
+    private String province = "-1";//This needs to be -1 so that we know that it is when the page has just been loaded and the first province will be shown (alberta)
     private double totalPrice = 0;
-    private ArrayList<Albums> listOfAlbumsInTheCart = new ArrayList<Albums>();
-    private ArrayList<Tracks> listOfTracksInTheCart = new ArrayList<Tracks>();
+    private double totalPst = 0;
+    private double totalGst = 0;
+    private double totalHst = 0;
+
 
     
     /*all of the setters */
@@ -99,79 +103,138 @@ public class CheckoutBean implements Serializable {
         return "";
     }
     
-    public String getCartSize(){
-        return getAllIdFromCart().length + "";
-    }
+    /**
+     * 
+     */
+    public void reload() throws IOException {
+    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+    ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+}
     
-    private String[] getAllIdFromCart(){
-        CookieManager cookies = new CookieManager();
-        String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
-        return dataResult.split(",");
-    }
-    
-    private void SetListOfItems(){
-        AlbumsJpaController albumController = new AlbumsJpaController();
-        TracksJpaController trackController = new TracksJpaController();
-        
-        String[] data = getAllIdFromCart();
-        for(String item:data){
-            if(item.length()>0){
-                if(item.toLowerCase().contains("a")){
-                    listOfAlbumsInTheCart.add(albumController.findAlbums(parseStringToInt(item.replace("a", ""))));
-                }
-                else{
-                    listOfTracksInTheCart.add(trackController.findTracks(parseStringToInt(item)));
-                }
-            }
-        }
-    }
+
     
     /**
      * This method will return the int value of the string
      * @param strToParse
      * @return in
+     * @author Ibrahim
      */
     private int parseStringToInt(String strToParse){
         return Integer.parseInt(strToParse);
     }
     
+
     /**
-     * This method will allow us to get the list of albums that are in the cart
-     * @return ArrayList of albums
+     * This method will get the total price of the items that are in the cart and return the value 
+     * @param trackTotal
+     * @param albumTotal
+     * @return String
+     * @author Ibrahim
      */
-    public ArrayList<Albums> retrieveAllAlbumsInTheCart(){
-        SetListOfItems();
-        return this.listOfAlbumsInTheCart;
-    }
-    
-    /**
-     * This method will allow us to get the list of tracks that are in the cart
-     * @return ArrayList of tracks
-     */
-    public ArrayList<Tracks> retrieveAllTracksInTheCart(){
-        SetListOfItems();
-        return this.listOfTracksInTheCart;
-    }
-    
     public String computePrices(String trackTotal,String albumTotal){
-        return ((convertStringToDouble(trackTotal)+convertStringToDouble(albumTotal)) +"");
+        totalPrice = (convertStringToDouble(trackTotal)+convertStringToDouble(albumTotal));
+        return totalPrice + "";
     }
     
     /**
      * This method will convert a string into a double
      * @param data
      * @return double
+     * @author Ibrahim
      */
     private double convertStringToDouble(String data){
         return Double.parseDouble(data);
     }
+
+
+    /**
+     * This method will compute the pst value from the total price before tax
+     * @param total
+     * @param percentage
+     * @return String 
+     * @author Ibrahim
+     */    
+    public String computePst(String total,String percentage){
+        System.out.println(percentage + "   percentage------------    " + total+"  total---------");
+        this.totalPst = getPercentagePrice(convertStringToDouble(total),convertStringToDouble(percentage));
+        return this.totalPst+"";
+    }
+    /**
+     * This method will compute the gst value from the total price before tax
+     * @param total
+     * @param percentage
+     * @return String
+     * @author Ibrahim
+     */
+    public String computeGst(String total,String percentage){
+        this.totalGst = getPercentagePrice(convertStringToDouble(total),convertStringToDouble(percentage));
+        return this.totalGst+"";
+    }
     
-    public List<String> getx(){
-        List<String> test = new ArrayList<String>();
-        test.add("1");
-        test.add("2");
-        test.add("3");
-        test.add("4");
-        return test;
+    /**
+     * This method will compute the pst value from the total price before tax
+     * @param total
+     * @param percentage
+     * @return String
+     * @author Ibrahim
+     */
+    public String computeHst(String total,String percentage){
+        this.totalHst = getPercentagePrice(convertStringToDouble(total),convertStringToDouble(percentage));
+        return this.totalHst+"";
+    }
+    
+
+    /**
+     * This method will return the string of the total price 
+     * @return String
+     * @author Ibrahim
+     */
+    public String getPriceBeforeTax(){
+        return this.totalPrice+"";
+    }
+    
+    /**
+     * This method will return the total price with the tax added to it
+     * @param total
+     * @param pstValue
+     * @param gstValue
+     * @param hstValue
+     * @return String
+     * @author Ibrahim
+     */
+    public String getToatlPriceWithTax(String total,String pstValue,String gstValue,String hstValue){
+        return convertStringToDouble(total)+convertStringToDouble(computePst(total,pstValue))+convertStringToDouble(computePst(total,gstValue))+convertStringToDouble(computePst(total,hstValue))+"";
+    }
+    
+    /**
+     * This method will compute the percentage of the double value that has been passed (it will also round the value to 2 digits)
+     * @param value
+     * @param percentage
+     * @return double
+     * @author Ibrahim
+     */
+    private double getPercentagePrice(double value,double percentage){
+        double result = 0;
+        if(percentage == 0){
+            result = 0;
+        }
+        else{
+            result = roundDoubleValue((value*percentage)/100);
+        }
+        
+        return result;
+        
+    }
+    
+    /**
+     * This method will round the double to 2 digit 
+     * found some help on this website : https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+     * @param value
+     * @return Double
+     * @author Ibrahim
+     */
+    private Double roundDoubleValue(double value){
+        DecimalFormat df = new DecimalFormat("#.##");
+        return Double.valueOf(df.format(value));
     }
 }

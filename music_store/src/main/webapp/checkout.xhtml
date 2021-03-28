@@ -40,9 +40,9 @@ and open the template in the editor.
                                     </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="nameCard">#{msgs.askName}</h:outputLabel>  
-                                    <h:inputText class="input_info" id="nameCard" value="#{checkoutData.name}" required="true" requiredMessage="#{msgs.nameMessage}" />
-                                        <!--<f:validateRegex pattern = "[A-Za-z]" />
-                                    </h:inputText>--><br/><br/>
+                                    <h:inputText class="input_info" id="nameCard" value="#{checkoutData.name}" required="true" requiredMessage="#{msgs.nameMessage}" >
+                                        <f:validator validatorId="NameValidator" />
+                                    </h:inputText><br/><br/>
 
                                     <h:outputLabel class="inforLb" for="address">#{msgs.askAddress}</h:outputLabel>  
                                     <h:inputText class="input_info" id="address" value="#{checkoutData.address}" required="true" requiredMessage="#{msgs.addressMessage}">
@@ -61,6 +61,13 @@ and open the template in the editor.
                                         <f:ajax event="change" render="renderPst" />
                                         <f:ajax event="change" render="renderHst" />
                                         <f:ajax event="change" render="renderGst" />
+                                        
+                                        <f:ajax event="change" render="renderPstRealPrice" />
+                                        <f:ajax event="change" render="renderHstRealPrice" />
+                                        <f:ajax event="change" render="renderGstRealPrice" />
+                                        
+                                        <f:ajax event="change" render="rendertotalPrice" />
+                                        
                                       <f:selectItem itemValue="1" itemLabel="Alberta" />
                                       <f:selectItem itemValue="2" itemLabel="British Columbia" />
                                       <f:selectItem itemValue="3" itemLabel="Manitoba" />   
@@ -102,13 +109,13 @@ and open the template in the editor.
                                 </c:forEach>
                                 </p>
 				<hr class="hrColor" />
-                                <h5>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice)}</h5><br/>
-                                <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %</h5><br/>
-                                <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %</h5><br/>
-                                <h5>#{msgs.pst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %</h5><br/>
+                                <h5>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice)}$</h5><br/>
+                                <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %  -------➤    <h:outputText id="renderPstRealPrice" value="#{checkoutData.computePst(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst)}"/> $</h5><br/>
+                                <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %  -------➤    <h:outputText id="renderGstRealPrice" value="#{checkoutData.computeGst(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).gst)}"/> $</h5><br/>
+                                <h5>#{msgs.hst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %  -------➤    <h:outputText id="renderHstRealPrice" value="#{checkoutData.computeHst(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h5><br/>
 				<hr class="hrColor"/>
                                 <br/>
-				<h1>#{msgs.total}</h1>
+                                <h1>#{msgs.total} <h:outputText id="rendertotalPrice" value="#{checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst, provincesJpaController.findProvinces(checkoutData.province).gst, provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h1>
 
 			</div>
 			
