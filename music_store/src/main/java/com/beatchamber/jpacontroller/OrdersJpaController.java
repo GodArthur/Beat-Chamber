@@ -1,16 +1,23 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.entities.Albums;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.beatchamber.entities.Clients;
+import com.beatchamber.entities.OrderAlbum;
+import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
+import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -150,7 +157,50 @@ public class OrdersJpaController implements Serializable {
         return findOrdersEntities(true, -1, -1).size();
     }
     
-    public String addOrdersToTable(){
+    public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
+        //set variables
+        ClientsJpaController clientController = new ClientsJpaController();
+        OrderAlbumJpaController orderAlbumController = new OrderAlbumJpaController();
+        OrderTrackJpaController orderTrackController = new OrderTrackJpaController();
+        Orders order = new Orders();
+        Date date = new Date();
+        AlbumsJpaController albumController = new AlbumsJpaController();
+        TracksJpaController trackController = new TracksJpaController();
+        int newOrderId = findTotalOrders()+1;
+        //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
+        //creating the order
+        order.setOrderDate(date);
+        order.setClientNumber(clientController.findClients(ClientNumber,em));
+        order.setOrderId(newOrderId);
+        try {
+            create(order);
+        } catch (RollbackFailureException ex) {
+            java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //creating the orderAlbums
+        for (Albums item:albumList) {
+            OrderAlbum orderAlbum =  new OrderAlbum();
+            orderAlbum.setAlbumId(albumController.findAlbums(item.getAlbumNumber(),em));
+            orderAlbum.setOrderId(newOrderId);
+            try {
+                orderAlbumController.create(orderAlbum,em,utx);
+            } catch (RollbackFailureException ex) {
+                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        //creating the orderTrack
+        for(Tracks item:trackList){
+            OrderTrack orderTrack = new OrderTrack();
+            orderTrack.setOrderId(newOrderId);
+            orderTrack.setTrackId(trackController.findTracks(item.getTrackId(),em));
+            try {
+                orderTrackController.create(orderTrack);
+            } catch (RollbackFailureException ex) {
+                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         return "index.xhtml";
     }
@@ -177,7 +227,6 @@ public class OrdersJpaController implements Serializable {
     }
 
     public int getOrdersCount() {
-
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         Root<Orders> rt = cq.from(Orders.class);
         cq.select(em.getCriteriaBuilder().count(rt));
