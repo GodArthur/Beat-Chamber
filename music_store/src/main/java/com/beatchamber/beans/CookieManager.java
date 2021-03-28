@@ -189,6 +189,18 @@ public class CookieManager {
     }
     
     /**
+     * This method will clear the items the in the cart
+     */
+    public void clearTheCart(){
+        clearCookie(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
+        try {
+            reload();
+        } catch (IOException ex) {
+            Logger.getLogger(CookieManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
      * This method will remove the id from the cart
      * @param idToRemove
      * @throws InterruptedException 
