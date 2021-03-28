@@ -141,6 +141,19 @@ public class OrdersJpaController implements Serializable {
     public List<Orders> findOrdersEntities() {
         return findOrdersEntities(true, -1, -1);
     }
+    
+    /**
+     * This method will return the number of orders placed and also the number id 
+     * @return int
+     */
+    public int findTotalOrders() {
+        return findOrdersEntities(true, -1, -1).size();
+    }
+    
+    public String addOrdersToTable(){
+        
+        return "index.xhtml";
+    }
 
     public List<Orders> findOrdersEntities(int maxResults, int firstResult) {
         return findOrdersEntities(false, maxResults, firstResult);

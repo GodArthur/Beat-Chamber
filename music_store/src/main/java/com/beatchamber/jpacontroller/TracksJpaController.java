@@ -415,6 +415,7 @@ public class TracksJpaController implements Serializable {
         double total=0;
         for(Tracks item:listOfTracksInTheCart){
             total = total + item.getCostPrice();
+            System.out.println(total + "   ------------------------");
         }
         return total + "";
     }

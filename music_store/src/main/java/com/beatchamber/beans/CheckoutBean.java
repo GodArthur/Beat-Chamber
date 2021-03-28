@@ -129,7 +129,10 @@ public class CheckoutBean implements Serializable {
      * @author Ibrahim
      */
     public String computePrices(String trackTotal,String albumTotal){
+        System.out.println(trackTotal + "   tracks************************************");
+        System.out.println(albumTotal + "   albums************************************");
         totalPrice = (convertStringToDouble(trackTotal)+convertStringToDouble(albumTotal));
+        System.out.println(totalPrice + "   total******************************************");
         return totalPrice + "";
     }
     

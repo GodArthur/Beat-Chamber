@@ -16,6 +16,11 @@ and open the template in the editor.
             <ui:define name="content">
                 
                 <div id="cartPage">
+                    <h:form>
+                        <h:commandLink action="#{cookies.clearTheCart()}" >
+                            <p:button value="#{msgs.clearCart}"  />
+                        </h:commandLink>
+                    </h:form>
                     <h2 class="changeTextToWhite">#{msgs.albumsboughtTitle}</h2>
                     <!-- This will display all of the albums -->
                     <c:forEach var="albumItem" items="#{albumsJpaController.retrieveAllAlbumsInTheCart()}">
