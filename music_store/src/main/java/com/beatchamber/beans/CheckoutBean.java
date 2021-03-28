@@ -5,12 +5,9 @@
  */
 package com.beatchamber.beans;
 
-import com.beatchamber.entities.Albums;
-import com.beatchamber.entities.Tracks;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -104,7 +101,7 @@ public class CheckoutBean implements Serializable {
     }
     
     /**
-     * 
+     * This method will reload the page 
      */
     public void reload() throws IOException {
     ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -132,7 +129,10 @@ public class CheckoutBean implements Serializable {
      * @author Ibrahim
      */
     public String computePrices(String trackTotal,String albumTotal){
+        System.out.println(trackTotal + "   tracks************************************");
+        System.out.println(albumTotal + "   albums************************************");
         totalPrice = (convertStringToDouble(trackTotal)+convertStringToDouble(albumTotal));
+        System.out.println(totalPrice + "   total******************************************");
         return totalPrice + "";
     }
     
@@ -155,7 +155,6 @@ public class CheckoutBean implements Serializable {
      * @author Ibrahim
      */    
     public String computePst(String total,String percentage){
-        System.out.println(percentage + "   percentage------------    " + total+"  total---------");
         this.totalPst = getPercentagePrice(convertStringToDouble(total),convertStringToDouble(percentage));
         return this.totalPst+"";
     }

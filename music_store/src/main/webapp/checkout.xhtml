@@ -88,7 +88,7 @@ and open the template in the editor.
                                     <br/>
                                     
                                     
-                                    <h:commandButton action="index.xhtml" styleClass="validationBTN" value="Complete Checkout" type="submit"/>
+                                    <h:commandButton action="#{ordersJpaController.addOrdersToTable()}" styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/>
 
 				</h:form>
 
@@ -109,13 +109,13 @@ and open the template in the editor.
                                 </c:forEach>
                                 </p>
 				<hr class="hrColor" />
-                                <h5>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice)}$</h5><br/>
-                                <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %  -------➤    <h:outputText id="renderPstRealPrice" value="#{checkoutData.computePst(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst)}"/> $</h5><br/>
-                                <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %  -------➤    <h:outputText id="renderGstRealPrice" value="#{checkoutData.computeGst(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).gst)}"/> $</h5><br/>
-                                <h5>#{msgs.hst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %  -------➤    <h:outputText id="renderHstRealPrice" value="#{checkoutData.computeHst(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h5><br/>
+                                <h5>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice)}$</h5><br/>
+                                <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %  -------➤    <h:outputText id="renderPstRealPrice" value="#{checkoutData.computePst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst)}"/> $</h5><br/>
+                                <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %  -------➤    <h:outputText id="renderGstRealPrice" value="#{checkoutData.computeGst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).gst)}"/> $</h5><br/>
+                                <h5>#{msgs.hst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %  -------➤    <h:outputText id="renderHstRealPrice" value="#{checkoutData.computeHst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h5><br/>
 				<hr class="hrColor"/>
                                 <br/>
-                                <h1>#{msgs.total} <h:outputText id="rendertotalPrice" value="#{checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice, tracksController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst, provincesJpaController.findProvinces(checkoutData.province).gst, provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h1>
+                                <h1>#{msgs.total} <h:outputText id="rendertotalPrice" value="#{checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst, provincesJpaController.findProvinces(checkoutData.province).gst, provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h1>
 
 			</div>
 			
