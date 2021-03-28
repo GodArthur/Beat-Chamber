@@ -33,6 +33,7 @@ public class CookieManager {
     /**
      * This method will return the number of Cookies that are made
      * @return String
+     * @author Ibrahim
      */
     public String getCount(){
         Map result = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
@@ -42,7 +43,8 @@ public class CookieManager {
     /**
      * This method will find the value of the cookies from the given key
      * @param key
-     * @return String 
+     * @return String
+     * @author Ibrahim
      */
     public String findValue(String key){
         Object my_cookie = context.getExternalContext().getRequestCookieMap().get(key);
@@ -57,6 +59,7 @@ public class CookieManager {
      * This method will create a cookie with the given key and value
      * @param key
      * @param value 
+     * @author Ibrahim
      */
     public void createCookie(String key,String value){
         FacesContext context = 	FacesContext.getCurrentInstance();
@@ -66,6 +69,7 @@ public class CookieManager {
     /**
      * Adds the id to the cart if the id is not already in the cart
      * @param id 
+     * @author Ibrahim
      */
     public void addItemToCart(String idOfItem){
         if(!isItemInCart(idOfItem)){
@@ -78,6 +82,14 @@ public class CookieManager {
         }
     }
     
+    /**
+     * (checks for the albums)
+     * This method will be used in the cart page it will check if the id is in the cart and if it is it wil return none so the div containing the information will not be shown
+     * (This method was made because it takes some time for the cookies to be updated and be reflected on he page so this is a shortcut so that the user will not need to wait for the page to be updated after the cookies has been changed)
+     * @param idToCheck
+     * @return String 
+     * @author Ibrahim
+     */
     public String checkIfAlbumIsInCart(String idToCheck){
         for(String item:getAllIdFromCart()){
             if(item.equals("a"+idToCheck)){
@@ -88,6 +100,14 @@ public class CookieManager {
         return "none";
     }
     
+    /**
+     * (checks for the tracks)
+     * This method will be used in the cart page it will check if the id is in the cart and if it is it wil return none so the div containing the information will not be shown
+     * (This method was made because it takes some time for the cookies to be updated and be reflected on he page so this is a shortcut so that the user will not need to wait for the page to be updated after the cookies has been changed)
+     * @param idToCheck
+     * @return String
+     * @author Ibrahim
+     */
     public String checkIfTrackIsInCart(String idToCheck){
         for(String item:getAllIdFromCart()){
             if(item.equals(idToCheck)){
@@ -98,11 +118,82 @@ public class CookieManager {
         return "none";
     }
     
+    /**
+     * This method will reload the page
+     * @throws IOException 
+     * @author Ibrahim
+     */
     public void reload() throws IOException {
     ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
     ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
 }
+    /**
+     * This method will add the add the album to the cart cookie (it takes the string of the albums database id so not a15 but just 15)
+     * @param albumId 
+     * @author Ibrahim
+     */
+    public void addAlbumToCart(String albumId){
+        addItemToCart("a"+albumId);
+        try {
+            reload();
+        } catch (IOException ex) {
+            Logger.getLogger(CookieManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
+    /**
+     * This method returns true if the id given is in the cart
+     * @param id
+     * @return Boolean
+     * @author Ibrahim
+     */
+    private Boolean isIdInCart(String id){
+        for(String item:getAllIdFromCart()){
+            if(item.equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * This method will return a string that represents if the button should be disabled because it alredy is in the cart
+     * @param albumId
+     * @return String
+     * @author Ibrahim
+     */
+    public String shouldTheAddToCartBeDisabled(int albumId){
+     if(isIdInCart("a"+albumId)){
+         return "true";
+     }
+     else{
+         return "false";
+     }
+    }
+    
+    /**
+     * This method will display the default txt on the button if the album is not already in the cart or if the album is already in the cart
+     * it will return a message on the button to say that the album is alredy in the cart
+     * @param albumId
+     * @param buttonText
+     * @return String
+     * @author Ibrahim
+     */
+    public String adjustDisplay(String albumId,String buttonText){
+        if(isIdInCart("a"+albumId)){
+            return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","Album_Alredy_In_Cart",null).getDetail();
+        }
+        else{
+            return buttonText;
+        }
+    }
+    
+    /**
+     * This method will remove the id from the cart
+     * @param idToRemove
+     * @throws InterruptedException 
+     * @author Ibrahim
+     */
     public void removeItemFromCart(String idToRemove) throws InterruptedException{
         String newCookieList = "";
         if(!isCartEmpty()){
@@ -125,6 +216,7 @@ public class CookieManager {
      * Check if the id of the is already in the cart
      * @param id
      * @return Boolean
+     * @author Ibrahim
      */
     public Boolean isItemInCart(String id){
      return findValue(cartKey).contains(id);
@@ -133,6 +225,7 @@ public class CookieManager {
     /**
      * Checks if the cart is empty
      * @return Boolean
+     * @author Ibrahim
      */
     private Boolean isCartEmpty(){
         if(findValue(cartKey).length() < 1){
@@ -146,6 +239,7 @@ public class CookieManager {
     /**
      * This method will clear the value of the given cookie value
      * @param key 
+     * @author Ibrahim
      */
     public void clearCookie(String key){
         createCookie(key,"");
@@ -154,6 +248,7 @@ public class CookieManager {
     /**
      * This method will return the number of items in the cart
      * @return String 
+     * @author Ibrahim
      */
     public String findNumberOfItemsInCart(){
         if(isCartEmpty()){
@@ -170,6 +265,11 @@ public class CookieManager {
         return count+"";
     }
     
+    /**
+     * This method will return a string array of all of the ids of the items that are in the cart
+     * @return String 
+     * @author Ibrahim
+     */
     private String[] getAllIdFromCart(){
         String dataResult = findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
         return dataResult.split(",");
