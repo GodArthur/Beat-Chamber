@@ -394,7 +394,7 @@ td {
 /*Ibrahim was here*/
 #show_prices{
 	border-style: solid;
-	width:20%;
+	width:30%;
         height:550px;
 	display: inline-block;
 	overflow: auto ;
@@ -409,6 +409,65 @@ td {
 	width:100%;
         background-color: #333;
 }
+/*Ibrahim was here*/
+#cartPage{
+        padding-top:5px; 
+	overflow: hidden;
+	width:100%;
+        background-color: #333;
+        float:left;
+        padding-left: 15%;
+}
+/* Ibrahim was here */
+.itemList{
+    color:#5b3ec9;
+    border-style: solid;
+    height:auto;
+    position:relative;
+    width:80%;
+}
+
+/*Ibrahim was here*/
+.itemPicture{
+    display: inline-block;
+    overflow: hidden;
+}
+/*Ibrahim was here*/
+.roundedButton{
+    background-color: #5b3ec9!important;
+    color: white!important;
+    width:10%;
+    top:0px;
+    right:0px;
+    float:right;
+    position:absolute;
+}
+
+.changeTextToWhite{
+    color:white;
+}
+
+.roundedButton:hover{
+    color:red!important;
+}
+
+.roundedButton2{
+    background-color: green !important;
+    color: white !important;
+    left:35%;
+    width:auto;
+    border:transparent !important;
+}
+
+/*Ibrahim was here*/
+.dataInformation{
+    top:0;
+    overflow: hidden;
+    display:inline-block;
+}
+
+
+
 /*Ibrahim was here*/
 .inforLb{
 	display: inline-block;

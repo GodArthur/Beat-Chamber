@@ -1,5 +1,6 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.beans.CookieManager;
 import com.beatchamber.entities.Albums;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -45,6 +46,8 @@ public class AlbumsJpaController implements Serializable {
 
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
+    
+    private ArrayList<Albums> listOfAlbumsInTheCart = new ArrayList<Albums>();
 
     public AlbumsJpaController() {
     }
@@ -354,6 +357,70 @@ public class AlbumsJpaController implements Serializable {
         }
         return albumPath + "_large.jpg";
     }
+    
+    /**
+     * This method will allow us to get the list of albums that are in the cart
+     * @return ArrayList of albums
+     * @author Ibrahim
+     */
+    public ArrayList<Albums> retrieveAllAlbumsInTheCart(){
+        SetListOfItems();
+        return this.listOfAlbumsInTheCart;
+    }
+    
+    /**
+     * This method will return the total price of the items in the cart
+     * @return String
+     * @author Ibrahim
+     */
+    public String getTotalPrice(){
+        SetListOfItems();
+        double total=0;
+        for(Albums item:listOfAlbumsInTheCart){
+            System.out.println(item.getCostPrice() + "***album");
+            total = total + item.getCostPrice();
+        }
+        return total + "";
+    }
+    
+    
+    /**
+     * This method will get all of the ids of the items in the cart
+     * @return String[] 
+     * @author Ibrahim
+     */
+    private String[] getAllIdFromCart(){
+        CookieManager cookies = new CookieManager();
+        String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
+        return dataResult.split(",");
+    }
+    
+    /**
+     * This method will return the int value of the string
+     * @param strToParse
+     * @return int
+     * @author Ibrahim
+     */
+    private int parseStringToInt(String strToParse){
+        return Integer.parseInt(strToParse);
+    }
+    
+    /**
+     * This method will set the arrayList so that we would have the data from the cookies in them
+     * @author Ibrahim
+     */
+    private void SetListOfItems(){
+        listOfAlbumsInTheCart.clear();
+        String[] data = getAllIdFromCart();
+        for(String item:data){
+            if(item.length()>0){
+                if(item.toLowerCase().contains("a")){
+                    listOfAlbumsInTheCart.add(findAlbums(parseStringToInt(item.replace("a", ""))));
+                }
+            }
+        }
+    }
+    
 }
 
 
