@@ -16,15 +16,14 @@
             <ui:define name="content">
                 <section>
                     <div>
-                        <h2>Write a Review for "#{albumsJpaController.findAlbums(album.albumId).albumTitle}"</h2>
+                        <h2>Write a Review for "#{tracks.trackTitle}"</h2>
                         <div id="album-list">
                             <div class="album-display-small">
                                 <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}" styleClass="album-img-small"/>
-                                <p>#{tracks.trackTitle}</p>
                             </div>
 
                             <div class="stars">
-                                <form>
+                                <h:form>
                                     <h:selectOneRadio value="#{user.favColor1}">
                                         <input class="star star-5" id="star-5" type="radio" name="star"/>
                                         <label class="star star-5" for="star-5"></label>
@@ -37,7 +36,7 @@
                                         <input class="star star-1" id="star-1" type="radio" name="star"/>
                                         <label class="star star-1" for="star-1"></label>
                                     </h:selectOneRadio>
-                                </form>
+                                </h:form>
                             </div>
 
                             <form class="review-textbox">

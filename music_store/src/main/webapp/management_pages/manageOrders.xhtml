@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!-- Management page for Order Massimo Di Girolamo 1735728 -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet library="styles" name="main.css" />
+        <h:outputStylesheet library="webjars" name="bootstrap/4.3.1/css/bootstrap.min-jsf.css"/>
+        <h:outputStylesheet library="webjars" name="font-awesome/5.15.2/css/all.min-jsf.css" />
+        <title>#{msgs.managetitle}</title>
+    </h:head>
+    <h:body>
+        <!-- Base template of the page -->
+        <ui:composition template="../templates/master_template.xhtml">
+            <!-- Promotion banner -->
+            <ui:define name="content">
+                <div>
+                    <div class="container-page">
+                        <div class="icon-bar">
+                            <h:link id="clinetButton" outcome="manageClients" >
+                                <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
+                            </h:link>
+                            <h:link  id="albumButton" >
+                                <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
+                            </h:link>
+                            <h:link  id="trackButton" >
+                                <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
+                            </h:link>
+                            <h:link  id="orderButton" class="active" >
+                                <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
+                            </h:link>
+                            <h:link  id="reviewButton"  >
+                                <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
+                            </h:link>
+                            <h:link  id="reportButton"  >
+                                <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
+                            </h:link>
+                            <h:link  id="rssButton"  >
+                                <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
+                            </h:link>
+                            <h:link  id="surveyButton" outcome="manageSurveys">
+                                <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
+                            </h:link>
+                            <h:link  id="adButton" >
+                                <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
+                            </h:link>
+                        </div>
+                        
+                        <!-- End of the nav -->
+                        
+                        <h:form id="form" class="container-table">
+                            <p:growl id="messages" showDetail="true"/>
+                            <p:dataTable id="dt-surveys" widgetVar="dtSurveys" var="survey" value="#{theSurveys.surveys}"
+                                         reflow="true" 
+                                         selection="#{theSurveys.selectedSurvey}" rowKey="#{survey.surveyId}" paginator="true"
+                                         rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                                <f:facet name="header">
+                                    <div>
+                                        <span class="table-title">
+                                            Orders
+                                        </span>
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" 
+                                                         onkeyup="PF('dtSurveys').filter()" placeholder="Search"/>
+                                        </span>
+                                        <span>
+                                            <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theSurveys.openNew()}"
+                                                             update=":form:manage-survey-content" 
+                                                             oncomplete="PF('manageSurveyDialog').show()"
+                                                             styleClass="rounded-button ui-button-help float-right">
+                                                <p:resetInput target=":form:manage-survey-content"/>
+                                            </p:commandButton>
+                                        </span>
+                                    </div>
+                                </f:facet>
+
+
+                                <p:column style="width:calc(150px)" headerText="ID" sortBy="#{survey.surveyId}">
+                                    <h:outputText value="#{survey.surveyId}"/>
+                                </p:column>
+                                <p:column style="width:calc(800px)" headerText="Title" sortBy="#{survey.title}">
+                                    <h:outputText value="#{survey.title}"/>
+                                </p:column>
+
+
+                                <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
+                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-survey-content"
+                                                     oncomplete="PF('manageSurveyDialog').show()"
+                                                     styleClass="edit-button rounded-button ui-button-help" process="@this">
+                                        <f:setPropertyActionListener value="#{survey}" target="#{theSurveys.selectedSurvey}"/>
+                                        <p:resetInput target=":form:manage-survey-content"/>
+                                    </p:commandButton>
+                                </p:column>
+
+                                <p:column style="width:calc(50px)" exportable="false" headerText="Delete" >
+                                    <p:commandButton class="rounded-button" icon="pi pi-trash" process="@this"
+                                                     oncomplete="PF('deleteSurveyDialog').show()">
+                                        <f:setPropertyActionListener value="#{survey}" target="#{theSurveys.selectedSurvey}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

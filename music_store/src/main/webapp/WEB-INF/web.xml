@@ -32,7 +32,7 @@
     <welcome-file-list>
 
         
-        <welcome-file>cart.xhtml</welcome-file>
+        <welcome-file>manageClients.xhtml</welcome-file>
 
     </welcome-file-list>
     
