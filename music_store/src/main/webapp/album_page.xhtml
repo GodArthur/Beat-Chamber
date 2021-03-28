@@ -30,7 +30,12 @@
                             <p:rating readonly="true" value="4"/>
                         </h:form>
                     </div>
-                    <button>#{msgs.addToCart}</button>
+                    
+
+                    <h:form><!-- @author Ibrahim -->
+                        <p:commandButton action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
+                    </h:form>
+                    
                     <h:form>
                         <h:commandLink action="#{tracks.sendDefaultTrack}">
                             <f:param name="albumId" value="#{album.albumId}"/>

@@ -434,8 +434,8 @@ td {
 }
 /*Ibrahim was here*/
 .roundedButton{
-    background-color: #5b3ec9;
-    color: white;
+    background-color: #5b3ec9!important;
+    color: white!important;
     width:10%;
     top:0px;
     right:0px;
@@ -443,12 +443,29 @@ td {
     position:absolute;
 }
 
+.changeTextToWhite{
+    color:white;
+}
 
+.roundedButton:hover{
+    color:red!important;
+}
+
+.roundedButton2{
+    background-color: green !important;
+    color: white !important;
+    left:35%;
+    width:auto;
+    border:transparent !important;
+}
+
+/*Ibrahim was here*/
 .dataInformation{
     top:0;
     overflow: hidden;
     display:inline-block;
 }
+
 
 
 /*Ibrahim was here*/

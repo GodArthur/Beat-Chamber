@@ -16,8 +16,10 @@ and open the template in the editor.
             <ui:define name="content">
                 
                 <div id="cartPage">
-                    <h2>#{msgs.albumsboughtTitle}</h2>
+                    <h2 class="changeTextToWhite">#{msgs.albumsboughtTitle}</h2>
+                    <!-- This will display all of the albums -->
                     <c:forEach var="albumItem" items="#{albumsJpaController.retrieveAllAlbumsInTheCart()}">
+                        <!-- This is a div that will be created for every album made -->
                         <div class="itemList" style="display:#{cookies.checkIfAlbumIsInCart(albumItem.albumNumber)}">
                             <!-- The form tag is being use so that we do not get the warning mesage -->
                             <h:form>
@@ -36,10 +38,12 @@ and open the template in the editor.
                             </h:form>
                             
                         </div>
+                        <!-- This will display every track that have been bought -->
                     </c:forEach>
                     
-                    <h2>#{msgs.trackboughtTitle}</h2>
+                    <h2 class="changeTextToWhite">#{msgs.trackboughtTitle}</h2>
                     <c:forEach var="trackItem" items="#{tracksController.retrieveAllTracksInTheCart()}">
+                        <!-- This is a div created for every track -->
                         <div class="itemList" style="display:#{cookies.checkIfTrackIsInCart(albumItem.albumNumber)}">
                             <h:form>
                                 <div class="itemPicture"><h:graphicImage  library="images" name="#{albumsJpaController.getAlbumPath(trackItem.selectionNumber, true)}" styleClass="album-img-small"/></div>
@@ -56,9 +60,13 @@ and open the template in the editor.
                         </div>
                     </c:forEach>
                     
+                    <br/>
+                    <br/>
+                    
+                    <!-- Button that will allow the user to get to the checkout page -->
                     <h:form>
                     <h:commandLink action="checkout.xhtml" >
-                        <p:button value="#{msgs.goToCheckout}" class="roundedButton" />
+                        <p:button value="#{msgs.goToCheckout}" class="roundedButton2" />
                     </h:commandLink>
                     </h:form>
                     
