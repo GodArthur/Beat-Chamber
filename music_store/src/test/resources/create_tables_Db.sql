@@ -24,9 +24,11 @@ GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
 
 /* remove tables if they are already present */
 
-drop database CSgb1w21test;
+drop database CSgb1w21;
+CREATE DATABASE CSgb1w21;
+USE CSgb1w21;
 
-DROP TABLE IF EXISTS Ads;
+/*DROP TABLE IF EXISTS Ads;
 DROP TABLE IF EXISTS RSS_Feeds;
 DROP TABLE IF EXISTS Invoice_Details;
 DROP TABLE IF EXISTS Survey_to_Choice;
@@ -46,7 +48,7 @@ DROP TABLE IF EXISTS Genres;
 DROP TABLE IF EXISTS Provinces;
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Order_track;
-DROP TABLE IF EXISTS Order_album;
+DROP TABLE IF EXISTS Order_album;*/
 
 
 
@@ -246,19 +248,24 @@ create table Orders(
 order_id int primary key auto_increment,
 client_number int not null,
 order_date date,
+visible boolean,
 FOREIGN KEY (client_number) REFERENCES Clients(client_number)
 );
 
 /* Order_track */
 create table order_track(
-order_id int primary key auto_increment,
+tablekey int primary key auto_increment,
+order_id int ,
 track_id int not null,
-FOREIGN KEY (track_id) REFERENCES tracks(track_id)
+FOREIGN KEY (track_id) REFERENCES tracks(track_id),
+FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 
 /* order_album */
 create table order_album(
-order_id int primary key auto_increment,
+tablekey int primary key auto_increment,
+order_id int ,
 album_id int not null,
-FOREIGN KEY (album_id) REFERENCES albums(album_number)
+FOREIGN KEY (album_id) REFERENCES albums(album_number),
+FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
