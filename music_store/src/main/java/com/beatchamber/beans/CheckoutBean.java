@@ -5,6 +5,7 @@
  */
 package com.beatchamber.beans;
 
+import com.beatchamber.jpacontroller.AlbumsJpaController;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DecimalFormat;
@@ -12,6 +13,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -33,6 +36,8 @@ public class CheckoutBean implements Serializable {
     private double totalPst = 0;
     private double totalGst = 0;
     private double totalHst = 0;
+    @PersistenceContext(unitName = "music_store_persistence")
+    private EntityManager em;
 
 
     
@@ -129,10 +134,7 @@ public class CheckoutBean implements Serializable {
      * @author Ibrahim
      */
     public String computePrices(String trackTotal,String albumTotal){
-        System.out.println(trackTotal + "   tracks************************************");
-        System.out.println(albumTotal + "   albums************************************");
         totalPrice = (convertStringToDouble(trackTotal)+convertStringToDouble(albumTotal));
-        System.out.println(totalPrice + "   total******************************************");
         return totalPrice + "";
     }
     
@@ -236,4 +238,5 @@ public class CheckoutBean implements Serializable {
         DecimalFormat df = new DecimalFormat("#.##");
         return Double.valueOf(df.format(value));
     }
+    
 }
