@@ -293,18 +293,18 @@ public class LoginRegisterBackingBean implements Serializable {
             this.client.setCellPhone(this.cellPhoneNumber.toString());
         }
         
-        String salt = getSalt();
-        this.client.setSalt(salt);
-
-        byte[] hashPsword = hash(this.client.getPassword(), salt);
-        char[] hashPswordChar = new char[hashPsword.length];
-
-        for (int i = 0; i < hashPsword.length; i++) {
-            hashPswordChar[i] = (char) hashPsword[i];
-        }
-
-        String hashPswordStr = String.valueOf(hashPswordChar);
-        this.client.setHash(hashPswordStr);
+//        String salt = getSalt();
+//        this.client.setSalt(salt);
+//
+//        byte[] hashPsword = hash(this.client.getPassword(), salt);
+//        char[] hashPswordChar = new char[hashPsword.length];
+//
+//        for (int i = 0; i < hashPsword.length; i++) {
+//            hashPswordChar[i] = (char) hashPsword[i];
+//        }
+//
+//        String hashPswordStr = String.valueOf(hashPswordChar);
+//        this.client.setHash(hashPswordStr);
     }
 
     //Creates a randomly generated String
