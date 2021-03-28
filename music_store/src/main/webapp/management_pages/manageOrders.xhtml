@@ -50,59 +50,7 @@
                         
                         <!-- End of the nav -->
                         
-                        <h:form id="form" class="container-table">
-                            <p:growl id="messages" showDetail="true"/>
-                            <p:dataTable id="dt-surveys" widgetVar="dtSurveys" var="survey" value="#{theSurveys.surveys}"
-                                         reflow="true" 
-                                         selection="#{theSurveys.selectedSurvey}" rowKey="#{survey.surveyId}" paginator="true"
-                                         rows="10" rowSelectMode="add" paginatorPosition="bottom">
-                                <f:facet name="header">
-                                    <div>
-                                        <span class="table-title">
-                                            Orders
-                                        </span>
-                                        <span class="filter-container ui-input-icon-left">
-                                            <i class="pi pi-search"></i>
-                                            <p:inputText id="globalFilter" 
-                                                         onkeyup="PF('dtSurveys').filter()" placeholder="Search"/>
-                                        </span>
-                                        <span>
-                                            <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theSurveys.openNew()}"
-                                                             update=":form:manage-survey-content" 
-                                                             oncomplete="PF('manageSurveyDialog').show()"
-                                                             styleClass="rounded-button ui-button-help float-right">
-                                                <p:resetInput target=":form:manage-survey-content"/>
-                                            </p:commandButton>
-                                        </span>
-                                    </div>
-                                </f:facet>
-
-
-                                <p:column style="width:calc(150px)" headerText="ID" sortBy="#{survey.surveyId}">
-                                    <h:outputText value="#{survey.surveyId}"/>
-                                </p:column>
-                                <p:column style="width:calc(800px)" headerText="Title" sortBy="#{survey.title}">
-                                    <h:outputText value="#{survey.title}"/>
-                                </p:column>
-
-
-                                <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
-                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-survey-content"
-                                                     oncomplete="PF('manageSurveyDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-help" process="@this">
-                                        <f:setPropertyActionListener value="#{survey}" target="#{theSurveys.selectedSurvey}"/>
-                                        <p:resetInput target=":form:manage-survey-content"/>
-                                    </p:commandButton>
-                                </p:column>
-
-                                <p:column style="width:calc(50px)" exportable="false" headerText="Delete" >
-                                    <p:commandButton class="rounded-button" icon="pi pi-trash" process="@this"
-                                                     oncomplete="PF('deleteSurveyDialog').show()">
-                                        <f:setPropertyActionListener value="#{survey}" target="#{theSurveys.selectedSurvey}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </h:form>
+                        
                     </div>
                 </div>
             </ui:define>

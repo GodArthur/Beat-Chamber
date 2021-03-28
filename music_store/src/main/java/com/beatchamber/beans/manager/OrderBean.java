@@ -1,5 +1,7 @@
-package com.beatchamber.beans;
+package com.beatchamber.beans.manager;
 
+import com.beatchamber.jpacontroller.OrderAlbumJpaController;
+import com.beatchamber.jpacontroller.OrderTrackJpaController;
 import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.Serializable;
 import javax.inject.Inject;
