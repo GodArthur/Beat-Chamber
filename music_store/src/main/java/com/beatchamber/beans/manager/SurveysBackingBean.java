@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.beatchamber.backing;
+package com.beatchamber.beans.manager;
 
 import com.beatchamber.entities.Choices;
 import com.beatchamber.entities.SurveyToChoice;

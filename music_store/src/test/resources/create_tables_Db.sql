@@ -1,5 +1,5 @@
-/* Creating the database */
-/*DROP DATABASE IF EXISTS beat_chamber;
+/*Creating the database */
+DROP DATABASE IF EXISTS beat_chamber;
 CREATE DATABASE beat_chamber;
 
 USE beat_chamber;
@@ -8,7 +8,7 @@ DROP USER IF EXISTS dawson@localhost;
 CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
 GRANT ALL ON beat_chamber.* TO dawson@'localhost';
 
-/*
+
 DROP DATABASE IF EXISTS CSgb1w21;
 CREATE DATABASE CSgb1w21;
 USE CSgb1w21;
@@ -22,7 +22,7 @@ GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
 GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
 
 
-/* remove tables if they are already present */
+/*remove tables if they are already present */
 
 drop database CSgb1w21;
 CREATE DATABASE CSgb1w21;
