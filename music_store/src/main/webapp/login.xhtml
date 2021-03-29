@@ -21,16 +21,16 @@
                             <h:outputLabel class="login-title" value="#{msgs.titlelogin}"/>
                             <div>
                                 <h:inputText  class="login-input" id="username" 
-                                              value="#{loginBean.username}" a:placeholder="Username"/>
+                                              value="#{theLoginRegister.username}" a:placeholder="Username/Email"/>
                                 <h:inputSecret class="login-input" id="password" 
-                                               value="#{loginBean.password}" a:placeholder="Password"/>
+                                               value="#{theLoginRegister.password}" a:placeholder="Password"/>
                                 <h:messages />
                                 <h:commandButton id="button" value="#{msgs.login}" class="loginButton"
-                                                 action="#{loginBean.doLogin}"/>
+                                                 action="#{theLoginRegister.doLogin}"/>
                             </div>
                             <div>
                                  <h:outputLabel value="#{msgs.createAccount}"/>
-                                 <h:link outcome="signup.xhtml" value="#{msgs.register}" />
+                                 <h:link outcome="redirectToSignup" value="#{msgs.register}" />
                             </div>
                             
                         </h:form>

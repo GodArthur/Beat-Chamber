@@ -54,9 +54,11 @@ public class PhoneNumberConverter implements Converter, Serializable {
         }
 
         PhoneNumber phoneNumber = (PhoneNumber) value;
-
-        String stringValue = "(" + phoneNumber.getAreaCode() + ") "
-                + phoneNumber.getPrefix() + "-" + phoneNumber.getLineNumber();
+        String stringValue = "";
+        if (!phoneNumber.getAreaCode().equals("") && !phoneNumber.getPrefix().equals("") && !phoneNumber.getLineNumber().equals("")) {
+            stringValue = "(" + phoneNumber.getAreaCode() + ") "
+                    + phoneNumber.getPrefix() + "-" + phoneNumber.getLineNumber();
+        }
 
         return stringValue;
     }

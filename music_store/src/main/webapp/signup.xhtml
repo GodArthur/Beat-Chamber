@@ -8,7 +8,6 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
-        <h:outputStylesheet library="webjars" name="bootstrap/4.3.1/css/bootstrap.min-jsf.css"/>
         <title>#{msgs.signupTitle}</title>
     </h:head>
     <h:body>
@@ -24,123 +23,131 @@
                         </div>
 
                         <h:form id="form">
-                            <div class="row">
-                                <div class="input-group col-sm-12">
-                                    <h:outputLabel class="form-label" for="username" value="#{msgs.username}"/>
-                                    <h:inputText class="input-style col-sm-9" id="username" 
-                                                 required="true" requiredMessage="#{msgs.usernameRequired}">
-                                    </h:inputText>
-                                    <h:message for="username" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                            </div>
+                            <h:panelGrid columns="3" cellpadding="1" border="0" cellspacing="10"
+                                         title="#{msgs.signup}" columnClasses="firstColumn,secondColumn,thirdColumn"
+                                         rowClasses="rowHeight, rowHeight">
+                                <p:outputLabel style="font-size: 18px" for="username" value="#{msgs.username}"/>
+                                <h:inputText class="input-style" id="username" 
+                                             value="#{theLoginRegister.client.username}"
+                                             required="true" requiredMessage="#{msgs.usernameRequired}"
+                                             validator="#{theLoginRegister.validateUniqueUser}"/>
+                                <h:message for="username" styleClass="errorMessage" style="color:red"/>
 
-                            <div class="row">
-                                <div class="input-group col-sm-12">
-                                    <h:outputLabel class="form-label" value="#{msgs.email}"/>
-                                    <h:inputText class="input-style col-sm-9" id="email" 
-                                                 a:type="email"  required="true"
-                                                 requiredMessage="#{msgs.emailRequired}"/>
-                                    <h:message for="email" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="input-group col-sm-12">
-                                    <h:outputLabel class="form-label" value="#{msgs.password}"/>
-                                    <h:inputSecret class="input-style col-sm-9" id="password" 
-                                                   required="true" requiredMessage="#{msgs.passwordRequired}"/>
-                                    <h:message for="password" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                            </div>
+                                <p:outputLabel style="font-size: 18px" for="email" value="#{msgs.email}"/>
+                                <h:inputText class="input-style" id="email" 
+                                             value="#{theLoginRegister.client.email}"
+                                             a:type="email"  required="true"
+                                             requiredMessage="#{msgs.emailRequired}"
+                                             validator="#{theLoginRegister.validateUniqueEmail}"/>
+                                <h:message for="email" styleClass="errorMessage" style="color:red"/>
 
-                            <div class="row">
-                                <div class="input-group col-sm-12">
-                                    <h:outputLabel class="form-label" value="#{msgs.repassword}"/>
-                                    <h:inputSecret class="input-style col-sm-7" id="re-password" 
-                                                   required="true" requiredMessage="#{msgs.repasswordRequired}"/>
-                                    <h:message for="re-password" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.firstname}"/>
-                                    <h:inputText class="input-style" id="first_name" 
-                                                 required="true"
-                                                 requiredMessage="#{msgs.firstnameRequired}"/>
-                                    <h:message for="first_name" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.lastname}"/>
-                                    <h:inputText class="input-style" id="last_name" 
-                                                 required="true"
-                                                 requiredMessage="#{msgs.lastnameRequired}"/>
-                                    <h:message for="last_name" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                            </div>
+                                <p:outputLabel style="font-size: 18px" for="password" value="#{msgs.password}"/>
+                                <h:inputSecret class="input-style" id="password" 
+                                               value="#{theLoginRegister.password}"
+                                               required="true" requiredMessage="#{msgs.passwordRequired}"/>
+                                <h:message for="password" styleClass="errorMessage" style="color:red"/>
 
-                            <div class="row">
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.homePhone}"/>
-                                    <h:inputText class="input-style" id="homePhone" 
-                                                 converter="com.beatchamber.PhoneNumberConverter">
-                                        <f:ajax event="blur" render="@this"/>
-                                    </h:inputText>
-                                    <h:message for="homePhone" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.cellPhone}"/>
-                                    <h:inputText class="input-style" id="cellPhone" 
-                                                 converter="com.beatchamber.PhoneNumberConverter">
-                                        <f:ajax event="blur" render="@this"/>
-                                    </h:inputText>
-                                    <h:message for="cellPhone" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                            </div>
+                                <p:outputLabel style="font-size: 18px" for="re-password" value="#{msgs.repassword}"/>
+                                <h:inputSecret class="input-style" id="re-password"
+                                               value="#{theLoginRegister.passwordConfirm}"
+                                               required="true" requiredMessage="#{msgs.repasswordRequired}"
+                                               validator="#{theLoginRegister.validatePasswordCorrect}"/>
+                                <h:message for="re-password" styleClass="errorMessage" style="color:red"/>
 
-                            <div class="row">
-                                <div class="input-group col-sm-12">
-                                    <h:outputLabel class="form-label" value="#{msgs.company}"/>
-                                    <h:inputText class="input-style col-sm-9" id="company" />
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="input-group col-sm-12">
-                                    <h:outputLabel class="form-label" value="#{msgs.address1}"/>
-                                    <h:inputText class="input-style col-sm-9" id="address1" />
-                                </div>
-                            </div>
+                                <p:outputLabel style="font-size: 18px" for="first_name" value="#{msgs.firstname}"/>
+                                <h:inputText class="input-style" id="first_name" 
+                                             value="#{theLoginRegister.client.firstName}"
+                                             required="true"
+                                             requiredMessage="#{msgs.firstnameRequired}"/>
+                                <h:message for="first_name" styleClass="errorMessage" style="color:red"/>
 
-                            <div class="row">
-                                <div class="input-group col-sm-12">
-                                    <h:outputLabel class="form-label" value="#{msgs.address2}"/>
-                                    <h:inputText class="input-style col-sm-9" id="address2" />
-                                </div>
-                            </div>
+                                <p:outputLabel style="font-size: 18px" for="last_name" value="#{msgs.lastname}"/>
+                                <h:inputText class="input-style" id="last_name" 
+                                             value="#{theLoginRegister.client.lastName}"
+                                             required="true"
+                                             requiredMessage="#{msgs.lastnameRequired}"/>
+                                <h:message for="last_name" styleClass="errorMessage" style="color:red"/>
 
-                            <div class="row">
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.country}"/>
-                                    <h:inputText class="input-style" id="country" />
-                                </div>
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.province}"/>
-                                    <h:inputText class="input-style" id="province" />
-                                </div>
-                            </div>
+                                <p:outputLabel style="font-size: 18px"  for="homePhone" value="#{msgs.homePhone}"/>
+                                <h:inputText class="input-style" id="homePhone" 
+                                             value="#{theLoginRegister.homePhoneNumber}"
+                                             converter="com.beatchamber.PhoneNumberConverter">
+                                    <f:ajax event="blur" render="@this"/>
+                                </h:inputText>
+                                <h:message for="homePhone" styleClass="errorMessage" style="color:red"/>
 
-                            <div class="row">
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.city}"/>
-                                    <h:inputText class="input-style" id="city" />
-                                </div>
-                                <div class="input-group col-sm-6">
-                                    <h:outputLabel class="form-label" value="#{msgs.postalCode}"/>
-                                    <h:inputText class="input-style" id="postalCode" />
-                                </div>
-                            </div>
-                            <p:commandButton type="submit" update="form" class="btn btn-block" value="#{msgs.register}"/>
+                                <p:outputLabel style="font-size: 18px" for="cellPhone" value="#{msgs.cellPhone}"/>
+                                <h:inputText class="input-style" id="cellPhone" 
+                                             value="#{theLoginRegister.cellPhoneNumber}"
+                                             converter="com.beatchamber.PhoneNumberConverter">
+                                    <f:ajax event="blur" render="@this"/>
+                                </h:inputText>
+                                <h:message for="cellPhone" styleClass="errorMessage" style="color:red"/>
+
+                                <p:outputLabel style="font-size: 18px" for="company" value="#{msgs.company}"/>
+                                <h:inputText class="input-style" id="company" 
+                                             value="#{theLoginRegister.client.companyName}"/>
+                                <h:message for="company" styleClass="errorMessage" style="color:red"/>
+
+
+                                <p:outputLabel style="font-size: 18px" for="address1" value="#{msgs.address1}"/>
+                                <h:inputText class="input-style" id="address1" 
+                                             value="#{theLoginRegister.client.address1}"/>
+                                <h:message for="address1" styleClass="errorMessage" style="color:red"/>
+
+
+                                <p:outputLabel style="font-size: 18px" for="address2" value="#{msgs.address2}"/>
+                                <h:inputText class="input-style" id="address2" 
+                                             value="#{theLoginRegister.client.address2}"/>
+                                <h:message for="address2" styleClass="errorMessage" style="color:red"/>
+
+
+                                <p:outputLabel style="font-size: 18px" for="country" value="#{msgs.country}"/>
+                                <h:selectOneMenu class="input-style" id="country" 
+                                                 value="#{theLoginRegister.client.country}"> 
+                                    <f:selectItem itemValue=" " itemLabel=" " />
+                                    <f:selectItem itemValue = "Canada" itemLabel = "Canada" /> 
+                                </h:selectOneMenu>  
+                                <h:message for="country" styleClass="errorMessage" style="color:red"/>
+
+                                <p:outputLabel style="font-size: 18px" for="province" value="#{msgs.province}"/>
+                                <h:selectOneMenu class="input-style" id="province"
+                                                 style="text-align:center;"
+                                                 value="#{theLoginRegister.client.province}">
+                                    <f:selectItem itemValue=" " itemLabel=" " />
+                                    <f:selectItem itemValue="Alberta" itemLabel="Alberta" />
+                                    <f:selectItem itemValue="British Columbia" itemLabel="British Columbia" />
+                                    <f:selectItem itemValue="Manitoba" itemLabel="Manitoba" />   
+                                    <f:selectItem itemValue="New Brunswick" itemLabel="New Brunswick" />   
+                                    <f:selectItem itemValue="Newfoundland and Labrador" itemLabel="Newfoundland and Labrador" />   
+                                    <f:selectItem itemValue="Northwest Territories" itemLabel="Northwest Territories" />   
+                                    <f:selectItem itemValue="Nova Scotia" itemLabel="Nova Scotia" />   
+                                    <f:selectItem itemValue="Nunavut" itemLabel="Nunavut" />   
+                                    <f:selectItem itemValue="Ontario" itemLabel="Ontario" />   
+                                    <f:selectItem itemValue="Prince Edward Island" itemLabel="Prince Edward Island" />   
+                                    <f:selectItem itemValue="Quebec" itemLabel="Quebec" />   
+                                    <f:selectItem itemValue="Saskatchewan" itemLabel="Saskatchewan" />   
+                                    <f:selectItem itemValue="Yukon" itemLabel="Yukon" />   
+                                </h:selectOneMenu>
+                                <h:message for="province" styleClass="errorMessage" style="color:red"/>
+
+
+                                <p:outputLabel style="font-size: 18px" for="city" value="#{msgs.city}"/>
+                                <h:inputText class="input-style" id="city" 
+                                             value="#{theLoginRegister.client.city}"/>
+                                <h:message for="city" styleClass="errorMessage" style="color:red"/>
+
+                                <p:outputLabel style="font-size: 18px" for="postalCode" value="#{msgs.postalCode}"/>
+                                <h:inputText class="input-style" id="postalCode" 
+                                             value="#{theLoginRegister.client.postalCode}"/>
+                                <h:message for="postalCode" styleClass="errorMessage" style="color:red"/>
+                            </h:panelGrid>
+                            <p:commandButton type="submit" update="form" 
+                                             action="#{theLoginRegister.doCreateUser()}" 
+                                             value="#{msgs.register}"/>
                         </h:form>
                     </div>
 

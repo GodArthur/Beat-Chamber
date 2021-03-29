@@ -8,7 +8,6 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
-        <h:outputStylesheet library="webjars" name="bootstrap/4.3.1/css/bootstrap.min-jsf.css"/>
         <h:outputStylesheet library="webjars" name="font-awesome/5.15.2/css/all.min-jsf.css" />
         <title>#{msgs.managetitle}</title>
     </h:head>
@@ -42,7 +41,7 @@
                             <h:link  id="rssButton" >
                                 <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
                             </h:link>
-                            <h:link  id="surveyButton" class="active" outcome="manageSurveys" >
+                            <h:link  id="surveyButton" class="activedTag" outcome="manageSurveys" >
                                 <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
                             </h:link>
                             <h:link  id="adButton" >
