@@ -4,6 +4,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
@@ -11,41 +12,41 @@
         <title>#{msgs.managetitle}</title>
     </h:head>
     <h:body>
-            <!-- Base template of the page -->
-            <ui:composition template="../templates/master_template.xhtml">
-                <!-- Promotion banner -->
-                <ui:define name="content">
-                    <div>
-                        <div class="container-page">
-                            <div class="icon-bar">
-                                <h:link id="clinetButton" class="activedTag" >
-                                    <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
-                                </h:link>
-                                <h:link  id="albumButton" >
-                                    <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
-                                </h:link>
-                                <h:link  id="trackButton" >
-                                    <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
-                                </h:link>
-                                <h:link  id="orderButton" outcome="manageOrders" >
-                                    <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
-                                </h:link>
-                                <h:link  id="reviewButton"  >
-                                    <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
-                                </h:link>
-                                <h:link  id="reportButton"  >
-                                    <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
-                                </h:link>
-                                <h:link  id="rssButton"  >
-                                    <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
-                                </h:link>
-                                <h:link  id="surveyButton" outcome="manageSurveys">
-                                    <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
-                                </h:link>
-                                <h:link  id="adButton" >
-                                    <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
-                                </h:link>
-                            </div>
+        <!-- Base template of the page -->
+        <ui:composition template="../templates/master_template.xhtml">
+            <!-- Promotion banner -->
+            <ui:define name="content">
+                <div>
+                    <div class="container-page">
+                        <div class="icon-bar">
+                            <h:link id="clinetButton" class="activedTag" >
+                                <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
+                            </h:link>
+                            <h:link  id="albumButton" >
+                                <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
+                            </h:link>
+                            <h:link  id="trackButton" >
+                                <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
+                            </h:link>
+                            <h:link  id="orderButton" outcome="manageOrders" >
+                                <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
+                            </h:link>
+                            <h:link  id="reviewButton"  >
+                                <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
+                            </h:link>
+                            <h:link  id="reportButton"  >
+                                <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
+                            </h:link>
+                            <h:link  id="rssButton"  >
+                                <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
+                            </h:link>
+                            <h:link  id="surveyButton" outcome="manageSurveys">
+                                <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
+                            </h:link>
+                            <h:link  id="adButton" >
+                                <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
+                            </h:link>
+                        </div>
 
                         <h:form id="form" class="container-table">
                             <p:growl id="messages" showDetail="true"/>
@@ -120,73 +121,110 @@
                                       widgetVar="manageClientDialog" responsive="true" width="500px" height="450px">
                                 <p:outputPanel id="manage-client-content" class="ui-fluid">
                                     <p:outputPanel rendered="#{not empty theClients.selectedClient}">
-                                        <div class="p-field p-col-12">
-                                            <p:outputLabel for="username" value="Username"/>
-                                            <p:inputText id="username"  value="#{theClients.selectedClient.username}" required="true"/>
+                                        <div>
+                                            <p:outputLabel for="username" value="#{msgs.username}"/>
+                                            <p:inputText id="username"  value="#{theClients.selectedClient.username}" 
+                                                         required="true" requiredMessage="#{msgs.usernameRequired}"/>
+                                            <h:message for="username" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="p-field p-col-12">
-                                            <p:outputLabel for="userTitle" value="Title"/>
-                                            <p:selectOneMenu id="userTitle" value="#{theClients.selectedClient.title}" required="true"> 
+                                        <div>
+                                            <p:outputLabel for="userTitle" value="#{msgs.clientTitle}"/>
+                                            <p:selectOneMenu id="userTitle" value="#{theClients.selectedClient.title}" 
+                                                             required="true" requiredMessage="#{msgs.titleRequired}"> 
                                                 <f:selectItem itemLabel="#{theClients.selectedClient.title}" itemValue="#{theClients.selectedClient.title}"/>
                                                 <f:selectItem itemValue = "Consumer" itemLabel = "Consumer" /> 
                                                 <f:selectItem itemValue = "Manager" itemLabel = "Manager" />  
                                             </p:selectOneMenu>  
+                                            <h:message for="userTitle" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="firstName" value="First Name"/>
-                                                <p:inputText id="firstName" value="#{theClients.selectedClient.firstName}" required="true"/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="lastName" value="Last Name"/>
-                                                <p:inputText id="lastName" value="#{theClients.selectedClient.lastName}" required="true"/>
-                                            </div>
+                                        <div>
+                                            <p:outputLabel for="firstName" value="#{msgs.firstname}"/>
+                                            <p:inputText id="firstName" value="#{theClients.selectedClient.firstName}" 
+                                                         required="true" requiredMessage="#{msgs.firstnameRequired}" />
+                                            <h:message for="firstName" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="p-field p-col-12">
-                                            <p:outputLabel for="email" value="Email"/>
-                                            <p:inputText id="email"  value="#{theClients.selectedClient.email}" required="true"/>
+                                        <div>
+                                            <p:outputLabel for="lastName" value="#{msgs.lastname}"/>
+                                            <p:inputText id="lastName" value="#{theClients.selectedClient.lastName}" 
+                                                         required="true" requiredMessage="#{msgs.lastnameRequired}"/>
+                                            <h:message for="lastName" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="cellphone" value="Cell Phone"/>
-                                                <p:inputText id="cellphone" value="#{theClients.selectedClient.cellPhone}"/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="homephone" value="Home Phone"/>
-                                                <p:inputText id="homephone" value="#{theClients.selectedClient.homePhone}"/>
-                                            </div>
+                                        <div>
+                                            <p:outputLabel for="email" value="#{msgs.email}"/>
+                                            <p:inputText id="email"  value="#{theClients.selectedClient.email}" 
+                                                         a:type="email" required="true"
+                                                         requiredMessage="#{msgs.emailRequired}"/>
+                                            <h:message for="email" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="p-field p-col-12">
-                                            <p:outputLabel for="company" value="Company"/>
+                                        <div>
+                                            <p:outputLabel for="cellphone" value="#{msgs.cellPhone}"/>
+                                            <p:inputText id="cellphone" value="#{theClients.cellPhoneNumber}"
+                                                         converter="com.beatchamber.PhoneNumberConverter">
+                                                <f:ajax event="blur" render="@this"/>
+                                            </p:inputText>
+                                            <h:message for="cellphone" styleClass="errorMessage" style="color:red"/>
+                                        </div>
+                                        <div>
+                                            <p:outputLabel for="homephone" value="#{msgs.homePhone}"/>
+                                            <p:inputText id="homephone" value="#{theClients.homePhoneNumber}"
+                                                         converter="com.beatchamber.PhoneNumberConverter">
+                                                <f:ajax event="blur" render="@this"/>
+                                            </p:inputText>
+                                            <h:message for="homephone" styleClass="errorMessage" style="color:red"/>
+                                        </div>
+                                        <div>
+                                            <p:outputLabel for="company" value="#{msgs.company}"/>
                                             <p:inputText id="company"  value="#{theClients.selectedClient.companyName}"/>
+                                            <h:message for="company" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="p-field p-col-12">
-                                            <p:outputLabel for="address1" value="Address1"/>
+                                        <div>
+                                            <p:outputLabel for="address1" value="#{msgs.address1}"/>
                                             <p:inputText id="address1"  value="#{theClients.selectedClient.address1}"/>
+                                            <h:message for="address1" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="p-field p-col-12">
-                                            <p:outputLabel for="address2" value="Address2"/>
+                                        <div>
+                                            <p:outputLabel for="address2" value="#{msgs.address2}"/>
                                             <p:inputText id="address2"  value="#{theClients.selectedClient.address2}"/>
+                                            <h:message for="address2" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="country" value="Country"/>
-                                                <p:inputText id="country"  value="#{theClients.selectedClient.country}"/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="province" value="Province"/>
-                                                <p:inputText id="province"  value="#{theClients.selectedClient.province}"/>
-                                            </div>
+                                        <div>
+                                            <p:outputLabel for="country" value="#{msgs.country}"/>
+                                            <p:selectOneMenu id="country" value="#{theClients.selectedClient.country}"> 
+                                                <f:selectItem itemLabel="#{theClients.selectedClient.country}" itemValue="#{theClients.selectedClient.country}"/>
+                                                <f:selectItem itemValue = "Canada" itemLabel = "Canada" /> 
+                                            </p:selectOneMenu>  
+                                            <h:message for="country" styleClass="errorMessage" style="color:red"/>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="city" value="City"/>
-                                                <p:inputText id="city"  value="#{theClients.selectedClient.city}"/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p:outputLabel for="postalCode" value="Postal Code"/>
-                                                <p:inputText id="postalCode"  value="#{theClients.selectedClient.postalCode}"/>
-                                            </div>
+                                        <div>
+                                            <p:outputLabel for="province" value="#{msgs.province}"/>
+                                            <p:selectOneMenu id="province" value="#{theClients.selectedClient.province}">
+                                                <f:selectItem itemLabel="#{theClients.selectedClient.province}" itemValue="#{theClients.selectedClient.province}"/>
+                                                <f:selectItem itemValue=" " itemLabel=" " />
+                                                <f:selectItem itemValue="Alberta" itemLabel="Alberta" />
+                                                <f:selectItem itemValue="British Columbia" itemLabel="British Columbia" />
+                                                <f:selectItem itemValue="Manitoba" itemLabel="Manitoba" />   
+                                                <f:selectItem itemValue="New Brunswick" itemLabel="New Brunswick" />   
+                                                <f:selectItem itemValue="Newfoundland and Labrador" itemLabel="Newfoundland and Labrador" />   
+                                                <f:selectItem itemValue="Northwest Territories" itemLabel="Northwest Territories" />   
+                                                <f:selectItem itemValue="Nova Scotia" itemLabel="Nova Scotia" />   
+                                                <f:selectItem itemValue="Nunavut" itemLabel="Nunavut" />   
+                                                <f:selectItem itemValue="Ontario" itemLabel="Ontario" />   
+                                                <f:selectItem itemValue="Prince Edward Island" itemLabel="Prince Edward Island" />   
+                                                <f:selectItem itemValue="Quebec" itemLabel="Quebec" />   
+                                                <f:selectItem itemValue="Saskatchewan" itemLabel="Saskatchewan" />   
+                                                <f:selectItem itemValue="Yukon" itemLabel="Yukon" />   
+                                            </p:selectOneMenu>
+                                            <h:message for="province" styleClass="errorMessage" style="color:red"/>
+                                        </div>
+                                        <div>
+                                            <p:outputLabel for="city" value="#{msgs.city}"/>
+                                            <p:inputText id="city"  value="#{theClients.selectedClient.city}"/>
+                                            <h:message for="city" styleClass="errorMessage" style="color:red"/>
+                                        </div>
+                                        <div>
+                                            <p:outputLabel for="postalCode" value="#{msgs.postalCode}"/>
+                                            <p:inputText id="postalCode"  value="#{theClients.selectedClient.postalCode}"/>
+                                            <h:message for="postalCode" styleClass="errorMessage" style="color:red"/>
                                         </div>
 
                                     </p:outputPanel>
