@@ -142,6 +142,19 @@ public class CookieManager {
     }
     
     /**
+     * This method will add the add the tracks to the cart cookie 
+     * @param albumId 
+     */
+    public void addTrackToCart(String trackId){
+        addItemToCart(trackId);
+        try {
+            reload();
+        } catch (IOException ex) {
+            Logger.getLogger(CookieManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
      * This method returns true if the id given is in the cart
      * @param id
      * @return Boolean
