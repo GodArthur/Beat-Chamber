@@ -1,9 +1,7 @@
 package com.beatchamber.beans;
 
-import java.io.Serializable;
 import java.util.Locale;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
@@ -13,8 +11,8 @@ import javax.inject.Named;
  * @author Susan Vuu - 1735488
  */
 @Named
-@SessionScoped
-public class LocaleChanger implements Serializable {
+@RequestScoped
+public class LocaleChanger {
     
     public LocaleChanger(){
         
