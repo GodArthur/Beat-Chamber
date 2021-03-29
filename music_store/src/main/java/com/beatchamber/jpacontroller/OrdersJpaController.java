@@ -169,6 +169,62 @@ public class OrdersJpaController implements Serializable {
     public Orders findOrders(Integer id) {
         return em.find(Orders.class, id);
     }
+    
+    public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
+        //set variables
+        ClientsJpaController clientController = new ClientsJpaController();
+        OrderAlbumJpaController orderAlbumController = new OrderAlbumJpaController();
+        OrderTrackJpaController orderTrackController = new OrderTrackJpaController();
+        Orders order = new Orders();
+        Date date = new Date();
+        AlbumsJpaController albumController = new AlbumsJpaController();
+        TracksJpaController trackController = new TracksJpaController();
+        int newOrderId = findTotalOrders()+1;
+        
+        //creating the order
+        order.setOrderDate(date);
+        order.setClientNumber(clientController.findClients(ClientNumber,em));
+        order.setOrderId(newOrderId);
+        order.setVisible(true);
+        try {
+            create(order);
+        } catch (RollbackFailureException ex) {
+            java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //creating the orderAlbums
+        for (Albums item:albumList) {
+            OrderAlbum orderAlbum =  new OrderAlbum();
+            orderAlbum.setAlbumId(albumController.findAlbums(item.getAlbumNumber(),em));
+            orderAlbum.setOrderId(findTotalOrders());
+            try {
+                orderAlbumController.create(orderAlbum,em,utx);
+            } catch (RollbackFailureException ex) {
+                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        //creating the orderTrack
+        for(Tracks item:trackList){
+            OrderTrack orderTrack = new OrderTrack();
+            orderTrack.setOrderId(newOrderId);
+            orderTrack.setTrackId(trackController.findTracks(item.getTrackId(),em));
+            try {
+                orderTrackController.create(orderTrack);
+            } catch (RollbackFailureException ex) {
+                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return "index.xhtml";
+    }
+
+    private int findTotalOrders(){
+        if(findOrdersEntities() == null){
+            return 0;
+        }
+        return findOrdersEntities().size();
+    }
 
     public int getOrdersCount() {
 
@@ -179,5 +235,7 @@ public class OrdersJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
 
     }
+    
+    
 
 }
