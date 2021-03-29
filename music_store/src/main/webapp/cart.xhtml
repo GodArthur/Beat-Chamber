@@ -49,9 +49,9 @@ and open the template in the editor.
                     <h2 class="changeTextToWhite">#{msgs.trackboughtTitle}</h2>
                     <c:forEach var="trackItem" items="#{tracksController.retrieveAllTracksInTheCart()}">
                         <!-- This is a div created for every track -->
-                        <div class="itemList" style="display:#{cookies.checkIfTrackIsInCart(albumItem.albumNumber)}">
+                        <div class="itemList" style="display:#{cookies.checkIfTrackIsInCart(trackItem.trackId)}">
                             <h:form>
-                                <div class="itemPicture"><h:graphicImage  library="images" name="#{albumsJpaController.getAlbumPath(trackItem.selectionNumber, true)}" styleClass="album-img-small"/></div>
+                                <div class="itemPicture"><h:graphicImage  library="images" name="#{albumsJpaController.getAlbumPath(trackItem.albumNumber.albumNumber, true)}" styleClass="album-img-small"/></div>
                                 <div class="dataInformation">
                                     <h3>#{msgs.showTitle} #{trackItem.trackTitle}</h3>
                                     <h3>#{msgs.showGenre} #{trackItem.musicCategory}</h3>
