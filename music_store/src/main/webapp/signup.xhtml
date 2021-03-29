@@ -38,13 +38,14 @@
                                 <h:inputText class="input-style" id="email" 
                                              value="#{theLoginRegister.client.email}"
                                              a:type="email"  required="true"
-                                             requiredMessage="#{msgs.emailRequired}"/>
+                                             requiredMessage="#{msgs.emailRequired}"
+                                             validator="#{theLoginRegister.validateUniqueEmail}"/>
                                 <h:message for="email" styleClass="errorMessage" style="color:red"/>
 
 
                                 <p:outputLabel style="font-size: 18px" for="password" value="#{msgs.password}"/>
                                 <h:inputSecret class="input-style" id="password" 
-                                               value="#{theLoginRegister.client.password}"
+                                               value="#{theLoginRegister.password}"
                                                required="true" requiredMessage="#{msgs.passwordRequired}"/>
                                 <h:message for="password" styleClass="errorMessage" style="color:red"/>
 
@@ -107,6 +108,7 @@
                                 <p:outputLabel style="font-size: 18px" for="country" value="#{msgs.country}"/>
                                 <h:selectOneMenu class="input-style" id="country" 
                                                  value="#{theLoginRegister.client.country}"> 
+                                    <f:selectItem itemValue=" " itemLabel=" " />
                                     <f:selectItem itemValue = "Canada" itemLabel = "Canada" /> 
                                 </h:selectOneMenu>  
                                 <h:message for="country" styleClass="errorMessage" style="color:red"/>
@@ -115,6 +117,7 @@
                                 <h:selectOneMenu class="input-style" id="province"
                                                  style="text-align:center;"
                                                  value="#{theLoginRegister.client.province}">
+                                    <f:selectItem itemValue=" " itemLabel=" " />
                                     <f:selectItem itemValue="Alberta" itemLabel="Alberta" />
                                     <f:selectItem itemValue="British Columbia" itemLabel="British Columbia" />
                                     <f:selectItem itemValue="Manitoba" itemLabel="Manitoba" />   

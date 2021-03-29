@@ -9,11 +9,16 @@ import com.beatchamber.entities.Clients;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -149,42 +154,46 @@ public class LoginRegisterBean implements Serializable {
         for (Clients clientItem : clientsList) {
             String dbUsername = clientItem.getUsername();
             String dbEmail = clientItem.getEmail();
-            String dbPassword = clientItem.getPassword();
+            //String dbPassword = clientItem.getPassword();
             String dbSalt = clientItem.getSalt();
             String dbhashPassword = clientItem.getHash();
 
-            boolean isPasswordMatch = false;
-            if (dbSalt != null && dbhashPassword != null) {
-                byte[] hashpsword = hash(password, dbSalt);
-                String hashpswordStr = Arrays.toString(hashpsword);
-                if (dbhashPassword.equals(hashpswordStr)) {
+            // check username and password
+            if ((dbUsername.equals(username) || dbEmail.equals(username))) {
+                boolean isPasswordMatch = false;
+                if (dbSalt != null) {
+                    byte[] saltByte = Base64.getDecoder().decode(dbSalt);
+                    String hashpsword = getSecurePassword(password, saltByte);
+                    if (dbhashPassword.equals(hashpsword)) {
+                        isPasswordMatch = true;
+                    }
+                } else if (dbhashPassword.equals(password)) {
                     isPasswordMatch = true;
                 }
-            } else if (dbPassword.equals(password)) {
-                isPasswordMatch = true;
-            }
 
-            // Successful login
-            if ((dbUsername.equals(username) || dbEmail.equals(username)) && isPasswordMatch) {
-                LOG.info("Successful login");
-                loggedIn = true;
-                this.client = clientItem;
+                // Successful login
+                if (isPasswordMatch) {
+                    LOG.info("Successful login");
+                    loggedIn = true;
+                    this.client = clientItem;
+                    this.username = this.client.getUsername();
 
-                if (client.getTitle().equals("Manager")) {
-                    this.isManager = true;
-                    return "redirectToManagement";
-                } else {
-                    this.isManager = false;
-                    return "redirectToIndex";
+                    if (client.getTitle().equals("Manager")) {
+                        this.isManager = true;
+                        return "redirectToManagement";
+                    } else {
+                        this.isManager = false;
+                        return "redirectToIndex";
+                    }
                 }
-
             }
         }
         LOG.info("Unsuccessful login");
 
         // Set login ERROR
-        FacesMessage msg = new FacesMessage("The username or the password is incorrect", "ERROR MSG");
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext context = FacesContext.getCurrentInstance();
+        String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['incorrectLogin']}", String.class);
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
         FacesContext.getCurrentInstance().addMessage(null, msg);
 
         // To to login page
@@ -244,17 +253,44 @@ public class LoginRegisterBean implements Serializable {
     public void validateUniqueUser(FacesContext context, UIComponent component,
             Object value) {
 
-        LOG.debug("validateUniquePassword");
+        LOG.debug("validateUniqueUserName");
 
         // Retrieve the value passed to this method
         String username = (String) value;
 
-        LOG.debug("validateUniquePassword: " + username);
+        LOG.debug("validateUniqueUserName: " + username);
         this.clients = clientsJpaController.findClientsEntities();
 
         for (Clients client : this.clients) {
             if (client.getUsername().equals(username)) {
-                String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicate']}", String.class);
+                String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateName']}", String.class);
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
+                throw new ValidatorException(msg);
+            }
+        }
+    }
+
+    /**
+     * The method verifies that the Login name is not already in the database
+     *
+     * @param context
+     * @param component
+     * @param value
+     */
+    public void validateUniqueEmail(FacesContext context, UIComponent component,
+            Object value) {
+
+        LOG.debug("validateUniqueEmail");
+
+        // Retrieve the value passed to this method
+        String username = (String) value;
+
+        LOG.debug("validateUniqueEmail: " + username);
+        this.clients = clientsJpaController.findClientsEntities();
+
+        for (Clients client : this.clients) {
+            if (client.getEmail().equals(username)) {
+                String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateEmail']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);
             }
@@ -281,49 +317,78 @@ public class LoginRegisterBean implements Serializable {
 
     /*
     * Set all the necessary fields which cannot get from input to DB
-    */
+     */
     private void setClientFields() {
+        //Temporarily used for setting password 
+        this.client.setPassword(password);
+
+        // Set title
         this.client.setTitle("Consumer");
-        
+
+        //Set phone number
         if (this.homePhoneNumber != null) {
             this.client.setHomePhone(this.homePhoneNumber.toString());
+        } else {
+            this.client.setHomePhone("");
         }
         if (this.cellPhoneNumber != null) {
             this.client.setCellPhone(this.cellPhoneNumber.toString());
+        } else {
+            this.client.setCellPhone("");
         }
-        
-//        String salt = getSalt();
-//        this.client.setSalt(salt);
-//
-//        byte[] hashPsword = hash(this.client.getPassword(), salt);
-//        char[] hashPswordChar = new char[hashPsword.length];
-//
-//        for (int i = 0; i < hashPsword.length; i++) {
-//            hashPswordChar[i] = (char) hashPsword[i];
-//        }
-//
-//        String hashPswordStr = String.valueOf(hashPswordChar);
-//        this.client.setHash(hashPswordStr);
+
+        //Set salt and hashed password
+        byte[] salt = getSalt();
+        String saltStr = Base64.getEncoder().encodeToString(salt);
+        this.client.setSalt(saltStr);
+
+        String securePassword = getSecurePassword(this.client.getPassword(), salt);
+        this.client.setHash(securePassword);
     }
 
-    //Creates a randomly generated String
-    public String getSalt() {
-        return new BigInteger(140, random).toString(32);
-    }
-
-    //Takes a password and a salt a performs a one way hashing on them, returning an array of bytes.
-    public byte[] hash(String password, String salt) {
+    /*
+    * Get a random salt value
+     */
+    private byte[] getSalt() {
+        //Create array for salt
+        byte[] salt = new byte[16];
         try {
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+            //Always use a SecureRandom generator
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
+            //Get a random salt
+            sr.nextBytes(salt);
 
-            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 1024, 256);
-
-            SecretKey key = skf.generateSecret(spec);
-            byte[] hash = key.getEncoded();
-            return hash;
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
+            Logger.getLogger(LoginRegisterBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //return salt
+        return salt;
+    }
+
+    /*
+    * Generate a Secure Password using salt
+     */
+    private String getSecurePassword(String passwordToHash, byte[] salt) {
+        String generatedPassword = null;
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            //Add password bytes to digest
+            md.update(salt);
+            //Get the hash's bytes 
+            byte[] bytes = md.digest(passwordToHash.getBytes());
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            //Get complete hashed password in hex format
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(LoginRegisterBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return generatedPassword;
     }
 
 }
