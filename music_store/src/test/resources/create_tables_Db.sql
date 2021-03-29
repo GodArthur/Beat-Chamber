@@ -155,7 +155,6 @@ postal_code varchar(20),
 home_phone varchar(20),
 cell_phone varchar(20),
 email varchar(40) not null,
-genre_of_last_search varchar(40),
 username varchar(40) not null,
 salt varchar(32),
 hash varchar(32)
