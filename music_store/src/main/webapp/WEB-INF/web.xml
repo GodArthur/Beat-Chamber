@@ -30,14 +30,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-
-<<<<<<< HEAD
-        
-        <welcome-file>checkout.xhtml</welcome-file>
-
-=======
         <welcome-file>index.xhtml</welcome-file>
->>>>>>> 2868d135634174cc66aada94ae99ab9e6a7a0932
     </welcome-file-list>
-    
 </web-app>

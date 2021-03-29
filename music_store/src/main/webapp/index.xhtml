@@ -17,7 +17,7 @@
                 <h:form>
                     <!-- Recommended section. Will be used for cookies -->
                     <section class="recommended">
-                        <h2 class="genre-title">#{msgs.welcomeGreeting}</h2>
+                        <h2 class="main-title">#{msgs.welcomeGreeting}</h2>
                         <p class="album-description">#{msgs.recommendedDesc}</p>
                         <div class="recommended-list">
                             <div class="recommended-album">
@@ -127,7 +127,9 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <button class="see-more-button">#{msgs.seeMore}</button>
+                                <h:commandLink action="redirectToBrowseMusic">
+                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                </h:commandLink>
                             </div>
                         </div>
                     </section>
@@ -162,7 +164,9 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <button class="see-more-button">#{msgs.seeMore}</button>
+                                <h:commandLink action="redirectToBrowseMusic">
+                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                </h:commandLink>
                             </div>
                         </div>
                     </section>
@@ -170,7 +174,7 @@
                         <!-- Vertical ad -->
                         <div class="left-ad-display">
                             <h:outputLink value="#{adsJpaController.getAdLink(6)}" target="_blank">
-                                <h:graphicImage library="images" name="#{adsJpaController.getAdPath(6)}" styleClass="ad left"/>
+                                <h:graphicImage library="images" name="#{adsJpaController.getAdPath(6)}" styleClass="ad"/>
                             </h:outputLink>
                         </div>
                         <!-- Survey display -->
@@ -214,7 +218,9 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <button class="see-more-button">#{msgs.seeMore}</button>
+                                <h:commandLink action="redirectToBrowseMusic">
+                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                </h:commandLink>
                             </div>
                         </div>
                     </section>
@@ -249,7 +255,9 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <button class="see-more-button">#{msgs.seeMore}</button>
+                                <h:commandLink action="redirectToBrowseMusic">
+                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                </h:commandLink>
                             </div>
                         </div>
                     </section>
@@ -284,7 +292,9 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <button class="see-more-button">#{msgs.seeMore}</button>
+                                <h:commandLink action="redirectToBrowseMusic">
+                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                </h:commandLink>
                             </div>
                         </div>
                     </section>
