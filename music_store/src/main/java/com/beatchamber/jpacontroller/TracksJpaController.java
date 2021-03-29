@@ -14,6 +14,7 @@ import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.entities.GenreToTracks;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.Genres;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
@@ -22,7 +23,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ParameterExpression;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -338,7 +341,8 @@ public class TracksJpaController implements Serializable {
      * Method finds all Tracks based on a specific album
      * @param albumId
      * @param trackId
-     * @return 
+     * @return tracks from the same album
+     * @author Korjon Chang-Jones
      */
     public List<Tracks> findTracksByAlbum(Integer albumId){
         
@@ -361,6 +365,26 @@ public class TracksJpaController implements Serializable {
 
     }
  
+    
+    /**
+     * Method finds one of the genres for a specific track
+     * based on its ID
+     * @param id
+     * @return The genre of the track
+     * @author Korjon Chang-Jones
+     */
+    public Genres findGenre(Integer id){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Genres>  cq = cb.createQuery(Genres.class);
+        Root <Genres> rt = cq.from(Genres.class);
+        Join genreToTracks = rt.join("genreToTracksList");
+        cq.where(cb.equal(genreToTracks.get("trackId").get("trackId"), id));
+        TypedQuery<Genres> query = em.createQuery(cq);
+        
+        return query.getSingleResult();
+        
+    }
 
     public int getTracksCount() {
 
