@@ -43,18 +43,6 @@ a:visited {
     color: #a58cff;
 }
 
-table {
-    text-align: left;
-}
-
-tr {
-    display: block;
-}
-
-td {
-    display: block;
-}
-
 .left {
     float: left;
 }
@@ -63,11 +51,9 @@ td {
     float: right;
 }
 
-.main-title{
+.main-title {
     font-family: 'Changa', sans-serif;
-    font-size: 20px;
-    text-transform: uppercase;
-    margin: 0;
+    font-size: 40px;
 }
 
 .main-icon {
@@ -241,14 +227,12 @@ td {
     height: 50%;
 }
 
-.album-left-ad {
-    float: left;
+.ad-max-height {
     max-height: 500px;
 }
 
-.album-right-ad {
-    float: right;
-    max-height: 500px;
+.album-info {
+    margin-bottom: 10px;
 }
 
 .ratings {

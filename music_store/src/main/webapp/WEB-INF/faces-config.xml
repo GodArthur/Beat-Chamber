@@ -66,8 +66,8 @@
     </navigation-rule>
     <navigation-rule>
         <navigation-case>
-            <from-outcome>redirectToAlbumList</from-outcome>
-            <to-view-id>album_list.xhtml</to-view-id>
+            <from-outcome>redirectToBrowseMusic</from-outcome>
+            <to-view-id>browse_music.xhtml</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
