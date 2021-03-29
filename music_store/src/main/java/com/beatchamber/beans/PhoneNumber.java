@@ -21,6 +21,12 @@ public class PhoneNumber implements Serializable {
     private String prefix;
     private String lineNumber;
 
+    public PhoneNumber() {
+        this.areaCode = "";
+        this.prefix = "";
+        this.lineNumber = "";
+    }
+
     public PhoneNumber(String areaCode, String prefix, String lineNumber) {
         this.areaCode = areaCode;
         this.prefix = prefix;
@@ -41,6 +47,10 @@ public class PhoneNumber implements Serializable {
 
     @Override
     public String toString() {
-        return areaCode + "-" + prefix + "-" + lineNumber;
+        if (!areaCode.equals("") && !prefix.equals("") && !lineNumber.equals("")) {
+            return "(" + areaCode + ")" + prefix + "-" + lineNumber;
+        } else {
+            return "";
+        }
     }
 }
