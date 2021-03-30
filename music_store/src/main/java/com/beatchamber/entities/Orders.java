@@ -33,6 +33,9 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Orders.findByOrderDate", query = "SELECT o FROM Orders o WHERE o.orderDate = :orderDate")})
 public class Orders implements Serializable {
 
+    @Column(name = "visible")
+    private Boolean visible;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -100,6 +103,14 @@ public class Orders implements Serializable {
     @Override
     public String toString() {
         return "com.beatchamber.entities.Orders[ orderId=" + orderId + " ]";
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
     
 }

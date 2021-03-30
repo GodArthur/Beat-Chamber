@@ -66,8 +66,8 @@
     </navigation-rule>
     <navigation-rule>
         <navigation-case>
-            <from-outcome>redirectToAlbumList</from-outcome>
-            <to-view-id>album_list.xhtml</to-view-id>
+            <from-outcome>redirectToBrowseMusic</from-outcome>
+            <to-view-id>browse_music.xhtml</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -75,6 +75,13 @@
         <navigation-case>
             <from-outcome>redirectToManagement</from-outcome>
             <to-view-id>management_pages/manageClients.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>redirectToSignup</from-outcome>
+            <to-view-id>signup.xhtml</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>

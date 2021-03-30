@@ -27,14 +27,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
-public class OrderAlbumJpaController implements Serializable {/*
+public class OrderAlbumJpaController implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(OrderAlbumJpaController.class);
 
     @Resource
     private UserTransaction utx;
 
-    @PersistenceContext(unitName = "my_persistence_unit")
+    @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
 
     public OrderAlbumJpaController() {
@@ -60,6 +60,35 @@ public class OrderAlbumJpaController implements Serializable {/*
             try {
 
                 utx.rollback();
+                LOG.error("Rollback");
+            } catch (IllegalStateException | SecurityException | SystemException re) {
+                LOG.error("Rollback2");
+
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+        }
+    }
+    
+    public void create(OrderAlbum orderAlbum,EntityManager em2,UserTransaction utx2) throws RollbackFailureException {
+
+        try {
+
+            utx2.begin();
+            Albums albumId = orderAlbum.getAlbumId();
+            if (albumId != null) {
+                albumId = em2.getReference(albumId.getClass(), albumId.getAlbumNumber());
+                orderAlbum.setAlbumId(albumId);
+            }
+            em2.persist(orderAlbum);
+            if (albumId != null) {
+                albumId.getOrderAlbumCollection().add(orderAlbum);
+                albumId = em2.merge(albumId);
+            }
+            utx2.commit();
+        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            try {
+
+                utx2.rollback();
                 LOG.error("Rollback");
             } catch (IllegalStateException | SecurityException | SystemException re) {
                 LOG.error("Rollback2");
@@ -169,4 +198,4 @@ public class OrderAlbumJpaController implements Serializable {/*
         return ((Long) q.getSingleResult()).intValue();
 
     }
-*/}
+}

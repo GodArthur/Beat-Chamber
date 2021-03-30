@@ -1,5 +1,6 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.entities.Albums;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -10,11 +11,13 @@ import com.beatchamber.entities.Orders;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -47,6 +50,7 @@ public class OrdersJpaController implements Serializable {
     public void create(Orders orders) throws RollbackFailureException {
 
         try {
+
             utx.begin();
             Clients clientNumber = orders.getClientNumber();
             if (clientNumber != null) {
@@ -128,7 +132,7 @@ public class OrdersJpaController implements Serializable {
             }
             em.remove(orders);
             utx.commit();
-        } catch (NotSupportedException | SystemException | com.beatchamber.exceptions.NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -140,19 +144,6 @@ public class OrdersJpaController implements Serializable {
 
     public List<Orders> findOrdersEntities() {
         return findOrdersEntities(true, -1, -1);
-    }
-    
-    /**
-     * This method will return the number of orders placed and also the number id 
-     * @return int
-     */
-    public int findTotalOrders() {
-        return findOrdersEntities(true, -1, -1).size();
-    }
-    
-    public String addOrdersToTable(){
-        
-        return "index.xhtml";
     }
 
     public List<Orders> findOrdersEntities(int maxResults, int firstResult) {
@@ -169,11 +160,11 @@ public class OrdersJpaController implements Serializable {
             q.setFirstResult(firstResult);
         }
         return q.getResultList();
+
     }
 
     public Orders findOrders(Integer id) {
         return em.find(Orders.class, id);
-
     }
 
     public int getOrdersCount() {

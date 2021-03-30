@@ -17,7 +17,7 @@
         <nav>
             <div class="topnav">
                 <h:link value="#{msgs.home}" outcome="redirectToIndex"/>
-                <h:link value="#{msgs.browseMusic}" outcome="redirectToAlbumList"/>
+                <h:link value="#{msgs.browseMusic}" outcome="redirectToBrowseMusic"/>
                 <h:link value="#{msgs.about}" outcome="redirectToAbout"/>
                 <h:form>
                     <h:commandLink action="#{localeChanger.changeLocale()}">
@@ -25,22 +25,23 @@
                     </h:commandLink>
                 </h:form>
                 <h:link value="#{msgs.loginRegister}" outcome="redirectToLogin"
-                        rendered="#{!loginBean.loggedIn}"/>
+                        rendered="#{!theLoginRegister.loggedIn}"/>
                 <h:link value="#{msgs.management}" outcome="redirectToManagement"
-                        rendered="#{loginBean.loggedIn and loginBean.manager}"/>
-                <h:form>
-                    <p:growl id="messages" showDetail="true"/>
-                    <h:outputText value="#{msgs.welcome} #{loginBean.username}" styleClass="welcome-label"
-                                  rendered="#{loginBean.loggedIn}"/>
-                    <h:commandLink id="logout" action="#{loginBean.doLogout}"
-                                   rendered="#{loginBean.loggedIn}">
-                        <i class="pi pi-fw pi-power-off"></i>
-                    </h:commandLink>
-                </h:form>
+                        rendered="#{theLoginRegister.loggedIn and theLoginRegister.manager}"/>               
+
                 <h:form>
                     <h:commandLink action="cart">
                         <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
                         <h:outputLabel>#{cookies.findNumberOfItemsInCart()}</h:outputLabel>
+                    </h:commandLink>
+                </h:form>
+
+                <h:form>
+                    <h:outputText value="#{msgs.welcome} #{theLoginRegister.username}" styleClass="welcome-label"
+                                  rendered="#{theLoginRegister.loggedIn}"/>
+                    <h:commandLink id="logout" action="#{theLoginRegister.doLogout}"
+                                   rendered="#{theLoginRegister.loggedIn}">
+                        <i class="pi pi-fw pi-power-off"></i>
                     </h:commandLink>
                 </h:form>
             </div>

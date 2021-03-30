@@ -3,15 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.beatchamber.backing;
+package com.beatchamber.beans.manager;
 
+import com.beatchamber.beans.PhoneNumber;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -46,6 +52,10 @@ public class ClientsBackingBean implements Serializable {
 
     private Clients selectedClient;
 
+    private PhoneNumber homePhoneNumber;
+
+    private PhoneNumber cellPhoneNumber;
+    
     @PostConstruct
     public void init() {
         this.clients = clientsJpaController.findClientsEntities();
@@ -63,25 +73,43 @@ public class ClientsBackingBean implements Serializable {
         this.selectedClient = selectedClient;
     }
 
+    public PhoneNumber getHomePhoneNumber() {
+        return this.homePhoneNumber;
+    }
+
+    public void setHomePhoneNumber(PhoneNumber phoneNumber) {
+        this.homePhoneNumber = phoneNumber;
+    }
+
+    public PhoneNumber getCellPhoneNumber() {
+        return this.cellPhoneNumber;
+    }
+
+    public void setCellPhoneNumber(PhoneNumber phoneNumber) {
+        this.cellPhoneNumber = phoneNumber;
+    }
+
     public List<Boolean> isManager() {
         List<Boolean> isManagerList = new ArrayList<>();
         this.clients.forEach(item -> isManagerList.add(item.getTitle().equals("Manager")));
         return isManagerList;
     }
-
+    
     public void openNew() {
         this.selectedClient = new Clients();
     }
 
     public void saveClient() {
         try {
+            this.selectedClient.setPassword("********");
             if (this.selectedClient.getClientNumber() == null) {
-                this.selectedClient.setPassword("123456");
-                this.convertPhoneFormat();
+                this.setPassword();
+                this.setPhoneNumber();
                 clientsJpaController.create(this.selectedClient);
                 this.clients.add(this.selectedClient);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Added"));
             } else {
+                this.setPhoneNumber();
                 clientsJpaController.edit(this.selectedClient);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Updated"));
             }
@@ -107,14 +135,76 @@ public class ClientsBackingBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-clients");
     }
 
-    private void convertPhoneFormat() {
-        String stringCellPhone = "(" + this.selectedClient.getCellPhone().substring(0, 3) + ") "
-                + this.selectedClient.getCellPhone().substring(3, 6) + "-"
-                + this.selectedClient.getCellPhone().substring(6, 10);
-        this.selectedClient.setCellPhone(stringCellPhone);
-        String stringHomePhone = "(" + this.selectedClient.getHomePhone().substring(0, 3) + ") "
-                + this.selectedClient.getHomePhone().substring(3, 6) + "-"
-                + this.selectedClient.getHomePhone().substring(6, 10);
-        this.selectedClient.setHomePhone(stringHomePhone);
+    private void setPhoneNumber() {
+        //Set phone number
+        if (this.homePhoneNumber != null) {
+            this.selectedClient.setHomePhone(this.homePhoneNumber.toString());
+        } else {
+            this.selectedClient.setHomePhone("");
+        }
+        if (this.cellPhoneNumber != null) {
+            this.selectedClient.setCellPhone(this.cellPhoneNumber.toString());
+        } else {
+            this.selectedClient.setCellPhone("");
+        }
+        this.homePhoneNumber = new PhoneNumber();
+        this.cellPhoneNumber = new PhoneNumber();
+    }
+
+    private void setPassword() {
+        String initPassword = "123456";
+
+        //Set salt and hashed password
+        byte[] salt = getSalt();
+        String saltStr = Base64.getEncoder().encodeToString(salt);
+        this.selectedClient.setSalt(saltStr);
+
+        String securePassword = getSecurePassword(initPassword, salt);
+        this.selectedClient.setHash(securePassword);
+    }
+
+    /*
+    * Get a random salt value
+     */
+    private byte[] getSalt() {
+        //Create array for salt
+        byte[] salt = new byte[16];
+        try {
+            //Always use a SecureRandom generator
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
+            //Get a random salt
+            sr.nextBytes(salt);
+
+        } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
+            java.util.logging.Logger.getLogger(ClientsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //return salt
+        return salt;
+    }
+
+    /*
+    * Generate a Secure Password using salt
+     */
+    private String getSecurePassword(String passwordToHash, byte[] salt) {
+        String generatedPassword = null;
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            //Add password bytes to digest
+            md.update(salt);
+            //Get the hash's bytes 
+            byte[] bytes = md.digest(passwordToHash.getBytes());
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            //Get complete hashed password in hex format
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            java.util.logging.Logger.getLogger(ClientsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return generatedPassword;
     }
 }

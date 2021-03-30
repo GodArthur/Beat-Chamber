@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.beatchamber.entities;
 
 import java.io.Serializable;
@@ -93,6 +88,7 @@ public class Clients implements Serializable {
     @Size(max = 20)
     @Column(name = "cell_phone")
     private String cellPhone;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull()
@@ -257,6 +253,13 @@ public class Clients implements Serializable {
     public String toString() {
         return "com.beatchamber.entities.Clients[ clientNumber=" + clientNumber + " ]";
     }
+    public Collection<Orders> getOrdersCollection() {
+        return ordersCollection;
+    }
+    public void setOrdersCollection(Collection<Orders> ordersCollection) {
+        this.ordersCollection = ordersCollection;
+    }
+
 
     public String getTitle() {
         return title;
@@ -266,7 +269,6 @@ public class Clients implements Serializable {
         this.title = title;
     }
 
-
     public String getAddress1() {
         return address1;
     }
@@ -274,6 +276,7 @@ public class Clients implements Serializable {
     public void setAddress1(String address1) {
         this.address1 = address1;
     }
+
 
     public String getAddress2() {
         return address2;
@@ -306,7 +309,6 @@ public class Clients implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
-
 
     public String getEmail() {
         return email;
@@ -346,14 +348,6 @@ public class Clients implements Serializable {
 
     public void setHash(String hash) {
         this.hash = hash;
-    }
-
-    public Collection<Orders> getOrdersCollection() {
-        return ordersCollection;
-    }
-
-    public void setOrdersCollection(Collection<Orders> ordersCollection) {
-        this.ordersCollection = ordersCollection;
     }
     
 }

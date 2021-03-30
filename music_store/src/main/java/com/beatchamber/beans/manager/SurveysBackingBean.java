@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.beatchamber.backing;
+package com.beatchamber.beans.manager;
 
 import com.beatchamber.entities.Choices;
 import com.beatchamber.entities.SurveyToChoice;
@@ -51,6 +51,9 @@ public class SurveysBackingBean implements Serializable {
     @Inject
     private ChoicesJpaController choicesJpaController;
 
+//    @Inject
+//    private LoginRegisterBackingBean loginRegisterBackingBean;
+
     private List<Surveys> surveys;
 
     private Surveys selectedSurvey;
@@ -66,6 +69,11 @@ public class SurveysBackingBean implements Serializable {
     public void init() {
         this.surveys = surveysJpaController.findSurveysEntities();
     }
+
+//    Test for getting user id from login pages
+//    public int getUserID() {
+//        return loginRegisterBackingBean.getClientId();
+//    }
 
     public List<Surveys> getSurveys() {
         return surveys;
@@ -262,7 +270,7 @@ public class SurveysBackingBean implements Serializable {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void initializeChoices() {
         this.choice1 = new Choices();
         this.choice1.setChoiceName("");

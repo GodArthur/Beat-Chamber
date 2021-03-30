@@ -1,4 +1,4 @@
-/* Creating the database */
+/*Creating the database */
 /*DROP DATABASE IF EXISTS beat_chamber;
 CREATE DATABASE beat_chamber;
 
@@ -6,7 +6,7 @@ USE beat_chamber;
 
 DROP USER IF EXISTS dawson@localhost;
 CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
-GRANT ALL ON beat_chamber.* TO dawson@'localhost'; */
+GRANT ALL ON beat_chamber.* TO dawson@'localhost';*/
 
 
 DROP DATABASE IF EXISTS CSgb1w21;
@@ -22,11 +22,15 @@ GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
 GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
 
 
-/* remove tables if they are already present */
 
-drop database CSgb1w21test;
 
-DROP TABLE IF EXISTS Ads;
+/*remove tables if they are already present */
+
+rop database CSgb1w21;
+CREATE DATABASE CSgb1w21;
+USE CSgb1w21;
+
+/*DROP TABLE IF EXISTS Ads;
 DROP TABLE IF EXISTS RSS_Feeds;
 DROP TABLE IF EXISTS Invoice_Details;
 DROP TABLE IF EXISTS Survey_to_Choice;
@@ -46,7 +50,7 @@ DROP TABLE IF EXISTS Genres;
 DROP TABLE IF EXISTS Provinces;
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Order_track;
-DROP TABLE IF EXISTS Order_album;
+DROP TABLE IF EXISTS Order_album;*/
 
 
 
@@ -151,9 +155,7 @@ postal_code varchar(20),
 home_phone varchar(20),
 cell_phone varchar(20),
 email varchar(40) not null,
-genre_of_last_search varchar(40),
 username varchar(40) not null,
-password varchar(40) not null,
 salt varchar(32),
 hash varchar(32)
 );
@@ -231,6 +233,15 @@ FOREIGN KEY (survey_id) REFERENCES Surveys(survey_id),
 FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
 );
 
+/* Orders */
+create table Orders(
+tablekey int primary key auto_increment,
+order_id int not null,
+client_number int not null,
+order_date date,
+visible boolean,
+FOREIGN KEY (client_number) REFERENCES Clients(client_number)
+);
 
 /* provinces */
 create table Provinces(
@@ -241,24 +252,20 @@ gst double not null,
 hst double not null
 );
 
-/* Orders */
-create table Orders(
-order_id int primary key auto_increment,
-client_number int not null,
-order_date date,
-FOREIGN KEY (client_number) REFERENCES Clients(client_number)
-);
-
 /* Order_track */
 create table order_track(
-order_id int primary key auto_increment,
+tablekey int primary key auto_increment,
+order_id int not null,
 track_id int not null,
-FOREIGN KEY (track_id) REFERENCES tracks(track_id)
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
+/*FOREIGN KEY (order_id) REFERENCES Orders(order_id)*/
 );
 
 /* order_album */
 create table order_album(
-order_id int primary key auto_increment,
+tablekey int primary key auto_increment,
+order_id int ,
 album_id int not null,
 FOREIGN KEY (album_id) REFERENCES albums(album_number)
+/*FOREIGN KEY (order_id) REFERENCES Orders(order_id)*/
 );

@@ -364,6 +364,12 @@ public class TracksJpaController implements Serializable {
         return em.find(Tracks.class, id);
 
     }
+    
+    public Tracks findTracks(Integer id,EntityManager em2) {
+
+        return em2.find(Tracks.class, id);
+
+    }
  
     
     /**
