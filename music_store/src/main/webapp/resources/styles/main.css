@@ -43,11 +43,6 @@ a:visited {
     color: #a58cff;
 }
 
-table {
-    text-align: left;
-}
-
-
 .left {
     float: left;
 }
@@ -56,11 +51,9 @@ table {
     float: right;
 }
 
-.main-title{
+.main-title {
     font-family: 'Changa', sans-serif;
-    font-size: 20px;
-    text-transform: uppercase;
-    margin: 0;
+    font-size: 40px;
 }
 
 .main-icon {
@@ -234,14 +227,12 @@ table {
     height: 50%;
 }
 
-.album-left-ad {
-    float: left;
+.ad-max-height {
     max-height: 500px;
 }
 
-.album-right-ad {
-    float: right;
-    max-height: 500px;
+.album-info {
+    margin-bottom: 10px;
 }
 
 .ratings {
@@ -703,7 +694,7 @@ label.star:before {
   left: 10%;
   top: 22%;
   width: 50%;
-  height: 53%;
+  height: auto;
   border-style: solid;
   padding: 30px;
   padding-left: 50px;
@@ -729,6 +720,18 @@ button {
 #add-btn {
   color: #5b3ec9;
   margin-bottom: 10px;
+}
+
+#viewed-albums-section{
+    
+    padding: 0;
+}
+
+#viewed-items-container{
+    
+    text-align: center;
+    background-color: #333;
+    color: white;
 }
 
 .album-cover-group {

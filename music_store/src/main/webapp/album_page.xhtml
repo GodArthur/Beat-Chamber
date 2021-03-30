@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Album Page</title>
         <h:outputStylesheet library="styles" name="main.css"/>
@@ -16,41 +17,75 @@
                 <section class="album-display">
                     <!-- Album and ads -->
                     <div class="img-display">
-                        <h:graphicImage library="images" name="ads/DogsAd.png" styleClass="album-left-ad"/>
+                        <h:outputLink value="#{adsJpaController.getAdLink(7)}" target="_blank">
+                            <h:graphicImage library="images" name="#{adsJpaController.getAdPath(7)}" styleClass="ad-max-height left"/>
+                        </h:outputLink>
                         <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}"/>
-                        <h:graphicImage library="images" name="ads/AuroraAd.png" styleClass="album-right-ad"/>
+                        <h:outputLink value="#{adsJpaController.getAdLink(8)}" target="_blank">
+                            <h:graphicImage library="images" name="#{adsJpaController.getAdPath(8)}" styleClass="ad-max-height right"/>
+                        </h:outputLink>
                     </div>
                     <!-- Album description -->
                     <div class="album-info">
                         <h2 class="album-title">#{albumsJpaController.findAlbums(album.albumId).albumTitle}</h2>
                         <h2>#{albumsJpaController.getAlbumArtist(album.albumId).artistName}</h2>
                         <a href="../java/com/beatchamber/beans/AlbumBean.java"></a>
-                        <div>#{albumsJpaController.findAlbums(album.albumId).listPrice}</div>
+                        <h:outputText value="#{albumsJpaController.findAlbums(album.albumId).listPrice}" styleClass="album-price">
+                            <f:convertNumber currencySymbol="$" type="currency"/>
+                        </h:outputText>
                         <h:form>
                             <p:rating readonly="true" value="4"/>
                         </h:form>
                     </div>
-                    
+
 
                     <h:form><!-- @author Ibrahim -->
                         <p:commandButton action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
                     </h:form>
+
                     
-                    <h:form>
+
+                    <h:form styleClass=""><!-- @author Ibrahim -->
+                        <p:commandButton icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
+                    </h:form>
+                    <h:form><!--@author Korjon Chang-Jones-->
+
                         <h:commandLink action="#{tracks.sendDefaultTrack}">
                             <f:param name="albumId" value="#{album.albumId}"/>
                             <button>#{msgs.viewTracks}</button>
                         </h:commandLink>
                     </h:form>
                 </section>
-                <!-- Review section -->
-                <section>
-                    <h2>#{msgs.reviews}</h2>
-                    <!--Adding code to display the reviews that have been approved -->
-                    <p>#{msgs.noReviews}</p>
 
-                    <a href="review_page.xhtml"><button>#{msgs.addReview}</button></a>
 
+                <!--@author Korjon Chang-Jones Items similar to the album being viewed -->
+                <section id="viewed-albums-section">
+                <p class="item-extra">#{msgs.otherViewed}</p>
+                <div id="viewed-items-container">
+                    <c:forEach var="albumItem" items="#{album.similarAlbums}">
+                        <div class="album-cover-group">
+                            <div>
+                                <h:form>
+                                    <h:commandLink action="#{album.sendAlbum}">
+                                        <f:param name="albumId" value="#{albumItem.albumNumber}"/>
+
+                                        <h:graphicImage
+                                            library="images"
+                                            name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, false)}"
+                                            width="270"
+                                            height="270"
+                                            />
+                                    </h:commandLink>
+                                </h:form>
+                            </div>
+                            <h:form>
+                                <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum}">
+                                    <f:param name="albumId" value="#{albumItem.albumNumber}"/>
+                                </h:commandLink>
+                            </h:form>
+                        </div>
+                    </c:forEach>    
+                </div>
                 </section>
             </ui:define>
         </ui:composition>
