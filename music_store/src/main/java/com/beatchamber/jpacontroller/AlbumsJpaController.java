@@ -380,7 +380,6 @@ public class AlbumsJpaController implements Serializable {
         SetListOfItems();
         double total=0;
         for(Albums item:listOfAlbumsInTheCart){
-            System.out.println(item.getCostPrice() + "***album");
             total = total + item.getCostPrice();
         }
         return total + "";

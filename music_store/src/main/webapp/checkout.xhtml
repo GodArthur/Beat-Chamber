@@ -55,6 +55,7 @@ and open the template in the editor.
 
                                     <h:outputLabel class="City" for="province">#{msgs.askProvince}
                                         
+                                        
                                     </h:outputLabel>  
                                     <h:selectOneMenu value="#{checkoutData.province}">
                                         <f:ajax event="change" render="renderPst" />
@@ -88,12 +89,19 @@ and open the template in the editor.
                                     
                                     
                                     <h:commandButton action="#{ordersJpaController.addOrdersToTable(1,albumsJpaController.retrieveAllAlbumsInTheCart(),tracksController.retrieveAllTracksInTheCart())}" styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/>
-
+                                    
 				</h:form>
+                            
+                            
 
 			</div>
 
+                        
+                    
 			<div id="show_prices">
+
+
+                            
 				<h2>#{msgs.showItems}</h2><br/>
                                 <p>
                                 <h5>#{msgs.albumsboughtTitle}</h5>
@@ -116,6 +124,7 @@ and open the template in the editor.
                                 <br/>
                                 <h1>#{msgs.total} <h:outputText id="rendertotalPrice" value="#{checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst, provincesJpaController.findProvinces(checkoutData.province).gst, provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h1>
 
+                                
 			</div>
 			
 		</div>
