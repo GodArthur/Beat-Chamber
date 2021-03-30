@@ -26,7 +26,7 @@ GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
 
 /*remove tables if they are already present */
 
-rop database CSgb1w21;
+drop database CSgb1w21;
 CREATE DATABASE CSgb1w21;
 USE CSgb1w21;
 

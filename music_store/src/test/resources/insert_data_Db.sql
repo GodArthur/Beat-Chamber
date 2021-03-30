@@ -563,7 +563,7 @@ insert into Survey_to_Choice(survey_id,choice_id) values
 (7,30),
 (7,31);
 
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password, hash) values 
+insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, hash) values 
 (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
 (2, 'Consumer', 'Riggey', 'Phillis', 'Dabvine', '12 Pankratz Avenue', '1796 Coleman Lane', 'Deep River', 'Alberta', 'Canada', 'M4J 4T3', '(974)586-1706', '(579)113-6429', 'cst.send@gmail.com', 'DawsonConsumer', 'dawsoncollege'),
 (3, 'Consumer', 'Widdop', 'Zeke', 'Zoovu', '61 Veith Street', '738 Schurz Hill', 'Dieppe', 'New Brunswick', 'Canada', 'E1A 4S3', '(879)573-6174', '(264)385-8093', 'zwiddop2@mlb.com', 'zwiddop2', 'UErBWw'),
