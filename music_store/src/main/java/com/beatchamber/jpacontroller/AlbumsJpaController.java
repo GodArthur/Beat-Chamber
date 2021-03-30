@@ -22,6 +22,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -420,6 +423,50 @@ public class AlbumsJpaController implements Serializable {
             }
         }
     }
+    
+    
+     /**
+     * Method finds specific Albums based on its
+     * genre
+     * @param genre
+     * @param title
+     * @return the list of Albums in the same genre
+     * @author Korjon Chang-jones
+     */
+    public List<Albums> findAlbumsByGenre(Genres genre, String title){
+        
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
+        Root<Albums> rt = cq.from(Albums.class);
+        Join genreToAlbums = rt.join("genreToAlbumList");
+        Join genres = genreToAlbums.join("genreId");
+        cq.where(cb.and(cb.equal(genres.get("genreName"), genre.getGenreName()), cb.notEqual(rt.get("albumTitle"), title)));
+        TypedQuery<Albums> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
+    
+      /**
+     * Method finds one of the genres for a specific Album
+     * based on its ID
+     * @param id
+     * @return The genre of the Album
+     * @author Korjon Chang-Jones
+     */
+    public Genres findGenre(Integer id){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Genres>  cq = cb.createQuery(Genres.class);
+        Root <Genres> rt = cq.from(Genres.class);
+        Join genreToTracks = rt.join("genreToAlbumList");
+        cq.where(cb.equal(genreToTracks.get("albumNumber").get("albumNumber"), id));
+        TypedQuery<Genres> query = em.createQuery(cq);
+        
+        return query.getSingleResult();
+        
+    }
+
     
 }
 

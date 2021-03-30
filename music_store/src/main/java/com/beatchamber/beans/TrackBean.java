@@ -1,7 +1,9 @@
 
 package com.beatchamber.beans;
+import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -24,8 +26,14 @@ public class TrackBean implements Serializable{
     private String trackTitle;
     private String musicCategory;
     
+    
     @Inject
     private TracksJpaController tracksController; 
+    
+    @Inject
+    private AlbumBean album;
+    
+    private List<Tracks> trackList;
     
     public TrackBean(){
         
@@ -63,6 +71,11 @@ public class TrackBean implements Serializable{
         this.musicCategory = musicCat;
     }
     
+    public List<Tracks> getTrackList(){
+        
+        return trackList;
+    }
+    
     /**
      * Method sends the url to the track
      * page for a specific song on an album
@@ -73,17 +86,18 @@ public class TrackBean implements Serializable{
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
         this.trackId = Integer.parseInt(params.get("trackId"));
-        
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
+        storeSimilarAlbums();
         
         return "track.xhtml";
         
     }
     
-    public String sendReview(){
-        this.trackId = 1;
-        return "track.xhtml";
+    private void storeSimilarAlbums(){
+        
+        album.storeSimilarAlbums(tracksController.findGenre(trackId));
     }
+    
     
     /**
      * Method sends the url to the track
@@ -99,10 +113,14 @@ public class TrackBean implements Serializable{
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
         int albumId = Integer.parseInt(params.get("albumId"));
-        this.trackId = tracksController.findTracksByAlbum(albumId).get(0).getTrackId();
+        trackList = tracksController.findTracksByAlbum(albumId);
+        this.trackId = trackList.get(0).getTrackId();
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
         
+        storeSimilarAlbums();
         return "track.xhtml";
     }
+    
+    
     
 }
