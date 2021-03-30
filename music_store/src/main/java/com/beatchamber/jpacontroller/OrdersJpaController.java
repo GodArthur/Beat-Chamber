@@ -7,21 +7,17 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.beatchamber.entities.Clients;
-import com.beatchamber.entities.OrderAlbum;
-import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
-import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -54,6 +50,7 @@ public class OrdersJpaController implements Serializable {
     public void create(Orders orders) throws RollbackFailureException {
 
         try {
+
             utx.begin();
             Clients clientNumber = orders.getClientNumber();
             if (clientNumber != null) {
@@ -82,7 +79,6 @@ public class OrdersJpaController implements Serializable {
     public void edit(Orders orders) throws NonexistentEntityException, Exception {
 
         try {
-
             utx.begin();
             Orders persistentOrders = em.find(Orders.class, orders.getOrderId());
             Clients clientNumberOld = persistentOrders.getClientNumber();
@@ -111,14 +107,14 @@ public class OrdersJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = orders.getOrderId();
                 if (findOrders(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new com.beatchamber.exceptions.NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+    public void destroy(Integer id) throws IllegalOrphanException, com.beatchamber.exceptions.NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException, NonexistentEntityException {
 
         try {
             utx.begin();
@@ -164,66 +160,11 @@ public class OrdersJpaController implements Serializable {
             q.setFirstResult(firstResult);
         }
         return q.getResultList();
+
     }
 
     public Orders findOrders(Integer id) {
         return em.find(Orders.class, id);
-    }
-    
-    public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
-        //set variables
-        ClientsJpaController clientController = new ClientsJpaController();
-        OrderAlbumJpaController orderAlbumController = new OrderAlbumJpaController();
-        OrderTrackJpaController orderTrackController = new OrderTrackJpaController();
-        Orders order = new Orders();
-        Date date = new Date();
-        AlbumsJpaController albumController = new AlbumsJpaController();
-        TracksJpaController trackController = new TracksJpaController();
-        int newOrderId = findTotalOrders()+1;
-        
-        //creating the order
-        order.setOrderDate(date);
-        order.setClientNumber(clientController.findClients(ClientNumber,em));
-        order.setOrderId(newOrderId);
-        order.setVisible(true);
-        try {
-            create(order);
-        } catch (RollbackFailureException ex) {
-            java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //creating the orderAlbums
-        for (Albums item:albumList) {
-            OrderAlbum orderAlbum =  new OrderAlbum();
-            orderAlbum.setAlbumId(albumController.findAlbums(item.getAlbumNumber(),em));
-            orderAlbum.setOrderId(findTotalOrders());
-            try {
-                orderAlbumController.create(orderAlbum,em,utx);
-            } catch (RollbackFailureException ex) {
-                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        //creating the orderTrack
-        for(Tracks item:trackList){
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(newOrderId);
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId(),em));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                java.util.logging.Logger.getLogger(OrdersJpaController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        return "index.xhtml";
-    }
-
-    private int findTotalOrders(){
-        if(findOrdersEntities() == null){
-            return 0;
-        }
-        return findOrdersEntities().size();
     }
 
     public int getOrdersCount() {
@@ -233,9 +174,6 @@ public class OrdersJpaController implements Serializable {
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
-
     }
-    
-    
 
 }
