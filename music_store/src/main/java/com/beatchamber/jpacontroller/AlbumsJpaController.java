@@ -236,8 +236,6 @@ public class AlbumsJpaController implements Serializable {
                 }
             }
             throw ex;
-
-
         }
     }
 
