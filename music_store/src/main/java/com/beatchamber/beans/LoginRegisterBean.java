@@ -54,11 +54,11 @@ public class LoginRegisterBean implements Serializable {
 
     @Inject
     private ClientsJpaController clientsJpaController;
-
+/*
     @PostConstruct
     public void init() {
         this.clients = clientsJpaController.findClientsEntities();
-    }
+    }*/
 
     // ------------------------------
     // Getters & Setters
@@ -148,7 +148,6 @@ public class LoginRegisterBean implements Serializable {
         for (Clients clientItem : clientsList) {
             String dbUsername = clientItem.getUsername();
             String dbEmail = clientItem.getEmail();
-            //String dbPassword = clientItem.getPassword();
             String dbSalt = clientItem.getSalt();
             String dbhashPassword = clientItem.getHash();
 
@@ -230,7 +229,7 @@ public class LoginRegisterBean implements Serializable {
         String password = (String) passwordInput.getLocalValue();
 
         if (password == null || confirmPassword == null || !password.equals(confirmPassword)) {
-            LOG.debug("validatePasswordCorrect: " + client.getPassword() + " and " + confirmPassword);
+            LOG.debug("validatePasswordCorrect: " + password + " and " + confirmPassword);
             String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['nomatch']}", String.class);
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
             throw new ValidatorException(msg);
@@ -313,8 +312,6 @@ public class LoginRegisterBean implements Serializable {
     * Set all the necessary fields which cannot get from input to DB
      */
     private void setClientFields() {
-        //Temporarily used for setting password 
-        this.client.setPassword(password);
 
         // Set title
         this.client.setTitle("Consumer");
@@ -336,7 +333,7 @@ public class LoginRegisterBean implements Serializable {
         String saltStr = Base64.getEncoder().encodeToString(salt);
         this.client.setSalt(saltStr);
 
-        String securePassword = getSecurePassword(this.client.getPassword(), salt);
+        String securePassword = getSecurePassword(this.password, salt);
         this.client.setHash(securePassword);
     }
 

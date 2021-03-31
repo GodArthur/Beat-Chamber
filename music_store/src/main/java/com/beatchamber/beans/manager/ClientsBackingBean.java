@@ -101,7 +101,6 @@ public class ClientsBackingBean implements Serializable {
 
     public void saveClient() {
         try {
-            this.selectedClient.setPassword("********");
             if (this.selectedClient.getClientNumber() == null) {
                 this.setPassword();
                 this.setPhoneNumber();

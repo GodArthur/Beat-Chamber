@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Album Page</title>
         <h:outputStylesheet library="styles" name="main.css"/>
@@ -36,15 +37,53 @@
                             <p:rating readonly="true" value="4"/>
                         </h:form>
                     </div>
+
+
+                    <h:form><!-- @author Ibrahim -->
+                        <p:commandButton action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
+                    </h:form>
+
+                    
+
                     <h:form styleClass=""><!-- @author Ibrahim -->
                         <p:commandButton icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
                     </h:form>
-                    <h:form>
+                    <h:form><!--@author Korjon Chang-Jones-->
+
                         <h:commandLink action="#{tracks.sendDefaultTrack}">
                             <f:param name="albumId" value="#{album.albumId}"/>
                             <button>#{msgs.viewTracks}</button>
                         </h:commandLink>
                     </h:form>
+                </section>
+                <!--@author Korjon Chang-Jones Items similar to the album being viewed -->
+                <section id="viewed-albums-section">
+                    <p class="item-extra">#{msgs.otherViewed}</p>
+                    <div id="viewed-items-container">
+                        <c:forEach var="albumItem" items="#{album.similarAlbums}">
+                            <div class="album-cover-group">
+                                <div>
+                                    <h:form>
+                                        <h:commandLink action="#{album.sendAlbum}">
+                                            <f:param name="albumId" value="#{albumItem.albumNumber}"/>
+
+                                            <h:graphicImage
+                                                library="images"
+                                                name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, false)}"
+                                                width="270"
+                                                height="270"
+                                                />
+                                        </h:commandLink>
+                                    </h:form>
+                                </div>
+                                <h:form>
+                                    <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum}">
+                                        <f:param name="albumId" value="#{albumItem.albumNumber}"/>
+                                    </h:commandLink>
+                                </h:form>
+                            </div>
+                        </c:forEach>    
+                    </div>
                 </section>
                 <!-- Review section -->
                 <section>

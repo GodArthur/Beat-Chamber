@@ -8,7 +8,7 @@ DROP USER IF EXISTS dawson@localhost;
 CREATE USER dawson@'localhost' IDENTIFIED WITH mysql_native_password BY 'dawson123' REQUIRE NONE;
 GRANT ALL ON beat_chamber.* TO dawson@'localhost';*/
 
-/*
+
 DROP DATABASE IF EXISTS CSgb1w21;
 CREATE DATABASE CSgb1w21;
 USE CSgb1w21;
@@ -20,13 +20,13 @@ CREATE USER CSgb1w21@'%' IDENTIFIED WITH mysql_native_password BY 'odeckoxb' REQ
 GRANT ALL ON CSgb1w21.* TO CSgb1w21@'localhost';
 
 GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
-*/
+
 
 
 
 /*remove tables if they are already present */
 
-rop database CSgb1w21;
+drop database CSgb1w21;
 CREATE DATABASE CSgb1w21;
 USE CSgb1w21;
 
