@@ -694,7 +694,7 @@ label.star:before {
   left: 10%;
   top: 22%;
   width: 50%;
-  height: 53%;
+  height: auto;
   border-style: solid;
   padding: 30px;
   padding-left: 50px;
@@ -720,6 +720,18 @@ button {
 #add-btn {
   color: #5b3ec9;
   margin-bottom: 10px;
+}
+
+#viewed-albums-section{
+    
+    padding: 0;
+}
+
+#viewed-items-container{
+    
+    text-align: center;
+    background-color: #333;
+    color: white;
 }
 
 .album-cover-group {

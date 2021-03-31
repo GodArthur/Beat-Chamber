@@ -54,11 +54,11 @@ public class LoginRegisterBean implements Serializable {
 
     @Inject
     private ClientsJpaController clientsJpaController;
-
+/*
     @PostConstruct
     public void init() {
         this.clients = clientsJpaController.findClientsEntities();
-    }
+    }*/
 
     // ------------------------------
     // Getters & Setters
