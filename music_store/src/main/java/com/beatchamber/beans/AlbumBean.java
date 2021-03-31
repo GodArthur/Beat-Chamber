@@ -52,7 +52,7 @@ public class AlbumBean implements Serializable {
         Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
         this.albumId = Integer.parseInt(params.get("albumId"));
         
-        return "album_page.xhtml?faces-redirect=true&albumId=" + this.albumId;
+        return "album_page.xhtml?albumId=" + this.albumId;
     }
 
 }

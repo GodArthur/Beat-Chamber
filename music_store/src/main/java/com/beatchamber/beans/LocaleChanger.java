@@ -1,8 +1,13 @@
 package com.beatchamber.beans;
 
+import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 
 /**
@@ -12,8 +17,8 @@ import javax.inject.Named;
  */
 @Named
 //Partially works. Maybe because of RequestScoped? Test with Ken's example
-@RequestScoped
-public class LocaleChanger {
+@SessionScoped
+public class LocaleChanger implements Serializable {
     
     private Locale locale;
     
