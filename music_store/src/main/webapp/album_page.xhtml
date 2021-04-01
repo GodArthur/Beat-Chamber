@@ -56,36 +56,40 @@
                         </h:commandLink>
                     </h:form>
                 </section>
-
-
                 <!--@author Korjon Chang-Jones Items similar to the album being viewed -->
                 <section id="viewed-albums-section">
-                <p class="item-extra">#{msgs.otherViewed}</p>
-                <div id="viewed-items-container">
-                    <c:forEach var="albumItem" items="#{album.similarAlbums}">
-                        <div class="album-cover-group">
-                            <div>
-                                <h:form>
-                                    <h:commandLink action="#{album.sendAlbum}">
-                                        <f:param name="albumId" value="#{albumItem.albumNumber}"/>
+                    <p class="item-extra">#{msgs.otherViewed}</p>
+                    <div id="viewed-items-container">
+                        <c:forEach var="albumItem" items="#{album.similarAlbums}">
+                            <div class="album-cover-group">
+                                <div>
+                                    <h:form>
+                                        <h:commandLink action="#{album.sendAlbum}">
+                                            <f:param name="albumId" value="#{albumItem.albumNumber}"/>
 
-                                        <h:graphicImage
-                                            library="images"
-                                            name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, false)}"
-                                            width="270"
-                                            height="270"
-                                            />
+                                            <h:graphicImage
+                                                library="images"
+                                                name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, false)}"
+                                                width="270"
+                                                height="270"
+                                                />
+                                        </h:commandLink>
+                                    </h:form>
+                                </div>
+                                <h:form>
+                                    <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum}">
+                                        <f:param name="albumId" value="#{albumItem.albumNumber}"/>
                                     </h:commandLink>
                                 </h:form>
                             </div>
-                            <h:form>
-                                <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum}">
-                                    <f:param name="albumId" value="#{albumItem.albumNumber}"/>
-                                </h:commandLink>
-                            </h:form>
-                        </div>
-                    </c:forEach>    
-                </div>
+                        </c:forEach>    
+                    </div>
+                </section>
+                <!-- Review section -->
+                <section>
+                    <h2>#{msgs.reviews}</h2>
+                    <!--Adding code to display the reviews that have been approved -->
+                    <p>#{msgs.noReviews}</p>
                 </section>
             </ui:define>
         </ui:composition>

@@ -15,8 +15,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-
-
 /**
  * Managed bean for the Albums, passing to the album page
  * 
@@ -33,16 +31,24 @@ public class AlbumBean implements Serializable {
     @Inject
     private AlbumsJpaController albumController;
 
-    //Default constructor required
+    /**
+     * Default constructor
+     */
     public AlbumBean() {
         this.albumId = 0;
     }
     
+    /**
+     * @return The album id
+     */
     public int getAlbumId(){
-        
         return this.albumId;
     }
     
+    /**
+     * Set the album id
+     * @param albumId 
+     */
     public void setAlbumId(Integer albumId){
         this.albumId = albumId;
     }
@@ -52,13 +58,17 @@ public class AlbumBean implements Serializable {
         return similarAlbums.subList(0, 3);
     }
     
+    /**
+     * Stores the sent param in albumId, and navigates to the album page
+     * @return The album page
+     */
     public String sendAlbum(){
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
         this.albumId = Integer.parseInt(params.get("albumId"));
         
         storeSimilarAlbums(albumController.findGenre(albumId));
-        return "album_page.xhtml";
+        return "album_page.xhtml?albumId=" + this.albumId;
     }
     
     /**

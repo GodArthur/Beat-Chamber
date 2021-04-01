@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
     This config file points to the console because the Selenium tests runs as a 
     Java app and not a web app.

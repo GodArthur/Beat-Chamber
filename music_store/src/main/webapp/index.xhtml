@@ -182,7 +182,9 @@
                             <h2>#{surveysJpaController.findSurveys(1).title}</h2>
                             <h:selectOneRadio>
                                 <c:forEach var="choice" items="#{surveysJpaController.getSurveyChoices(1)}">
-                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName}" class="choice-radio-btn"/>
+                                    <div class="choice">
+                                        <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName}" class="choice-radio-btn"/>
+                                    </div>
                                 </c:forEach>
                             </h:selectOneRadio>
                         </div>

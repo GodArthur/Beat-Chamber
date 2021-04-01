@@ -191,8 +191,7 @@ public class Clients implements Serializable {
     public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
     }
-
-
+    
     public List<CustomerReviews> getCustomerReviewsList() {
         return customerReviewsList;
     }

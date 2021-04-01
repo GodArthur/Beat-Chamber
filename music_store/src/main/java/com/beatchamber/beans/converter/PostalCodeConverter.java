@@ -19,10 +19,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author 1733570 Yan Tang
  */
-@FacesConverter("com.beatchamber.PhoneNumberConverter")
-public class PhoneNumberConverter implements Converter, Serializable {
+@FacesConverter("com.beatchamber.PostalCodeConverter")
+public class PostalCodeConverter implements Converter, Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(PhoneNumberConverter.class);
+    private final static Logger LOG = LoggerFactory.getLogger(PostalCodeConverter.class);
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component,
@@ -32,17 +32,16 @@ public class PhoneNumberConverter implements Converter, Serializable {
             return null;
         }
 
-        String rawNumber = stringValue.replaceAll("[^0-9]", "");
-        String phoneNumber = null;
-        if (rawNumber.length() != 10) {
+        String rawCode = stringValue.replaceAll("\\s+", "").trim().toUpperCase();
+        String postalCode = null;
+        if (rawCode.length() != 6) {
             throw new ConverterException(new FacesMessage(
-                    "Phone number must be 10 numeric characters"));
+                    "PostalCode must be 6 characters"));
         } else {
-            phoneNumber = "(" + rawNumber.substring(0, 3) + ") "
-                    + rawNumber.substring(3, 6) + "-" + rawNumber.substring(6, 10);
+            postalCode = rawCode.substring(0, 3) + " " + rawCode.substring(3, 6);
         }
 
-        return phoneNumber;
+        return postalCode;
     }
 
     @Override
@@ -55,11 +54,10 @@ public class PhoneNumberConverter implements Converter, Serializable {
         String stringValue = "";
 
         if ((value instanceof String)) {
-            String phoneNumberStr = (String) value;
-            if (!phoneNumberStr.equals("")) {
-                String rawStr = phoneNumberStr.replaceAll("[^0-9]+", " ").replaceAll("\\s+", "").trim();
-                stringValue = "(" + rawStr.substring(0, 3) + ") "
-                        + rawStr.substring(3, 6) + "-" + rawStr.substring(6, 10);
+            String postalCodeStr = (String) value;
+            if (!postalCodeStr.equals("")) {
+                String rawStr = postalCodeStr.replaceAll("\\s+", "").trim().toUpperCase();
+                stringValue = rawStr.substring(0, 3) + " " + rawStr.substring(3, 6);
             }
         }
 

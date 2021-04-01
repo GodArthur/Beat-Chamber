@@ -7,16 +7,17 @@ package com.beatchamber.beans;
 
 import com.beatchamber.entities.Clients;
 import com.beatchamber.jpacontroller.ClientsJpaController;
+import com.beatchamber.jpacontroller.ProvincesJpaController;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -41,8 +42,6 @@ public class LoginRegisterBean implements Serializable {
     private String username;
     private String password;
     private String passwordConfirm;
-    private PhoneNumber homePhoneNumber;
-    private PhoneNumber cellPhoneNumber;
 
     private Clients client;
     private List<Clients> clients;
@@ -54,11 +53,9 @@ public class LoginRegisterBean implements Serializable {
 
     @Inject
     private ClientsJpaController clientsJpaController;
-/*
-    @PostConstruct
-    public void init() {
-        this.clients = clientsJpaController.findClientsEntities();
-    }*/
+
+    @Inject
+    private ProvincesJpaController provincesJpaController;
 
     // ------------------------------
     // Getters & Setters
@@ -91,22 +88,6 @@ public class LoginRegisterBean implements Serializable {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public PhoneNumber getHomePhoneNumber() {
-        return this.homePhoneNumber;
-    }
-
-    public void setHomePhoneNumber(PhoneNumber phoneNumber) {
-        this.homePhoneNumber = phoneNumber;
-    }
-
-    public PhoneNumber getCellPhoneNumber() {
-        return this.cellPhoneNumber;
-    }
-
-    public void setCellPhoneNumber(PhoneNumber phoneNumber) {
-        this.cellPhoneNumber = phoneNumber;
-    }
-
     public Clients getClient() {
         if (this.client == null) {
             this.client = new Clients();
@@ -130,12 +111,14 @@ public class LoginRegisterBean implements Serializable {
         return this.isManager;
     }
 
-    public void setIsManager(boolean isManager) {
-        this.isManager = isManager;
-    }
-
     public List<Clients> getClients() {
         return clientsJpaController.findClientsEntities();
+    }
+
+    public List<String> getProvices() {
+        List<String> proviceList = new ArrayList<>();
+        this.provincesJpaController.findProvincesEntities().forEach(item -> proviceList.add(item.getChoiceName()));
+        return proviceList;
     }
 
     /**
@@ -148,7 +131,6 @@ public class LoginRegisterBean implements Serializable {
         for (Clients clientItem : clientsList) {
             String dbUsername = clientItem.getUsername();
             String dbEmail = clientItem.getEmail();
-            //String dbPassword = clientItem.getPassword();
             String dbSalt = clientItem.getSalt();
             String dbhashPassword = clientItem.getHash();
 
@@ -211,8 +193,6 @@ public class LoginRegisterBean implements Serializable {
 
         //clear the form
         this.client = new Clients();
-        this.homePhoneNumber = new PhoneNumber();
-        this.cellPhoneNumber = new PhoneNumber();
         LOG.info("Successful logout");
         return "redirectToIndex";
     }
@@ -230,7 +210,7 @@ public class LoginRegisterBean implements Serializable {
         String password = (String) passwordInput.getLocalValue();
 
         if (password == null || confirmPassword == null || !password.equals(confirmPassword)) {
-            LOG.debug("validatePasswordCorrect: " + client.getPassword() + " and " + confirmPassword);
+            LOG.debug("validatePasswordCorrect: " + password + " and " + confirmPassword);
             String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['nomatch']}", String.class);
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
             throw new ValidatorException(msg);
@@ -271,8 +251,19 @@ public class LoginRegisterBean implements Serializable {
      * @param component
      * @param value
      */
-    public void validateUniqueEmail(FacesContext context, UIComponent component,
+    public void validateEmail(FacesContext context, UIComponent component,
             Object value) {
+        // Retrieve the value passed to this method
+        String emailStr = (String) value;
+        // Reqular expression pattern to validate the format submitted
+        String validator = "^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+"
+                + "(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{2,})$";
+
+        if (!emailStr.matches(validator)) {
+            String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['invalidEmailFormat']}", String.class);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
+            throw new ValidatorException(msg);
+        }
 
         LOG.debug("validateUniqueEmail");
 
@@ -291,6 +282,20 @@ public class LoginRegisterBean implements Serializable {
         }
     }
 
+//
+//    public void validatePostalCodeFormat(FacesContext context, UIComponent component,
+//            Object value) {
+//        // Retrieve the value passed to this method
+//        String postalcode = (String) value;
+//        // Reqular expression pattern to validate the format submitted
+//        String validator = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z]?[0-9][A-Z][0-9]$";
+//
+//        if (!postalcode.matches(validator)) {
+//            String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['invalidPostalCode']}", String.class);
+//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
+//            throw new ValidatorException(msg);
+//        }
+//    }
     public String doCreateUser() throws Exception {
         // set all the necessary fields which cannot get from input to DB
         setClientFields();
@@ -304,8 +309,6 @@ public class LoginRegisterBean implements Serializable {
 
         //clear the form
         this.client = new Clients();
-        this.homePhoneNumber = new PhoneNumber();
-        this.cellPhoneNumber = new PhoneNumber();
         return "redirectToIndex";
     }
 
@@ -313,30 +316,16 @@ public class LoginRegisterBean implements Serializable {
     * Set all the necessary fields which cannot get from input to DB
      */
     private void setClientFields() {
-        //Temporarily used for setting password 
-        this.client.setPassword(password);
 
         // Set title
         this.client.setTitle("Consumer");
-
-        //Set phone number
-        if (this.homePhoneNumber != null) {
-            this.client.setHomePhone(this.homePhoneNumber.toString());
-        } else {
-            this.client.setHomePhone("");
-        }
-        if (this.cellPhoneNumber != null) {
-            this.client.setCellPhone(this.cellPhoneNumber.toString());
-        } else {
-            this.client.setCellPhone("");
-        }
 
         //Set salt and hashed password
         byte[] salt = getSalt();
         String saltStr = Base64.getEncoder().encodeToString(salt);
         this.client.setSalt(saltStr);
 
-        String securePassword = getSecurePassword(this.client.getPassword(), salt);
+        String securePassword = getSecurePassword(this.password, salt);
         this.client.setHash(securePassword);
     }
 
