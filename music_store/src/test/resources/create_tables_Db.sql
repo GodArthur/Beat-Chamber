@@ -252,6 +252,7 @@ gst double not null,
 hst double not null
 );
 
+
 /* Order_track */
 create table order_track(
 tablekey int primary key auto_increment,

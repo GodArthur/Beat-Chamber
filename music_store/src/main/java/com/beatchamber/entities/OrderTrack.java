@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,12 +30,17 @@ import javax.persistence.Table;
     @NamedQuery(name = "OrderTrack.findByOrderId", query = "SELECT o FROM OrderTrack o WHERE o.orderId = :orderId")})
 public class OrderTrack implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @Column(name = "tablekey")
+    private Integer tablekey;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "order_id")
-    private Integer orderId;
+    private int orderId;
+
+    private static final long serialVersionUID = 1L;
     @JoinColumn(name = "track_id", referencedColumnName = "track_id")
     @ManyToOne(optional = false)
     private Tracks trackId;
@@ -63,28 +69,28 @@ public class OrderTrack implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (orderId != null ? orderId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrderTrack)) {
-            return false;
-        }
-        OrderTrack other = (OrderTrack) object;
-        if ((this.orderId == null && other.orderId != null) || (this.orderId != null && !this.orderId.equals(other.orderId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
         return "com.beatchamber.entities.OrderTrack[ orderId=" + orderId + " ]";
     }
+
+    public OrderTrack(Integer tablekey, int orderId) {
+        this.tablekey = tablekey;
+        this.orderId = orderId;
+    }
+
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
+    }
+
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+
     
 }

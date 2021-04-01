@@ -54,7 +54,6 @@ public class Albums implements Serializable {
     @Basic(optional = false)
     @NotNull()
     @Column(name = "release_date")
-    @Temporal(TemporalType.DATE)
     private Date releaseDate;
     @Basic(optional = false)
     @NotNull
@@ -68,7 +67,6 @@ public class Albums implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "entry_date")
-    @Temporal(TemporalType.DATE)
     private Date entryDate;
     @Basic(optional = false)
     @NotNull
@@ -275,5 +273,6 @@ public class Albums implements Serializable {
     public String getCookieId(){
         return "a"+this.albumNumber;
     }
+
     
 }
