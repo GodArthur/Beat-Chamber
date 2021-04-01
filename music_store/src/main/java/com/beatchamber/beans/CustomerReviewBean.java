@@ -1,11 +1,9 @@
 package com.beatchamber.beans;
 
-import com.beatchamber.beans.manager.ClientsBackingBean;
 import com.beatchamber.beans.manager.SurveysBackingBean;
 import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.CustomerReviewsJpaController;
-import com.beatchamber.jpacontroller.ClientsJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import org.slf4j.Logger;
@@ -15,7 +13,6 @@ import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -38,14 +35,12 @@ public class CustomerReviewBean implements Serializable {
     private CustomerReviewsJpaController customerReviewsJpaController;
 
     @Inject
-    private ClientsJpaController clientsJpaController;
-
-    @Inject
     private TracksJpaController tracksJpaController;
 
-    @Inject
-    private ClientsBackingBean clientsBackingBean;
 
+    @Inject
+    private LoginRegisterBean userLoginBean;
+            
     @Inject
     private TrackBean trackBean;
 
@@ -56,7 +51,7 @@ public class CustomerReviewBean implements Serializable {
     private int track_id;
     private int client_number;
     private Date review_date;
-    private String rating;
+    private int rating;
     private String review_text;
     private boolean approval_status;
 
@@ -64,14 +59,13 @@ public class CustomerReviewBean implements Serializable {
     public void init() {
         this.customerReviews = customerReviewsJpaController.findCustomerReviewsEntities();
     }*/
-
     /**
      * Constructor
      */
-    public CustomerReviewBean(){
+    public CustomerReviewBean() {
         this.selectedCustomerReviews = new CustomerReviews();
     }
-    
+
     public int getTrack_id() {
         return this.track_id;
     }
@@ -96,11 +90,11 @@ public class CustomerReviewBean implements Serializable {
         this.review_date = reviewDate;
     }
 
-    public String getRating() {
+    public int getRating() {
         return this.rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 
@@ -124,20 +118,25 @@ public class CustomerReviewBean implements Serializable {
 
         try {
             selectedCustomerReviews.setTrackId(tracksJpaController.findTracks(trackBean.getTrackId()));
-            selectedCustomerReviews.setClientNumber(clientsBackingBean.getSelectedClient());
+            selectedCustomerReviews.setClientNumber(userLoginBean.getClient());
             selectedCustomerReviews.setReviewDate(new java.sql.Date(System.currentTimeMillis()));
 
             //this.rating and this.review should be set by user on site 
             selectedCustomerReviews.setApprovalStatus(false);
 
             //If the rating and the review are filled in then review can be made
-            if (this.rating != null && (!this.review_text.isEmpty())) {
+            if (this.rating == 0 || this.review_text.isEmpty()) {
 
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The review must have a rating and a written review"));
+            
+            } else {
                 LOG.trace("Creating new review entity object");
+                selectedCustomerReviews.setRating(this.rating);
+                selectedCustomerReviews.setReviewText(this.review_text);
+                
                 customerReviewsJpaController.create(selectedCustomerReviews);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Review Added! It will be shown once it is approved"));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The review must have a rating and a written review"));
+
             }
 
         } catch (RollbackFailureException ex) {
