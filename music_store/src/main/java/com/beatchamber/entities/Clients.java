@@ -39,9 +39,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Clients.findByHomePhone", query = "SELECT c FROM Clients c WHERE c.homePhone = :homePhone"),
     @NamedQuery(name = "Clients.findByCellPhone", query = "SELECT c FROM Clients c WHERE c.cellPhone = :cellPhone"),
     @NamedQuery(name = "Clients.findByEmail", query = "SELECT c FROM Clients c WHERE c.email = :email"),
-    @NamedQuery(name = "Clients.findByGenreOfLastSearch", query = "SELECT c FROM Clients c WHERE c.genreOfLastSearch = :genreOfLastSearch"),
     @NamedQuery(name = "Clients.findByUsername", query = "SELECT c FROM Clients c WHERE c.username = :username"),
-    @NamedQuery(name = "Clients.findByPassword", query = "SELECT c FROM Clients c WHERE c.password = :password"),
     @NamedQuery(name = "Clients.findBySalt", query = "SELECT c FROM Clients c WHERE c.salt = :salt"),
     @NamedQuery(name = "Clients.findByHash", query = "SELECT c FROM Clients c WHERE c.hash = :hash")})
 public class Clients implements Serializable {
@@ -95,20 +93,12 @@ public class Clients implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "email")
     private String email;
-    @Size(max = 40)
-    @Column(name = "genre_of_last_search")
-    private String genreOfLastSearch;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 40)
     @Column(name = "username")
     private String username;
-    @Basic(optional = false)
-    @NotNull()
-    @Size(min = 1, max = 40)
-    @Column(name = "password")
-    private String password;
     @Size(max = 32)
     @Column(name = "salt")
     private String salt;
@@ -135,14 +125,13 @@ public class Clients implements Serializable {
         this.clientNumber = clientNumber;
     }
 
-    public Clients(Integer clientNumber, String title, String lastName, String firstName, String email, String username, String password) {
+    public Clients(Integer clientNumber, String title, String lastName, String firstName, String email, String username) {
         this.clientNumber = clientNumber;
         this.title = title;
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
         this.username = username;
-        this.password = password;
     }
 
     public Integer getClientNumber() {
@@ -201,15 +190,6 @@ public class Clients implements Serializable {
 
     public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
-    }
-
-
-    public String getGenreOfLastSearch() {
-        return genreOfLastSearch;
-    }
-
-    public void setGenreOfLastSearch(String genreOfLastSearch) {
-        this.genreOfLastSearch = genreOfLastSearch;
     }
 
 
@@ -324,14 +304,6 @@ public class Clients implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getSalt() {

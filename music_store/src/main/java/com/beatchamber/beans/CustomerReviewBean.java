@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -28,7 +29,7 @@ import javax.inject.Named;
  * @author Massimo Di Girolamo
  */
 @Named("customerReviews")
-@SessionScoped
+@RequestScoped
 public class CustomerReviewBean implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(CustomerReviewBean.class);
@@ -64,6 +65,13 @@ public class CustomerReviewBean implements Serializable {
         this.customerReviews = customerReviewsJpaController.findCustomerReviewsEntities();
     }*/
 
+    /**
+     * Constructor
+     */
+    public CustomerReviewBean(){
+        this.selectedCustomerReviews = new CustomerReviews();
+    }
+    
     public int getTrack_id() {
         return this.track_id;
     }
@@ -116,14 +124,14 @@ public class CustomerReviewBean implements Serializable {
 
         try {
             selectedCustomerReviews.setTrackId(tracksJpaController.findTracks(trackBean.getTrackId()));
-            selectedCustomerReviews.setClientNumber(clientsJpaController.findClients(clientsBackingBean.getSelectedClient().getClientNumber()));
+            selectedCustomerReviews.setClientNumber(clientsBackingBean.getSelectedClient());
             selectedCustomerReviews.setReviewDate(new java.sql.Date(System.currentTimeMillis()));
 
             //this.rating and this.review should be set by user on site 
             selectedCustomerReviews.setApprovalStatus(false);
 
             //If the rating and the review are filled in then review can be made
-            if (this.rating != null && this.review_text.isEmpty()) {
+            if (this.rating != null && (!this.review_text.isEmpty())) {
 
                 LOG.trace("Creating new review entity object");
                 customerReviewsJpaController.create(selectedCustomerReviews);

@@ -4,7 +4,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
         <!--Style for the star radio buttons -->
@@ -24,6 +25,7 @@
 
                             <div class="stars">
                                 <h:form>
+                                    <p:growl id="messages" showDetail="true"/>
                                     <h:selectOneRadio value="#{customerReviews.rating}">
                                         <input class="star star-5" id="star-5" type="radio" name="star"/>
                                         <label class="star star-5" for="star-5"></label>
