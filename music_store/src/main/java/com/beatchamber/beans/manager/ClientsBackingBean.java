@@ -19,13 +19,14 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.HeuristicMixedException;
@@ -34,6 +35,7 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import org.primefaces.PrimeFaces;
+import org.primefaces.util.LangUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * @author 1733570 Yan Tang
  */
 @Named("theClients")
-@SessionScoped
+@ViewScoped
 public class ClientsBackingBean implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(ClientsBackingBean.class);
@@ -56,6 +58,8 @@ public class ClientsBackingBean implements Serializable {
     private List<Clients> clients;
 
     private Clients selectedClient;
+    
+    private List<Clients> filteredClients;
 
     @PostConstruct
     public void init() {
@@ -72,6 +76,14 @@ public class ClientsBackingBean implements Serializable {
 
     public void setSelectedClient(Clients selectedClient) {
         this.selectedClient = selectedClient;
+    }
+    
+    public List<Clients> getFilteredClients() {
+        return filteredClients;
+    }
+
+    public void setFilteredClients(List<Clients> filteredClients) {
+        this.filteredClients = filteredClients;
     }
     
     public List<String> getProvices() {
@@ -199,9 +211,9 @@ public class ClientsBackingBean implements Serializable {
         String username = (String) value;
 
         LOG.debug("validateUniqueUserName: " + username);
-        this.clients = clientsJpaController.findClientsEntities();
+        List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
-        for (Clients client : this.clients) {
+        for (Clients client : clientsList) {
             if (client.getUsername().equals(username) 
                     && this.selectedClient!= null 
                     && this.selectedClient.getClientNumber().intValue() != client.getClientNumber().intValue()) {
@@ -244,9 +256,9 @@ public class ClientsBackingBean implements Serializable {
         String username = (String) value;
 
         LOG.debug("validateUniqueEmail: " + username);
-        this.clients = clientsJpaController.findClientsEntities();
+        List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
-        for (Clients client : this.clients) {
+        for (Clients client : clientsList) {
             if (client.getEmail().equals(username)
                     && this.selectedClient != null
                     && this.selectedClient.getClientNumber().intValue() != client.getClientNumber().intValue()) {
@@ -255,5 +267,19 @@ public class ClientsBackingBean implements Serializable {
                 throw new ValidatorException(msg);
             }
         }
+    }
+    
+    public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
+        if (LangUtils.isValueBlank(filterText)) {
+            return true;
+        }
+
+        Clients client = (Clients) value;
+        return client.getUsername().toLowerCase().contains(filterText)
+                || client.getEmail().toLowerCase().contains(filterText)
+                || client.getFirstName().toLowerCase().contains(filterText)
+                || client.getLastName().toLowerCase().contains(filterText)
+                || client.getCellPhone().toLowerCase().contains(filterText);
     }
 }

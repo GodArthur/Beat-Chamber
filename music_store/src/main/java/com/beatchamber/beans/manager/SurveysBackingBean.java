@@ -16,6 +16,7 @@ import com.beatchamber.jpacontroller.SurveyToChoiceJpaController;
 import com.beatchamber.jpacontroller.SurveysJpaController;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -31,13 +32,14 @@ import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 
 /**
  *
  * @author 1733570 Yan Tang
  */
 @Named("theSurveys")
-@SessionScoped
+@ViewScoped
 public class SurveysBackingBean implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(SurveysBackingBean.class);
@@ -53,11 +55,10 @@ public class SurveysBackingBean implements Serializable {
 
 //    @Inject
 //    private LoginRegisterBackingBean loginRegisterBackingBean;
-
     private List<Surveys> surveys;
 
     private Surveys selectedSurvey;
-
+    private int numOfChoices = 2;
     //private List<SurveyToChoice> surveyToChoices;
     private Choices choice1;
     private Choices choice2;
@@ -74,7 +75,6 @@ public class SurveysBackingBean implements Serializable {
 //    public int getUserID() {
 //        return loginRegisterBackingBean.getClientId();
 //    }
-
     public List<Surveys> getSurveys() {
         return surveys;
     }
@@ -287,5 +287,17 @@ public class SurveysBackingBean implements Serializable {
         this.choice5 = new Choices();
         this.choice5.setChoiceName("");
         this.choice5.setVotes(0);
+    }
+
+    public void setNumOfChoicesAction() {
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-surveys");
+    }
+
+    public int getNumOfChoices() {
+        return this.numOfChoices;
+    }
+
+    public void setNumOfChoices(String num) {
+        this.numOfChoices = Integer.parseInt(num);
     }
 }

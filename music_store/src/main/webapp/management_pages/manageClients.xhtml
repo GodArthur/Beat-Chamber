@@ -13,243 +13,218 @@
     </h:head>
     <h:body>
         <!-- Base template of the page -->
-        <ui:composition template="../templates/master_template.xhtml">
+        <ui:composition template="../templates/management_template.xhtml">
             <!-- Promotion banner -->
-            <ui:define name="content">
-                <div>
-                    <div class="container-page">
-                        <div class="icon-bar">
-                            <h:link id="clinetButton" class="activedTag" >
-                                <i class="fas fa-user-edit fa-lg"></i><br/><h5>Clients</h5>
-                            </h:link>
-                            <h:link  id="albumButton" >
-                                <i class="fas fa-music fa-lg"></i><br/><h5>Albums</h5>
-                            </h:link>
-                            <h:link  id="trackButton" >
-                                <i class="fas fa-compact-disc fa-lg"></i><br/><h5>Tracks</h5>
-                            </h:link>
-                            <h:link  id="orderButton" outcome="manageOrders" >
-                                <i class="fas fa-file-alt fa-lg"></i><br/><h5>Orders</h5>
-                            </h:link>
-                            <h:link  id="reviewButton"  >
-                                <i class="fas fa-star-half-alt fa-lg"></i><br/><h5>Reviews</h5>
-                            </h:link>
-                            <h:link  id="reportButton"  >
-                                <i class="fas fa-chart-bar fa-lg"></i><br/><h5>Reports</h5>
-                            </h:link>
-                            <h:link  id="rssButton"  >
-                                <i class="fas fa-rss-square fa-lg"></i><br/><h5>RSS Feeds</h5>
-                            </h:link>
-                            <h:link  id="surveyButton" outcome="manageSurveys">
-                                <i class="fas fa-chart-line fa-lg"></i><br/><h5>Surveys</h5>
-                            </h:link>
-                            <h:link  id="adButton" >
-                                <i class="fas fa-ad fa-lg"></i><br/><h5>Ads</h5>
-                            </h:link>
-                        </div>
+            <ui:define name="dataTableContent">
 
-                        <h:form id="form" class="container-table">
-                            <p:growl id="messages" showDetail="true"/>
-                            <p:dataTable id="dt-clients" widgetVar="dtClients" var="client" value="#{theClients.clients}"
-                                         reflow="true" 
-                                         selection="#{theClients.selectedClient}" rowKey="#{client.clientNumber}" paginator="true"
-                                         rows="10" rowSelectMode="add" paginatorPosition="bottom">
-                                <f:facet name="header">
-                                    <div>
-                                        <span class="table-title">
-                                            Clients
-                                        </span>
-                                        <span class="filter-container ui-input-icon-left">
-                                            <i class="pi pi-search"></i>
-                                            <p:inputText id="globalFilter" 
-                                                         onkeyup="PF('dtClients').filter()" placeholder="Search"/>
-                                        </span>
-                                        <span>
-                                            <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theClients.openNew()}"
-                                                             update=":form:manage-client-content" 
-                                                             oncomplete="PF('manageClientDialog').show()"
-                                                             styleClass="rounded-button ui-button-help float-right">
-                                                <p:resetInput target=":form:manage-client-content"/>
-                                            </p:commandButton>
-                                        </span>
-                                    </div>
-                                </f:facet>
-
-
-                                <p:column style="width:calc(20px)" headerText="ID" sortBy="#{client.clientNumber}" >
-                                    <h:outputText value="#{client.clientNumber}" />
-                                </p:column>
-                                <p:column style="width:calc(100px)" headerText="UserName" sortBy="#{client.username}">
-                                    <h:outputText value="#{client.username}"/>
-                                </p:column>
-                                <p:column style="width:calc(40px)" headerText="Title" sortBy="#{client.title}">
-                                    <h:outputText value="#{client.title}" 
-                                                  styleClass="badge badge-primary"/>
-                                </p:column>
-                                <p:column style="width:calc(100px)" headerText="First Name" sortBy="#{client.firstName}">
-                                    <h:outputText value="#{client.firstName}"/>
-                                </p:column>
-                                <p:column style="width:calc(100px)" headerText="Last Name" sortBy="#{client.lastName}">
-                                    <h:outputText value="#{client.lastName}"/>
-                                </p:column>
-                                <p:column style="width:calc(150px)" headerText="Email" sortBy="#{client.email}">
-                                    <h:outputText value="#{client.email}"/>
-                                </p:column>
-                                <p:column style="width:calc(100px)" headerText="Cell Phone" sortBy="#{client.cellPhone}">
-                                    <h:outputText value="#{client.cellPhone}"/>
-                                </p:column>
-
-                                <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
-                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-client-content"
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true"/>
+                    <p:dataTable id="dt-clients" widgetVar="dtClients" var="client" value="#{theClients.clients}"
+                                 reflow="true" 
+                                 selection="#{theClients.selectedClient}" rowKey="#{client.clientNumber}" paginator="true"
+                                 rows="10" rowSelectMode="add" paginatorPosition="bottom"
+                                 filteredValue="#{theClients.filteredClients}"
+                                 globalFilterFunction="#{theClients.globalFilterFunction}">
+                        <f:facet name="header">
+                            <div>
+                                <span class="table-title">
+                                    Clients
+                                </span>
+                                <span class="filter-container ui-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" 
+                                                 onkeyup="PF('dtClients').filter()" placeholder="Search"/>
+                                </span>
+                                <span>
+                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theClients.openNew()}"
+                                                     update=":form:manage-client-content" 
                                                      oncomplete="PF('manageClientDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-help" process="@this">
-                                        <f:setPropertyActionListener value="#{client}" target="#{theClients.selectedClient}"/>
+                                                     styleClass="rounded-button ui-button-help float-right">
                                         <p:resetInput target=":form:manage-client-content"/>
                                     </p:commandButton>
-                                </p:column>
-
-                                <p:column style="width:calc(50px)" exportable="false" headerText="Delete" >
-                                    <p:commandButton class="rounded-button" icon="pi pi-trash" process="@this"
-                                                     oncomplete="PF('deleteClientDialog').show()">
-                                        <f:setPropertyActionListener value="#{client}" target="#{theClients.selectedClient}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
+                                </span>
+                            </div>
+                        </f:facet>
 
 
-                            <p:dialog header="Client Details" showEffect="fade" modal="true"
-                                      widgetVar="manageClientDialog" responsive="true" width="500px" height="450px">
-                                <p:outputPanel id="manage-client-content" class="ui-fluid">
-                                    <p:outputPanel rendered="#{not empty theClients.selectedClient}">
-                                        <div>
-                                            <p:outputLabel for="username" value="#{msgs.username}"/>
-                                            <p:inputText id="username"  value="#{theClients.selectedClient.username}" 
-                                                         required="true" requiredMessage="#{msgs.usernameRequired}"
-                                                         />
-                                            <h:message for="username" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="userTitle" value="#{msgs.clientTitle}"/>
-                                            <p:selectOneMenu id="userTitle" value="#{theClients.selectedClient.title}" 
-                                                             required="true" requiredMessage="#{msgs.titleRequired}"> 
-                                                <f:selectItem itemValue=" " itemLabel="Select Title..." noSelectionOption="true"/>
-                                                <f:selectItem itemValue = "Consumer" itemLabel = "Consumer" /> 
-                                                <f:selectItem itemValue = "Manager" itemLabel = "Manager" />  
-                                            </p:selectOneMenu>  
-                                            <h:message for="userTitle" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="firstName" value="#{msgs.firstname}"/>
-                                            <p:inputText id="firstName" value="#{theClients.selectedClient.firstName}" 
-                                                         required="true" requiredMessage="#{msgs.firstnameRequired}" />
-                                            <h:message for="firstName" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="lastName" value="#{msgs.lastname}"/>
-                                            <p:inputText id="lastName" value="#{theClients.selectedClient.lastName}" 
-                                                         required="true" requiredMessage="#{msgs.lastnameRequired}"/>
-                                            <h:message for="lastName" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="email" value="#{msgs.email}"/>
-                                            <p:inputText id="email"  value="#{theClients.selectedClient.email}" 
-                                                         a:type="email" required="true"
-                                                         requiredMessage="#{msgs.emailRequired}"
-                                                         />
-                                            <h:message for="email" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="cellphone" value="#{msgs.cellPhone}"/>
-                                            <p:inputText id="cellphone" value="#{theClients.selectedClient.cellPhone}"
-                                                         converter="com.beatchamber.PhoneNumberConverter">
-                                                <f:ajax event="blur" render="@this"/>
-                                            </p:inputText>
-                                            <h:message for="cellphone" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="homephone" value="#{msgs.homePhone}"/>
-                                            <p:inputText id="homephone" value="#{theClients.selectedClient.homePhone}"
-                                                         converter="com.beatchamber.PhoneNumberConverter">
-                                                <f:ajax event="blur" render="@this"/>
-                                            </p:inputText>
-                                            <h:message for="homephone" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="company" value="#{msgs.company}"/>
-                                            <p:inputText id="company"  value="#{theClients.selectedClient.companyName}"/>
-                                            <h:message for="company" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="address1" value="#{msgs.address1}"/>
-                                            <p:inputText id="address1"  value="#{theClients.selectedClient.address1}"/>
-                                            <h:message for="address1" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="address2" value="#{msgs.address2}"/>
-                                            <p:inputText id="address2"  value="#{theClients.selectedClient.address2}"/>
-                                            <h:message for="address2" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="country" value="#{msgs.country}"/>
-                                            <p:selectOneMenu id="country" value="#{theClients.selectedClient.country}"> 
-                                                <f:selectItem itemValue=" " itemLabel="Select Country..." noSelectionOption="true"/>
-                                                <f:selectItem itemValue = "Canada" itemLabel = "Canada" /> 
-                                            </p:selectOneMenu>  
-                                            <h:message for="country" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="province" value="#{msgs.province}"/>
-                                            <p:selectOneMenu id="province" value="#{theClients.selectedClient.province}">
-                                                <f:selectItem itemValue=" " itemLabel="Select Province..." noSelectionOption="true"/>
-                                                <f:selectItems value="#{theClients.provices}" />
-                                            </p:selectOneMenu>
-                                            <h:message for="province" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="city" value="#{msgs.city}"/>
-                                            <p:inputText id="city"  value="#{theClients.selectedClient.city}"/>
-                                            <h:message for="city" styleClass="errorMessage" style="color:red"/>
-                                        </div>
-                                        <div>
-                                            <p:outputLabel for="postalCode" value="#{msgs.postalCode}"/>
-                                            <p:inputText id="postalCode"  value="#{theClients.selectedClient.postalCode}"
-                                                         converter="com.beatchamber.PostalCodeConverter">
-                                                <f:ajax event="blur" render="@this"/>
-                                            </p:inputText>
-                                            <h:message for="postalCode" styleClass="errorMessage" style="color:red"/>
-                                        </div>
+                        <p:column style="width:calc(20px)" headerText="ID" sortBy="#{client.clientNumber}" 
+                                  filterBy="#{client.clientNumber}" filterMatchMode="contains">
+                            <h:outputText value="#{client.clientNumber}" />
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="UserName" sortBy="#{client.username}" 
+                                  filterBy="#{client.username}" filterMatchMode="contains">
+                            <h:outputText value="#{client.username}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Title" sortBy="#{client.title}"
+                                  filterBy="#{client.title}" filterMatchMode="contains">
+                            <h:outputText value="#{client.title}" 
+                                          styleClass="badge badge-primary"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="First Name" sortBy="#{client.firstName}"
+                                  filterBy="#{client.firstName}" filterMatchMode="contains">
+                            <h:outputText value="#{client.firstName}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Last Name" sortBy="#{client.lastName}"
+                                  filterBy="#{client.lastName}" filterMatchMode="contains">
+                            <h:outputText value="#{client.lastName}"/>
+                        </p:column>
+                        <p:column style="width:calc(150px)" headerText="Email" sortBy="#{client.email}"
+                                  filterBy="#{client.email}" filterMatchMode="contains">
+                            <h:outputText value="#{client.email}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Cell Phone" sortBy="#{client.cellPhone}"
+                                  filterBy="#{client.cellPhone}" filterMatchMode="contains">
+                            <h:outputText value="#{client.cellPhone}"/>
+                        </p:column>
 
-                                    </p:outputPanel>
-                                </p:outputPanel>
+                        <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-client-content"
+                                             oncomplete="PF('manageClientDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-help" process="@this">
+                                <f:setPropertyActionListener value="#{client}" target="#{theClients.selectedClient}"/>
+                                <p:resetInput target=":form:manage-client-content"/>
+                            </p:commandButton>
+                        </p:column>
 
-                                <f:facet name="footer">
-                                    <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theClients.saveClient}"
-                                                     update="manage-client-content" process="manage-client-content @this"/>
-                                    <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageClientDialog').hide()"
-                                                     class="ui-button-secondary"/>
-                                </f:facet>
-                            </p:dialog>
+                        <p:column style="width:calc(50px)" exportable="false" headerText="Delete" >
+                            <p:commandButton class="rounded-button" icon="pi pi-trash" process="@this"
+                                             oncomplete="PF('deleteClientDialog').show()">
+                                <f:setPropertyActionListener value="#{client}" target="#{theClients.selectedClient}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
 
 
-                            <p:confirmDialog widgetVar="deleteClientDialog" showEffect="fade" width="300"
-                                             message="Delete the client?" header="Confirm" severity="warn">
-                                <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{theClients.deleteClient}"
-                                                 process="@this" oncomplete="PF('deleteClientDialog').hide()"/>
-                                <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                                 onclick="PF('deleteClientDialog').hide()"/>
-                            </p:confirmDialog>
+                    <p:dialog header="Client Details" showEffect="fade" modal="true"
+                              widgetVar="manageClientDialog" responsive="true" width="500px" height="450px">
+                        <p:outputPanel id="manage-client-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty theClients.selectedClient}">
+                                <div>
+                                    <p:outputLabel for="username" value="#{msgs.username}"/>
+                                    <p:inputText id="username"  value="#{theClients.selectedClient.username}" 
+                                                 required="true" requiredMessage="#{msgs.usernameRequired}"
+                                                 validator="#{theClients.validateUniqueUser}"/>
+                                    <h:message for="username" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="userTitle" value="#{msgs.clientTitle}"/>
+                                    <p:selectOneMenu id="userTitle" value="#{theClients.selectedClient.title}" 
+                                                     required="true" requiredMessage="#{msgs.titleRequired}"> 
+                                        <f:selectItem itemValue=" " itemLabel="Select Title..." noSelectionOption="true"/>
+                                        <f:selectItem itemValue = "Consumer" itemLabel = "Consumer" /> 
+                                        <f:selectItem itemValue = "Manager" itemLabel = "Manager" />  
+                                    </p:selectOneMenu>  
+                                    <h:message for="userTitle" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="firstName" value="#{msgs.firstname}"/>
+                                    <p:inputText id="firstName" value="#{theClients.selectedClient.firstName}" 
+                                                 required="true" requiredMessage="#{msgs.firstnameRequired}" />
+                                    <h:message for="firstName" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="lastName" value="#{msgs.lastname}"/>
+                                    <p:inputText id="lastName" value="#{theClients.selectedClient.lastName}" 
+                                                 required="true" requiredMessage="#{msgs.lastnameRequired}"/>
+                                    <h:message for="lastName" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="email" value="#{msgs.email}"/>
+                                    <p:inputText id="email"  value="#{theClients.selectedClient.email}" 
+                                                 a:type="email" required="true"
+                                                 requiredMessage="#{msgs.emailRequired}"
+                                                 validator="#{theClients.validateEmail}"/>
+                                    <h:message for="email" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="cellphone" value="#{msgs.cellPhone}"/>
+                                    <p:inputText id="cellphone" value="#{theClients.selectedClient.cellPhone}"
+                                                 converter="com.beatchamber.PhoneNumberConverter">
+                                        <f:ajax event="blur" render="@this"/>
+                                    </p:inputText>
+                                    <h:message for="cellphone" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="homephone" value="#{msgs.homePhone}"/>
+                                    <p:inputText id="homephone" value="#{theClients.selectedClient.homePhone}"
+                                                 converter="com.beatchamber.PhoneNumberConverter">
+                                        <f:ajax event="blur" render="@this"/>
+                                    </p:inputText>
+                                    <h:message for="homephone" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="company" value="#{msgs.company}"/>
+                                    <p:inputText id="company"  value="#{theClients.selectedClient.companyName}"/>
+                                    <h:message for="company" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="address1" value="#{msgs.address1}"/>
+                                    <p:inputText id="address1"  value="#{theClients.selectedClient.address1}"/>
+                                    <h:message for="address1" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="address2" value="#{msgs.address2}"/>
+                                    <p:inputText id="address2"  value="#{theClients.selectedClient.address2}"/>
+                                    <h:message for="address2" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="country" value="#{msgs.country}"/>
+                                    <p:selectOneMenu id="country" value="#{theClients.selectedClient.country}"> 
+                                        <f:selectItem itemValue=" " itemLabel="Select Country..." noSelectionOption="true"/>
+                                        <f:selectItem itemValue = "Canada" itemLabel = "Canada" /> 
+                                    </p:selectOneMenu>  
+                                    <h:message for="country" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="province" value="#{msgs.province}"/>
+                                    <p:selectOneMenu id="province" value="#{theClients.selectedClient.province}">
+                                        <f:selectItem itemValue=" " itemLabel="Select Province..." noSelectionOption="true"/>
+                                        <f:selectItems value="#{theClients.provices}" />
+                                    </p:selectOneMenu>
+                                    <h:message for="province" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="city" value="#{msgs.city}"/>
+                                    <p:inputText id="city"  value="#{theClients.selectedClient.city}"/>
+                                    <h:message for="city" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="postalCode" value="#{msgs.postalCode}"/>
+                                    <p:inputText id="postalCode"  value="#{theClients.selectedClient.postalCode}"
+                                                 converter="com.beatchamber.PostalCodeConverter">
+                                        <f:ajax event="blur" render="@this"/>
+                                    </p:inputText>
+                                    <h:message for="postalCode" styleClass="errorMessage" style="color:red"/>
+                                </div>
 
-                            <p:confirmDialog global="true" showEffect="fade" width="300">
-                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" 
-                                                 icon="pi pi-check"/>
-                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                                 icon="pi pi-times"/>
-                            </p:confirmDialog>
+                            </p:outputPanel>
+                        </p:outputPanel>
 
-                        </h:form>
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theClients.saveClient}"
+                                             update="manage-client-content" process="manage-client-content @this"/>
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageClientDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
 
-                    </div>
-                </div>
+
+                    <p:confirmDialog widgetVar="deleteClientDialog" showEffect="fade" width="300"
+                                     message="Delete the client?" header="Confirm" severity="warn">
+                        <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{theClients.deleteClient}"
+                                         process="@this" oncomplete="PF('deleteClientDialog').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteClientDialog').hide()"/>
+                    </p:confirmDialog>
+
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" 
+                                         icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+
+                </h:form>
             </ui:define>
         </ui:composition>
     </h:body>
