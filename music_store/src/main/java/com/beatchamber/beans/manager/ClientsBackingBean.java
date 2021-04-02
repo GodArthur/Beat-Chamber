@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * This backing bean is used for survey management page
  *
  * @author 1733570 Yan Tang
  */
@@ -51,65 +52,111 @@ public class ClientsBackingBean implements Serializable {
 
     @Inject
     private ClientsJpaController clientsJpaController;
-    
+
     @Inject
     private ProvincesJpaController provincesJpaController;
 
     private List<Clients> clients;
 
     private Clients selectedClient;
-    
+
     private List<Clients> filteredClients;
 
+    /**
+     * Initialization.
+     */
     @PostConstruct
     public void init() {
         this.clients = clientsJpaController.findClientsEntities();
     }
 
+    /**
+     * Get all the clients.
+     *
+     * @return a list of clients in the database.
+     */
     public List<Clients> getClients() {
         return clients;
     }
 
+    /**
+     * Get the selected the client.
+     *
+     * @return the selected client.
+     */
     public Clients getSelectedClient() {
         return selectedClient;
     }
 
+    /**
+     * Set the selected client.
+     *
+     * @param selectedClient the selected client.
+     */
     public void setSelectedClient(Clients selectedClient) {
         this.selectedClient = selectedClient;
     }
-    
+
+    /**
+     * Get the filteredClients.
+     *
+     * @return a list of filtedClients.
+     */
     public List<Clients> getFilteredClients() {
         return filteredClients;
     }
 
+    /**
+     * Set the filtedClients.
+     *
+     * @param filteredClients a list of filtedClients.
+     */
     public void setFilteredClients(List<Clients> filteredClients) {
         this.filteredClients = filteredClients;
     }
-    
-    public List<String> getProvices() {
+
+    /**
+     * Get all the provinces in the database.
+     *
+     * @return a list of all the provinces.
+     */
+    public List<String> getProvinces() {
         List<String> proviceList = new ArrayList<>();
-        this.provincesJpaController.findProvincesEntities().forEach(item->proviceList.add(item.getChoiceName()));
+        this.provincesJpaController.findProvincesEntities().forEach(item -> proviceList.add(item.getChoiceName()));
         return proviceList;
     }
 
+    /**
+     * Check if the client is a manager.
+     *
+     * @return true if the client is a manager, otherwise false.
+     */
     public List<Boolean> isManager() {
         List<Boolean> isManagerList = new ArrayList<>();
         this.clients.forEach(item -> isManagerList.add(item.getTitle().equals("Manager")));
         return isManagerList;
     }
 
+    /**
+     * Initialize the selectClient field when opening the add new dialog.
+     */
     public void openNew() {
         this.selectedClient = new Clients();
     }
 
+    /**
+     * Add or save the changes to the client table.
+     */
     public void saveClient() {
         try {
+            //when add a new client
             if (this.selectedClient.getClientNumber() == null) {
                 this.setPassword();
                 clientsJpaController.create(this.selectedClient);
                 this.clients.add(this.selectedClient);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Added"));
             } else {
+                //when edit a existing client
                 clientsJpaController.edit(this.selectedClient);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Client Updated"));
             }
@@ -123,6 +170,9 @@ public class ClientsBackingBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-clients");
     }
 
+    /**
+     * Delete the client when delete button is clicked.
+     */
     public void deleteClient() {
         try {
             clientsJpaController.destroy(this.selectedClient.getClientNumber());
@@ -135,20 +185,26 @@ public class ClientsBackingBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-clients");
     }
 
+    /**
+     * Set the hashed password for a new client.
+     */
     private void setPassword() {
         String initPassword = "123456";
 
-        //Set salt and hashed password
+        //Set salt
         byte[] salt = getSalt();
         String saltStr = Base64.getEncoder().encodeToString(salt);
         this.selectedClient.setSalt(saltStr);
 
+        //Set hashed password
         String securePassword = getSecurePassword(initPassword, salt);
         this.selectedClient.setHash(securePassword);
     }
 
-    /*
-    * Get a random salt value
+    /**
+     * Get a random salt value.
+     *
+     * @return a list of byte array for random number.
      */
     private byte[] getSalt() {
         //Create array for salt
@@ -166,8 +222,12 @@ public class ClientsBackingBean implements Serializable {
         return salt;
     }
 
-    /*
-    * Generate a Secure Password using salt
+    /**
+     * Generate a Secure Password using salt.
+     *
+     * @param passwordToHash the password need to be hashed.
+     * @param salt the salt.
+     * @return a string of a hashed password.
      */
     private String getSecurePassword(String passwordToHash, byte[] salt) {
         String generatedPassword = null;
@@ -193,7 +253,7 @@ public class ClientsBackingBean implements Serializable {
     }
 
     /**
-     * The method verifies that the username is not already in the database
+     * The method verifies that the username is not already in the database.
      *
      * @param context
      * @param component
@@ -203,9 +263,6 @@ public class ClientsBackingBean implements Serializable {
             Object value) {
 
         LOG.debug("validateUniqueUserName");
-//        if (this.selectedClient != null && this.selectedClient.getClientNumber() != null) {
-//            return;
-//        }
 
         // Retrieve the value passed to this method
         String username = (String) value;
@@ -214,8 +271,8 @@ public class ClientsBackingBean implements Serializable {
         List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
         for (Clients client : clientsList) {
-            if (client.getUsername().equals(username) 
-                    && this.selectedClient!= null 
+            if (client.getUsername().equals(username)
+                    && this.selectedClient != null
                     && this.selectedClient.getClientNumber().intValue() != client.getClientNumber().intValue()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
@@ -225,7 +282,7 @@ public class ClientsBackingBean implements Serializable {
     }
 
     /**
-     * The method verifies that the email is not already in the database
+     * The method verifies that the email is not already in the database.
      *
      * @param context
      * @param component
@@ -248,9 +305,6 @@ public class ClientsBackingBean implements Serializable {
         }
 
         LOG.debug("validateUniqueEmail");
-//        if (this.selectedClient != null && this.selectedClient.getClientNumber() != null) {
-//            return;
-//        }
 
         // Retrieve the value passed to this method
         String username = (String) value;
@@ -268,7 +322,15 @@ public class ClientsBackingBean implements Serializable {
             }
         }
     }
-    
+
+    /**
+     * It is used for a global search.
+     *
+     * @param value
+     * @param filter
+     * @param locale
+     * @return
+     */
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
         if (LangUtils.isValueBlank(filterText)) {

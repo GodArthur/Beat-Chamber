@@ -179,7 +179,7 @@
                                     <p:outputLabel for="province" value="#{msgs.province}"/>
                                     <p:selectOneMenu id="province" value="#{theClients.selectedClient.province}">
                                         <f:selectItem itemValue=" " itemLabel="Select Province..." noSelectionOption="true"/>
-                                        <f:selectItems value="#{theClients.provices}" />
+                                        <f:selectItems value="#{theClients.provinces}" />
                                     </p:selectOneMenu>
                                     <h:message for="province" styleClass="errorMessage" style="color:red"/>
                                 </div>
@@ -202,7 +202,9 @@
 
                         <f:facet name="footer">
                             <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theClients.saveClient}"
-                                             update="manage-client-content" process="manage-client-content @this"/>
+                                             widgetVar="saveButton" onclick="PF('saveButton').disable()"
+                                             update="manage-client-content" process="manage-client-content @this"
+                                             oncomplete="PF('saveButton').enable()"/>
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageClientDialog').hide()"
                                              class="ui-button-secondary"/>
                         </f:facet>
