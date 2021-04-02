@@ -5,10 +5,11 @@
  */
 package com.beatchamber.beans;
 
-import com.beatchamber.jpacontroller.AlbumsJpaController;
+
+
+import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -16,6 +17,10 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
+import java.text.DecimalFormat;
+import javax.inject.Inject;
+
+
 
 /**
  *
@@ -25,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestScoped
 public class CheckoutBean implements Serializable {
     
+            
     private String cardNumber = "";
     private String expDate = "";
     private String cvv = "";
@@ -233,6 +239,7 @@ public class CheckoutBean implements Serializable {
      * @param value
      * @return Double
      * @author Ibrahim
+     * 
      */
     private Double roundDoubleValue(double value){
         DecimalFormat df = new DecimalFormat("#.##");
