@@ -51,6 +51,10 @@ a:visited {
     float: right;
 }
 
+.flow-root {
+    display: flow-root;
+}
+
 .main-title {
     font-family: 'Changa', sans-serif;
     font-size: 40px;
@@ -197,13 +201,11 @@ a:visited {
 }
 
 .survey-display{
+    height: 40%;
     padding: 10px;
+    margin-bottom: 10px;
     background-color: #1a1a1a;
-    display: flow-root;
-}
-
-.choice {
-    display: block;
+    display: grid;
 }
 
 .choice-radio-btn {

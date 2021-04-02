@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
  * @author kibra
  */
 @Entity
-@Table(name = "rss_feeds", catalog = "beat_chamber", schema = "")
+@Table(name = "rss_feeds", catalog = "CSgb1w21", schema = "")
 @NamedQueries({
     @NamedQuery(name = "RssFeeds.findAll", query = "SELECT r FROM RssFeeds r"),
     @NamedQuery(name = "RssFeeds.findByRssId", query = "SELECT r FROM RssFeeds r WHERE r.rssId = :rssId"),
@@ -33,7 +33,7 @@ public class RssFeeds implements Serializable {
     private Integer rssId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 1000)
     @Column(name = "link")
     private String link;
 
@@ -89,5 +89,4 @@ public class RssFeeds implements Serializable {
     public String toString() {
         return "com.beatchamber.entities.RssFeeds[ rssId=" + rssId + " ]";
     }
-    
 }

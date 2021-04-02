@@ -208,7 +208,7 @@ link varchar(100) not null
 /* RSS_Feeds */
 create table RSS_Feeds (
 rss_id int primary key auto_increment,
-link varchar(100) not null
+link varchar(1000) not null
 );
 
 /* Surveys */
