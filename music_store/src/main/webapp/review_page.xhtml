@@ -4,7 +4,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
         <!--Style for the star radio buttons -->
@@ -21,28 +22,34 @@
                             <div class="album-display-small">
                                 <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}" styleClass="album-img-small"/>
                             </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <h:form>
+                                <div class="stars">
+                                    <p:growl id="messages" showDetail="true"/>
+                                    <!--<h:selectOneRadio value="{customerReviews.rating}">-->
+                                        <p:rating value="#{customerReviews.rating}"/>
+                                        
+<!--                                        <f:selectItem itemValue="1" class="star star-1" id="star-1"/>
+                                        <f:selectItem itemValue="2" class="star star-2" id="star-2"/>
+                                        <f:selectItem itemValue="3" class="star star-3" id="star-3"/>      
+                                        <f:selectItem itemValue="4" class="star star-4" id="star-4"/>
+                                        <f:selectItem itemValue="5" class="star star-5" id="star-5"/>-->
+                                    <!--</h:selectOneRadio>-->
 
-                            <div class="stars">
-                                <h:form>
-                                    <h:selectOneRadio value="#{user.favColor1}">
-                                        <input class="star star-5" id="star-5" type="radio" name="star"/>
-                                        <label class="star star-5" for="star-5"></label>
-                                        <input class="star star-4" id="star-4" type="radio" name="star"/>
-                                        <label class="star star-4" for="star-4"></label>
-                                        <input class="star star-3" id="star-3" type="radio" name="star"/>
-                                        <label class="star star-3" for="star-3"></label>
-                                        <input class="star star-2" id="star-2" type="radio" name="star"/>
-                                        <label class="star star-2" for="star-2"></label>
-                                        <input class="star star-1" id="star-1" type="radio" name="star"/>
-                                        <label class="star star-1" for="star-1"></label>
-                                    </h:selectOneRadio>
-                                </h:form>
-                            </div>
-
-                            <form class="review-textbox">
-                                <textarea rows = "5" cols = "60" name = "description" placeholder="Leave you review here..."></textarea>
-                                <input type = "submit" value = "submit" />
-                            </form>
+                                </div>
+                                <div class="review-textbox">
+                                    <h:inputTextarea rows = "5" cols = "60"
+                                                     a:placeholder="Leave you review here..."
+                                                     value="#{customerReviews.review_Text}"/>
+                                    </div>
+                                <div>
+                                    <h:commandButton class="reviewbtn" type="submit" value="Add Review"
+                                                     action="#{customerReviews.addCustomerReview()}"/>                                   
+                                </div>
+                            </h:form>
                         </div>
                     </div>
                 </section>

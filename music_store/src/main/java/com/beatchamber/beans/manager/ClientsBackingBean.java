@@ -77,6 +77,7 @@ public class ClientsBackingBean implements Serializable {
      */
     public List<Clients> getClients() {
         return clients;
+        
     }
 
     /**

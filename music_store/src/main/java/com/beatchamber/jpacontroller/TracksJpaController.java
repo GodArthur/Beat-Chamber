@@ -8,12 +8,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.InvoiceDetails;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.entities.GenreToTracks;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.Artists;
 import com.beatchamber.entities.Genres;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
@@ -51,7 +51,7 @@ public class TracksJpaController implements Serializable {
 
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
-    
+
     private ArrayList<Tracks> listOfTracksInTheCart = new ArrayList<Tracks>();
 
     public TracksJpaController() {
@@ -334,62 +334,127 @@ public class TracksJpaController implements Serializable {
         return q.getResultList();
 
     }
-    
-       
+
     /**
-     * Written by Korjon Chang-Jones
-     * Method finds all Tracks based on a specific album
+     * Written by Korjon Chang-Jones Method finds all Tracks based on a specific
+     * album
+     *
      * @param albumId
-     * @param trackId
      * @return tracks from the same album
      * @author Korjon Chang-Jones
      */
-    public List<Tracks> findTracksByAlbum(Integer albumId){
-        
+    public List<Tracks> findTracksByAlbum(Integer albumId) {
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        
+
         CriteriaQuery<Tracks> cq = cb.createQuery(Tracks.class);
         Root<Tracks> rt = cq.from(Tracks.class);
         cq.where(cb.equal(rt.get("albumNumber").get("albumNumber"), albumId));
         cq.select(rt);
         Query q = em.createQuery(cq);
-        
+
         return q.getResultList();
+
+    }
+    
+    /**
+     * Method finds Tracks by their date entered
+     * in the inventory. 
+     * @param startDate Lower bound of the date range
+     * @param endDate Upper bound of the date range
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<Tracks> findTracksByDate(Date startDate, Date endDate){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tracks> cq = cb.createQuery(Tracks.class);
+        Root<Tracks> rt = cq.from(Tracks.class);
+        cq.where(cb.between(rt.get("entryDate"), startDate, endDate));
+        TypedQuery<Tracks> query = em.createQuery(cq);
+
+        return query.getResultList();
+        
+
+    }
+
+    /**
+     * Method finds tracks based on the title that is given. Title does not have
+     * to be exact string
+     *
+     * @param title
+     * @return list of albums containing title string
+     * @author Korjon Chang-Jones
+     */
+    public List<Tracks> findTracksByTitle(String title) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tracks> cq = cb.createQuery(Tracks.class);
+        Root<Tracks> rt = cq.from(Tracks.class);
+        cq.where(cb.like(rt.get("trackTitle"), "%" + title + "%"));
+        TypedQuery<Tracks> query = em.createQuery(cq);
+
+        return query.getResultList();
+    }
+    
+    /*
+    public List<Tracks>findTracksByArtist(String artistName){
+        
         
     }
-         
-
+    
+    
+    /**
+     * Method finds Artists on a specific track
+     * @param id
+     * @return The list of artists on the track
+     *
+     * @author Korjon Chang-Jones
+     */
+    public List<Artists> findArtists(Integer id){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Artists> cq = cb.createQuery(Artists.class);
+        Root <Artists> rt = cq.from(Artists.class);
+        Join artistToTracks = rt.join("artistsToTracksList");
+        cq.where(cb.equal(artistToTracks.get("trackId").get("trackId"), id));
+        TypedQuery<Artists> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
+    
+    
     public Tracks findTracks(Integer id) {
 
         return em.find(Tracks.class, id);
 
     }
-    
-    public Tracks findTracks(Integer id,EntityManager em2) {
+
+    public Tracks findTracks(Integer id, EntityManager em2) {
 
         return em2.find(Tracks.class, id);
 
     }
- 
-    
+
     /**
-     * Method finds one of the genres for a specific track
-     * based on its ID
+     * Method finds one of the genres for a specific track based on its ID
+     *
      * @param id
      * @return The genre of the track
      * @author Korjon Chang-Jones
      */
-    public Genres findGenre(Integer id){
-        
+    public Genres findGenre(Integer id) {
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Genres>  cq = cb.createQuery(Genres.class);
-        Root <Genres> rt = cq.from(Genres.class);
+        CriteriaQuery<Genres> cq = cb.createQuery(Genres.class);
+        Root<Genres> rt = cq.from(Genres.class);
         Join genreToTracks = rt.join("genreToTracksList");
         cq.where(cb.equal(genreToTracks.get("trackId").get("trackId"), id));
         TypedQuery<Genres> query = em.createQuery(cq);
-        
+
         return query.getSingleResult();
-        
+
     }
 
     public int getTracksCount() {
@@ -401,65 +466,68 @@ public class TracksJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
 
     }
-    
-    private void SetListOfItems(){
+
+    private void SetListOfItems() {
         listOfTracksInTheCart.clear();
         String[] data = getAllIdFromCart();
-        for(String item:data){
-            if(item.length()>0){
-                if(!item.toLowerCase().contains("a")){
+        for (String item : data) {
+            if (item.length() > 0) {
+                if (!item.toLowerCase().contains("a")) {
                     listOfTracksInTheCart.add(findTracks(parseStringToInt(item)));
                 }
             }
         }
     }
-    
+
     /**
      * This method will allow us to get the list of tracks that are in the cart
+     *
      * @return ArrayList of tracks
      * @author Ibrahim
      */
-    public ArrayList<Tracks> retrieveAllTracksInTheCart(){
+    public ArrayList<Tracks> retrieveAllTracksInTheCart() {
         SetListOfItems();
         return this.listOfTracksInTheCart;
     }
-    
+
     /**
-     * This method will return an array of the id from tracks the cart 
+     * This method will return an array of the id from tracks the cart
+     *
      * @return String[]
      * @author Ibrahim
      */
-    private String[] getAllIdFromCart(){
+    private String[] getAllIdFromCart() {
         CookieManager cookies = new CookieManager();
-        String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
+        String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages", "cartKey", null).getDetail());
         return dataResult.split(",");
     }
-    
+
     /**
-     * This method will return the total price of the tracks that are in the cart
+     * This method will return the total price of the tracks that are in the
+     * cart
+     *
      * @return String
      * @author Ibrahim
      */
-    public String getTotalPrice(){
+    public String getTotalPrice() {
         SetListOfItems();
-        double total=0;
-        for(Tracks item:listOfTracksInTheCart){
+        double total = 0;
+        for (Tracks item : listOfTracksInTheCart) {
             total = total + item.getCostPrice();
             System.out.println(total + "   ------------------------");
         }
         return total + "";
     }
-    
+
     /**
      * This method will return the int value of the string
+     *
      * @param strToParse
      * @return int
      * @author Ibrahim
      */
-    private int parseStringToInt(String strToParse){
+    private int parseStringToInt(String strToParse) {
         return Integer.parseInt(strToParse);
     }
-    
-    
 
 }
