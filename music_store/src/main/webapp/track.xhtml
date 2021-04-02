@@ -61,7 +61,8 @@
                                         <p>#{trackItem.trackTitle}</p>
                                     </h:commandLink> 
                                 </h:form>
-                                <h:button value="#{msgs.addToCart}" rendered="#{tracks.trackId != trackItem.trackId}"/>
+                                <!-- need to add action="{cookies.addTrackToCart(trackItem.trackId)}" -->
+                                <h:button value="#{msgs.addToCart}"  rendered="#{tracks.trackId != trackItem.trackId}"/>
                             </div>
                         </li>
                         </c:forEach>
