@@ -17,6 +17,7 @@ import com.beatchamber.entities.GenreToAlbum;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
+import java.util.Date;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -424,6 +425,47 @@ public class AlbumsJpaController implements Serializable {
         }
     }
     
+     /**
+     * Method finds Tracks by their date entered
+     * in the inventory. 
+     * @param firstDate Lower bound of the date range
+     * @param lastDate Upper bound of the date range
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<Albums> findAlbumsByDate(Date firstDate, Date lastDate){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Albums> cq = cb.createQuery(Albums.class);
+        Root<Albums> rt = cq.from(Albums.class);
+        cq.where(cb.between(rt.get("entryDate"), firstDate, lastDate));
+        TypedQuery<Albums> query = em.createQuery(cq);
+
+        return query.getResultList();
+        
+    }
+    
+    /**
+     * Method finds albums based on the title
+     * that is given. Title does not have
+     * to be exact string
+     * 
+     * @param title
+     * @return list of albums containing title string 
+     * @author Korjon Chang-jones
+     */
+    public List<Albums> findAlbumsByTitle(String title){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
+        Root<Albums> rt = cq.from(Albums.class);
+        cq.where(cb.like(rt.get("albumTitle"), "%" + title + "%"));
+        TypedQuery<Albums> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
+    
     
      /**
      * Method finds specific Albums based on its
@@ -466,8 +508,24 @@ public class AlbumsJpaController implements Serializable {
         return query.getSingleResult();
         
     }
-
     
+     /**
+     * Method finds Artists on a specific track
+     * @param id
+     * @return The list of artists on the track
+     * @author Korjon Chang-Jones
+     */
+    public List<Artists> findArtists(Integer id){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Artists> cq = cb.createQuery(Artists.class);
+        Root <Artists> rt = cq.from(Artists.class);
+        Join artistAlbums = rt.join("artistAlbumsList");
+        cq.where(cb.equal(artistAlbums.get("albumNumber").get("albumNumber"), id));
+        TypedQuery<Artists> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
 }
 
 

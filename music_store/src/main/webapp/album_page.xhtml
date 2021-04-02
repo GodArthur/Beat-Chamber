@@ -38,13 +38,6 @@
                         </h:form>
                     </div>
 
-
-                    <h:form><!-- @author Ibrahim -->
-                        <p:commandButton action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
-                    </h:form>
-
-                    
-
                     <h:form styleClass=""><!-- @author Ibrahim -->
                         <p:commandButton icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
                     </h:form>
