@@ -273,8 +273,7 @@ public class ClientsBackingBean implements Serializable {
 
         for (Clients client : clientsList) {
             if (client.getUsername().equals(username)
-                    && this.selectedClient != null
-                    && this.selectedClient.getClientNumber().intValue() != client.getClientNumber().intValue()) {
+                    && this.selectedClient.getClientNumber() != client.getClientNumber()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);
@@ -315,8 +314,7 @@ public class ClientsBackingBean implements Serializable {
 
         for (Clients client : clientsList) {
             if (client.getEmail().equals(username)
-                    && this.selectedClient != null
-                    && this.selectedClient.getClientNumber().intValue() != client.getClientNumber().intValue()) {
+                    && this.selectedClient.getClientNumber()!= client.getClientNumber()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateEmail']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);
