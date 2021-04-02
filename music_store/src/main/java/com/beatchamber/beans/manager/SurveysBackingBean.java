@@ -18,7 +18,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,13 +30,15 @@ import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 
 /**
- *
+ * This backing bean is used for survey management page
+ * 
  * @author 1733570 Yan Tang
  */
 @Named("theSurveys")
-@SessionScoped
+@ViewScoped
 public class SurveysBackingBean implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(SurveysBackingBean.class);
@@ -51,40 +52,52 @@ public class SurveysBackingBean implements Serializable {
     @Inject
     private ChoicesJpaController choicesJpaController;
 
-//    @Inject
-//    private LoginRegisterBackingBean loginRegisterBackingBean;
-
     private List<Surveys> surveys;
-
     private Surveys selectedSurvey;
 
-    //private List<SurveyToChoice> surveyToChoices;
     private Choices choice1;
     private Choices choice2;
     private Choices choice3;
     private Choices choice4;
     private Choices choice5;
 
+    private String numOfChoices = "5";
+    private boolean renderable3 = true;
+    private boolean renderable4 = true;
+    private boolean renderable5 = true;
+    
+    /**
+     * Initialization
+     */
     @PostConstruct
     public void init() {
         this.surveys = surveysJpaController.findSurveysEntities();
     }
 
-//    Test for getting user id from login pages
-//    public int getUserID() {
-//        return loginRegisterBackingBean.getClientId();
-//    }
-
-    public List<Surveys> getSurveys() {
-        return surveys;
-    }
-
+    /**
+     * Get selected Survey info.
+     * @return the selected survey
+     */
     public Surveys getSelectedSurvey() {
+        if(selectedSurvey == null){
+            //get new survey
+            this.selectedSurvey = new Surveys();
+        }
         return selectedSurvey;
     }
 
+    /**
+     * Set selected survey.
+     * @param selectedSurvey 
+     */
     public void setSelectedSurvey(Surveys selectedSurvey) {
         this.selectedSurvey = selectedSurvey;
+        
+        //set number of choices
+        this.numOfChoices = "" + this.selectedSurvey.getSurveyToChoiceList().size();
+        this.setBooleans();
+        
+        // set all the choices' value based on the number of choices
         this.choice1 = this.selectedSurvey.getSurveyToChoiceList().get(0).getChoiceId();
         this.choice2 = null;
         this.choice3 = null;
@@ -103,32 +116,150 @@ public class SurveysBackingBean implements Serializable {
             }
         }
     }
+    
+    /**
+     * Get all the surveys.
+     * @return a list of all the surveys
+     */
+    public List<Surveys> getSurveys() {
+        return surveys;
+    }
+    
+    /**
+     * Get Choice1.
+     * @return choice1
+     */
+    public Choices getChoice1() {
+        if(this.choice1 == null){
+            this.choice1 = new Choices();
+        this.choice1.setChoiceName("");
+        }
+        return this.choice1;
+    }
 
+    /**
+     * Get Choice2.
+     * @return choice2
+     */
+    public Choices getChoice2() {
+        if(this.choice2 == null){
+            this.choice2 = new Choices();
+        this.choice2.setChoiceName("");
+        }
+        return this.choice2;
+    }
+
+    /**
+     * Get Choice3.
+     * @return choice3
+     */
+    public Choices getChoice3() {
+        if(this.choice3 == null){
+            this.choice3 = new Choices();
+        this.choice3.setChoiceName("");
+        }
+        return this.choice3;
+    }
+
+    /**
+     * Get Choice4.
+     * @return choice4
+     */
+    public Choices getChoice4() {
+        if(this.choice4 == null){
+            this.choice4 = new Choices();
+        this.choice4.setChoiceName("");
+        }
+        return this.choice4;
+    }
+
+    /**
+     * Get Choice5.
+     * @return choice5
+     */
+    public Choices getChoice5() {
+        if(this.choice5 == null){
+            this.choice5 = new Choices();
+        this.choice5.setChoiceName("");
+        }
+        return this.choice5;
+    }
+
+    
+     /**
+     * Get number of the choices .
+     * @return the number of choices.
+     */
+    public String getNumOfChoices(){
+        return this.numOfChoices;
+    }
+
+    /**
+     * Set the Number of Choices.
+     * @param numOfChoices the number of choices.
+     */
+    public void setNumOfChoices(String numOfChoices) {
+        this.numOfChoices = numOfChoices;
+        this.setBooleans();
+        PrimeFaces.current().ajax().update("form:messages", "form:manage-options-content");
+    }
+    
+     /**
+     * Get if Choice3 is available.
+     * @return true when Choice3 is available, otherwise false.
+     */
+    public boolean getRenderable3() {
+        return this.renderable3;
+    }
+
+    /**
+     * Get if Choice4 is available.
+     * @return true when Choice4 is available, otherwise false.
+     */
+    public boolean getRenderable4() {
+        return this.renderable4;
+    }
+
+    /**
+     * Get if Choice5 is available.
+     * @return true when Choice5 is available, otherwise false.
+     */
+    public boolean getRenderable5() {
+        return this.renderable5;
+    }
+
+    /**
+     * Used for valueChangeListener of the Number of choices.
+     */
+    public void setNumOfChoicesAction() {
+        //no action needed here. it is for ajax purpose only
+    }
+
+
+    /**
+     * Initialize all the fields when opening the add new survey dialog.
+     */
     public void openNew() {
         this.selectedSurvey = new Surveys();
         this.initializeChoices();
-
-//        List<SurveyToChoice> surveyToChoices = new ArrayList<>();
-//
-//        for (int i = 0; i < 5; i++) {
-//            SurveyToChoice tempSurveyToChoice = new SurveyToChoice();
-//            tempSurveyToChoice.setSurveyId(selectedSurvey);
-//            Choices tempChoice = new Choices();
-//            tempChoice.setChoiceName("");
-//            tempChoice.setVotes(0);
-//            tempSurveyToChoice.setChoiceId(tempChoice);
-//            surveyToChoices.add(tempSurveyToChoice);
-//        }
-//        this.selectedSurvey.setSurveyToChoiceList(surveyToChoices);//newly added
+        this.numOfChoices = "2";
+        this.setBooleans();
     }
 
+    /**
+     * Add or save all the changes of the survey and the choices.
+     */
     public void saveSurvey() {
         try {
             if (this.selectedSurvey.getSurveyId() == null) {
+                //when adding a new survey, add the survey and choices to the database 
                 this.surveys.add(this.selectedSurvey);
                 this.addChoicesDataToDB();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Survey Added"));
             } else {
+                //delete choice 3, 4, and 5 that are not needed anymore
+                this.deleteChoices(); 
+                //when editing a survey, save the changes to the database 
                 this.surveysJpaController.edit(selectedSurvey);
                 this.updateChoicesDataToDB();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Survey Updated"));
@@ -145,13 +276,29 @@ public class SurveysBackingBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-surveys");
     }
 
+    /**
+     * Delete the survey and all the choices when delete button is clicked.
+     */
     public void deleteSurvey() {
         try {
-            this.choicesJpaController.destroy(this.choice1.getChoiceId());
-            this.choicesJpaController.destroy(this.choice2.getChoiceId());
-            this.choicesJpaController.destroy(this.choice3.getChoiceId());
-            this.choicesJpaController.destroy(this.choice4.getChoiceId());
-            this.choicesJpaController.destroy(this.choice5.getChoiceId());
+            //Delete the choice if the choice is available
+            if (this.choice1 != null && this.choice1.getChoiceId() != null) {
+                this.choicesJpaController.destroy(this.choice1.getChoiceId());
+            }
+            if (this.choice2 != null && this.choice2.getChoiceId() != null) {
+                this.choicesJpaController.destroy(this.choice2.getChoiceId());
+            }
+            if (this.choice3 != null && this.choice3.getChoiceId() != null) {
+                this.choicesJpaController.destroy(this.choice3.getChoiceId());
+            }
+            if (this.choice4 != null && this.choice4.getChoiceId() != null) {
+                this.choicesJpaController.destroy(this.choice4.getChoiceId());
+            }
+            if (this.choice5 != null && this.choice5.getChoiceId() != null) {
+                this.choicesJpaController.destroy(this.choice5.getChoiceId());
+            }
+            
+            //Delete all the related item from surveyToChoice table
             List<SurveyToChoice> surveyToChoice = this.selectedSurvey.getSurveyToChoiceList();
             surveyToChoice.forEach(item -> {
                 try {
@@ -160,41 +307,24 @@ public class SurveysBackingBean implements Serializable {
                     java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
+            
+            //Delete the Surevey item from survey table
             this.surveysJpaController.destroy(this.selectedSurvey.getSurveyId());
         } catch (IllegalOrphanException | NonexistentEntityException | NotSupportedException | SystemException | RollbackFailureException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //Update the surveys List
         this.surveys.remove(this.selectedSurvey);
         this.selectedSurvey = null;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Survey Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-surveys");
     }
 
-    public Choices getChoice1() {
-        return this.choice1;
-        //return this.selectedSurvey.getSurveyToChoiceList().get(0).getChoiceId();
-    }
-
-    public Choices getChoice2() {
-        return this.choice2;
-        //return this.selectedSurvey.getSurveyToChoiceList().get(1).getChoiceId();
-    }
-
-    public Choices getChoice3() {
-        return this.choice3;
-        //return this.selectedSurvey.getSurveyToChoiceList().get(2).getChoiceId();
-    }
-
-    public Choices getChoice4() {
-        return this.choice4;
-        //return this.selectedSurvey.getSurveyToChoiceList().get(3).getChoiceId();
-    }
-
-    public Choices getChoice5() {
-        return this.choice5;
-        //return this.selectedSurvey.getSurveyToChoiceList().get(4).getChoiceId();
-    }
-
+    
+    /**
+     * Add the choices to database when adding a new survey.
+     */
     public void addChoicesDataToDB() {
         try {
             //this statement must be executed before adding it to the surveyToChoice otherwise the survey id is null
@@ -205,60 +335,70 @@ public class SurveysBackingBean implements Serializable {
             if (choice2 != null && !choice2.getChoiceName().equals("")) {
                 this.addChoiceAndSurveyToChoice(choice2);
             }
-            if (choice3 != null && !choice3.getChoiceName().equals("")) {
+            if (choice3 != null && !choice3.getChoiceName().equals("")  && Integer.parseInt(this.numOfChoices) > 2) {
                 this.addChoiceAndSurveyToChoice(choice3);
             }
-            if (choice4 != null && !choice4.getChoiceName().equals("")) {
+            if (choice4 != null && !choice4.getChoiceName().equals("")  && Integer.parseInt(this.numOfChoices) > 3) {
                 this.addChoiceAndSurveyToChoice(choice4);
             }
-            if (choice5 != null && !choice5.getChoiceName().equals("")) {
+            if (choice5 != null && !choice5.getChoiceName().equals("")  && Integer.parseInt(this.numOfChoices) >4) {
                 this.addChoiceAndSurveyToChoice(choice5);
             }
         } catch (RollbackFailureException ex) {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-//        this.selectedSurvey.getSurveyToChoiceList().forEach(item -> {
-//            try {
-//                this.choicesJpaController.create(item.getChoiceId());
-//                this.choices.add(item.getChoiceId());
-//                this.surveyToChoiceJpaController.create(item);
-//            } catch (RollbackFailureException ex) {
-//                java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        });
     }
 
+    /**
+     * Update the Choices when editing.
+     */
     public void updateChoicesDataToDB() {
         try {
             if (choice1 != null && !choice1.getChoiceName().equals("")) {
-                this.choicesJpaController.edit(choice1);
+                if (choice1.getChoiceId() == null) {
+                    addChoiceAndSurveyToChoice(choice1);
+                } else {
+                    this.choicesJpaController.edit(choice1);
+                }
             }
             if (choice2 != null && !choice2.getChoiceName().equals("")) {
-                this.choicesJpaController.edit(choice2);
+                if (choice1.getChoiceId() == null) {
+                    addChoiceAndSurveyToChoice(choice2);
+                } else {
+                    this.choicesJpaController.edit(choice2);
+                }
             }
             if (choice3 != null && !choice3.getChoiceName().equals("")) {
-                this.choicesJpaController.edit(choice3);
+                if (this.selectedSurvey.getSurveyToChoiceList().size() < 3 && Integer.parseInt(numOfChoices) > 2) {
+                    //newly added choice
+                    addChoiceAndSurveyToChoice(choice3);
+                } else {
+                    this.choicesJpaController.edit(choice3);
+                }
             }
             if (choice4 != null && !choice4.getChoiceName().equals("")) {
-                this.choicesJpaController.edit(choice4);
+                if (this.selectedSurvey.getSurveyToChoiceList().size() < 4 && Integer.parseInt(numOfChoices) > 3) {
+                    addChoiceAndSurveyToChoice(choice4);
+                } else {
+                    this.choicesJpaController.edit(choice4);
+                }
             }
             if (choice5 != null && !choice5.getChoiceName().equals("")) {
-                this.choicesJpaController.edit(choice5);
+                if (this.selectedSurvey.getSurveyToChoiceList().size() < 5 && Integer.parseInt(numOfChoices) > 4) {
+                    addChoiceAndSurveyToChoice(choice5);
+                } else {
+                    this.choicesJpaController.edit(choice5);
+                }
             }
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //this.surveyToChoices.forEach(item -> {
-//        this.selectedSurvey.getSurveyToChoiceList().forEach(item-> {
-//            try {
-//                this.choicesJpaController.edit(item.getChoiceId());
-//            } catch (Exception ex) {
-//                java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        });
     }
 
+    /**
+     * Add the choices to the choices table and surveyToChoice table.
+     * @param choice 
+     */
     private void addChoiceAndSurveyToChoice(Choices choice) {
         try {
             this.choicesJpaController.create(choice);
@@ -271,6 +411,9 @@ public class SurveysBackingBean implements Serializable {
         }
     }
 
+    /**
+     * Initialize all the choices.
+     */
     private void initializeChoices() {
         this.choice1 = new Choices();
         this.choice1.setChoiceName("");
@@ -287,5 +430,97 @@ public class SurveysBackingBean implements Serializable {
         this.choice5 = new Choices();
         this.choice5.setChoiceName("");
         this.choice5.setVotes(0);
+    }
+
+   
+
+    /**
+     * Set the flag to identify how many options are available.
+     */
+    private void setBooleans() {
+        switch (this.numOfChoices) {
+            case "2":
+                this.renderable3 = false;
+                this.renderable4 = false;
+                this.renderable5 = false;
+                break;
+            case "3":
+                this.renderable3 = true;
+                this.renderable4 = false;
+                this.renderable5 = false;
+                break;
+            case "4":
+                this.renderable3 = true;
+                this.renderable4 = true;
+                this.renderable5 = false;
+                break;
+            case "5":
+                this.renderable3 = true;
+                this.renderable4 = true;
+                this.renderable5 = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+   
+    /**
+     * Delete the choices if the choices are not need when editing.
+     */
+    private void deleteChoices() {
+        try {
+            
+            if (this.selectedSurvey.getSurveyToChoiceList().size() > Integer.parseInt(numOfChoices)) {
+                //
+                List<SurveyToChoice> temp = this.selectedSurvey.getSurveyToChoiceList();
+                switch (this.numOfChoices) {
+                    case "2":
+                        for (int i = 2; i < temp.size(); i++) {
+                            this.surveyToChoiceJpaController.destroy(temp.get(i).getTablekey());
+                        }
+                        if (this.choice3.getChoiceId() != null) {
+                            this.choicesJpaController.destroy(this.choice3.getChoiceId());
+                        }
+                        if (this.choice4.getChoiceId() != null) {
+                            this.choicesJpaController.destroy(this.choice4.getChoiceId());
+                        }
+                        if (this.choice5.getChoiceId() != null) {
+                            this.choicesJpaController.destroy(this.choice5.getChoiceId());
+                        }
+                        break;
+                    case "3":
+                        for (int i = 3; i < temp.size(); i++) {
+                            this.surveyToChoiceJpaController.destroy(temp.get(i).getTablekey());
+                        }
+                        if (this.choice4.getChoiceId() != null) {
+                            this.choicesJpaController.destroy(this.choice4.getChoiceId());
+                        }
+                        if (this.choice5.getChoiceId() != null) {
+                            this.choicesJpaController.destroy(this.choice5.getChoiceId());
+                        }
+                        break;
+                    case "4":
+                        for (int i = 4; i < temp.size(); i++) {
+                            this.surveyToChoiceJpaController.destroy(temp.get(i).getTablekey());
+                        }
+                        if (this.choice5.getChoiceId() != null) {
+                            this.choicesJpaController.destroy(this.choice5.getChoiceId());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (IllegalOrphanException | NonexistentEntityException | NotSupportedException | SystemException | RollbackException | RollbackFailureException | HeuristicMixedException | HeuristicRollbackException ex) {
+            java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Initialize all the field when cancel a operation.
+     */
+    public void cancelAction(){
+        this.openNew();
     }
 }

@@ -53,9 +53,9 @@
             <h:form id="searchFunctions">
                 <h:inputText id="searchBar" a:placeholder="#{msgs.searchMusic}" value="#{search.searchValue}" styleClass="search" rendered="#{!search.dateCondition}"/>
                 
-                <p:calendar id="calendar" styleClass="search" value="#{search.searchValue}" navigator="true"
+                <p:calendar id="startCalendar" styleClass="search" value="#{search.searchValue}" navigator="true"
                         pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
-                <p:calendar id="calendar" a:placeholder="Last Date" styleClass="search" value="#{search.searchValue}" navigator="true"
+                <p:calendar id="endCalendar" a:placeholder="Last Date" styleClass="search" value="#{search.searchValue}" navigator="true"
                         pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
                 
                 <h:selectOneMenu value="#{search.searchCondition}" styleClass="search-dropdown">
@@ -65,7 +65,7 @@
                     <f:selectItem itemValue="artistName" itemLabel="Artist Name" />
                     <f:ajax render="searchFunctions"/>
                 </h:selectOneMenu>
-                <h:commandButton action="" styleClass="search-button" value="#{msgs.search}"/>
+                <h:commandButton action="browse_music.xhtml" styleClass="search-button" value="#{msgs.search}"/>
             </h:form>
         </div>
     </body>

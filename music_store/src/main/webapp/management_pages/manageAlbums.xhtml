@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!-- Management page. @Author Yan Tang 1733570 -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet library="styles" name="main.css" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.15.2/css/all.min-jsf.css" />
+        <title>#{msgs.managetitle}</title>
+    </h:head>
+    <h:body>
+        <!-- Base template of the page -->
+        <ui:composition template="../templates/management_template.xhtml">
+            <!-- Promotion banner -->
+            <ui:define name="dataTableContent">
+
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true"/>
+                    <p:dataTable id="dt-albums" widgetVar="dtAlbums" var="albumItem" value="#{theAlbums.albums}"
+                                 reflow="true" selection="#{theAlbums.selectedAlbum}" 
+                                 rowKey="#{albumItem.albumNumber}" paginator="true"
+                                 rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div>
+                                <span class="table-title">
+                                    Albums
+                                </span>
+                                <span>
+                                    <p:commandButton value="Add New Album" icon="pi pi-plus" 
+                                                     actionListener="#{theAlbums.openNew()}"
+                                                     update=":form:manage-album-content" 
+                                                     oncomplete="PF('manageAlbumDialog').show()"
+                                                     styleClass="rounded-button ui-button-help float-right">
+                                        <p:resetInput target=":form:manage-album-content"/>
+                                    </p:commandButton>
+                                </span>
+                            </div>
+                        </f:facet>
+
+                        <p:column style="width:2rem">
+                            <p:rowToggler/>
+                        </p:column>
+
+                        <p:column style="width:calc(20px)" headerText="ID" sortBy="#{albumItem.albumNumber}" 
+                                  filterBy="#{albumItem.albumNumber}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.albumNumber}" />
+                        </p:column>
+                        <p:column style="width:calc(200px)" headerText="Title" sortBy="#{albumItem.albumTitle}" 
+                                  filterBy="#{albumItem.albumTitle}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.albumTitle}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Entry Date" sortBy="#{albumItem.entryDate}"
+                                  filterBy="#{albumItem.entryDate}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.entryDate}" />
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Release Date" sortBy="#{albumItem.releaseDate}"
+                                  filterBy="#{albumItem.releaseDate}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.releaseDate}"/>
+                        </p:column>
+                        <p:column style="width:calc(100px)" headerText="Removal Status" sortBy="#{albumItem.removalStatus}"
+                                  filterBy="#{albumItem.removalStatus}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.removalStatus}"/>
+                        </p:column>
+
+                        <p:column style="width:calc(50px)" exportable="false" headerText="Add Track" >
+                            <p:commandButton icon="pi pi-plus" update=":form:add-track-content"
+                                             oncomplete="PF('addTrackDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-help" process="@this">
+                                <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
+                                <p:resetInput target=":form:add-track-content"/>
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-album-content"
+                                             oncomplete="PF('manageAlbumDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-help" process="@this">
+                                <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
+                                <p:resetInput target=":form:manage-album-content"/>
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:column style="width:calc(50px)" exportable="false" headerText="Delete" >
+                            <p:commandButton class="rounded-button" icon="pi pi-trash" process="@this"
+                                             oncomplete="PF('deleteAlbumDialog').show()">
+                                <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:rowExpansion styleClass="rowExpan">
+                            <p:dataTable id="dt-trackList" style="margin-left:90px; background:blue"
+                                         var="trackItem" value="#{theAlbums.getTrackListInAlbum(albumItem.albumNumber)}">
+                                <p:column headerText="TrackId">
+                                    <h:outputText value="#{trackItem.trackId}"/>
+                                </p:column>
+                                <p:column headerText="Track Title">
+                                    <h:outputText value="#{trackItem.trackTitle}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this">
+                                        <f:setPropertyActionListener target="#{theAlbums.removeTrackFromAlbum}" value="#{albumItem.albumNumber} #{trackItem.trackId}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:rowExpansion>
+                    </p:dataTable>
+
+
+                    <p:dialog header="Album Details" showEffect="fade" modal="true"
+                              widgetVar="manageAlbumDialog" responsive="true" width="500px" height="450px">
+                        <p:outputPanel id="manage-album-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty theAlbums.selectedAlbum}">
+                                <div>
+                                    <p:outputLabel for="albumTitle" value="#{msgs.albumTitle}"/>
+                                    <p:inputText id="albumTitle"  value="#{theAlbums.selectedAlbum.albumTitle}" 
+                                                 required="true" requiredMessage="#{msgs.albumTitleRequired}"/>
+                                    <h:message for="albumTitle" styleClass="errorMessage" style="color:red"/>
+                                </div>
+
+                                <div>
+                                    <p:outputLabel for="costPrice" value="#{msgs.costPrice}"/>
+                                    <p:datePicker id="costPrice" value="#{theAlbums.selectedAlbum.costPrice}" />
+                                    <h:message for="costPrice" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="listPrice" value="#{msgs.listPrice}"/>
+                                    <p:datePicker id="listPrice" value="#{theAlbums.selectedAlbum.listPrice}" />
+                                    <h:message for="listPrice" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="salePrice" value="#{msgs.salePrice}"/>
+                                    <p:datePicker id="salePrice" value="#{theAlbums.selectedAlbum.salePrice}" />
+                                    <h:message for="salePrice" styleClass="errorMessage" style="color:red"/>
+                                </div>
+
+                                <div>
+                                    <p:outputLabel for="entryDate" value="#{msgs.entryDate}"/>
+                                    <p:datePicker id="entryDate" value="#{theAlbums.selectedAlbum.entryDate}" />
+                                    <h:message for="entryDate" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="releaseDate" value="#{msgs.releaseDate}"/>
+                                    <p:datePicker id="releaseDate" value="#{theAlbums.selectedAlbum.releaseDate}" />
+                                    <h:message for="releaseDate" styleClass="errorMessage" style="color:red"/>
+                                </div>
+
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theAlbums.saveAlbum}"
+                                             update="manage-album-content" process="manage-album-content @this"/>
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageAlbumDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
+
+
+                    <p:confirmDialog widgetVar="deleteAlbumDialog" showEffect="fade" width="300"
+                                     message="Delete the album?" header="Confirm" severity="warn">
+                        <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{theAlbums.deleteAlbum}"
+                                         process="@this" oncomplete="PF('deleteAlbumDialog').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteAlbumDialog').hide()"/>
+                    </p:confirmDialog>
+
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" 
+                                         icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+
+
+                    <p:dialog header="Add the Track" showEffect="fade" modal="true"
+                              widgetVar="addTrackDialog" responsive="true" width="500px" height="450px">
+                        <p:outputPanel id="add-track-content" class="ui-fluid">
+                            <div>
+                                <p:outputLabel for="trackTitle" value="#{msgs.trackTitle}"/>
+                                <p:selectOneMenu id="trackTitle" value="#{theAlbums.newTrack.trackTitle}" 
+                                                 required="true" requiredMessage="#{msgs.titleRequired}"> 
+                                    <f:selectItem itemValue=" " itemLabel="Select song..." noSelectionOption="true"/>
+                                    <f:selectItems value="#{theAlbums.allTracks}" />
+                                </p:selectOneMenu>  
+                                <h:message for="trackTitle" styleClass="errorMessage" style="color:red"/>
+                            </div>
+
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Add to Album" icon="pi pi-check" actionListener="#{theAlbums.addTrackToAlbum}"
+                                             update="add-track-content" process="add-track-content @this"/>
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageAlbumDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
