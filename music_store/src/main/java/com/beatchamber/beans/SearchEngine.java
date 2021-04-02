@@ -97,7 +97,10 @@ public class SearchEngine implements Serializable {
         return searchCondition.equals("dateAdded");
     }
     
-    
+    /**
+     * Method finds Music content (albums and/or tracks)
+     * based on a search condition
+     */
     public void findMusicContent(){
         
         musicComponents = new ArrayList<>();
@@ -130,6 +133,10 @@ public class SearchEngine implements Serializable {
         
     }
     
+    /**
+     * Method finds music content (albums and tracks)
+     * entered in the inventory between certain dates
+     */
     public void findMusicContentByDate(){
         
         try {     

@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -79,7 +78,6 @@ public class Tracks implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "entry_date")
-    @Temporal(TemporalType.DATE)
     private Date entryDate;
     @Basic(optional = false)
     @NotNull
@@ -267,6 +265,12 @@ public class Tracks implements Serializable {
     public String toString() {
         return "com.beatchamber.entities.Tracks[ trackId=" + trackId + " ]";
     }
+    public Collection<OrderTrack> getOrderTrackCollection() {
+        return orderTrackCollection;
+    }
+    public void setOrderTrackCollection(Collection<OrderTrack> orderTrackCollection) {
+        this.orderTrackCollection = orderTrackCollection;
+    }
 
     public boolean getRemoved() {
         return removed;
@@ -298,14 +302,6 @@ public class Tracks implements Serializable {
 
     public void setHst(double hst) {
         this.hst = hst;
-    }
-
-    public Collection<OrderTrack> getOrderTrackCollection() {
-        return orderTrackCollection;
-    }
-
-    public void setOrderTrackCollection(Collection<OrderTrack> orderTrackCollection) {
-        this.orderTrackCollection = orderTrackCollection;
     }
     
 }

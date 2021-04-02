@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css"/>
         <title>Home Page</title>
@@ -21,6 +22,7 @@
                         <p class="album-description">#{msgs.recommendedDesc}</p>
                         <div class="recommended-list">
                             <div class="recommended-album">
+                                <!-- Links that don't redirect (URL stays the same) -->
                                 <h:commandLink action="#{album.sendAlbum}">
                                     <f:param name="albumId" value="2"/>
                                     <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(2, true)}" styleClass="album-img-small"/>
@@ -128,7 +130,7 @@
                             </div>
                             <div class="see-more-container right">
                                 <h:commandLink action="redirectToBrowseMusic">
-                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                    <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
                         </div>
@@ -165,7 +167,7 @@
                             </div>
                             <div class="see-more-container right">
                                 <h:commandLink action="redirectToBrowseMusic">
-                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                    <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
                         </div>
@@ -185,6 +187,16 @@
                                     <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName}" class="choice-radio-btn"/>
                                 </c:forEach>
                             </h:selectOneRadio>
+                        </div>
+                        <!-- Getting the link from the db doesn't work. Probably because of a security feature? -->
+                        <div class="rss-display flow-root">
+                            <script type="text/javascript" language="javascript" src="#{rssFeedsJpaController.findRssFeeds(1).link}"></script>
+                            <noscript> You apparently do not have JavaScript enabled on your browser lest you would be viewing an RSS Feed here from <a href="http://www.rssdog.com/">RSS Dog</a> </noscript>
+                        </div>
+                        <!-- Hardcoding the link works -->
+                        <div class="rss-display flow-root">
+                            <script type="text/javascript" language="javascript" src="https://www.rssdog.com/index.php?url=http%3A%2F%2Fwww.nasa.gov%2Frss%2Fdyn%2Fbreaking_news.rss&amp;mode=javascript&amp;showonly=&amp;maxitems=3&amp;showdescs=1&amp;desctrim=320&amp;descmax=0&amp;tabwidth=100%25&amp;linktarget=_blank&amp;bordercol=%23800080&amp;headbgcol=%23000000&amp;headtxtcol=%23ffffff&amp;titlebgcol=%231a1a1a&amp;titletxtcol=%238c9cff&amp;itembgcol=%23b3b3b3&amp;itemtxtcol=%23000000&amp;ctl=0"></script>
+                            <noscript> You apparently do not have JavaScript enabled on your browser lest you would be viewing an RSS Feed here from <a href="http://www.rssdog.com/">RSS Dog</a> </noscript>
                         </div>
                     </section>
                     <section>
@@ -219,7 +231,7 @@
                             </div>
                             <div class="see-more-container right">
                                 <h:commandLink action="redirectToBrowseMusic">
-                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                    <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
                         </div>
@@ -256,7 +268,7 @@
                             </div>
                             <div class="see-more-container right">
                                 <h:commandLink action="redirectToBrowseMusic">
-                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                    <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
                         </div>
@@ -293,7 +305,7 @@
                             </div>
                             <div class="see-more-container right">
                                 <h:commandLink action="redirectToBrowseMusic">
-                                    <button class="see-more-button">#{msgs.seeMore}</button>
+                                    <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
                         </div>

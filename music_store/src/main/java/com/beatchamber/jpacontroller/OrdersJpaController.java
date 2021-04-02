@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.entities.Orders;
+import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
@@ -17,7 +18,10 @@ import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import com.beatchamber.entities.OrderAlbum;
+import com.beatchamber.entities.OrderTrack;
+import java.util.Date;
+import javax.inject.Inject;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -38,6 +42,21 @@ public class OrdersJpaController implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(OrdersJpaController.class);
 
+    @Inject
+    private OrderAlbumJpaController orderAlbumController; 
+    
+    @Inject
+    private OrderTrackJpaController orderTrackController;
+    
+    @Inject
+    private ClientsJpaController clientController; 
+    
+    @Inject
+    private AlbumsJpaController albumController;
+    
+    @Inject
+    private TracksJpaController trackController;
+    
     @Resource
     private UserTransaction utx;
 
@@ -163,9 +182,58 @@ public class OrdersJpaController implements Serializable {
 
     }
 
+    private int findTotalOrders(){
+        return findOrdersEntities().size();
+    }
+    
     public Orders findOrders(Integer id) {
         return em.find(Orders.class, id);
     }
+    
+        public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
+        //set variables
+        Orders order = new Orders();
+        Date date = new Date();
+        int newOrderId = findTotalOrders()+1;
+        //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
+        //creating the order
+        order.setOrderDate(date);
+        order.setClientNumber(clientController.findClients(ClientNumber));
+        order.setVisible(true);
+        order.setOrderId(newOrderId);
+        try {
+            create(order);
+        } catch (RollbackFailureException ex) {
+            LOG.error("orders order roll back error");
+        }
+        
+        //creating the orderAlbums
+        for (Albums item:albumList) {
+            OrderAlbum orderAlbum =  new OrderAlbum();
+            orderAlbum.setAlbumId(item);
+            orderAlbum.setOrderId(newOrderId);
+            try {
+                orderAlbumController.create(orderAlbum);
+            } catch (RollbackFailureException ex) {
+                LOG.error("order rollback error");
+            }
+        }
+        
+        //creating the orderTrack
+        for(Tracks item:trackList){
+            OrderTrack orderTrack = new OrderTrack();
+            orderTrack.setOrderId(newOrderId);
+            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
+            try {
+                orderTrackController.create(orderTrack);
+            } catch (RollbackFailureException ex) {
+                LOG.error("order track error");
+            }
+        }
+        
+        return "index.xhtml";
+    }
+
 
     public int getOrdersCount() {
 

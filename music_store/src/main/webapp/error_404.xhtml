@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 404 page @Author Susan Vuu-->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
@@ -10,8 +11,10 @@
         <!-- Base template of the page -->
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
-                <h1>This webpage does not exist!</h1>
-                <h:graphicImage library="images" name="404image.jpg"/>
+                <section class="error-section">
+                    <h1>This webpage does not exist!</h1>
+                    <h:graphicImage library="images" name="404image.jpg"/>
+                </section>
             </ui:define>
         </ui:composition>
     </h:body>

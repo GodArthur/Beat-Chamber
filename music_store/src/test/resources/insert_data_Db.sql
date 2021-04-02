@@ -568,7 +568,7 @@ insert into Survey_to_Choice(survey_id,choice_id) values
 (7,30),
 (7,31);
 
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, password, hash) values 
+insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, hash) values 
 (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
 (2, 'Consumer', 'Riggey', 'Phillis', 'Dabvine', '12 Pankratz Avenue', '1796 Coleman Lane', 'Deep River', 'Alberta', 'Canada', 'M4J 4T3', '(974)586-1706', '(579)113-6429', 'cst.send@gmail.com', 'DawsonConsumer', 'dawsoncollege'),
 (3, 'Consumer', 'Widdop', 'Zeke', 'Zoovu', '61 Veith Street', '738 Schurz Hill', 'Dieppe', 'New Brunswick', 'Canada', 'E1A 4S3', '(879)573-6174', '(264)385-8093', 'zwiddop2@mlb.com', 'zwiddop2', 'UErBWw'),
@@ -608,3 +608,6 @@ insert into Ads (ad_id,file_name,link) values
 (8,'Aurora','https://en.wikipedia.org/wiki/Aurora'),
 (9,'Dogs','https://www.petfinder.com/pet-adoption/dog-adoption/'),
 (10,'Online classes','https://zoom.us/');
+
+insert into rss_feeds (link) values 
+('https://www.rssdog.com/index.php?url=http%3A%2F%2Fwww.nasa.gov%2Frss%2Fdyn%2Fbreaking_news.rss&amp;mode=javascript&amp;showonly=&amp;maxitems=3&amp;showdescs=1&amp;desctrim=320&amp;descmax=0&amp;tabwidth=100%25&amp;linktarget=_blank&amp;bordercol=%23800080&amp;headbgcol=%23000000&amp;headtxtcol=%23ffffff&amp;titlebgcol=%231a1a1a&amp;titletxtcol=%238c9cff&amp;itembgcol=%23b3b3b3&amp;itemtxtcol=%23000000&amp;ctl=0&type=html');

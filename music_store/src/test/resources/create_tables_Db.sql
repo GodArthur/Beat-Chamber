@@ -26,7 +26,7 @@ GRANT ALL ON CSgb1w21.* TO CSgb1w21@'%';
 
 /*remove tables if they are already present */
 
-rop database CSgb1w21;
+drop database CSgb1w21;
 CREATE DATABASE CSgb1w21;
 USE CSgb1w21;
 
@@ -208,7 +208,7 @@ link varchar(100) not null
 /* RSS_Feeds */
 create table RSS_Feeds (
 rss_id int primary key auto_increment,
-link varchar(100) not null
+link varchar(1000) not null
 );
 
 /* Surveys */
@@ -251,6 +251,7 @@ pst double not null,
 gst double not null,
 hst double not null
 );
+
 
 /* Order_track */
 create table order_track(

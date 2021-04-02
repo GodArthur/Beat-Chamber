@@ -8,19 +8,22 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
         <header>
-            <h:form>
-                <h:commandLink action="index.html">
-                    <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
-                </h:commandLink>
-            </h:form>
+            <h:link outcome="redirectToIndex">
+                <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
+            </h:link>
         </header>
+        <!-- Main links -->
         <nav>
             <div class="topnav">
+                <!-- Links that redirect -->
                 <h:link value="#{msgs.home}" outcome="redirectToIndex"/>
                 <h:link value="#{msgs.browseMusic}" outcome="redirectToBrowseMusic"/>
                 <h:link value="#{msgs.about}" outcome="redirectToAbout"/>
                 <h:form>
-                    <h:commandLink action="#{localeChanger.changeLocale()}">
+                    <h:commandLink action="#{localeChanger.setLanguage('fr', 'CA')}" rendered="#{localeChanger.currentEnglish}">
+                        #{msgs.changeLanguage}
+                    </h:commandLink>
+                    <h:commandLink action="#{localeChanger.setLanguage('en', 'CA')}" rendered="#{!localeChanger.currentEnglish}">
                         #{msgs.changeLanguage}
                     </h:commandLink>
                 </h:form>
@@ -40,7 +43,7 @@
                     <h:outputText value="#{msgs.welcome} #{theLoginRegister.username}" styleClass="welcome-label"
                                   rendered="#{theLoginRegister.loggedIn}"/>
                     <h:commandLink id="logout" action="#{theLoginRegister.doLogout}"
-                                   rendered="#{theLoginRegister.loggedIn}">
+                                   rendered="#{theLoginRegister.loggedIn}" title="#{msgs.logout}" >
                         <i class="pi pi-fw pi-power-off"></i>
                     </h:commandLink>
                 </h:form>

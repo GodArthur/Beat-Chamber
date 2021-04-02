@@ -1,3 +1,4 @@
+
 <!-- 
      Configuration: Parent element of a log4j2.xml file for Web applications
      status= refers to the level of messages emitted by log4j2 about itself
