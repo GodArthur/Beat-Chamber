@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,10 +30,16 @@ import javax.persistence.Table;
     @NamedQuery(name = "OrderAlbum.findByOrderId", query = "SELECT o FROM OrderAlbum o WHERE o.orderId = :orderId")})
 public class OrderAlbum implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @Column(name = "tablekey")
+    private Integer tablekey;
+
+    private static final long serialVersionUID = 1L;
+
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "order_id")
     private Integer orderId;
     @JoinColumn(name = "album_id", referencedColumnName = "album_number")
@@ -86,5 +93,14 @@ public class OrderAlbum implements Serializable {
     public String toString() {
         return "com.beatchamber.entities.OrderAlbum[ orderId=" + orderId + " ]";
     }
+
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
+    }
+
     
 }

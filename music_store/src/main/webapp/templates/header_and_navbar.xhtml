@@ -8,7 +8,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
         <header>
-            <h:link outcome="index.html">
+            <h:link outcome="redirectToIndex">
                 <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
             </h:link>
         </header>
@@ -43,7 +43,7 @@
                     <h:outputText value="#{msgs.welcome} #{theLoginRegister.username}" styleClass="welcome-label"
                                   rendered="#{theLoginRegister.loggedIn}"/>
                     <h:commandLink id="logout" action="#{theLoginRegister.doLogout}"
-                                   rendered="#{theLoginRegister.loggedIn}">
+                                   rendered="#{theLoginRegister.loggedIn}" title="#{msgs.logout}" >
                         <i class="pi pi-fw pi-power-off"></i>
                     </h:commandLink>
                 </h:form>

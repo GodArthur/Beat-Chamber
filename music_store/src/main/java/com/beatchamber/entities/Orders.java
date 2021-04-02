@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -33,15 +34,20 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Orders.findByOrderDate", query = "SELECT o FROM Orders o WHERE o.orderDate = :orderDate")})
 public class Orders implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "tablekey")
+    private Integer tablekey;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "order_id")
+    private int orderId;
+
     @Column(name = "visible")
     private Boolean visible;
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "order_id")
-    private Integer orderId;
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
@@ -80,25 +86,6 @@ public class Orders implements Serializable {
         this.clientNumber = clientNumber;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (orderId != null ? orderId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Orders)) {
-            return false;
-        }
-        Orders other = (Orders) object;
-        if ((this.orderId == null && other.orderId != null) || (this.orderId != null && !this.orderId.equals(other.orderId))) {
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public String toString() {
@@ -112,5 +99,29 @@ public class Orders implements Serializable {
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
+
+
+
+    public Orders(Integer tablekey, int orderId) {
+        this.tablekey = tablekey;
+        this.orderId = orderId;
+    }
+
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
+    }
+
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+
+
+
     
 }

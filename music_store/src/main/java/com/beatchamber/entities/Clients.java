@@ -88,17 +88,26 @@ public class Clients implements Serializable {
     private String cellPhone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull()
     @Size(min = 1, max = 40)
     @Column(name = "email")
     private String email;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    /*@Size(max = 40)
+    @Column(name = "genre_of_last_search")
+    private String genreOfLastSearch;*/
     @Basic(optional = false)
-    @NotNull
+    @NotNull()
     @Size(min = 1, max = 40)
     @Column(name = "username")
     private String username;
+   /* @Basic(optional = false)
+    @NotNull()
+    @Size(min = 1, max = 40)
+    @Column(name = "password")
+    private String password;*/
     @Size(max = 32)
     @Column(name = "salt")
     private String salt;
@@ -191,7 +200,7 @@ public class Clients implements Serializable {
     public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
     }
-
+    
     public List<CustomerReviews> getCustomerReviewsList() {
         return customerReviewsList;
     }
@@ -248,6 +257,7 @@ public class Clients implements Serializable {
         this.title = title;
     }
 
+
     public String getAddress1() {
         return address1;
     }
@@ -255,7 +265,6 @@ public class Clients implements Serializable {
     public void setAddress1(String address1) {
         this.address1 = address1;
     }
-
 
     public String getAddress2() {
         return address2;
@@ -297,6 +306,14 @@ public class Clients implements Serializable {
         this.email = email;
     }
 
+    /*public String getGenreOfLastSearch() {
+        return genreOfLastSearch;
+    }
+
+    public void setGenreOfLastSearch(String genreOfLastSearch) {
+        this.genreOfLastSearch = genreOfLastSearch;
+    }*/
+
     public String getUsername() {
         return username;
     }
@@ -304,6 +321,14 @@ public class Clients implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    /*public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }*/
 
     public String getSalt() {
         return salt;

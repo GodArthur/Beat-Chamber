@@ -475,44 +475,28 @@ a:visited {
 
 /*massimo adding new css for review page*/
 .review-textbox {
-  float: right;
+  float: none;
 }
 
 div.stars {
   width: 270px;
   display: inline-block;
   float:inherit;
+  padding-right: 100px;
 }
 
-input.star { display: none; }
-
-label.star {
+.reviewbtn{
+  clear:both;
+  background-color:#a58cff;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
   float: right;
-  padding: 10px;
-  font-size: 36px;
-  color: #ffffff;
-  transition: all .2s;
 }
 
-input.star:checked ~ label.star:before {
-  content: "\2605";
-  color: #FD4;
-  transition: all .25s;
-}
-
-input.star-5:checked ~ label.star:before {
-  color: #FE7;
-  text-shadow: 0 0 20px #952;
-}
-
-input.star-1:checked ~ label.star:before { color: #F62; }
-
-label.star:hover { transform: rotate(-15deg) scale(1.3); }
-
-label.star:before {
-  content: "\2606";
-  font-family: FontAwesome;
-}
 
 /*massimo adding new css for review page*/
 

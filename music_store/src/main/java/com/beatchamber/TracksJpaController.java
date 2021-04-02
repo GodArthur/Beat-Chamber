@@ -1,6 +1,10 @@
-package com.beatchamber.jpacontroller;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.beatchamber;
 
-import com.beatchamber.beans.CookieManager;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -12,52 +16,30 @@ import java.util.ArrayList;
 import java.util.List;
 import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.entities.GenreToTracks;
+import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Tracks;
-import com.beatchamber.entities.Albums;
-import com.beatchamber.entities.Genres;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
-import com.beatchamber.exceptions.RollbackFailureException;
-import javax.annotation.Resource;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
+import java.util.Collection;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.ParameterExpression;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Massimo Di Girolamo
+ * @author kibra
  */
-@Named("tracksController")
-@SessionScoped
 public class TracksJpaController implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(TracksJpaController.class);
+    public TracksJpaController(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+    private EntityManagerFactory emf = null;
 
-    @Resource
-    private UserTransaction utx;
-
-    @PersistenceContext(unitName = "music_store_persistence")
-    private EntityManager em;
-
-    private ArrayList<Tracks> listOfTracksInTheCart = new ArrayList<Tracks>();
-
-    public TracksJpaController() {
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
 
-    public void create(Tracks tracks) throws RollbackFailureException {
+    public void create(Tracks tracks) {
         if (tracks.getInvoiceDetailsList() == null) {
             tracks.setInvoiceDetailsList(new ArrayList<InvoiceDetails>());
         }
@@ -67,10 +49,13 @@ public class TracksJpaController implements Serializable {
         if (tracks.getGenreToTracksList() == null) {
             tracks.setGenreToTracksList(new ArrayList<GenreToTracks>());
         }
-
+        if (tracks.getOrderTrackCollection() == null) {
+            tracks.setOrderTrackCollection(new ArrayList<OrderTrack>());
+        }
+        EntityManager em = null;
         try {
-
-            utx.begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Albums albumNumber = tracks.getAlbumNumber();
             if (albumNumber != null) {
                 albumNumber = em.getReference(albumNumber.getClass(), albumNumber.getAlbumNumber());
@@ -94,6 +79,12 @@ public class TracksJpaController implements Serializable {
                 attachedGenreToTracksList.add(genreToTracksListGenreToTracksToAttach);
             }
             tracks.setGenreToTracksList(attachedGenreToTracksList);
+            Collection<OrderTrack> attachedOrderTrackCollection = new ArrayList<OrderTrack>();
+            for (OrderTrack orderTrackCollectionOrderTrackToAttach : tracks.getOrderTrackCollection()) {
+                orderTrackCollectionOrderTrackToAttach = em.getReference(orderTrackCollectionOrderTrackToAttach.getClass(), orderTrackCollectionOrderTrackToAttach.getTablekey());
+                attachedOrderTrackCollection.add(orderTrackCollectionOrderTrackToAttach);
+            }
+            tracks.setOrderTrackCollection(attachedOrderTrackCollection);
             em.persist(tracks);
             if (albumNumber != null) {
                 albumNumber.getTracksList().add(tracks);
@@ -126,23 +117,28 @@ public class TracksJpaController implements Serializable {
                     oldTrackIdOfGenreToTracksListGenreToTracks = em.merge(oldTrackIdOfGenreToTracksListGenreToTracks);
                 }
             }
-            utx.commit();
-        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
-                utx.rollback();
-                LOG.error("Rollback");
-            } catch (IllegalStateException | SecurityException | SystemException re) {
-                LOG.error("Rollback2");
-
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            for (OrderTrack orderTrackCollectionOrderTrack : tracks.getOrderTrackCollection()) {
+                Tracks oldTrackIdOfOrderTrackCollectionOrderTrack = orderTrackCollectionOrderTrack.getTrackId();
+                orderTrackCollectionOrderTrack.setTrackId(tracks);
+                orderTrackCollectionOrderTrack = em.merge(orderTrackCollectionOrderTrack);
+                if (oldTrackIdOfOrderTrackCollectionOrderTrack != null) {
+                    oldTrackIdOfOrderTrackCollectionOrderTrack.getOrderTrackCollection().remove(orderTrackCollectionOrderTrack);
+                    oldTrackIdOfOrderTrackCollectionOrderTrack = em.merge(oldTrackIdOfOrderTrackCollectionOrderTrack);
+                }
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
             }
         }
     }
 
     public void edit(Tracks tracks) throws IllegalOrphanException, NonexistentEntityException, Exception {
-
+        EntityManager em = null;
         try {
-            utx.begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Tracks persistentTracks = em.find(Tracks.class, tracks.getTrackId());
             Albums albumNumberOld = persistentTracks.getAlbumNumber();
             Albums albumNumberNew = tracks.getAlbumNumber();
@@ -152,6 +148,8 @@ public class TracksJpaController implements Serializable {
             List<CustomerReviews> customerReviewsListNew = tracks.getCustomerReviewsList();
             List<GenreToTracks> genreToTracksListOld = persistentTracks.getGenreToTracksList();
             List<GenreToTracks> genreToTracksListNew = tracks.getGenreToTracksList();
+            Collection<OrderTrack> orderTrackCollectionOld = persistentTracks.getOrderTrackCollection();
+            Collection<OrderTrack> orderTrackCollectionNew = tracks.getOrderTrackCollection();
             List<String> illegalOrphanMessages = null;
             for (InvoiceDetails invoiceDetailsListOldInvoiceDetails : invoiceDetailsListOld) {
                 if (!invoiceDetailsListNew.contains(invoiceDetailsListOldInvoiceDetails)) {
@@ -167,6 +165,14 @@ public class TracksJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain CustomerReviews " + customerReviewsListOldCustomerReviews + " since its trackId field is not nullable.");
+                }
+            }
+            for (OrderTrack orderTrackCollectionOldOrderTrack : orderTrackCollectionOld) {
+                if (!orderTrackCollectionNew.contains(orderTrackCollectionOldOrderTrack)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain OrderTrack " + orderTrackCollectionOldOrderTrack + " since its trackId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -197,6 +203,13 @@ public class TracksJpaController implements Serializable {
             }
             genreToTracksListNew = attachedGenreToTracksListNew;
             tracks.setGenreToTracksList(genreToTracksListNew);
+            Collection<OrderTrack> attachedOrderTrackCollectionNew = new ArrayList<OrderTrack>();
+            for (OrderTrack orderTrackCollectionNewOrderTrackToAttach : orderTrackCollectionNew) {
+                orderTrackCollectionNewOrderTrackToAttach = em.getReference(orderTrackCollectionNewOrderTrackToAttach.getClass(), orderTrackCollectionNewOrderTrackToAttach.getTablekey());
+                attachedOrderTrackCollectionNew.add(orderTrackCollectionNewOrderTrackToAttach);
+            }
+            orderTrackCollectionNew = attachedOrderTrackCollectionNew;
+            tracks.setOrderTrackCollection(orderTrackCollectionNew);
             tracks = em.merge(tracks);
             if (albumNumberOld != null && !albumNumberOld.equals(albumNumberNew)) {
                 albumNumberOld.getTracksList().remove(tracks);
@@ -245,28 +258,39 @@ public class TracksJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
-        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
-                utx.rollback();
-            } catch (IllegalStateException | SecurityException | SystemException re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            for (OrderTrack orderTrackCollectionNewOrderTrack : orderTrackCollectionNew) {
+                if (!orderTrackCollectionOld.contains(orderTrackCollectionNewOrderTrack)) {
+                    Tracks oldTrackIdOfOrderTrackCollectionNewOrderTrack = orderTrackCollectionNewOrderTrack.getTrackId();
+                    orderTrackCollectionNewOrderTrack.setTrackId(tracks);
+                    orderTrackCollectionNewOrderTrack = em.merge(orderTrackCollectionNewOrderTrack);
+                    if (oldTrackIdOfOrderTrackCollectionNewOrderTrack != null && !oldTrackIdOfOrderTrackCollectionNewOrderTrack.equals(tracks)) {
+                        oldTrackIdOfOrderTrackCollectionNewOrderTrack.getOrderTrackCollection().remove(orderTrackCollectionNewOrderTrack);
+                        oldTrackIdOfOrderTrackCollectionNewOrderTrack = em.merge(oldTrackIdOfOrderTrackCollectionNewOrderTrack);
+                    }
+                }
             }
+            em.getTransaction().commit();
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = tracks.getTrackId();
                 if (findTracks(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The tracks with id " + id + " no longer exists.");
                 }
             }
             throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicMixedException, HeuristicRollbackException {
-
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+        EntityManager em = null;
         try {
-            utx.begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Tracks tracks;
             try {
                 tracks = em.getReference(Tracks.class, id);
@@ -289,6 +313,13 @@ public class TracksJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Tracks (" + tracks + ") cannot be destroyed since the CustomerReviews " + customerReviewsListOrphanCheckCustomerReviews + " in its customerReviewsList field has a non-nullable trackId field.");
             }
+            Collection<OrderTrack> orderTrackCollectionOrphanCheck = tracks.getOrderTrackCollection();
+            for (OrderTrack orderTrackCollectionOrphanCheckOrderTrack : orderTrackCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Tracks (" + tracks + ") cannot be destroyed since the OrderTrack " + orderTrackCollectionOrphanCheckOrderTrack + " in its orderTrackCollection field has a non-nullable trackId field.");
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -303,14 +334,11 @@ public class TracksJpaController implements Serializable {
                 genreToTracksListGenreToTracks = em.merge(genreToTracksListGenreToTracks);
             }
             em.remove(tracks);
-            utx.commit();
-        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
-                utx.rollback();
-            } catch (IllegalStateException | SecurityException | SystemException re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
             }
-            throw ex;
         }
     }
 
@@ -323,144 +351,41 @@ public class TracksJpaController implements Serializable {
     }
 
     private List<Tracks> findTracksEntities(boolean all, int maxResults, int firstResult) {
-
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Tracks.class));
-        Query q = em.createQuery(cq);
-        if (!all) {
-            q.setMaxResults(maxResults);
-            q.setFirstResult(firstResult);
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Tracks.class));
+            Query q = em.createQuery(cq);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
         }
-        return q.getResultList();
-
-    }
-
-    /**
-     * Written by Korjon Chang-Jones Method finds all Tracks based on a specific
-     * album
-     *
-     * @param albumId
-     * @param trackId
-     * @return tracks from the same album
-     * @author Korjon Chang-Jones
-     */
-    public List<Tracks> findTracksByAlbum(Integer albumId) {
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-
-        CriteriaQuery<Tracks> cq = cb.createQuery(Tracks.class);
-        Root<Tracks> rt = cq.from(Tracks.class);
-        cq.where(cb.equal(rt.get("albumNumber").get("albumNumber"), albumId));
-        cq.select(rt);
-        Query q = em.createQuery(cq);
-
-        return q.getResultList();
-
     }
 
     public Tracks findTracks(Integer id) {
-
-        return em.find(Tracks.class, id);
-
-    }
-
-    public Tracks findTracks(Integer id, EntityManager em2) {
-
-        return em2.find(Tracks.class, id);
-
-    }
-
-    /**
-     * Method finds one of the genres for a specific track based on its ID
-     *
-     * @param id
-     * @return The genre of the track
-     * @author Korjon Chang-Jones
-     */
-    public Genres findGenre(Integer id) {
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Genres> cq = cb.createQuery(Genres.class);
-        Root<Genres> rt = cq.from(Genres.class);
-        Join genreToTracks = rt.join("genreToTracksList");
-        cq.where(cb.equal(genreToTracks.get("trackId").get("trackId"), id));
-        TypedQuery<Genres> query = em.createQuery(cq);
-
-        return query.getSingleResult();
-
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Tracks.class, id);
+        } finally {
+            em.close();
+        }
     }
 
     public int getTracksCount() {
-
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        Root<Tracks> rt = cq.from(Tracks.class);
-        cq.select(em.getCriteriaBuilder().count(rt));
-        Query q = em.createQuery(cq);
-        return ((Long) q.getSingleResult()).intValue();
-
-    }
-
-    private void SetListOfItems() {
-        listOfTracksInTheCart.clear();
-        String[] data = getAllIdFromCart();
-        for (String item : data) {
-            if (item.length() > 0) {
-                if (!item.toLowerCase().contains("a")) {
-                    listOfTracksInTheCart.add(findTracks(parseStringToInt(item)));
-                }
-            }
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            Root<Tracks> rt = cq.from(Tracks.class);
+            cq.select(em.getCriteriaBuilder().count(rt));
+            Query q = em.createQuery(cq);
+            return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
         }
     }
-
-    /**
-     * This method will allow us to get the list of tracks that are in the cart
-     *
-     * @return ArrayList of tracks
-     * @author Ibrahim
-     */
-    public ArrayList<Tracks> retrieveAllTracksInTheCart() {
-        SetListOfItems();
-        return this.listOfTracksInTheCart;
-    }
-
-    /**
-     * This method will return an array of the id from tracks the cart
-     *
-     * @return String[]
-     * @author Ibrahim
-     */
-    private String[] getAllIdFromCart() {
-        CookieManager cookies = new CookieManager();
-        String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages", "cartKey", null).getDetail());
-        return dataResult.split(",");
-    }
-
-    /**
-     * This method will return the total price of the tracks that are in the
-     * cart
-     *
-     * @return String
-     * @author Ibrahim
-     */
-    public String getTotalPrice() {
-        SetListOfItems();
-        double total = 0;
-        for (Tracks item : listOfTracksInTheCart) {
-            total = total + item.getCostPrice();
-            System.out.println(total + "   ------------------------");
-        }
-        return total + "";
-    }
-
-    /**
-     * This method will return the int value of the string
-     *
-     * @param strToParse
-     * @return int
-     * @author Ibrahim
-     */
-    private int parseStringToInt(String strToParse) {
-        return Integer.parseInt(strToParse);
-    }
-
+    
 }
