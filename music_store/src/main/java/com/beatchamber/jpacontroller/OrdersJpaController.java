@@ -1,5 +1,6 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.beans.CookieManager;
 import com.beatchamber.entities.Albums;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -194,6 +195,7 @@ public class OrdersJpaController implements Serializable {
         //set variables
         Orders order = new Orders();
         Date date = new Date();
+        CookieManager cookiesManager = new CookieManager();
         int newOrderId = findTotalOrders()+1;
         //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
         //creating the order
@@ -230,7 +232,7 @@ public class OrdersJpaController implements Serializable {
                 LOG.error("order track error");
             }
         }
-        
+        cookiesManager.clearTheCart();
         return "index.xhtml";
     }
 
