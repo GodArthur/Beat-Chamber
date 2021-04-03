@@ -30,11 +30,11 @@ and open the template in the editor.
                             <h:form>
                                 <div class="itemPicture"><h:graphicImage  library="images" name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, true)}" styleClass="album-img-small"/></div>
                                 <div class="dataInformation">
-                                <h3>#{msgs.showTitle} #{albumItem.albumTitle}</h3>
-                                <h3>#{msgs.showPrice} #{albumItem.costPrice}$</h3>
-                                <h3>#{msgs.showNumberTracks} #{albumItem.totalTracks} </h3>
-                                <h3>#{msgs.showDateRealease} #{albumItem.formatedDate}</h3>
-                                <h3>#{msgs.showRecordLabel} #{albumItem.recordingLabel}</h3>
+                                <h2>#{msgs.showTitle} #{albumItem.albumTitle}</h2><br/>
+                                <h2>#{msgs.showPrice} #{albumItem.costPrice}$</h2><br/>
+                                <h2>#{msgs.showNumberTracks} #{albumItem.totalTracks} </h2><br/>
+                                <h2>#{msgs.showDateRealease} #{albumItem.formatedDate}</h2><br/>
+                                <h2>#{msgs.showRecordLabel} #{albumItem.recordingLabel}</h2>
                                 </div>
 
                                 <h:commandLink action="#{cookies.removeItemFromCart(albumItem.cookieId)}" >
@@ -53,10 +53,15 @@ and open the template in the editor.
                             <h:form>
                                 <div class="itemPicture"><h:graphicImage  library="images" name="#{albumsJpaController.getAlbumPath(trackItem.albumNumber.albumNumber, true)}" styleClass="album-img-small"/></div>
                                 <div class="dataInformation">
-                                    <h3>#{msgs.showTitle} #{trackItem.trackTitle}</h3>
-                                    <h3>#{msgs.showGenre} #{trackItem.musicCategory}</h3>
-                                <h3>#{msgs.showPrice} #{trackItem.costPrice}$</h3>
-                                <h3>#{msgs.showLength} #{trackItem.playLength}</h3>
+                                    <h2>#{msgs.showTitle} #{trackItem.trackTitle}</h2>
+                                    <br/>
+                                    <h2>#{msgs.showGenre} #{trackItem.musicCategory}</h2>
+                                    <br/>
+                                    <h2>#{msgs.showPrice} #{trackItem.costPrice}$</h2>
+                                    <br/>
+                                    <h2>#{msgs.showLength} #{trackItem.playLength}</h2>
+                                    <br/>
+                                    <h2>#{msgs.showAlbumTitle} #{trackItem.albumNumber.albumTitle}</h2>
                                 </div>
                                 <h:commandLink action="#{cookies.removeItemFromCart(trackItem.trackId)}" >
                                     <p:button value="#{msgs.removeItem}" class="roundedButton" />

@@ -103,7 +103,7 @@ public class OrderTrackJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = orderTrack.getOrderId();
                 if (findOrderTrack(id) == null) {
-                    throw new com.beatchamber.exceptions.NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
                 }
             }
             throw ex;

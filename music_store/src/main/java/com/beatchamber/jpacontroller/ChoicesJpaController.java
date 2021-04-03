@@ -127,7 +127,7 @@ public class ChoicesJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = choices.getChoiceId();
                 if (findChoices(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The choices with id " + id + " no longer exists.");
                 }
             }
             throw ex;

@@ -79,7 +79,7 @@ public class AdsJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = ads.getAdId();
                 if (findAds(id) == null) {
-                    throw new NonexistentEntityException("The ad with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The ads with id " + id + " no longer exists.");
                 }
             }
             throw ex;

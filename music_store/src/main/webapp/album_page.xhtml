@@ -41,11 +41,13 @@
                     <h:form styleClass=""><!-- @author Ibrahim -->
                         <p:commandButton icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}"/>
                     </h:form>
-                    <h:form><!--@author Korjon Chang-Jones-->
+                    <br/>
+                    <h:form><!--@author Korjon Chang-Jones and Ibrahim Kebe-->
 
-                        <h:commandLink action="#{tracks.sendDefaultTrack}">
+                        <h:commandLink action="#{tracks.sendDefaultTrack}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}">
                             <f:param name="albumId" value="#{album.albumId}"/>
-                            <button>#{msgs.viewTracks}</button>
+                            <p:commandButton value="#{msgs.viewTracks}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId)}" />
+                            <!--<button>{msgs.viewTracks}</button>-->
                         </h:commandLink>
                     </h:form>
                 </section>
