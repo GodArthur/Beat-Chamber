@@ -191,7 +191,15 @@ public class OrdersJpaController implements Serializable {
         return em.find(Orders.class, id);
     }
     
-        public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
+    /**
+     * This method will add the orders in the appropriate order tables
+     * @param ClientNumber
+     * @param albumList
+     * @param trackList
+     * @return String
+     * @author Ibrahim 
+     */
+    public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
         //set variables
         Orders order = new Orders();
         Date date = new Date();
