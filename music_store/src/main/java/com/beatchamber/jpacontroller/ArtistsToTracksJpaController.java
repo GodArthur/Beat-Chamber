@@ -10,7 +10,7 @@ import com.beatchamber.entities.Artists;
 import com.beatchamber.entities.ArtistsToTracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
-import com.beatchamber.jpacontroller.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
