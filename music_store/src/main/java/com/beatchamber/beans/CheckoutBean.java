@@ -7,7 +7,6 @@ package com.beatchamber.beans;
 
 
 
-import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
@@ -18,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
-import javax.inject.Inject;
 
 
 

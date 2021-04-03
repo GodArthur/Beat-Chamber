@@ -33,17 +33,18 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Artists.findByArtistName", query = "SELECT a FROM Artists a WHERE a.artistName = :artistName")})
 public class Artists implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
+    @Column(name = "artist_name")
+    private String artistName;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "artist_id")
     private Integer artistId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
-    @Column(name = "artist_name")
-    private String artistName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "artistId")
     private List<ArtistAlbums> artistAlbumsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "artistId")
