@@ -71,6 +71,13 @@ public class AlbumBean implements Serializable {
         return "album_page.xhtml?albumId=" + this.albumId;
     }
     
+    public String sendAlbum(Albums album){
+        
+        this.albumId = album.getAlbumNumber();
+        storeSimilarAlbums(albumController.findGenre(albumId));
+        return "album_page.xhtml";
+    }
+    
     /**
      * Method gets albums that are similar to the contents
      * (album or track) being viewed.

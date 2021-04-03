@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
@@ -86,6 +87,17 @@ public class SearchEngine implements Serializable {
         this.lastDate = lastDate;
     }
     
+    public List<MusicComponent> getMusicComponents(){
+        
+        return musicComponents;
+    }
+    
+    public void setMusicComponents(List<MusicComponent> musicComponents){
+        
+        this.musicComponents = musicComponents;
+    }
+    
+    
 
     /**
      * Method checks if the selected search condition is based on the date added
@@ -101,7 +113,7 @@ public class SearchEngine implements Serializable {
      * Method finds Music content (albums and/or tracks)
      * based on a search condition
      */
-    public void findMusicContent(){
+    public String findMusicContent(){
         
         musicComponents = new ArrayList<>();
 
@@ -130,7 +142,7 @@ public class SearchEngine implements Serializable {
                 findAlbums();
         }
         
-        
+        return "browse_music.xhtml";
     }
     
     /**
@@ -180,8 +192,10 @@ public class SearchEngine implements Serializable {
         for(var track : tracks){
             
             TrackBackingBean trackBackingBean = new TrackBackingBean(track);
-            musicComponents.add(trackBackingBean);
+            trackBackingBean.setCoverPath(albumController.getAlbumPath(track.getAlbumNumber().getAlbumNumber(), true));
+            trackBackingBean.setArtists(trackController.findArtists(track.getTrackId()));
             
+            musicComponents.add(trackBackingBean);
         }
     }
     
@@ -191,7 +205,6 @@ public class SearchEngine implements Serializable {
     private void findAlbums(){
         
         List<Albums> albums = albumController.findAlbumsByTitle(searchValue);
-        
         storeAlbums(albums);
         
     }
@@ -207,7 +220,12 @@ public class SearchEngine implements Serializable {
         //Looping through every album
         //Creating a bean with the album
         //Storing the bean in the interface
-        albums.stream().map(album -> new AlbumBackingBean(album)).forEachOrdered(albumBackingBean -> {
+        albums.stream().map((Albums album) -> {
+            var albumBackingBean = new AlbumBackingBean(album);
+            albumBackingBean.setCoverPath(albumController.getAlbumPath(album.getAlbumNumber(), true));
+            albumBackingBean.setArtists(albumController.findArtists(album.getAlbumNumber()));
+            return albumBackingBean;
+        }).forEachOrdered(albumBackingBean -> {
             musicComponents.add(albumBackingBean);
         });
     }

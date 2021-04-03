@@ -18,9 +18,12 @@ import javax.inject.Named;
 @SessionScoped
 public class TrackBackingBean implements Serializable, MusicComponent {
 
-    private String title;
+    private Tracks track;
     private List<Artists> artists;
     private String coverPath;
+    
+    @Inject
+    TrackBean trackBean;
     
     @Inject
     AlbumsJpaController albumController;
@@ -34,15 +37,13 @@ public class TrackBackingBean implements Serializable, MusicComponent {
 
     public TrackBackingBean(Tracks track) {
 
-        this.title = track.getTrackTitle();
-        coverPath = albumController.getAlbumPath(track.getAlbumNumber().getAlbumNumber(), true);
-        artists = trackController.findArtists(track.getTrackId());
+        this.track = track;
     }
 
     @Override
     public String getTitle() {
 
-        return title;
+        return track.getTrackTitle();
     }
 
    @Override
@@ -51,8 +52,15 @@ public class TrackBackingBean implements Serializable, MusicComponent {
         return artists;
     }
 
+    @Override
     public void setArtists(List<Artists> artists) {
         this.artists = artists;
+    }
+    
+    @Override
+    public void setCoverPath(String coverPath){
+        
+        this.coverPath = coverPath;
     }
 
     @Override
@@ -61,8 +69,11 @@ public class TrackBackingBean implements Serializable, MusicComponent {
         return coverPath;
     }
 
-    public void setCoverPath(String coverPath) {
-        this.coverPath = coverPath;
+    
+    @Override
+    public String sendComponentPage(){
+        
+        return trackBean.sendTrack(track);
     }
 
 }
