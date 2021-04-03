@@ -765,7 +765,7 @@ button {
 .icon-bar a {
   float: left; 
   text-align: center; 
-  width: 11%; 
+  width: 9%; 
   padding: 12px 0; 
   color: black;
   font-size: 25px; 
@@ -793,7 +793,7 @@ button {
   color:#000!important;
 }
 
-.activedTag{
-    background:#a710b5;
+.ui-expanded-row-content{
+    background:lightgray!important;
 }
 
