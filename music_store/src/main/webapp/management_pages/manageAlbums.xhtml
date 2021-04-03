@@ -48,21 +48,47 @@
                                   filterBy="#{albumItem.albumNumber}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.albumNumber}" />
                         </p:column>
-                        <p:column style="width:calc(200px)" headerText="Title" sortBy="#{albumItem.albumTitle}" 
+                        <p:column style="width:calc(100px)" headerText="Title" sortBy="#{albumItem.albumTitle}" 
                                   filterBy="#{albumItem.albumTitle}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.albumTitle}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Entry Date" sortBy="#{albumItem.entryDate}"
-                                  filterBy="#{albumItem.entryDate}" filterMatchMode="contains">
-                            <h:outputText value="#{albumItem.entryDate}" />
-                        </p:column>
-                        <p:column style="width:calc(100px)" headerText="Release Date" sortBy="#{albumItem.releaseDate}"
+                        <p:column style="width:calc(80px)" headerText="Release Date" sortBy="#{albumItem.releaseDate}"
                                   filterBy="#{albumItem.releaseDate}" filterMatchMode="contains">
-                            <h:outputText value="#{albumItem.releaseDate}"/>
+                            <h:outputText value="#{albumItem.releaseDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Removal Status" sortBy="#{albumItem.removalStatus}"
+                        <p:column style="width:calc(80px)" headerText="Recording Label" sortBy="#{albumItem.recordingLabel}"
+                                  filterBy="#{albumItem.recordingLabel}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.recordingLabel}" />
+                        </p:column>
+                        <p:column style="width:calc(80px)" headerText="Entry Date" sortBy="#{albumItem.entryDate}"
+                                  filterBy="#{albumItem.entryDate}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.entryDate}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="width:calc(30px)" headerText="Cost Price" sortBy="#{albumItem.costPrice}"
+                                  filterBy="#{albumItem.costPrice}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.costPrice}"/>
+                        </p:column>
+                        <p:column style="width:calc(30px)" headerText="List Price" sortBy="#{albumItem.listPrice}"
+                                  filterBy="#{albumItem.listPrice}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.listPrice}"/>
+                        </p:column>
+                        <p:column style="width:calc(30px)" headerText="Sale Price" sortBy="#{albumItem.salePrice}"
+                                  filterBy="#{albumItem.salePrice}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.salePrice}"/>
+                        </p:column>
+                        <p:column style="width:calc(30px)" headerText="Removal Status" sortBy="#{albumItem.removalStatus}"
                                   filterBy="#{albumItem.removalStatus}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.removalStatus}"/>
+                        </p:column>
+                        <p:column style="width:calc(80px)" headerText="Removal Date" sortBy="#{albumItem.removalDate}"
+                                  filterBy="#{albumItem.removalDate}" filterMatchMode="contains">
+                            <h:outputText value="#{albumItem.removalDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column style="width:calc(50px)" exportable="false" headerText="Add Track" >
@@ -70,6 +96,7 @@
                                              oncomplete="PF('addTrackDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-help" process="@this">
                                 <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
+                                <f:setPropertyActionListener value="true" target="#{theAlbums.isAddTrack}"/>
                                 <p:resetInput target=":form:add-track-content"/>
                             </p:commandButton>
                         </p:column>
@@ -79,6 +106,7 @@
                                              oncomplete="PF('manageAlbumDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-help" process="@this">
                                 <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
+                                <f:setPropertyActionListener value="false" target="#{theAlbums.isAddTrack}"/>
                                 <p:resetInput target=":form:manage-album-content"/>
                             </p:commandButton>
                         </p:column>
@@ -101,8 +129,10 @@
                                 </p:column>
 
                                 <p:column>
-                                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this">
-                                        <f:setPropertyActionListener target="#{theAlbums.removeTrackFromAlbum}" value="#{albumItem.albumNumber} #{trackItem.trackId}" />
+                                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
+                                                     oncomplete="PF('deleteTrackDialog').show()">
+                                        <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
+                                        <f:setPropertyActionListener value="#{trackItem}" target="#{theAlbums.selectedTrack}"/>
                                     </p:commandButton>
                                 </p:column>
                             </p:dataTable>
@@ -119,6 +149,11 @@
                                     <p:inputText id="albumTitle"  value="#{theAlbums.selectedAlbum.albumTitle}" 
                                                  required="true" requiredMessage="#{msgs.albumTitleRequired}"/>
                                     <h:message for="albumTitle" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="releaseDate" value="#{msgs.releaseDate}"/>
+                                    <p:datePicker id="releaseDate" value="#{theAlbums.selectedAlbum.releaseDate}" />
+                                    <h:message for="releaseDate" styleClass="errorMessage" style="color:red"/>
                                 </div>
 
                                 <div>
@@ -142,23 +177,46 @@
                                     <p:datePicker id="entryDate" value="#{theAlbums.selectedAlbum.entryDate}" />
                                     <h:message for="entryDate" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                <div>
-                                    <p:outputLabel for="releaseDate" value="#{msgs.releaseDate}"/>
-                                    <p:datePicker id="releaseDate" value="#{theAlbums.selectedAlbum.releaseDate}" />
-                                    <h:message for="releaseDate" styleClass="errorMessage" style="color:red"/>
-                                </div>
+                                
 
                             </p:outputPanel>
                         </p:outputPanel>
 
                         <f:facet name="footer">
                             <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theAlbums.saveAlbum}"
-                                             update="manage-album-content" process="manage-album-content @this"/>
+                                             widgetVar="saveButton" onclick="PF('saveButton').disable()"
+                                             update="manage-album-content" process="manage-album-content @this"
+                                             oncomplete="PF('saveButton').enable()"/>
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageAlbumDialog').hide()"
-                                             class="ui-button-secondary"/>
+                                             class="ui-button-secondary">
+                            </p:commandButton>
                         </f:facet>
                     </p:dialog>
 
+
+                    <p:dialog header="Add the Track" showEffect="fade" modal="true"
+                              widgetVar="addTrackDialog" responsive="true" width="500px" height="450px">
+                        <p:outputPanel id="add-track-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{theAlbums.isAddTrack}">
+                                <div>
+                                    <p:outputLabel for="trackTitle" value="#{msgs.trackTitle}"/>
+                                    <p:selectOneMenu id="trackTitle" value="#{theAlbums.newTrack.trackTitle}" 
+                                                     required="true" requiredMessage="#{msgs.titleRequired}"> 
+                                        <f:selectItem itemValue=" " itemLabel="Select song..." noSelectionOption="true"/>
+                                        <f:selectItems value="#{theAlbums.allTracks}" />
+                                    </p:selectOneMenu>  
+                                    <h:message for="trackTitle" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Add to Album" icon="pi pi-check" actionListener="#{theAlbums.addTrackToAlbum}"
+                                             update="add-track-content" process="add-track-content @this"/>
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageAlbumDialog').hide()"
+                                             class="ui-button-secondary" />
+                        </f:facet>
+                    </p:dialog>
 
                     <p:confirmDialog widgetVar="deleteAlbumDialog" showEffect="fade" width="300"
                                      message="Delete the album?" header="Confirm" severity="warn">
@@ -166,6 +224,14 @@
                                          process="@this" oncomplete="PF('deleteAlbumDialog').hide()"/>
                         <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                          onclick="PF('deleteAlbumDialog').hide()"/>
+                    </p:confirmDialog>
+
+                    <p:confirmDialog widgetVar="deleteTrackDialog" showEffect="fade" width="300"
+                                     message="Delete the Track From This Album?" header="Confirm" severity="warn">
+                        <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{theAlbums.removeTrackFromAlbum}"
+                                         process="@this" oncomplete="PF('deleteTrackDialog').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteTrackDialog').hide()"/>
                     </p:confirmDialog>
 
                     <p:confirmDialog global="true" showEffect="fade" width="300">
@@ -176,28 +242,6 @@
                     </p:confirmDialog>
 
 
-                    <p:dialog header="Add the Track" showEffect="fade" modal="true"
-                              widgetVar="addTrackDialog" responsive="true" width="500px" height="450px">
-                        <p:outputPanel id="add-track-content" class="ui-fluid">
-                            <div>
-                                <p:outputLabel for="trackTitle" value="#{msgs.trackTitle}"/>
-                                <p:selectOneMenu id="trackTitle" value="#{theAlbums.newTrack.trackTitle}" 
-                                                 required="true" requiredMessage="#{msgs.titleRequired}"> 
-                                    <f:selectItem itemValue=" " itemLabel="Select song..." noSelectionOption="true"/>
-                                    <f:selectItems value="#{theAlbums.allTracks}" />
-                                </p:selectOneMenu>  
-                                <h:message for="trackTitle" styleClass="errorMessage" style="color:red"/>
-                            </div>
-
-                        </p:outputPanel>
-
-                        <f:facet name="footer">
-                            <p:commandButton value="Add to Album" icon="pi pi-check" actionListener="#{theAlbums.addTrackToAlbum}"
-                                             update="add-track-content" process="add-track-content @this"/>
-                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageAlbumDialog').hide()"
-                                             class="ui-button-secondary"/>
-                        </f:facet>
-                    </p:dialog>
 
                 </h:form>
             </ui:define>

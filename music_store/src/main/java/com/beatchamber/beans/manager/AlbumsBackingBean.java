@@ -7,27 +7,20 @@ package com.beatchamber.beans.manager;
 
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Tracks;
+import com.beatchamber.entities.Genres;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
-import com.beatchamber.jpacontroller.ProvincesJpaController;
+import com.beatchamber.jpacontroller.GenresJpaController;
 import java.io.Serializable;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,7 +30,6 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import org.primefaces.PrimeFaces;
-import org.primefaces.util.LangUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,14 +48,23 @@ public class AlbumsBackingBean implements Serializable {
 
     @Inject
     private TracksJpaController tracksJpaController;
+    
+    @Inject
+    private GenresJpaController genresJpaController;
 
     private List<Albums> albums;
 
     private Albums selectedAlbum;
 
+    private Tracks selectedTrack;
+
     private List<Tracks> tracksListInAlbum;
 
     private Tracks newTrack;
+
+    private boolean isAddTrack = false;
+    
+    private Genres genre;
 
     @PostConstruct
     public void init() {
@@ -75,11 +76,25 @@ public class AlbumsBackingBean implements Serializable {
     }
 
     public Albums getSelectedAlbum() {
+        if (this.selectedAlbum == null) {
+            this.selectedAlbum = new Albums();
+        }
         return selectedAlbum;
     }
 
     public void setSelectedAlbum(Albums selectedAlbum) {
         this.selectedAlbum = selectedAlbum;
+    }
+
+    public Tracks getSelectedTrack() {
+        if (this.selectedTrack == null) {
+            this.selectedTrack = new Tracks();
+        }
+        return selectedTrack;
+    }
+
+    public void setSelectedTrack(Tracks selectedTrack) {
+        this.selectedTrack = selectedTrack;
     }
 
     public Tracks getNewTrack() {
@@ -88,6 +103,14 @@ public class AlbumsBackingBean implements Serializable {
 
     public void setNewTrack(Tracks newTrack) {
         this.newTrack = newTrack;
+    }
+
+    public boolean getIsAddTrack() {
+        return isAddTrack;
+    }
+
+    public void setIsAddTrack(boolean isAddTrack) {
+        this.isAddTrack = isAddTrack;
     }
 
     public void openNew() {
@@ -142,11 +165,21 @@ public class AlbumsBackingBean implements Serializable {
 
     }
 
-    public void addNewTrack() {
-
-    }
-
     public void addTrackToAlbum() {
-
+        this.isAddTrack = false;
     }
+
+//    /**
+//     * Initialize all the field when cancel a operation.
+//     */
+//    public void cancelAction() {
+//        this.selectedAlbum = new Albums();
+//    }
+//
+//    /**
+//     * Initialize all the field when cancel a operation.
+//     */
+//    public void cancelAddTrackAction() {
+//        this.isAddTrack = false;
+//    }
 }
