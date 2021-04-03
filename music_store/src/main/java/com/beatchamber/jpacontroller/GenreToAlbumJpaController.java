@@ -126,7 +126,7 @@ public class GenreToAlbumJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = genreToAlbum.getTablekey();
                 if (findGenreToAlbum(id) == null) {
-                    throw new com.beatchamber.exceptions.NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The genreToAlbum with id " + id + " no longer exists.");
                 }
             }
             throw ex;

@@ -129,7 +129,7 @@ public class OrderAlbumJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = orderAlbum.getOrderId();
                 if (findOrderAlbum(id) == null) {
-                    throw new com.beatchamber.exceptions.NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The orderAlbum with id " + id + " no longer exists.");
                 }
             }
             throw ex;

@@ -128,7 +128,7 @@ public class InvoiceDetailsJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = invoiceDetails.getTablekey();
                 if (findInvoiceDetails(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The invoiceDetails with id " + id + " no longer exists.");
                 }
             }
             throw ex;

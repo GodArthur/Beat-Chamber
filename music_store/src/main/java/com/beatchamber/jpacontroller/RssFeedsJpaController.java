@@ -79,7 +79,7 @@ public class RssFeedsJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = rssFeeds.getRssId();
                 if (findRssFeeds(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The rssFeeds with id " + id + " no longer exists.");
                 }
             }
             throw ex;

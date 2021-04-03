@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -156,7 +155,7 @@ public class InvoicesJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = invoices.getSaleNumber();
                 if (findInvoices(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The invoices with id " + id + " no longer exists.");
                 }
             }
             throw ex;
