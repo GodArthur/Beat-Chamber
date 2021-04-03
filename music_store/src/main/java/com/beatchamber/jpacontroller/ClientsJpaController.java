@@ -226,7 +226,7 @@ public class ClientsJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = clients.getClientNumber();
                 if (findClients(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The clients with id " + id + " no longer exists.");
                 }
             }
             throw ex;

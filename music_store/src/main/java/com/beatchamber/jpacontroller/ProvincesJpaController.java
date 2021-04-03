@@ -78,7 +78,7 @@ public class ProvincesJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = provinces.getProvinceId();
                 if (findProvinces(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The provinces with id " + id + " no longer exists.");
                 }
             }
             throw ex;

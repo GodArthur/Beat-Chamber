@@ -127,7 +127,7 @@ public class CustomerReviewsJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = customerReviews.getReviewNumber();
                 if (findCustomerReviews(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The customerReviews with id " + id + " no longer exists.");
                 }
             }
             throw ex;

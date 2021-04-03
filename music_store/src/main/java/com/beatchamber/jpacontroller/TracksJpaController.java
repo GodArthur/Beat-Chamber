@@ -263,7 +263,7 @@ public class TracksJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = tracks.getTrackId();
                 if (findTracks(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The track with id " + id + " no longer exists.");
                 }
             }
             throw ex;
