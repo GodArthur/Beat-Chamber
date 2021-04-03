@@ -60,14 +60,6 @@ artist_id int not null primary key auto_increment,
 artist_name varchar(40) not null
 );
 
-/* artists_to_tracks */
-create table Artists_to_tracks(
-tablekey int primary key auto_increment ,
-artist_id int not null,
-track_id int,
-FOREIGN KEY (artist_id) REFERENCES Artists(artist_id)
-);
-
 /* Albums */
 create table Albums (
 album_number int not null primary key auto_increment,
@@ -102,6 +94,15 @@ pst double not null,
 gst double not null,
 hst double not null,
 FOREIGN KEY (album_number) REFERENCES Albums(album_number)
+);
+
+/* artists_to_tracks */
+create table Artists_to_tracks(
+tablekey int primary key auto_increment ,
+artist_id int not null,
+track_id int not null,
+FOREIGN KEY (artist_id) REFERENCES Artists(artist_id),
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
 );
 
 
@@ -208,7 +209,7 @@ link varchar(100) not null
 /* RSS_Feeds */
 create table RSS_Feeds (
 rss_id int primary key auto_increment,
-link varchar(100) not null
+link varchar(1000) not null
 );
 
 /* Surveys */
@@ -251,6 +252,7 @@ pst double not null,
 gst double not null,
 hst double not null
 );
+
 
 /* Order_track */
 create table order_track(

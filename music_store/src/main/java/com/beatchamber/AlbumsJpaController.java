@@ -1,62 +1,44 @@
-package com.beatchamber.jpacontroller;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.beatchamber;
 
-import com.beatchamber.beans.CookieManager;
 import com.beatchamber.entities.Albums;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.beatchamber.entities.Artists;
 import com.beatchamber.entities.ArtistAlbums;
 import java.util.ArrayList;
 import java.util.List;
 import com.beatchamber.entities.Tracks;
-import com.beatchamber.entities.Genres;
 import com.beatchamber.entities.GenreToAlbum;
+import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
-import com.beatchamber.exceptions.RollbackFailureException;
-import java.util.Date;
-import javax.annotation.Resource;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
+import java.util.Collection;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Join;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Massimo Di Girolamo
+ * @author kibra
  */
-@Named
-@SessionScoped
 public class AlbumsJpaController implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
+    public AlbumsJpaController(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+    private EntityManagerFactory emf = null;
 
-    @Resource
-    private UserTransaction utx;
-
-    @PersistenceContext(unitName = "music_store_persistence")
-    private EntityManager em;
-    
-    private ArrayList<Albums> listOfAlbumsInTheCart = new ArrayList<Albums>();
-
-    public AlbumsJpaController() {
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
 
-    public void create(Albums albums) throws RollbackFailureException {
+    public void create(Albums albums) {
         if (albums.getArtistAlbumsList() == null) {
             albums.setArtistAlbumsList(new ArrayList<ArtistAlbums>());
         }
@@ -66,9 +48,13 @@ public class AlbumsJpaController implements Serializable {
         if (albums.getGenreToAlbumList() == null) {
             albums.setGenreToAlbumList(new ArrayList<GenreToAlbum>());
         }
-
+        if (albums.getOrderAlbumCollection() == null) {
+            albums.setOrderAlbumCollection(new ArrayList<OrderAlbum>());
+        }
+        EntityManager em = null;
         try {
-            utx.begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             List<ArtistAlbums> attachedArtistAlbumsList = new ArrayList<ArtistAlbums>();
             for (ArtistAlbums artistAlbumsListArtistAlbumsToAttach : albums.getArtistAlbumsList()) {
                 artistAlbumsListArtistAlbumsToAttach = em.getReference(artistAlbumsListArtistAlbumsToAttach.getClass(), artistAlbumsListArtistAlbumsToAttach.getTablekey());
@@ -87,6 +73,12 @@ public class AlbumsJpaController implements Serializable {
                 attachedGenreToAlbumList.add(genreToAlbumListGenreToAlbumToAttach);
             }
             albums.setGenreToAlbumList(attachedGenreToAlbumList);
+            Collection<OrderAlbum> attachedOrderAlbumCollection = new ArrayList<OrderAlbum>();
+            for (OrderAlbum orderAlbumCollectionOrderAlbumToAttach : albums.getOrderAlbumCollection()) {
+                orderAlbumCollectionOrderAlbumToAttach = em.getReference(orderAlbumCollectionOrderAlbumToAttach.getClass(), orderAlbumCollectionOrderAlbumToAttach.getOrderId());
+                attachedOrderAlbumCollection.add(orderAlbumCollectionOrderAlbumToAttach);
+            }
+            albums.setOrderAlbumCollection(attachedOrderAlbumCollection);
             em.persist(albums);
             for (ArtistAlbums artistAlbumsListArtistAlbums : albums.getArtistAlbumsList()) {
                 Albums oldAlbumNumberOfArtistAlbumsListArtistAlbums = artistAlbumsListArtistAlbums.getAlbumNumber();
@@ -115,26 +107,28 @@ public class AlbumsJpaController implements Serializable {
                     oldAlbumNumberOfGenreToAlbumListGenreToAlbum = em.merge(oldAlbumNumberOfGenreToAlbumListGenreToAlbum);
                 }
             }
-
-
-            utx.commit();
-        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
-
-                utx.rollback();
-                LOG.error("Rollback");
-            } catch (IllegalStateException | SecurityException | SystemException re) {
-                LOG.error("Rollback2");
-
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            for (OrderAlbum orderAlbumCollectionOrderAlbum : albums.getOrderAlbumCollection()) {
+                Albums oldAlbumIdOfOrderAlbumCollectionOrderAlbum = orderAlbumCollectionOrderAlbum.getAlbumId();
+                orderAlbumCollectionOrderAlbum.setAlbumId(albums);
+                orderAlbumCollectionOrderAlbum = em.merge(orderAlbumCollectionOrderAlbum);
+                if (oldAlbumIdOfOrderAlbumCollectionOrderAlbum != null) {
+                    oldAlbumIdOfOrderAlbumCollectionOrderAlbum.getOrderAlbumCollection().remove(orderAlbumCollectionOrderAlbum);
+                    oldAlbumIdOfOrderAlbumCollectionOrderAlbum = em.merge(oldAlbumIdOfOrderAlbumCollectionOrderAlbum);
+                }
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
             }
         }
     }
 
     public void edit(Albums albums) throws IllegalOrphanException, NonexistentEntityException, Exception {
-
+        EntityManager em = null;
         try {
-            utx.begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Albums persistentAlbums = em.find(Albums.class, albums.getAlbumNumber());
             List<ArtistAlbums> artistAlbumsListOld = persistentAlbums.getArtistAlbumsList();
             List<ArtistAlbums> artistAlbumsListNew = albums.getArtistAlbumsList();
@@ -142,6 +136,8 @@ public class AlbumsJpaController implements Serializable {
             List<Tracks> tracksListNew = albums.getTracksList();
             List<GenreToAlbum> genreToAlbumListOld = persistentAlbums.getGenreToAlbumList();
             List<GenreToAlbum> genreToAlbumListNew = albums.getGenreToAlbumList();
+            Collection<OrderAlbum> orderAlbumCollectionOld = persistentAlbums.getOrderAlbumCollection();
+            Collection<OrderAlbum> orderAlbumCollectionNew = albums.getOrderAlbumCollection();
             List<String> illegalOrphanMessages = null;
             for (ArtistAlbums artistAlbumsListOldArtistAlbums : artistAlbumsListOld) {
                 if (!artistAlbumsListNew.contains(artistAlbumsListOldArtistAlbums)) {
@@ -159,10 +155,17 @@ public class AlbumsJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain Tracks " + tracksListOldTracks + " since its albumNumber field is not nullable.");
                 }
             }
+            for (OrderAlbum orderAlbumCollectionOldOrderAlbum : orderAlbumCollectionOld) {
+                if (!orderAlbumCollectionNew.contains(orderAlbumCollectionOldOrderAlbum)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain OrderAlbum " + orderAlbumCollectionOldOrderAlbum + " since its albumId field is not nullable.");
+                }
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-
             List<ArtistAlbums> attachedArtistAlbumsListNew = new ArrayList<ArtistAlbums>();
             for (ArtistAlbums artistAlbumsListNewArtistAlbumsToAttach : artistAlbumsListNew) {
                 artistAlbumsListNewArtistAlbumsToAttach = em.getReference(artistAlbumsListNewArtistAlbumsToAttach.getClass(), artistAlbumsListNewArtistAlbumsToAttach.getTablekey());
@@ -184,6 +187,13 @@ public class AlbumsJpaController implements Serializable {
             }
             genreToAlbumListNew = attachedGenreToAlbumListNew;
             albums.setGenreToAlbumList(genreToAlbumListNew);
+            Collection<OrderAlbum> attachedOrderAlbumCollectionNew = new ArrayList<OrderAlbum>();
+            for (OrderAlbum orderAlbumCollectionNewOrderAlbumToAttach : orderAlbumCollectionNew) {
+                orderAlbumCollectionNewOrderAlbumToAttach = em.getReference(orderAlbumCollectionNewOrderAlbumToAttach.getClass(), orderAlbumCollectionNewOrderAlbumToAttach.getOrderId());
+                attachedOrderAlbumCollectionNew.add(orderAlbumCollectionNewOrderAlbumToAttach);
+            }
+            orderAlbumCollectionNew = attachedOrderAlbumCollectionNew;
+            albums.setOrderAlbumCollection(orderAlbumCollectionNew);
             albums = em.merge(albums);
             for (ArtistAlbums artistAlbumsListNewArtistAlbums : artistAlbumsListNew) {
                 if (!artistAlbumsListOld.contains(artistAlbumsListNewArtistAlbums)) {
@@ -224,29 +234,39 @@ public class AlbumsJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
-
-        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
-                utx.rollback();
-            } catch (IllegalStateException | SecurityException | SystemException re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            for (OrderAlbum orderAlbumCollectionNewOrderAlbum : orderAlbumCollectionNew) {
+                if (!orderAlbumCollectionOld.contains(orderAlbumCollectionNewOrderAlbum)) {
+                    Albums oldAlbumIdOfOrderAlbumCollectionNewOrderAlbum = orderAlbumCollectionNewOrderAlbum.getAlbumId();
+                    orderAlbumCollectionNewOrderAlbum.setAlbumId(albums);
+                    orderAlbumCollectionNewOrderAlbum = em.merge(orderAlbumCollectionNewOrderAlbum);
+                    if (oldAlbumIdOfOrderAlbumCollectionNewOrderAlbum != null && !oldAlbumIdOfOrderAlbumCollectionNewOrderAlbum.equals(albums)) {
+                        oldAlbumIdOfOrderAlbumCollectionNewOrderAlbum.getOrderAlbumCollection().remove(orderAlbumCollectionNewOrderAlbum);
+                        oldAlbumIdOfOrderAlbumCollectionNewOrderAlbum = em.merge(oldAlbumIdOfOrderAlbumCollectionNewOrderAlbum);
+                    }
+                }
             }
+            em.getTransaction().commit();
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = albums.getAlbumNumber();
                 if (findAlbums(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The albums with id " + id + " no longer exists.");
                 }
             }
             throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
-
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+        EntityManager em = null;
         try {
-            utx.begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Albums albums;
             try {
                 albums = em.getReference(Albums.class, id);
@@ -269,6 +289,13 @@ public class AlbumsJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Albums (" + albums + ") cannot be destroyed since the Tracks " + tracksListOrphanCheckTracks + " in its tracksList field has a non-nullable albumNumber field.");
             }
+            Collection<OrderAlbum> orderAlbumCollectionOrphanCheck = albums.getOrderAlbumCollection();
+            for (OrderAlbum orderAlbumCollectionOrphanCheckOrderAlbum : orderAlbumCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Albums (" + albums + ") cannot be destroyed since the OrderAlbum " + orderAlbumCollectionOrphanCheckOrderAlbum + " in its orderAlbumCollection field has a non-nullable albumId field.");
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -278,14 +305,11 @@ public class AlbumsJpaController implements Serializable {
                 genreToAlbumListGenreToAlbum = em.merge(genreToAlbumListGenreToAlbum);
             }
             em.remove(albums);
-            utx.commit();
-        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
-                utx.rollback();
-            } catch (IllegalStateException | SecurityException | SystemException re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
             }
-            throw ex;
         }
     }
 
@@ -298,235 +322,41 @@ public class AlbumsJpaController implements Serializable {
     }
 
     private List<Albums> findAlbumsEntities(boolean all, int maxResults, int firstResult) {
-
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Albums.class));
-        Query q = em.createQuery(cq);
-        if (!all) {
-            q.setMaxResults(maxResults);
-            q.setFirstResult(firstResult);
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Albums.class));
+            Query q = em.createQuery(cq);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
         }
-        return q.getResultList();
     }
 
     public Albums findAlbums(Integer id) {
-        return em.find(Albums.class, id);
-    }
-    public Albums findAlbums(Integer id,EntityManager em2) {
-        return em2.find(Albums.class, id);
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Albums.class, id);
+        } finally {
+            em.close();
+        }
     }
 
     public int getAlbumsCount() {
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        Root<Albums> rt = cq.from(Albums.class);
-        cq.select(em.getCriteriaBuilder().count(rt));
-        Query q = em.createQuery(cq);
-        return ((Long) q.getSingleResult()).intValue();
-    }
-    
-    /**
-     * @param id
-     * @return The artist of the specific album
-     * @author Susan Vuu
-     */
-    public Artists getAlbumArtist(Integer id){
-        //Get the album first
-        Albums foundAlbum = em.find(Albums.class, id);
-        //Get the album's artist
-        return foundAlbum.getArtistAlbumsList().get(0).getArtistId();
-    }
-    
-    /**
-     * @param id
-     * @param isSmall
-     * @return The path of the album's image, either big or small
-     * @author Susan Vuu
-     */
-    public String getAlbumPath(Integer id, boolean isSmall){
-        Albums foundAlbum = em.find(Albums.class, id);
-        //Find the genre the album belongs to. Each album images are separated by genre
-        List<GenreToAlbum> genreList = foundAlbum.getGenreToAlbumList();
-        Genres firstGenre = genreList.get(0).getGenreId();
-        String genreName = firstGenre.getGenreName().replace(" ", "_");
-        
-        //Starting album path
-        String startingPath = "albums/" + genreName.toLowerCase() + "/";
-        //The album name included in the path
-        String albumName = foundAlbum.getAlbumTitle().replace(" ", "_").toLowerCase();
-        //Probably a better way with regex but unsure
-        String trimmedAlbumName = albumName.replace(".", "").replace("'", "").replace(":", "");
-        String albumPath = startingPath + trimmedAlbumName;
-        //Rest of album path
-        if(isSmall){
-            return albumPath + "_small.jpg";
-        }
-        return albumPath + "_large.jpg";
-    }
-    
-    /**
-     * This method will allow us to get the list of albums that are in the cart
-     * @return ArrayList of albums
-     * @author Ibrahim
-     */
-    public ArrayList<Albums> retrieveAllAlbumsInTheCart(){
-        SetListOfItems();
-        return this.listOfAlbumsInTheCart;
-    }
-    
-    /**
-     * This method will return the total price of the items in the cart
-     * @return String
-     * @author Ibrahim
-     */
-    public String getTotalPrice(){
-        SetListOfItems();
-        double total=0;
-        for(Albums item:listOfAlbumsInTheCart){
-            total = total + item.getCostPrice();
-        }
-        return total + "";
-    }
-    
-    
-    /**
-     * This method will get all of the ids of the items in the cart
-     * @return String[] 
-     * @author Ibrahim
-     */
-    private String[] getAllIdFromCart(){
-        CookieManager cookies = new CookieManager();
-        String dataResult = cookies.findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
-        return dataResult.split(",");
-    }
-    
-    /**
-     * This method will return the int value of the string
-     * @param strToParse
-     * @return int
-     * @author Ibrahim
-     */
-    private int parseStringToInt(String strToParse){
-        return Integer.parseInt(strToParse);
-    }
-    
-    /**
-     * This method will set the arrayList so that we would have the data from the cookies in them
-     * @author Ibrahim
-     */
-    private void SetListOfItems(){
-        listOfAlbumsInTheCart.clear();
-        String[] data = getAllIdFromCart();
-        for(String item:data){
-            if(item.length()>0){
-                if(item.toLowerCase().contains("a")){
-                    listOfAlbumsInTheCart.add(findAlbums(parseStringToInt(item.replace("a", ""))));
-                }
-            }
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            Root<Albums> rt = cq.from(Albums.class);
+            cq.select(em.getCriteriaBuilder().count(rt));
+            Query q = em.createQuery(cq);
+            return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
         }
     }
     
-     /**
-     * Method finds Tracks by their date entered
-     * in the inventory. 
-     * @param firstDate Lower bound of the date range
-     * @param lastDate Upper bound of the date range
-     * @return 
-     * 
-     * @author Korjon Chang-Jones
-     */
-    public List<Albums> findAlbumsByDate(Date firstDate, Date lastDate){
-        
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Albums> cq = cb.createQuery(Albums.class);
-        Root<Albums> rt = cq.from(Albums.class);
-        cq.where(cb.between(rt.get("entryDate"), firstDate, lastDate));
-        TypedQuery<Albums> query = em.createQuery(cq);
-
-        return query.getResultList();
-        
-    }
-    
-    /**
-     * Method finds albums based on the title
-     * that is given. Title does not have
-     * to be exact string
-     * 
-     * @param title
-     * @return list of albums containing title string 
-     * @author Korjon Chang-jones
-     */
-    public List<Albums> findAlbumsByTitle(String title){
-        
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
-        Root<Albums> rt = cq.from(Albums.class);
-        cq.where(cb.like(rt.get("albumTitle"), "%" + title + "%"));
-        TypedQuery<Albums> query = em.createQuery(cq);
-        
-        return query.getResultList();
-    }
-    
-    
-     /**
-     * Method finds specific Albums based on its
-     * genre
-     * @param genre
-     * @param title
-     * @return the list of Albums in the same genre
-     * @author Korjon Chang-jones
-     */
-    public List<Albums> findAlbumsByGenre(Genres genre, String title){
-        
-        
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
-        Root<Albums> rt = cq.from(Albums.class);
-        Join genreToAlbums = rt.join("genreToAlbumList");
-        Join genres = genreToAlbums.join("genreId");
-        cq.where(cb.and(cb.equal(genres.get("genreName"), genre.getGenreName()), cb.notEqual(rt.get("albumTitle"), title)));
-        TypedQuery<Albums> query = em.createQuery(cq);
-        
-        return query.getResultList();
-    }
-    
-      /**
-     * Method finds one of the genres for a specific Album
-     * based on its ID
-     * @param id
-     * @return The genre of the Album
-     * @author Korjon Chang-Jones
-     */
-    public Genres findGenre(Integer id){
-        
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Genres>  cq = cb.createQuery(Genres.class);
-        Root <Genres> rt = cq.from(Genres.class);
-        Join genreToTracks = rt.join("genreToAlbumList");
-        cq.where(cb.equal(genreToTracks.get("albumNumber").get("albumNumber"), id));
-        TypedQuery<Genres> query = em.createQuery(cq);
-        
-        return query.getSingleResult();
-        
-    }
-    
-     /**
-     * Method finds Artists on a specific track
-     * @param id
-     * @return The list of artists on the track
-     * @author Korjon Chang-Jones
-     */
-    public List<Artists> findArtists(Integer id){
-        
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Artists> cq = cb.createQuery(Artists.class);
-        Root <Artists> rt = cq.from(Artists.class);
-        Join artistAlbums = rt.join("artistAlbumsList");
-        cq.where(cb.equal(artistAlbums.get("albumNumber").get("albumNumber"), id));
-        TypedQuery<Artists> query = em.createQuery(cq);
-        
-        return query.getResultList();
-    }
 }
-
-
-

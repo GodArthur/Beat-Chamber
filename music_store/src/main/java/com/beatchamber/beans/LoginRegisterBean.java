@@ -44,7 +44,6 @@ public class LoginRegisterBean implements Serializable {
     private String passwordConfirm;
 
     private Clients client;
-    private List<Clients> clients;
 
     private boolean loggedIn;
     private boolean isManager;
@@ -233,9 +232,9 @@ public class LoginRegisterBean implements Serializable {
         String username = (String) value;
 
         LOG.debug("validateUniqueUserName: " + username);
-        this.clients = clientsJpaController.findClientsEntities();
+        List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
-        for (Clients client : this.clients) {
+        for (Clients client : clientsList) {
             if (client.getUsername().equals(username)) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
@@ -271,9 +270,9 @@ public class LoginRegisterBean implements Serializable {
         String username = (String) value;
 
         LOG.debug("validateUniqueEmail: " + username);
-        this.clients = clientsJpaController.findClientsEntities();
+        List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
-        for (Clients client : this.clients) {
+        for (Clients client : clientsList) {
             if (client.getEmail().equals(username)) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateEmail']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
