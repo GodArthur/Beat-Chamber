@@ -9,7 +9,6 @@ import com.beatchamber.entities.Choices;
 import com.beatchamber.entities.SurveyToChoice;
 import com.beatchamber.entities.Surveys;
 import com.beatchamber.exceptions.IllegalOrphanException;
-import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import java.util.List;
@@ -127,7 +126,7 @@ public class SurveyToChoiceJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = surveyToChoice.getTablekey();
                 if (findSurveyToChoice(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The surveyToChoice with id " + id + " no longer exists.");
                 }
             }
             throw ex;

@@ -127,7 +127,7 @@ public class ArtistAlbumsJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = artistAlbums.getTablekey();
                 if (findArtistAlbums(id) == null) {
-                    throw new com.beatchamber.exceptions.NonexistentEntityException("The artistAlbum with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The artistAlbum with id " + id + " no longer exists.");
                 }
             }
             throw ex;

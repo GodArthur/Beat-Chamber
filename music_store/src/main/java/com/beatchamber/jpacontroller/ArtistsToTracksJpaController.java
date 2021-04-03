@@ -8,8 +8,8 @@ import javax.persistence.criteria.Root;
 import com.beatchamber.entities.Artists;
 import com.beatchamber.entities.ArtistsToTracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
-import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.RollbackFailureException;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
@@ -62,6 +62,7 @@ public class ArtistsToTracksJpaController implements Serializable {
             utx.commit();
         } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
+
                 utx.rollback();
                 LOG.error("Rollback");
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -103,14 +104,14 @@ public class ArtistsToTracksJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = artistsToTracks.getTablekey();
                 if (findArtistsToTracks(id) == null) {
-                    throw new com.beatchamber.exceptions.NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The artistsToTracks with id " + id + " no longer exists.");
                 }
             }
             throw ex;
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, com.beatchamber.exceptions.NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 
         try {
             utx.begin();
@@ -128,7 +129,7 @@ public class ArtistsToTracksJpaController implements Serializable {
             }
             em.remove(artistsToTracks);
             utx.commit();
-        } catch (NotSupportedException | SystemException | com.beatchamber.exceptions.NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -156,12 +157,11 @@ public class ArtistsToTracksJpaController implements Serializable {
             q.setFirstResult(firstResult);
         }
         return q.getResultList();
-
     }
 
     public ArtistsToTracks findArtistsToTracks(Integer id) {
-        return em.find(ArtistsToTracks.class, id);
 
+        return em.find(ArtistsToTracks.class, id);
     }
 
     public int getArtistsToTracksCount() {
@@ -172,5 +172,4 @@ public class ArtistsToTracksJpaController implements Serializable {
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-
 }

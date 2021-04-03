@@ -6,7 +6,6 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.InvoiceDetails;
 import java.util.*;
 import com.beatchamber.entities.CustomerReviews;
@@ -26,7 +25,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.ParameterExpression;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -256,7 +254,7 @@ public class TracksJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = tracks.getTrackId();
                 if (findTracks(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The track with id " + id + " no longer exists.");
                 }
             }
             throw ex;
