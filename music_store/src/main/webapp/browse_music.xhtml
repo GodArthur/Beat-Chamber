@@ -18,9 +18,33 @@
                 </section>
                 <!-- PrimeFaces's DataView to display all the current albums -->
                 <h:form>
-                    <p:dataView var="albumList" value="#{albumsJpaController.findAlbumsEntities()}" 
+                    <p:dataView var="musicItem" value="#{search.musicComponents}" 
                                 multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                         <!-- Grid View -->
+                        <p:dataViewGridItem>
+                            <div class="album-grid-display">
+                                <h:commandLink action="#{musicItem.sendComponentPage}">
+                                    <p:graphicImage name="#{musicItem.coverPath}" library="images" styleClass="album-grid-img"/>
+                                    <div class="album-grid-info">
+                                        <div>#{musicItem.title}</div>
+                                        <div>#{musicItem.artists[0].artistName}</div>
+                                    </div>
+                                </h:commandLink>
+                                <h:form class="album-rating">
+                                    <p:rating readonly="true" value="4"/>
+                                </h:form>
+                                <h:outputText value="#{12}" styleClass="album-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                                <p:button value="Add to Cart" icon="pi pi-shopping-cart"/>
+                            </div>
+                        </p:dataViewGridItem>
+                    <!--
+                    <p:dataView var="albumList" value="#{albumsJpaController.findAlbumsEntities()}" 
+                                multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                    -->
+                        <!-- Grid View -->
+                        <!--
                         <p:dataViewGridItem>
                             <div class="album-grid-display">
                                 <h:commandLink action="#{album.sendAlbum}">
@@ -40,7 +64,9 @@
                                 <p:button value="Add to Cart" icon="pi pi-shopping-cart"/>
                             </div>
                         </p:dataViewGridItem>
+                        -->
                         <!-- List View -->
+                        <!--
                         <p:dataViewListItem>
                             <div class="album-list-display">
                                 <h:commandLink action="#{album.sendAlbum}">
@@ -65,6 +91,7 @@
                                 </div>
                             </div>
                         </p:dataViewListItem>
+                        -->
                     </p:dataView>
                 </h:form>
             </ui:define>

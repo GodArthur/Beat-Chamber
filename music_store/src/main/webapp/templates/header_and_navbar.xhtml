@@ -53,19 +53,19 @@
             <h:form id="searchFunctions">
                 <h:inputText id="searchBar" a:placeholder="#{msgs.searchMusic}" value="#{search.searchValue}" styleClass="search" rendered="#{!search.dateCondition}"/>
                 
-                <p:calendar id="calendar" styleClass="search" value="#{search.searchValue}" navigator="true"
+                <p:calendar id="startCalendar" a:placeholder="#{msgs.startDate}" styleClass="search" value="#{search.searchValue}" navigator="true"
                         pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
-                <p:calendar id="calendar" a:placeholder="Last Date" styleClass="search" value="#{search.searchValue}" navigator="true"
+                <p:calendar id="endCalendar" a:placeholder="#{msgs.endDate}" styleClass="search" value="#{search.searchValue}" navigator="true"
                         pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
                 
                 <h:selectOneMenu value="#{search.searchCondition}" styleClass="search-dropdown">
-                    <f:selectItem itemValue="albumTtitle" itemLabel="Album Title" />
-                    <f:selectItem itemValue="trackName" itemLabel="Track Name" />
-                    <f:selectItem itemValue="dateAdded" itemLabel="Date Added" />
-                    <f:selectItem itemValue="artistName" itemLabel="Artist Name" />
+                    <f:selectItem itemValue="albumTtitle" itemLabel="#{msgs.albumMenuItem}" />
+                    <f:selectItem itemValue="trackName" itemLabel="#{msgs.trackMenuItem}" />
+                    <f:selectItem itemValue="dateAdded" itemLabel="#{msgs.dateMenuItem}" />
+                    <f:selectItem itemValue="artistName" itemLabel="#{msgs.artistMenuItem}" />
                     <f:ajax render="searchFunctions"/>
                 </h:selectOneMenu>
-                <h:commandButton action="" styleClass="search-button" value="#{msgs.search}"/>
+                <h:commandButton action="#{search.findMusicContent}" styleClass="search-button" value="#{msgs.search}"/>
             </h:form>
         </div>
     </body>

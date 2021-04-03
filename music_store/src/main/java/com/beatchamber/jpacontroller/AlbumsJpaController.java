@@ -343,6 +343,8 @@ public class AlbumsJpaController implements Serializable {
      * @author Susan Vuu
      */
     public String getAlbumPath(Integer id, boolean isSmall){
+        
+        LOG.info("GETTING ALBUM PATH FROM ALBUM ID: " + id);
         Albums foundAlbum = em.find(Albums.class, id);
         //Find the genre the album belongs to. Each album images are separated by genre
         List<GenreToAlbum> genreList = foundAlbum.getGenreToAlbumList();
@@ -426,7 +428,7 @@ public class AlbumsJpaController implements Serializable {
     }
     
      /**
-     * Method finds Tracks by their date entered
+     * Method finds Albums by their date entered
      * in the inventory. 
      * @param firstDate Lower bound of the date range
      * @param lastDate Upper bound of the date range
@@ -457,12 +459,15 @@ public class AlbumsJpaController implements Serializable {
      */
     public List<Albums> findAlbumsByTitle(String title){
         
+        LOG.info("REACHING FINDING ALBUMS BY TITLE QUERY");
+        
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
         Root<Albums> rt = cq.from(Albums.class);
         cq.where(cb.like(rt.get("albumTitle"), "%" + title + "%"));
         TypedQuery<Albums> query = em.createQuery(cq);
         
+        LOG.info("fINISHED QUERY");
         return query.getResultList();
     }
     
@@ -525,6 +530,11 @@ public class AlbumsJpaController implements Serializable {
         TypedQuery<Artists> query = em.createQuery(cq);
         
         return query.getResultList();
+    }
+    
+    public String toString(){
+        
+        return "I EXISTTTTT";
     }
 }
 
