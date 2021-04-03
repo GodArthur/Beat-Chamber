@@ -118,7 +118,6 @@ public class CustomerReviewBean implements Serializable {
 
         try {
             selectedCustomerReviews.setTrackId(tracksJpaController.findTracks(trackBean.getTrackId()));
-            selectedCustomerReviews.setClientNumber(userLoginBean.getClient());
             selectedCustomerReviews.setReviewDate(new java.sql.Date(System.currentTimeMillis()));
 
             //this.rating and this.review should be set by user on site 
@@ -129,8 +128,16 @@ public class CustomerReviewBean implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The review must have a rating and a written review"));
             
-            } else {
+            }
+            //Else if check if the client is logged in
+            else if(userLoginBean.getClient().getFirstName() == null){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You must be logged in to leave a review"));
+                FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "login.xhtml");
+            }
+            else {
+                
                 LOG.trace("Creating new review entity object");
+                selectedCustomerReviews.setClientNumber(userLoginBean.getClient());
                 selectedCustomerReviews.setRating(this.rating);
                 selectedCustomerReviews.setReviewText(this.review_text);
                 
