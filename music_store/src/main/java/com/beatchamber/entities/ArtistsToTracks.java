@@ -1,4 +1,3 @@
-
 package com.beatchamber.entities;
 
 import java.io.Serializable;
