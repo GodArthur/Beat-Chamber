@@ -9,6 +9,7 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class is a wrapper for an Album entity
@@ -19,12 +20,17 @@ import javax.inject.Named;
 @SessionScoped
 public class AlbumBackingBean implements Serializable, MusicComponent {
 
+    private final static org.slf4j.Logger LOG = LoggerFactory.getLogger(LoginRegisterBean.class);
+
     private Albums album;
     private List<Artists> artists;
     private String coverPath;
 
     @Inject
     AlbumsJpaController albumController;
+    
+    @Inject
+    AlbumBean albumBean;
 
     public AlbumBackingBean() {
 
@@ -34,8 +40,6 @@ public class AlbumBackingBean implements Serializable, MusicComponent {
     public AlbumBackingBean(Albums album) {
 
         this.album = album;
-        coverPath = albumController.getAlbumPath(album.getAlbumNumber(), true);
-        artists = albumController.findArtists(album.getAlbumNumber());
     }
 
     @Override
@@ -60,7 +64,14 @@ public class AlbumBackingBean implements Serializable, MusicComponent {
         return coverPath;
     }
 
+    @Override
     public void setCoverPath(String coverPath) {
         this.coverPath = coverPath;
+    }
+    
+    @Override
+    public String sendComponentPage(){
+        
+        return albumBean.sendAlbum(album);
     }
 }
