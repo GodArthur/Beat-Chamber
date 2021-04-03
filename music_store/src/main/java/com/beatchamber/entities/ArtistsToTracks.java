@@ -26,14 +26,16 @@ import javax.persistence.Table;
     @NamedQuery(name = "ArtistsToTracks.findByTrackId", query = "SELECT a FROM ArtistsToTracks a WHERE a.trackId = :trackId")})
 public class ArtistsToTracks implements Serializable {
 
+    @JoinColumn(name = "track_id", referencedColumnName = "track_id")
+    @ManyToOne(optional = false)
+    private Tracks trackId;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "tablekey")
     private Integer tablekey;
-    @Column(name = "track_id")
-    private Integer trackId;
     @JoinColumn(name = "artist_id", referencedColumnName = "artist_id")
     @ManyToOne(optional = false)
     private Artists artistId;
@@ -53,11 +55,11 @@ public class ArtistsToTracks implements Serializable {
         this.tablekey = tablekey;
     }
 
-    public Integer getTrackId() {
+    public Tracks getTrackId() {
         return trackId;
     }
 
-    public void setTrackId(Integer trackId) {
+    public void setTrackId(Tracks trackId) {
         this.trackId = trackId;
     }
 
