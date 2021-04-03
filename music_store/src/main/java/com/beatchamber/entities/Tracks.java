@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -78,6 +79,7 @@ public class Tracks implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "entry_date")
+    @Temporal(TemporalType.DATE)
     private Date entryDate;
     @Basic(optional = false)
     @NotNull
@@ -95,6 +97,8 @@ public class Tracks implements Serializable {
     @NotNull
     @Column(name = "hst")
     private double hst;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId")
+    private Collection<ArtistsToTracks> artistsToTracksCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId")
     private Collection<OrderTrack> orderTrackCollection;
     private static final long serialVersionUID = 1L;
@@ -302,6 +306,14 @@ public class Tracks implements Serializable {
 
     public void setHst(double hst) {
         this.hst = hst;
+    }
+
+    public Collection<ArtistsToTracks> getArtistsToTracksCollection() {
+        return artistsToTracksCollection;
+    }
+
+    public void setArtistsToTracksCollection(Collection<ArtistsToTracks> artistsToTracksCollection) {
+        this.artistsToTracksCollection = artistsToTracksCollection;
     }
     
 }

@@ -21,39 +21,39 @@ and open the template in the editor.
 				<h:form>
                                     <p:growl  id="growl" showDetail="false" sticky="true" class="pop"/>  
                                     
-                                    <h:outputLabel class="inforLb" for="creditC">#{msgs.askCard}</h:outputLabel>  
+                                    <h:outputLabel class="inforLb" for="creditC"><h3>#{msgs.askCard}</h3></h:outputLabel>  
                                     <h:inputText class="input_info" id="creditC" value="#{checkoutData.cardNumber}" required="true" requiredMessage="#{msgs.creaditCardNumMessage}" >
                                         <f:converter converterId="com.beatChamber.CreditCardConverter" />
                                         <f:validator validatorId="CreditCardValidator" />
                                     </h:inputText>
                                     <br/><br/>
 
-                                    <h:outputLabel class="inforLb" for="expDate">#{msgs.askDate}</h:outputLabel>  
+                                    <h:outputLabel class="inforLb" for="expDate"><h3>#{msgs.askDate}</h3></h:outputLabel>  
                                     <h:inputText class="input_info" id="expDate" value="#{checkoutData.date}" required="true" requiredMessage="#{msgs.expiryDateMessage}" >
                                         <f:convertDateTime pattern="MM/yyyy" />
                                     </h:inputText><br/><br/>
 
-                                    <h:outputLabel class="inforLb" for="cvv">#{msgs.askCvv}</h:outputLabel>  
+                                    <h:outputLabel class="inforLb" for="cvv"><h3>#{msgs.askCvv}</h3></h:outputLabel>  
                                     <h:inputText class="input_info" id="cvv" value="#{checkoutData.cvv}" required="true" requiredMessage="#{msgs.cvvMessage}">
                                         <f:validator validatorId="CvvValidation" />
                                     </h:inputText><br/><br/>
 
-                                    <h:outputLabel class="inforLb" for="nameCard">#{msgs.askName}</h:outputLabel>  
+                                    <h:outputLabel class="inforLb" for="nameCard"><h3>#{msgs.askName}</h3></h:outputLabel>  
                                     <h:inputText class="input_info" id="nameCard" value="#{checkoutData.name}" required="true" requiredMessage="#{msgs.nameMessage}" >
                                         <f:validator validatorId="NameValidator" />
                                     </h:inputText><br/><br/>
 
-                                    <h:outputLabel class="inforLb" for="address">#{msgs.askAddress}</h:outputLabel>  
+                                    <h:outputLabel class="inforLb" for="address"><h3>#{msgs.askAddress}</h3></h:outputLabel>  
                                     <h:inputText class="input_info" id="address" value="#{checkoutData.address}" required="true" requiredMessage="#{msgs.addressMessage}">
                                         <f:validator validatorId="AddressValidator" />
                                     </h:inputText><br/><br/>
 
-                                    <h:outputLabel class="inforLb" for="City">#{msgs.askCity}</h:outputLabel>  
+                                    <h:outputLabel class="inforLb" for="City"><h3>#{msgs.askCity}</h3></h:outputLabel>  
                                     <h:inputText class="input_info" id="City" value="#{checkoutData.city}" required="true" requiredMessage="#{msgs.cityMessage}">
                                         <f:validator validatorId="cityValidator" />
                                     </h:inputText><br/><br/>
 
-                                    <h:outputLabel class="City" for="province">#{msgs.askProvince}
+                                    <h:outputLabel class="City" for="province"><h3>#{msgs.askProvince}</h3>
                                         
                                         
                                     </h:outputLabel>  
@@ -104,22 +104,22 @@ and open the template in the editor.
                             
 				<h2>#{msgs.showItems}</h2><br/>
                                 <p>
-                                <h5>#{msgs.albumsboughtTitle}</h5>
+                                <h1>#{msgs.albumsboughtTitle}</h1>
                                 <c:forEach var="albumItem" items="#{albumsJpaController.retrieveAllAlbumsInTheCart()}">
-                                    #{albumItem.albumTitle} #{albumItem.costPrice}$<br/>
+                                    <h3>#{albumItem.albumTitle} #{albumItem.costPrice}$</h3><br/>
                                 </c:forEach>
                                 </p>
-                                <h5>#{msgs.trackboughtTitle}</h5>
+                                <h1>#{msgs.trackboughtTitle}</h1>
                                 <p>
                                     <c:forEach var="trackItem" items="#{tracksController.retrieveAllTracksInTheCart()}">
-                                        #{trackItem.trackTitle} #{trackItem.costPrice}$<br/>
+                                        <h3>#{trackItem.trackTitle} #{trackItem.costPrice}$</h3><br/>
                                 </c:forEach>
                                 </p>
 				<hr class="hrColor" />
-                                <h5>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice)}$</h5><br/>
-                                <h5>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %  -------➤    <h:outputText id="renderPstRealPrice" value="#{checkoutData.computePst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst)}"/> $</h5><br/>
-                                <h5>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %  -------➤    <h:outputText id="renderGstRealPrice" value="#{checkoutData.computeGst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).gst)}"/> $</h5><br/>
-                                <h5>#{msgs.hst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %  -------➤    <h:outputText id="renderHstRealPrice" value="#{checkoutData.computeHst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h5><br/>
+                                <h3>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice)}$</h3><br/>
+                                <h3>#{msgs.pst} <h:outputText id="renderPst" value="#{provincesJpaController.findProvinces(checkoutData.province).pst}"  /> %  -------➤    <h:outputText id="renderPstRealPrice" value="#{checkoutData.computePst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst)}"/> $</h3><br/>
+                                <h3>#{msgs.gst} <h:outputText id="renderGst" value="#{provincesJpaController.findProvinces(checkoutData.province).gst}"  /> %  -------➤    <h:outputText id="renderGstRealPrice" value="#{checkoutData.computeGst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).gst)}"/> $</h3><br/>
+                                <h3>#{msgs.hst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %  -------➤    <h:outputText id="renderHstRealPrice" value="#{checkoutData.computeHst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h3><br/>
 				<hr class="hrColor"/>
                                 <br/>
                                 <h1>#{msgs.total} <h:outputText id="rendertotalPrice" value="#{checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst, provincesJpaController.findProvinces(checkoutData.province).gst, provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h1>
