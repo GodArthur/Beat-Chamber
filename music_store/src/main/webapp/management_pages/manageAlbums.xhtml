@@ -177,8 +177,29 @@
                                     <p:datePicker id="entryDate" value="#{theAlbums.selectedAlbum.entryDate}" />
                                     <h:message for="entryDate" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                
 
+                                <div>
+                                    <p:outputLabel for="genreList" value="#{msgs.genre}"/>
+                                    <p:selectCheckboxMenu id="genreList" value="#{theAlbums.selectedGenres}" 
+                                                          label="Choose Genres..." style="min-width: 15rem"
+                                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 30rem" scrollHeight="250">
+                                        <p:ajax event="itemUnselect" listener="#{theAlbums.onItemUnselect}"/>
+                                        <f:selectItems value="#{theAlbums.allGenres}"/>
+                                    </p:selectCheckboxMenu>
+                                    <h:message for="genreList" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                
+                                <div>
+                                    <p:outputLabel for="artistList" value="#{msgs.artist}"/>
+                                    <p:selectCheckboxMenu id="artistList" value="#{theAlbums.selectedArtists}" 
+                                                          label="Choose Artists..." style="min-width: 15rem"
+                                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 30rem" scrollHeight="250">
+                                        <p:ajax event="itemUnselect" listener="#{theAlbums.onItemUnselect}"/>
+                                        <f:selectItems value="#{theAlbums.allArtists}"/>
+                                    </p:selectCheckboxMenu>
+                                    <h:message for="artistList" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                
                             </p:outputPanel>
                         </p:outputPanel>
 

@@ -12,6 +12,8 @@ import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
+import com.beatchamber.jpacontroller.ArtistsJpaController;
+import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import com.beatchamber.jpacontroller.GenresJpaController;
 import java.io.Serializable;
@@ -30,6 +32,7 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.UnselectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +51,15 @@ public class AlbumsBackingBean implements Serializable {
 
     @Inject
     private TracksJpaController tracksJpaController;
-    
+
     @Inject
     private GenresJpaController genresJpaController;
+    
+    @Inject
+    private ArtistsJpaController artistsJpaController;
+
+    @Inject
+    private GenreToAlbumJpaController genreToAlbumJpaController;
 
     private List<Albums> albums;
 
@@ -63,8 +72,10 @@ public class AlbumsBackingBean implements Serializable {
     private Tracks newTrack;
 
     private boolean isAddTrack = false;
+
+    private String[] selectedGenres;
     
-    private Genres genre;
+    private String[] selectedArtists;
 
     @PostConstruct
     public void init() {
@@ -111,6 +122,49 @@ public class AlbumsBackingBean implements Serializable {
 
     public void setIsAddTrack(boolean isAddTrack) {
         this.isAddTrack = isAddTrack;
+    }
+
+//    public List<Genres> getAlbumGenres() {
+//        this.selectedAlbum.getGenreToAlbumList().forEach(item -> this.albumGenres.add(item.getGenreId()));
+//        return this.albumGenres;
+//    }
+
+    public List<String> getAllGenres() {
+        List<String> allGenresList = new ArrayList<>();
+        this.genresJpaController.findGenresEntities().forEach(item -> allGenresList.add(item.getGenreName()));
+        return allGenresList;
+    }
+
+    public String[] getSelectedGenres() {
+        List<String> selectedList = new ArrayList<>();
+        if (this.selectedAlbum.getAlbumNumber() != null) {
+            this.selectedAlbum.getGenreToAlbumList().forEach(item -> selectedList.add(item.getGenreId().getGenreName()));
+        }
+        this.selectedGenres = selectedList.toArray(new String[selectedList.size()]);
+        return selectedGenres;
+    }
+
+    public void setSelectedGenres(String[] selectedGenres) {
+        this.selectedGenres = selectedGenres;
+    }
+    
+    public List<String> getAllArtists() {
+        List<String> allArtistsList = new ArrayList<>();
+        this.artistsJpaController.findArtistsEntities().forEach(item -> allArtistsList.add(item.getArtistName()));
+        return allArtistsList;
+    }
+
+    public String[] getSelectedArtists() {
+        List<String> selectedList = new ArrayList<>();
+        if (this.selectedAlbum.getAlbumNumber() != null) {
+            this.selectedAlbum.getArtistAlbumsList().forEach(item -> selectedList.add(item.getArtistId().getArtistName()));
+        }
+        this.selectedGenres = selectedList.toArray(new String[selectedList.size()]);
+        return selectedGenres;
+    }
+
+    public void setSelectedArtists(String[] selectedArtists) {
+        this.selectedArtists = selectedArtists;
     }
 
     public void openNew() {
@@ -167,6 +221,16 @@ public class AlbumsBackingBean implements Serializable {
 
     public void addTrackToAlbum() {
         this.isAddTrack = false;
+    }
+
+    public void onItemUnselect(UnselectEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        FacesMessage msg = new FacesMessage();
+        msg.setSummary("Item unselected: " + event.getObject().toString());
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+
+        context.addMessage(null, msg);
     }
 
 //    /**
