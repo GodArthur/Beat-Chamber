@@ -14,11 +14,14 @@ import com.beatchamber.entities.Tracks;
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Artists;
 import com.beatchamber.entities.Genres;
+import com.beatchamber.entities.OrderTrack;
+import com.beatchamber.entities.Orders;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -51,6 +54,12 @@ public class TracksJpaController implements Serializable {
     private EntityManager em;
 
     private ArrayList<Tracks> listOfTracksInTheCart = new ArrayList<Tracks>();
+    
+    @Inject
+    private OrdersJpaController orderController;
+    
+    @Inject 
+    private OrderTrackJpaController trackOrderController;
 
     public TracksJpaController() {
     }
@@ -527,5 +536,6 @@ public class TracksJpaController implements Serializable {
     private int parseStringToInt(String strToParse) {
         return Integer.parseInt(strToParse);
     }
+    
 
 }

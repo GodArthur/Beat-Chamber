@@ -1,6 +1,5 @@
 package com.beatchamber.jpacontroller;
 
-import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Clients;
 import java.io.Serializable;
 import javax.persistence.Query;

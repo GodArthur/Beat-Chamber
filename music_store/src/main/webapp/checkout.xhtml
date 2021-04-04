@@ -21,6 +21,7 @@ and open the template in the editor.
 				<h:form>
                                     <p:growl  id="growl" showDetail="false" sticky="true" class="pop"/>  
                                     
+                                    <!--These will add some input for the user to enter the values in to be able to complete the checkout-->
                                     <h:outputLabel class="inforLb" for="creditC"><h3>#{msgs.askCard}</h3></h:outputLabel>  
                                     <h:inputText class="input_info" id="creditC" value="#{checkoutData.cardNumber}" required="true" requiredMessage="#{msgs.creaditCardNumMessage}" >
                                         <f:converter converterId="com.beatChamber.CreditCardConverter" />
