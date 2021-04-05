@@ -5,8 +5,9 @@
  */
 package com.beatchamber.test;
 
-import com.beatchamber.ClientsJpaController;
+
 import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

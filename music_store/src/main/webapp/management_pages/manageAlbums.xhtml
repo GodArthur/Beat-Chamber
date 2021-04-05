@@ -31,6 +31,7 @@
                                 <span>
                                     <p:commandButton value="Add New Album" icon="pi pi-plus" 
                                                      actionListener="#{theAlbums.openNew()}"
+                                                     process="@this"
                                                      update=":form:manage-album-content" 
                                                      oncomplete="PF('manageAlbumDialog').show()"
                                                      styleClass="rounded-button ui-button-help float-right">
@@ -62,13 +63,23 @@
                                   filterBy="#{albumItem.recordingLabel}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.recordingLabel}" />
                         </p:column>
-                        <p:column style="width:calc(80px)" headerText="Entry Date" sortBy="#{albumItem.entryDate}"
+<!--                        <p:column style="width:calc(80px)" headerText="Entry Date" sortBy="#{albumItem.entryDate}"
                                   filterBy="#{albumItem.entryDate}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.entryDate}" >
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </h:outputText>
+                        </p:column>-->
+                        <p:column style="width:calc(100px)" headerText="Genres" sortBy="#{theAlbums.getGenresListStr(albumItem.albumNumber)}"
+                                  filterBy="#{theAlbums.getGenresListStr(albumItem.albumNumber)}" filterMatchMode="contains">
+                            <h:outputText value="#{theAlbums.getGenresListStr(albumItem.albumNumber)}"/>
                         </p:column>
-                        <p:column style="width:calc(30px)" headerText="Cost Price" sortBy="#{albumItem.costPrice}"
+
+                        <p:column style="width:calc(100px)" headerText="Artists" sortBy="#{theAlbums.getArtistsListStr(albumItem.albumNumber)}"
+                                  filterBy="#{theAlbums.getArtistsListStr(albumItem.albumNumber)}" filterMatchMode="contains">
+                            <h:outputText value="#{theAlbums.getArtistsListStr(albumItem.albumNumber)}"/>
+                        </p:column>
+
+                        <!--                        <p:column style="width:calc(30px)" headerText="Cost Price" sortBy="#{albumItem.costPrice}"
                                   filterBy="#{albumItem.costPrice}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.costPrice}"/>
                         </p:column>
@@ -79,19 +90,20 @@
                         <p:column style="width:calc(30px)" headerText="Sale Price" sortBy="#{albumItem.salePrice}"
                                   filterBy="#{albumItem.salePrice}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.salePrice}"/>
-                        </p:column>
-                        <p:column style="width:calc(30px)" headerText="Removal Status" sortBy="#{albumItem.removalStatus}"
-                                  filterBy="#{albumItem.removalStatus}" filterMatchMode="contains">
-                            <h:outputText value="#{albumItem.removalStatus}"/>
+                        </p:column>-->
+
+                        <p:column style="width:calc(50px)" headerText="Removed" sortBy="#{albumItem.removalStatus}"
+                                  filterBy="#{albumItem.removalStatus?'Yes':'No'}" filterMatchMode="contains">
+                            <p:badge value="#{albumItem.removalStatus?'Yes':'No'}" severity="#{albumItem.removalStatus?'warning':'info'}" styleClass="p-mr-2"/>
                         </p:column>
                         <p:column style="width:calc(80px)" headerText="Removal Date" sortBy="#{albumItem.removalDate}"
                                   filterBy="#{albumItem.removalDate}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.removalDate}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+<!--                                <f:convertDateTime pattern="dd/MM/yyyy"/>-->
                             </h:outputText>
                         </p:column>
 
-                        <p:column style="width:calc(50px)" exportable="false" headerText="Add Track" >
+                        <p:column style="width:calc(30px)" exportable="false" headerText="Add Track" >
                             <p:commandButton icon="pi pi-plus" update=":form:add-track-content"
                                              oncomplete="PF('addTrackDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-help" process="@this">
@@ -101,9 +113,10 @@
                             </p:commandButton>
                         </p:column>
 
-                        <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
+                        <p:column style="width:calc(30px)" exportable="false" headerText="Edit" >
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-album-content"
                                              oncomplete="PF('manageAlbumDialog').show()"
+                                             actionListener="#{theAlbums.openEdit(albumItem)}"
                                              styleClass="edit-button rounded-button ui-button-help" process="@this">
                                 <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
                                 <f:setPropertyActionListener value="false" target="#{theAlbums.isAddTrack}"/>
@@ -111,7 +124,7 @@
                             </p:commandButton>
                         </p:column>
 
-                        <p:column style="width:calc(50px)" exportable="false" headerText="Delete" >
+                        <p:column style="width:calc(30px)" exportable="false" headerText="Delete" >
                             <p:commandButton class="rounded-button" icon="pi pi-trash" process="@this"
                                              oncomplete="PF('deleteAlbumDialog').show()">
                                 <f:setPropertyActionListener value="#{albumItem}" target="#{theAlbums.selectedAlbum}"/>
@@ -119,7 +132,7 @@
                         </p:column>
 
                         <p:rowExpansion styleClass="rowExpan">
-                            <p:dataTable id="dt-trackList" style="margin-left:90px; background:blue"
+                            <p:dataTable id="dt-trackList" style="margin:auto 80px; background:blue"
                                          var="trackItem" value="#{theAlbums.getTrackListInAlbum(albumItem.albumNumber)}">
                                 <p:column headerText="TrackId">
                                     <h:outputText value="#{trackItem.trackId}"/>
@@ -152,29 +165,46 @@
                                 </div>
                                 <div>
                                     <p:outputLabel for="releaseDate" value="#{msgs.releaseDate}"/>
-                                    <p:datePicker id="releaseDate" value="#{theAlbums.selectedAlbum.releaseDate}" />
+                                    <p:datePicker id="releaseDate" value="#{theAlbums.selectedAlbum.releaseDate}" 
+                                                  required="true" requiredMessage="#{msgs.releaseDateRequired}"/>
                                     <h:message for="releaseDate" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="recordingLabel" value="#{msgs.recordingLabel}"/>
+                                    <p:inputText id="recordingLabel"  value="#{theAlbums.selectedAlbum.recordingLabel}"
+                                                 required="true" requiredMessage="#{msgs.recordingLabelRequired}"/>
+                                    <h:message for="recordingLabel" styleClass="errorMessage" style="color:red"/>
                                 </div>
 
                                 <div>
                                     <p:outputLabel for="costPrice" value="#{msgs.costPrice}"/>
-                                    <p:datePicker id="costPrice" value="#{theAlbums.selectedAlbum.costPrice}" />
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">$</span>
+                                        <p:spinner id="costPrice" value="#{theAlbums.selectedAlbum.costPrice}" stepFactor="0.25" min="0"/>
+                                    </div>
                                     <h:message for="costPrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
                                 <div>
                                     <p:outputLabel for="listPrice" value="#{msgs.listPrice}"/>
-                                    <p:datePicker id="listPrice" value="#{theAlbums.selectedAlbum.listPrice}" />
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">$</span>
+                                        <p:spinner id="listPrice" value="#{theAlbums.selectedAlbum.listPrice}" stepFactor="0.25" min="0"/>
+                                    </div>
                                     <h:message for="listPrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
                                 <div>
                                     <p:outputLabel for="salePrice" value="#{msgs.salePrice}"/>
-                                    <p:datePicker id="salePrice" value="#{theAlbums.selectedAlbum.salePrice}" />
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">$</span>
+                                        <p:spinner id="salePrice" value="#{theAlbums.selectedAlbum.salePrice}" stepFactor="0.25" min="0"/>
+                                    </div>
                                     <h:message for="salePrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
 
                                 <div>
                                     <p:outputLabel for="entryDate" value="#{msgs.entryDate}"/>
-                                    <p:datePicker id="entryDate" value="#{theAlbums.selectedAlbum.entryDate}" />
+                                    <p:datePicker id="entryDate" value="#{theAlbums.selectedAlbum.entryDate}" 
+                                                  required="true" requiredMessage="#{msgs.entryDateRequired}"/>
                                     <h:message for="entryDate" styleClass="errorMessage" style="color:red"/>
                                 </div>
 
@@ -182,29 +212,49 @@
                                     <p:outputLabel for="genreList" value="#{msgs.genre}"/>
                                     <p:selectCheckboxMenu id="genreList" value="#{theAlbums.selectedGenres}" 
                                                           label="Choose Genres..." style="min-width: 15rem"
-                                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 30rem" scrollHeight="250">
-                                        <p:ajax event="itemUnselect" listener="#{theAlbums.onItemUnselect}"/>
-                                        <f:selectItems value="#{theAlbums.allGenres}"/>
+                                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 30rem" scrollHeight="250"
+                                                          required="true" requiredMessage="#{msgs.genreRequired}">
+                                        <f:selectItems value="#{theAlbums.allGenres}" var="allgenres"
+                                                       itemLabel="#{allgenres.genreName}"
+                                                       itemValue="#{allgenres.genreId}"/>
                                     </p:selectCheckboxMenu>
                                     <h:message for="genreList" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                
+
                                 <div>
                                     <p:outputLabel for="artistList" value="#{msgs.artist}"/>
                                     <p:selectCheckboxMenu id="artistList" value="#{theAlbums.selectedArtists}" 
                                                           label="Choose Artists..." style="min-width: 15rem"
-                                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 30rem" scrollHeight="250">
-                                        <p:ajax event="itemUnselect" listener="#{theAlbums.onItemUnselect}"/>
-                                        <f:selectItems value="#{theAlbums.allArtists}"/>
+                                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 30rem" scrollHeight="250"
+                                                          required="true" requiredMessage="#{msgs.artistRequired}">
+                                        <f:selectItems value="#{theAlbums.allArtists}" var="allartists"
+                                                       itemLabel="#{allartists.artistName}"
+                                                       itemValue="#{allartists.artistId}"/>
                                     </p:selectCheckboxMenu>
                                     <h:message for="artistList" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                
+
+                                <div>
+                                    <p:outputLabel for="totalTracks" value="#{msgs.totalTracks}"/>
+                                    <p:spinner id="totalTracks" value="#{theAlbums.selectedAlbum.totalTracks}" min="0"/>
+                                    <h:message for="totalTracks" styleClass="errorMessage" style="color:red"/>
+                                </div>
+
+                                <div>
+                                    <p:outputLabel for="removalStatus" value="#{msgs.removalStatus}"/><br/>
+                                    <p:selectBooleanCheckbox value="#{theAlbums.isRemoved}" id="removalStatus"
+                                                             itemLabel="Removed">
+                                        <!--                                        <p:ajax />-->
+                                        <!--                                        <p:ajax listener="#{theAlbums.changeStatus}"/>-->
+                                    </p:selectBooleanCheckbox>
+                                    <h:message for="removalStatus" styleClass="errorMessage" style="color:red"/>
+                                </div>
+
                             </p:outputPanel>
                         </p:outputPanel>
 
                         <f:facet name="footer">
-                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theAlbums.saveAlbum}"
+                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{theAlbums.saveAlbum()}"
                                              widgetVar="saveButton" onclick="PF('saveButton').disable()"
                                              update="manage-album-content" process="manage-album-content @this"
                                              oncomplete="PF('saveButton').enable()"/>
@@ -216,7 +266,7 @@
 
 
                     <p:dialog header="Add the Track" showEffect="fade" modal="true"
-                              widgetVar="addTrackDialog" responsive="true" width="500px" height="450px">
+                              widgetVar="addTrackDialog" responsive="true" width="500px" height="200px">
                         <p:outputPanel id="add-track-content" class="ui-fluid">
                             <p:outputPanel rendered="#{theAlbums.isAddTrack}">
                                 <div>
