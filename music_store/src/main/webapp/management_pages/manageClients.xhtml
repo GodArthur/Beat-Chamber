@@ -22,7 +22,7 @@
                 <h:form id="form">
                     <p:growl id="messages" showDetail="true"/>
                     <p:dataTable id="dt-clients" widgetVar="dtClients" var="client" value="#{theClients.clients}"
-                                 reflow="true" 
+                                 reflow="true" selectionMode="single"
                                  selection="#{theClients.selectedClient}" rowKey="#{client.clientNumber}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  filteredValue="#{theClients.filteredClients}"
@@ -59,8 +59,7 @@
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Title" sortBy="#{client.title}"
                                   filterBy="#{client.title}" filterMatchMode="contains">
-                            <h:outputText value="#{client.title}" 
-                                          styleClass="badge badge-primary"/>
+                            <h:outputText value="#{client.title}"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="First Name" sortBy="#{client.firstName}"
                                   filterBy="#{client.firstName}" filterMatchMode="contains">
