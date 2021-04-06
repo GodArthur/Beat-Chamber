@@ -251,7 +251,6 @@ public class AlbumsBackingBean implements Serializable {
         this.setSelectedArtists(selectedList.toArray(new Integer[selectedList.size()]));
     }
 
-
     public void saveAlbum() {
 
         try {
@@ -308,7 +307,7 @@ public class AlbumsBackingBean implements Serializable {
             java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Track Removed"));
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-trackList");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-albums");
     }
 
     public void addTrackToAlbum() {
@@ -323,7 +322,7 @@ public class AlbumsBackingBean implements Serializable {
                 java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
             }
             PrimeFaces.current().executeScript("PF('addTrackDialog').hide()");
-            PrimeFaces.current().ajax().update("form:messages", "form:dt-trackList");
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-albums");
         }
 
     }
@@ -335,7 +334,7 @@ public class AlbumsBackingBean implements Serializable {
         this.selectedTrack.setAlbumNumber(this.selectedAlbum);
 
         for (Genres genre : this.getAllGenres()) {
-            if (this.selectedGenres[0] == genre.getGenreId()) {
+            if (this.selectedGenres[0].compareTo(genre.getGenreId()) == 0) {
                 this.selectedTrack.setMusicCategory(genre.getGenreName());
             }
         }
@@ -349,6 +348,18 @@ public class AlbumsBackingBean implements Serializable {
         } else {
             this.selectedAlbum.setRemovalDate(false);
         }
+
+        for (Tracks track : this.selectedAlbum.getTracksList()) {
+            try {
+                track.setRemoved(this.isRemoved);
+                this.tracksJpaController.edit(track);
+            } catch (NonexistentEntityException ex) {
+                java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
     private void saveGenreToAlbum() {

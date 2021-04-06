@@ -116,7 +116,7 @@
 
                         <p:rowExpansion styleClass="rowExpan">
                             <p:dataTable id="dt-trackList" widgetVar="dtTrackList" style="margin:auto 80px; background:blue"
-                                         var="trackItem" value="#{theAlbums.getTrackListInAlbum(albumItem.albumNumber)}">
+                                         var="trackItem" value="#{theAlbums.getTrackListInAlbum(albumItem.albumNumber)}" >
                                 <p:column headerText="TrackId">
                                     <h:outputText value="#{trackItem.trackId}"/>
                                 </p:column>
@@ -128,7 +128,7 @@
                                 </p:column>
                                 <p:column>
                                     <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
-                                                     oncomplete="PF('removeTrackDialog').show()" >
+                                                     oncomplete="PF('removeTrackDialog').show()" rendered="#{!trackItem.removed}">
                                         <f:setPropertyActionListener value="#{trackItem}" target="#{theAlbums.selectedTrack}"/>
                                     </p:commandButton>
                                 </p:column>
