@@ -5,8 +5,8 @@
  */
 package com.beatchamber.test;
 
-import com.beatchamber.ClientsJpaController;
 import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +79,6 @@ public class ClientTest {
     
     @Test
     public void test_clientNumber(){
-        
         assertTrue(clientTesting.findClientsEntities().size()==10);
     }
 
