@@ -5,11 +5,16 @@
  */
 package com.beatchamber.test;
 
+import com.beatchamber.entities.Ads;
+import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.jpacontroller.AdsJpaController;
+import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.ClientsJpaController;
+import com.beatchamber.jpacontroller.GenresJpaController;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +23,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,16 +37,15 @@ import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
+import static org.eclipse.jetty.http.DateParser.parseDate;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -46,8 +53,9 @@ import org.junit.runner.RunWith;
  *
  * @author kibra
  */
+
 @RunWith(Arquillian.class)
-public class ClientTest {
+public class AlbumTest {
     @Deployment
     public static WebArchive deploy() {
 
@@ -82,95 +90,149 @@ public class ClientTest {
     }
     
     @Inject
-    private ClientsJpaController clientTesting ; 
+    private AlbumsJpaController albumController ; 
+    
+    @Inject
+    private GenresJpaController genreController;
     
     @Resource(lookup = "java:app/jdbc/CSgb1w21")
     private DataSource ds;
     
     /**
-     * This method will check if the total number of clients is right
+     * find the total number of albums
      */
     @Test
-    public void test_clientNumber(){
-        assertTrue(clientTesting.findClientsEntities().size()==10);
+    public void test_getTotalNumber(){
+        assertTrue(albumController.findAlbumsEntities().size() == 24);
     }
     
     /**
-     * This method is an alternative way of getting the total number of clients
+     * find the genre of album
      */
     @Test
-    public void test_clientNumberWithMethod(){
-        assertTrue(clientTesting.getClientsCount()==10);
+    public void test_findGenre(){
+        assertTrue(albumController.findGenre(1).getGenreName().equals("Hip Hop"));
     }
     
     /**
-     * This test will test to see if we are able to retrieve a specific client
+     * find the one album that contains both the string and the genre
      */
     @Test
-    public void test_getClient(){
-        //this should be (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
-        assertTrue(clientTesting.findClients(1).getTitle().equals("Manager"));
+    public void test_findAllAlbumFromGenre(){
+        //hip hop is the genre
+        assertTrue(albumController.findAlbumsByGenre(genreController.findGenres(1), "Antisocial").size()==1);
     }
     
     /**
-     * This test will destroy a user and check the size of the clients that are in the database
-     * @throws IllegalOrphanException
-     * @throws NonexistentEntityException
-     * @throws NotSupportedException
-     * @throws SystemException
-     * @throws RollbackFailureException
-     * @throws RollbackException
-     * @throws HeuristicMixedException
-     * @throws HeuristicRollbackException 
+     * find the 1 albums that contains this string
      */
     @Test
-    public void test_destroyClient() throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
-        //id 1 should be  (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
-        clientTesting.destroy(1);
-        
-        assertTrue(clientTesting.getClientsCount()==9);
+    public void test_findAlbumsByTitle(){
+        assertTrue(albumController.findAlbumsByTitle("Antisocial").size()==1);
     }
     
     /**
-     * This test will create a new user and check the new size of the list of clients returned
-     * @throws RollbackFailureException 
+     * check if it find the one albums that is in the date range
      */
     @Test
-    public void test_createClient() throws RollbackFailureException{
-        Clients newCreateClient = new Clients();
-        newCreateClient.setAddress1("dawson 123");
-        newCreateClient.setAddress2("dawson2 123");
-        newCreateClient.setCellPhone("5144565456");
-        newCreateClient.setCity("Montreal");
-        newCreateClient.setClientNumber(30);//It is 100% sure that it is not in the table 
-        newCreateClient.setCompanyName("dawson.inc");
-        newCreateClient.setCountry("Canada");
-        newCreateClient.setEmail("myEmail@emails.com");
-        newCreateClient.setFirstName("Bobby");
-        newCreateClient.setHomePhone("5145454545");
-        newCreateClient.setLastName("ybbob");
-        newCreateClient.setPostalCode("h3b4v5");
-        newCreateClient.setProvince("Quebec");
-        newCreateClient.setSalt("asdasd");
-        newCreateClient.setTitle("Consumer");
-        newCreateClient.setUsername("qwerasdf");
-        clientTesting.create(newCreateClient);
-        assertTrue(clientTesting.getClientsCount() == 11);
+    public void test_findAlbumByDate() throws ParseException{
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-01");
+        Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-07");
+        //should be Please Excuse Me For Being Antisocial
+        assertTrue(albumController.findAlbumsByDate(date1,date2).size()==1);
     }
     
     /**
-     * This test will test if when you edit a client the changes will be made
+     * check if the album image is correct for the large images
+     */
+    @Test
+    public void test_checkIfImageLargeIsGood(){
+        assertTrue(albumController.getAlbumPath(5,false).equals("albums/astroworld_large.jpg"));
+    }
+    
+    /**
+     * check if the album image is correct for the small images
+     */
+    @Test
+    public void test_checkIfImageSmallIsGood(){
+        assertTrue(albumController.getAlbumPath(5,true).equals("albums/astroworld_small.jpg"));
+    }
+    
+    /**
+     * This will return the artist from the album they are from
+     */
+    @Test
+    public void test_checkIfAlbumIsCorrectlyReturned(){
+        assertTrue(albumController.getAlbumArtist(3).getArtistName().equals("After Hours"));
+    }
+    
+    /**
+     * This will test if we get the correct total number of albums
+     */
+    @Test
+    public void test_checkTotalNumber(){
+        assertTrue(albumController.getAlbumsCount() == 24);
+    }
+    
+    /**
+     * This tests will find a specific album in the db
+     */
+    @Test
+    public void test_findSpecificAlbum(){
+        assertTrue(albumController.findAlbums(6).getAlbumTitle().equals("BOSSANOVA"));
+    }
+    
+    /**
+     * This is an alternative way of find the total number of albums
+     */
+    @Test
+    public void test_findtheTotalNumberOfAlbums(){
+        assertTrue(albumController.findAlbumsEntities().size() == 24);
+    }
+    
+    /**
+     * test to see if destroying an albums works
+     */
+    @Test
+    public void test_destroy() throws IllegalOrphanException, NonexistentEntityException, SystemException, NotSupportedException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+        albumController.destroy(1);
+        assertTrue(albumController.findAlbumsEntities().size() == 23);
+    }
+    
+    /**
+     * This method will see if editing does work
      * @throws NonexistentEntityException
      * @throws Exception 
      */
     @Test
-    public void test_editClient() throws NonexistentEntityException, Exception {
-        Clients newCreateClient = clientTesting.findClients(1);
-        newCreateClient.setTitle("Consumer");
-        clientTesting.edit(newCreateClient);
-        assertTrue(clientTesting.findClients(1).getTitle().equals("Consumer"));
+    public void test_edit() throws NonexistentEntityException, Exception{
+        Albums album = albumController.findAlbums(1);
+        album.setAlbumTitle("free albums");
+        albumController.edit(album);
+        assertTrue(albumController.findAlbums(1).getAlbumTitle().equals("free albums"));
     }
-
+    
+    /**
+     * This method will create an Album and insert it into the db
+     */
+    @Test
+    public void test_create() throws RollbackFailureException{
+        Albums album = new Albums();
+        album.setAlbumNumber(30);
+        album.setAlbumTitle("new album");
+        album.setCostPrice(2.1);
+        album.setEntryDate(new Date());
+        album.setListPrice(3.2);
+        album.setRecordingLabel("dawson sound");
+        album.setReleaseDate(new Date());
+        album.setRemovalDate(new Date());
+        album.setSalePrice(5.2);
+        album.setTotalTracks(4);
+        albumController.create(album);
+        assertTrue(albumController.findAlbumsEntities().size() == 25);
+    }
+    
+    
 /**
      * The database is recreated before each test. If the last test is
      * destructive then the database is in an unstable state. @AfterClass is
