@@ -148,6 +148,7 @@ public class RssFeedsJpaController implements Serializable {
 
     /**
      * @return A random rss feed to display
+     * @author Susan Vuu
      */
     public String getRandomRssFeed(){
         List<RssFeeds> rssFeeds = findRssFeedsEntities(true, 0, 0);
