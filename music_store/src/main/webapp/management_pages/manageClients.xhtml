@@ -22,7 +22,7 @@
                 <h:form id="form">
                     <p:growl id="messages" showDetail="true"/>
                     <p:dataTable id="dt-clients" widgetVar="dtClients" var="client" value="#{theClients.clients}"
-                                 reflow="true" selectionMode="single"
+                                 reflow="true" 
                                  selection="#{theClients.selectedClient}" rowKey="#{client.clientNumber}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  filteredValue="#{theClients.filteredClients}"

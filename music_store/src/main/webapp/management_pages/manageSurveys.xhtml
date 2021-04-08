@@ -20,7 +20,7 @@
                 <h:form id="form">
                     <p:growl id="messages" showDetail="true"/>
                     <p:dataTable id="dt-surveys" widgetVar="dtSurveys" var="survey" value="#{theSurveys.surveys}"
-                                 reflow="true" selectionMode="single"
+                                 reflow="true" 
                                  selection="#{theSurveys.selectedSurvey}" rowKey="#{survey.surveyId}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom">
                         <f:facet name="header">

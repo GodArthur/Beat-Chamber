@@ -95,7 +95,8 @@ public class Albums implements Serializable {
     @Column(name = "album_number")
     private Integer albumNumber;
     @Column(name = "removal_date")
-    private Boolean removalDate;
+    @Temporal(TemporalType.DATE)
+    private Date removalDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "albumNumber")
     private List<ArtistAlbums> artistAlbumsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "albumNumber")
@@ -203,11 +204,11 @@ public class Albums implements Serializable {
         this.removalStatus = removalStatus;
     }
 
-    public Boolean getRemovalDate() {
+    public Date getRemovalDate() {
         return removalDate;
     }
 
-    public void setRemovalDate(Boolean removalDate) {
+    public void setRemovalDate(Date removalDate) {
         this.removalDate = removalDate;
     }
 

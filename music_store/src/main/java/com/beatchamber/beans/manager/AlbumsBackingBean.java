@@ -41,11 +41,12 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.UnselectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * This class is used to show and manage the album information in the album
+ * management page.
  *
  * @author 1733570 Yan Tang
  */
@@ -82,27 +83,35 @@ public class AlbumsBackingBean implements Serializable {
     private List<Albums> albums;
     private Albums selectedAlbum;
     private Tracks selectedTrack;
-    private List<Tracks> tracksListInAlbum;
-    private Tracks newTracks;
 
     private boolean isAddTrack;
     private boolean isRemoved;
 
     private Integer[] selectedGenres;
     private Integer[] selectedArtists;
-    private Integer[] selectedTrackId;
 
-    List<Genres> albumGenres;
-
+    /**
+     * Initialization.
+     */
     @PostConstruct
     public void init() {
         this.albums = albumsJpaController.findAlbumsEntities();
     }
 
+    /**
+     * Get the list of Albums.
+     *
+     * @return a list of albums
+     */
     public List<Albums> getAlbums() {
         return albums;
     }
 
+    /**
+     * Get the selected album.
+     *
+     * @return the selected album.
+     */
     public Albums getSelectedAlbum() {
         if (this.selectedAlbum == null) {
             this.selectedAlbum = new Albums();
@@ -110,10 +119,20 @@ public class AlbumsBackingBean implements Serializable {
         return selectedAlbum;
     }
 
+    /**
+     * Set the selected album.
+     *
+     * @param selectedAlbum
+     */
     public void setSelectedAlbum(Albums selectedAlbum) {
         this.selectedAlbum = selectedAlbum;
     }
 
+    /**
+     * Get the selected track.
+     *
+     * @return the selected track.
+     */
     public Tracks getSelectedTrack() {
         if (this.selectedTrack == null) {
             this.selectedTrack = new Tracks();
@@ -121,75 +140,104 @@ public class AlbumsBackingBean implements Serializable {
         return selectedTrack;
     }
 
+    /**
+     * Set the selected track.
+     *
+     * @param selectedTrack
+     */
     public void setSelectedTrack(Tracks selectedTrack) {
         this.selectedTrack = selectedTrack;
     }
 
-    public Tracks getNewTracks() {
-        return newTracks;
-    }
-
-    public void setNewTracks(Tracks newTracks) {
-        this.newTracks = newTracks;
-    }
-
+    /**
+     * Get the tag of adding new track.
+     *
+     * @return true if it is adding new track, otherwise false;
+     */
     public boolean getIsAddTrack() {
         return isAddTrack;
     }
 
+    /**
+     * Set the tag of adding new track.
+     *
+     * @param isAddTrack
+     */
     public void setIsAddTrack(boolean isAddTrack) {
         this.isAddTrack = isAddTrack;
     }
 
+    /**
+     * Get the tag of removal status of the album.
+     *
+     * @return true if the album is identified as removed, otherwise, false.
+     */
     public boolean getIsRemoved() {
         return this.isRemoved;
     }
 
+    /**
+     * Set the tag of removal status of the album.
+     *
+     * @param isRemoved
+     */
     public void setIsRemoved(boolean isRemoved) {
         this.isRemoved = isRemoved;
     }
 
+    /**
+     * Get the selected Genre's id.
+     *
+     * @return an array of all the Genres selected.
+     */
     public Integer[] getSelectedGenres() {
         return selectedGenres;
     }
 
+    /**
+     * Set the selected Genres.
+     *
+     * @param genreList a array of genre's id
+     */
     public void setSelectedGenres(Integer[] genreList) {
         this.selectedGenres = genreList;
     }
 
+    /**
+     * Get the selected Artist's id.
+     *
+     * @return an array of all the Artists selected.
+     */
     public Integer[] getSelectedArtists() {
         return selectedArtists;
     }
 
+    /**
+     * Set the selected Artist
+     *
+     * @param artistsList a array of artist's id
+     */
     public void setSelectedArtists(Integer[] artistsList) {
         this.selectedArtists = artistsList;
     }
 
-    public Integer[] getSelectedTrackId() {
-        return selectedTrackId;
-    }
-
-    public void setSelectedTrackId(Integer[] selectedTrackId) {
-        this.selectedTrackId = selectedTrackId;
-    }
-//    public List<Genres> getAlbumGenres() {
-//        this.albums.forEach(item -> 
-//            {item.getGenreToAlbumList().forEach(genreitem -> this.albumGenres.add(genreitem.getGenreId()));}
-//        );
-//        return this.albumGenres;
-//    }
-//    public List<String> getAllGenres() {
-//        List<String> allGenresList = new ArrayList<>();
-//        this.genresJpaController.findGenresEntities().forEach(item -> allGenresList.add(item.getGenreName()));
-//        return allGenresList;
-//    }
-
+    /**
+     * Get all the genres.
+     *
+     * @return a list of all the genres in the database
+     */
     public List<Genres> getAllGenres() {
         List<Genres> allGenresList = new ArrayList<>();
         this.genresJpaController.findGenresEntities().forEach(item -> allGenresList.add(item));
         return allGenresList;
     }
 
+    /**
+     * Get a String of all the genre of the album, and join them with commas.
+     *
+     * @param album1 the selected album
+     * @return a string of the all the genres of the album
+     */
     public String getGenresListStr(Albums album1) {
         List<String> selectedList = new ArrayList<>();
         album1.getGenreToAlbumList().forEach(item -> selectedList.add(item.getGenreId().getGenreName()));
@@ -197,12 +245,23 @@ public class AlbumsBackingBean implements Serializable {
         return listStr;
     }
 
+    /**
+     * Get all the artists.
+     *
+     * @return a list of all the artists in the database.
+     */
     public List<Artists> getAllArtists() {
         List<Artists> allArtistsList = new ArrayList<>();
         this.artistsJpaController.findArtistsEntities().forEach(item -> allArtistsList.add(item));
         return allArtistsList;
     }
 
+    /**
+     * Get a String of all the artists of the album, and join them with commas.
+     *
+     * @param album the selected album
+     * @return a string of the all the artists of the album
+     */
     public String getArtistsListStr(Albums album) {
         List<String> selectedList = new ArrayList<>();
         album.getArtistAlbumsList().forEach(item -> selectedList.add(item.getArtistId().getArtistName()));
@@ -210,18 +269,20 @@ public class AlbumsBackingBean implements Serializable {
         return listStr;
     }
 
+    /**
+     * Get all the tracks of the album.
+     *
+     * @param albumIdStr the album number
+     * @return a list of tracks that in the album
+     */
     public List<Tracks> getTrackListInAlbum(String albumIdStr) {
         int albumId = Integer.parseInt(albumIdStr);
-        this.tracksListInAlbum = this.albumsJpaController.findAlbums(albumId).getTracksList();
-        return this.tracksListInAlbum;
+        return this.albumsJpaController.findAlbums(albumId).getTracksList();
     }
 
-    public List<Tracks> getAllTracks() {
-        List<Tracks> allTracks = new ArrayList<>();
-        this.tracksJpaController.findTracksEntities().forEach(item -> allTracks.add(item));
-        return allTracks;
-    }
-
+    /**
+     * Initialize the fields when the add new album button is clicked.
+     */
     public void openNew() {
         this.selectedAlbum = new Albums();
         List<Integer> selectedList = new ArrayList<>();
@@ -230,6 +291,12 @@ public class AlbumsBackingBean implements Serializable {
         this.setIsRemoved(false);
     }
 
+    /**
+     * Set the selected genres and artists and removal status for the selected.
+     * album when the edit button is clicked.
+     *
+     * @param selectedAlbum the selected album
+     */
     public void openEdit(Albums selectedAlbum) {
 
         List<Integer> selectedGenresList = new ArrayList<>();
@@ -244,6 +311,11 @@ public class AlbumsBackingBean implements Serializable {
 
     }
 
+    /**
+     * Initialize the fields when the add new track button is clicked.
+     *
+     * @param selectedAlbum the selected album
+     */
     public void openAddNewTrack(Albums selectedAlbum) {
         this.selectedTrack = new Tracks();
         List<Integer> selectedList = new ArrayList<>();
@@ -251,23 +323,28 @@ public class AlbumsBackingBean implements Serializable {
         this.setSelectedArtists(selectedList.toArray(new Integer[selectedList.size()]));
     }
 
+    /**
+     * Create a new album or save the changes of the selected album.
+     */
     public void saveAlbum() {
 
         try {
             if (this.selectedAlbum.getAlbumNumber() == null) {
                 this.setRemovalStatus();
-                albumsJpaController.create(this.selectedAlbum);
+                this.setTotalTracksToAlbum();
+                this.albumsJpaController.create(this.selectedAlbum);
                 this.saveGenreToAlbum();
                 this.saveArtistsToAlbum();
                 this.albums.add(this.selectedAlbum);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Album Added"));
             } else {
                 this.setRemovalStatus();
+                this.setTotalTracksToAlbum();
                 this.deleteGenreToAlbum();
                 this.saveGenreToAlbum();
                 this.deleteArtistsToAlbum();
                 this.saveArtistsToAlbum();
-                albumsJpaController.edit(this.selectedAlbum);
+                this.albumsJpaController.edit(this.selectedAlbum);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Album Updated"));
 
             }
@@ -282,22 +359,44 @@ public class AlbumsBackingBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-albums");
     }
 
-    public void deleteAlbum() {
-        this.deleteGenreToAlbum();
-        this.deleteArtistsToAlbum();
-
+    /**
+     * Set the album to a removed status when remove button is clicked.
+     */
+    public void removeAlbum() {
+        //Set the album to a removed status
         try {
-            albumsJpaController.destroy(this.selectedAlbum.getAlbumNumber());
-        } catch (IllegalOrphanException | NonexistentEntityException | NotSupportedException | SystemException | RollbackFailureException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
+            this.selectedAlbum.setRemovalStatus(true);
+            this.selectedAlbum.setRemovalDate(new Date());
+            this.albumsJpaController.edit(this.selectedAlbum);
+        } catch (NonexistentEntityException ex) {
+            java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.albums.remove(this.selectedAlbum);
-        this.selectedAlbum = null;
+
+        //Set all the tracks in the album to a removed status when the album is removed
+        if (!this.selectedAlbum.getTracksList().isEmpty()) {
+            for (Tracks track : this.selectedAlbum.getTracksList()) {
+                try {
+                    track.setRemoved(true);
+                    this.tracksJpaController.edit(track);
+                } catch (NonexistentEntityException ex) {
+                    java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Album Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-albums");
+
     }
 
+    /**
+     * Remove the selected track from the selected album.
+     */
     public void removeTrackFromAlbum() {
+        //remove the selected track
         try {
             this.selectedTrack.setRemoved(true);
             this.tracksJpaController.edit(this.selectedTrack);
@@ -308,9 +407,26 @@ public class AlbumsBackingBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Track Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-albums");
+
+        //Decrease the number of totalTracks in the album table by one.
+        try {
+            this.selectedAlbum = this.selectedTrack.getAlbumNumber();
+            this.selectedAlbum.setTotalTracks(this.selectedAlbum.getTotalTracks() - 1);
+            this.selectedTrack.setAlbumNumber(this.selectedAlbum);
+            this.tracksJpaController.edit(selectedTrack);
+            this.albumsJpaController.edit(selectedAlbum);
+        } catch (NonexistentEntityException ex) {
+            java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    /**
+     * Add a new track to the selected album.
+     */
     public void addTrackToAlbum() {
+        //Add a new track to the album
         if (this.selectedTrack.getTrackId() == null) {
             try {
                 this.setTrackFields();
@@ -325,8 +441,23 @@ public class AlbumsBackingBean implements Serializable {
             PrimeFaces.current().ajax().update("form:messages", "form:dt-albums");
         }
 
+        //Increase the number of totalTracks in the album table by one.
+        try {
+            this.selectedAlbum = this.selectedTrack.getAlbumNumber();
+            this.selectedAlbum.setTotalTracks(this.selectedAlbum.getTotalTracks() + 1);
+            this.selectedTrack.setAlbumNumber(this.selectedAlbum);
+            this.tracksJpaController.edit(selectedTrack);
+            this.albumsJpaController.edit(selectedAlbum);
+        } catch (NonexistentEntityException ex) {
+            java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    /**
+     * Set all the necessary fields when add a new track to the selected album.
+     */
     private void setTrackFields() {
         this.selectedTrack.setSelectionNumber(this.selectedAlbum.getTotalTracks() + 1);
         this.selectedTrack.setPlayLength("1:00");
@@ -340,28 +471,47 @@ public class AlbumsBackingBean implements Serializable {
         }
     }
 
+    /**
+     * Set the removal status when edit the selected album.
+     */
     private void setRemovalStatus() {
         this.selectedAlbum.setRemovalStatus(this.isRemoved);
-        //RemovalDate database format issue
+
         if (this.isRemoved) {
-            this.selectedAlbum.setRemovalDate(true);
+            this.selectedAlbum.setRemovalDate(new Date());
         } else {
-            this.selectedAlbum.setRemovalDate(false);
+            this.selectedAlbum.setRemovalDate(null);
         }
 
-        for (Tracks track : this.selectedAlbum.getTracksList()) {
-            try {
-                track.setRemoved(this.isRemoved);
-                this.tracksJpaController.edit(track);
-            } catch (NonexistentEntityException ex) {
-                java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        //Change all the tracks removal status when the album's status is changed.
+        if (this.selectedAlbum.getAlbumNumber() != null) {
+            for (Tracks track : this.selectedAlbum.getTracksList()) {
+                try {
+                    track.setRemoved(this.isRemoved);
+                    this.tracksJpaController.edit(track);
+                } catch (NonexistentEntityException ex) {
+                    java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
-
     }
 
+    /**
+     * Set the number of the total tracks.
+     */
+    private void setTotalTracksToAlbum() {
+        int numOfTracks = 0;
+        if (this.selectedAlbum.getAlbumNumber() != null) {
+            numOfTracks = this.selectedAlbum.getTracksList().size();
+        }
+        this.selectedAlbum.setTotalTracks(numOfTracks);
+    }
+
+    /**
+     * Save the selected genres to the GenreToAlbum list.
+     */
     private void saveGenreToAlbum() {
 
         List<GenreToAlbum> genreAlbumsList = new ArrayList<>();
@@ -379,6 +529,9 @@ public class AlbumsBackingBean implements Serializable {
         this.selectedAlbum.setGenreToAlbumList(genreAlbumsList);
     }
 
+    /**
+     * Delete all the existing genres in the selected album.
+     */
     private void deleteGenreToAlbum() {
 
         if (this.selectedAlbum.getAlbumNumber() != null) {
@@ -392,6 +545,9 @@ public class AlbumsBackingBean implements Serializable {
         }
     }
 
+    /**
+     * Save the selected artists to the ArtistsToAlbum list.
+     */
     private void saveArtistsToAlbum() {
 
         List<ArtistAlbums> artistAlbumsList = new ArrayList<>();
@@ -409,6 +565,9 @@ public class AlbumsBackingBean implements Serializable {
         this.selectedAlbum.setArtistAlbumsList(artistAlbumsList);
     }
 
+    /**
+     * Delete all the existing artists in the selected album.
+     */
     private void deleteArtistsToAlbum() {
 
         if (this.selectedAlbum.getAlbumNumber() != null) {
@@ -422,6 +581,9 @@ public class AlbumsBackingBean implements Serializable {
         }
     }
 
+    /**
+     * Save the selected genres to the GenreToTrack list.
+     */
     private void saveGenreToTrack() {
 
         List<GenreToTracks> genreTrackList = new ArrayList<>();
@@ -439,6 +601,9 @@ public class AlbumsBackingBean implements Serializable {
         this.selectedTrack.setGenreToTracksList(genreTrackList);
     }
 
+    /**
+     * Save the selected artist to the ArtistsToTrack list
+     */
     private void saveArtistsToTrack() {
 
         List<ArtistsToTracks> artistTrackList = new ArrayList<>();
