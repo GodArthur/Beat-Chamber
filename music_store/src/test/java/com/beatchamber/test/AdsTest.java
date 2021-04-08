@@ -39,6 +39,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -91,6 +92,7 @@ public class AdsTest {
     /**
      * test if we can get the correct link
      */
+    /*@Ignore*/
     @Test
     public void test_getLink(){
         assertTrue(adsController.getAdLink(1).equals("https://www.crunchyroll.com/"));
@@ -99,14 +101,17 @@ public class AdsTest {
     /**
      * see if we can get the correct path of a specific ad
      */
+    /*@Ignore*/
     @Test
     public void test_getAdPath(){
-        assertTrue(adsController.getAdLink(1).equals("ads/anime.png"));
+        System.out.println(adsController.getAdLink(1) + " %");
+        assertTrue(adsController.getAdPath(1).equals("ads/anime.png"));
     }
     
     /**
      * see if we can get the correct number of add that are in the database
      */
+    /*@Ignore*/
     @Test
     public void test_getCount(){
         assertTrue(adsController.getAdsCount() == 10);
@@ -117,12 +122,13 @@ public class AdsTest {
      */
     @Test
     public void test_findAd(){
-        assertTrue(adsController.findAds(1).getFileName().equals("Anime"));
+        assertTrue(adsController.findAds(1).getLink().equals("https://www.crunchyroll.com/"));
     }
     
     /**
-     * and alternative way to get all ads
+     * an alternative way to get all ads
      */
+    /*@Ignore*/
     @Test
     public void test_findAllAds(){
         assertTrue(adsController.findAdsEntities().size() == 10);
@@ -139,6 +145,7 @@ public class AdsTest {
      * @throws HeuristicMixedException
      * @throws HeuristicRollbackException 
      */
+    /*@Ignore*/
     @Test
     public void test_destroyAds() throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
         adsController.destroy(1);
@@ -149,6 +156,7 @@ public class AdsTest {
      * Test to see if the edit works
      * @throws Exception 
      */
+    /*@Ignore*/
     @Test
     public void test_Edit() throws Exception{
         Ads returnedAd = adsController.findAds(1);
@@ -161,6 +169,7 @@ public class AdsTest {
      * Test to see if we can add an ad
      * @throws RollbackFailureException 
      */
+    /*@Ignore*/
     @Test
     public void test_addAds() throws RollbackFailureException{
         Ads ads = new Ads();

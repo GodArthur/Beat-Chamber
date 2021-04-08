@@ -7,14 +7,16 @@ package com.beatchamber.test;
 
 import com.beatchamber.entities.Ads;
 import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.ArtistAlbums;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.AdsJpaController;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
+import com.beatchamber.jpacontroller.ArtistAlbumsJpaController;
+import com.beatchamber.jpacontroller.ArtistsJpaController;
 import com.beatchamber.jpacontroller.ClientsJpaController;
-import com.beatchamber.jpacontroller.GenresJpaController;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +25,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -37,7 +36,6 @@ import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
-import static org.eclipse.jetty.http.DateParser.parseDate;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -56,7 +54,7 @@ import org.junit.runner.RunWith;
  */
 
 @RunWith(Arquillian.class)
-public class AlbumTest {
+public class ArtistAlbumsTest {
     @Deployment
     public static WebArchive deploy() {
 
@@ -91,157 +89,80 @@ public class AlbumTest {
     }
     
     @Inject
-    private AlbumsJpaController albumController ; 
+    private ArtistAlbumsJpaController artistAlbumJpaController ; 
     
     @Inject
-    private GenresJpaController genreController;
+    private AlbumsJpaController album;
+    
+    @Inject
+    private ArtistsJpaController artist;
     
     @Resource(lookup = "java:app/jdbc/CSgb1w21")
     private DataSource ds;
     
-    //quick note we did not test the destroy because we dont remove the albums from the table we disable them by changing a boolean value
-    
-    
     /**
-     * find the total number of albums
-     */
-    /*@Ignore*/
-    @Test
-    public void test_getTotalNumber(){
-        assertTrue(albumController.findAlbumsEntities().size() == 24);
-    }
-    
-    /**
-     * find the genre of album
-     */
-    /*@Ignore*/
-    @Test
-    public void test_findGenre(){
-        assertTrue(albumController.findGenre(1).getGenreName().equals("Hip Hop"));
-    }
-    
-    /**
-     * find the one album that contains both the string and the genre
-     */
-    /*@Ignore*/
-    @Test
-    public void test_findAllAlbumFromGenre(){
-        //hip hop is the genre
-        assertTrue(albumController.findAlbumsByGenre(genreController.findGenres(1), "Antisocial").size()==1);
-    }
-    
-    /**
-     * find the 1 albums that contains this string
-     */
-    /*@Ignore*/
-    @Test
-    public void test_findAlbumsByTitle(){
-        assertTrue(albumController.findAlbumsByTitle("Antisocial").size()==1);
-    }
-    
-    /**
-     * check if it find the one albums that is in the date range
-     *
-    @Test
-    public void test_findAlbumByDate() throws ParseException{
-        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse("2000-02-01");
-        Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-07");
-        //should be Please Excuse Me For Being Antisocial
-        System.out.println(albumController.findAlbumsByDate(date1,date2).size() + " sizing");
-        assertTrue(albumController.findAlbumsByDate(date1,date2).size()==1);
-    }*/
-    
-    /**
-     * check if the album image is correct for the large images
-     */
-    /*@Ignore*/
-    @Test
-    public void test_checkIfImageLargeIsGood(){
-        assertTrue(albumController.getAlbumPath(5,false).equals("albums/hip_hop/astroworld_large.jpg"));
-    }
-    
-    /**
-     * check if the album image is correct for the small images
-     */
-    /*@Ignore*/
-    @Test
-    public void test_checkIfImageSmallIsGood(){
-        assertTrue(albumController.getAlbumPath(5,true).equals("albums/hip_hop/astroworld_small.jpg"));
-    }
-    
-    /**
-     * This will return the artist from the album they are from
-     */
-    /*@Ignore*/
-    @Test
-    public void test_checkIfAlbumIsCorrectlyReturned(){
-        assertTrue(albumController.getAlbumArtist(3).getArtistName().equals("The Weeknd"));
-    }
-    
-    /**
-     * This will test if we get the correct total number of albums
-     */
-    /*@Ignore*/
-    @Test
-    public void test_checkTotalNumber(){
-        assertTrue(albumController.getAlbumsCount() == 24);
-    }
-    
-    /**
-     * This tests will find a specific album in the db
-     */
-    /*@Ignore*/
-    @Test
-    public void test_findSpecificAlbum(){
-        assertTrue(albumController.findAlbums(6).getAlbumTitle().equals("BOSSANOVA"));
-    }
-    
-    /**
-     * This is an alternative way of find the total number of albums
-     */
-    /*@Ignore*/
-    @Test
-    public void test_findtheTotalNumberOfAlbums(){
-        assertTrue(albumController.findAlbumsEntities().size() == 24);
-    }
-    
-    /**
-     * This method will see if editing does work
-     * @throws NonexistentEntityException
-     * @throws Exception 
-     */
-    /*@Ignore*/
-    @Test
-    public void test_edit() throws NonexistentEntityException, Exception{
-        Albums album = albumController.findAlbums(1);
-        album.setAlbumTitle("free albums");
-        albumController.edit(album);
-        assertTrue(albumController.findAlbums(1).getAlbumTitle().equals("free albums"));
-    }
-    
-    /**
-     * This method will create an Album and insert it into the db
+     * check to see if the create method works
      */
     /*@Ignore*/
     @Test
     public void test_create() throws RollbackFailureException{
-        Albums album = new Albums();
-        album.setAlbumNumber(30);
-        album.setAlbumTitle("new album");
-        album.setCostPrice(2.1);
-        album.setEntryDate(new Date());
-        album.setListPrice(3.2);
-        album.setRecordingLabel("dawson sound");
-        album.setReleaseDate(new Date());
-        album.setRemovalDate(new Date());
-        album.setSalePrice(5.2);
-        album.setTotalTracks(4);
-        albumController.create(album);
-        assertTrue(albumController.findAlbumsEntities().size() == 25);
+        ArtistAlbums createdArtistAlbum = artistAlbumJpaController.findArtistAlbums(2);
+        createdArtistAlbum.setAlbumNumber(album.findAlbums(1));
+        createdArtistAlbum.setTablekey(40);
+        artistAlbumJpaController.create(createdArtistAlbum);
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 26);
+    }
+    
+    /**
+     * check to see if the destroy method works
+     */
+    /*@Ignore*/
+    @Test
+    public void test_destroy() throws RollbackFailureException, NonexistentEntityException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+        artistAlbumJpaController.destroy(2);
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 24);
+    }
+    
+    /**
+     * check to see if the edit method works
+     */
+    /*@Ignore*/
+    @Test
+    public void test_edit() throws RollbackFailureException, NonexistentEntityException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException, Exception{
+        ArtistAlbums artistAlbum = artistAlbumJpaController.findArtistAlbums(9);
+        artistAlbum.setAlbumNumber(album.findAlbums(1));
+        artistAlbumJpaController.edit(artistAlbum);
+        assertTrue(artistAlbumJpaController.findArtistAlbums(9).getAlbumNumber().getAlbumTitle().equals(album.findAlbums(1).getAlbumTitle()));
+    }
+    
+    /**
+     * This method will check if we can get the correct number of entries in the table
+     */
+    /*@Ignore*/
+    @Test
+    public void test_allNumbers(){
+        assertTrue(artistAlbumJpaController.findArtistAlbumsEntities().size() == 25);
+    }
+    
+    /**
+     * This will test if we can find a specific ArtistAlbum
+     */
+    @Test
+    public void test_findAnEntrie(){
+        assertTrue(artistAlbumJpaController.findArtistAlbums(2).getAlbumNumber().getAlbumNumber() == 2);
+    }
+    
+    /**
+     * This method will check if we can get the correct number of entries in the table
+     */
+    /*@Ignore*/
+    @Test
+    public void test_totalCount(){
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 25);
     }
     
     
-/**
+    /**
      * The database is recreated before each test. If the last test is
      * destructive then the database is in an unstable state. @AfterClass is
      * called just once when the test class is finished with by the JUnit
@@ -317,4 +238,6 @@ public class AlbumTest {
         return line.startsWith("--") || line.startsWith("//")
                 || line.startsWith("/*");
     }
+    
+    
 }
