@@ -5,10 +5,12 @@
  */
 package com.beatchamber.test;
 
+import com.beatchamber.entities.Ads;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.jpacontroller.AdsJpaController;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +37,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -46,8 +47,9 @@ import org.junit.runner.RunWith;
  *
  * @author kibra
  */
+
 @RunWith(Arquillian.class)
-public class ClientTest {
+public class AdsTest {
     @Deployment
     public static WebArchive deploy() {
 
@@ -82,38 +84,58 @@ public class ClientTest {
     }
     
     @Inject
-    private ClientsJpaController clientTesting ; 
+    private AdsJpaController adsController ; 
     
     @Resource(lookup = "java:app/jdbc/CSgb1w21")
     private DataSource ds;
     
     /**
-     * This method will check if the total number of clients is right
+     * test if we can get the correct link
      */
+    /*@Ignore*/
     @Test
-    public void test_clientNumber(){
-        assertTrue(clientTesting.findClientsEntities().size()==10);
+    public void test_getLink(){
+        assertTrue(adsController.getAdLink(1).equals("https://www.crunchyroll.com/"));
     }
     
     /**
-     * This method is an alternative way of getting the total number of clients
+     * see if we can get the correct path of a specific ad
      */
+    /*@Ignore*/
     @Test
-    public void test_clientNumberWithMethod(){
-        assertTrue(clientTesting.getClientsCount()==10);
+    public void test_getAdPath(){
+        System.out.println(adsController.getAdLink(1) + " %");
+        assertTrue(adsController.getAdPath(1).equals("ads/anime.png"));
     }
     
     /**
-     * This test will test to see if we are able to retrieve a specific client
+     * see if we can get the correct number of add that are in the database
      */
+    /*@Ignore*/
     @Test
-    public void test_getClient(){
-        //this should be (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
-        assertTrue(clientTesting.findClients(1).getTitle().equals("Manager"));
+    public void test_getCount(){
+        assertTrue(adsController.getAdsCount() == 10);
     }
     
     /**
-     * This test will destroy a user and check the size of the clients that are in the database
+     * see if we can find a specific ad
+     */
+    @Test
+    public void test_findAd(){
+        assertTrue(adsController.findAds(1).getLink().equals("https://www.crunchyroll.com/"));
+    }
+    
+    /**
+     * an alternative way to get all ads
+     */
+    /*@Ignore*/
+    @Test
+    public void test_findAllAds(){
+        assertTrue(adsController.findAdsEntities().size() == 10);
+    }
+    
+    /**
+     * This test will see if we can delete an ad
      * @throws IllegalOrphanException
      * @throws NonexistentEntityException
      * @throws NotSupportedException
@@ -123,53 +145,42 @@ public class ClientTest {
      * @throws HeuristicMixedException
      * @throws HeuristicRollbackException 
      */
+    /*@Ignore*/
     @Test
-    public void test_destroyClient() throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
-        //id 1 should be  (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
-        clientTesting.destroy(1);
-        
-        assertTrue(clientTesting.getClientsCount()==9);
+    public void test_destroyAds() throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+        adsController.destroy(1);
+        assertTrue(adsController.getAdsCount()==9);
     }
     
     /**
-     * This test will create a new user and check the new size of the list of clients returned
-     * @throws RollbackFailureException 
-     */
-    @Test
-    public void test_createClient() throws RollbackFailureException{
-        Clients newCreateClient = new Clients();
-        newCreateClient.setAddress1("dawson 123");
-        newCreateClient.setAddress2("dawson2 123");
-        newCreateClient.setCellPhone("5144565456");
-        newCreateClient.setCity("Montreal");
-        newCreateClient.setClientNumber(30);//It is 100% sure that it is not in the table 
-        newCreateClient.setCompanyName("dawson.inc");
-        newCreateClient.setCountry("Canada");
-        newCreateClient.setEmail("myEmail@emails.com");
-        newCreateClient.setFirstName("Bobby");
-        newCreateClient.setHomePhone("5145454545");
-        newCreateClient.setLastName("ybbob");
-        newCreateClient.setPostalCode("h3b4v5");
-        newCreateClient.setProvince("Quebec");
-        newCreateClient.setSalt("asdasd");
-        newCreateClient.setTitle("Consumer");
-        newCreateClient.setUsername("qwerasdf");
-        clientTesting.create(newCreateClient);
-        assertTrue(clientTesting.getClientsCount() == 11);
-    }
-    
-    /**
-     * This test will test if when you edit a client the changes will be made
-     * @throws NonexistentEntityException
+     * Test to see if the edit works
      * @throws Exception 
      */
+    /*@Ignore*/
     @Test
-    public void test_editClient() throws NonexistentEntityException, Exception {
-        Clients newCreateClient = clientTesting.findClients(1);
-        newCreateClient.setTitle("Consumer");
-        clientTesting.edit(newCreateClient);
-        assertTrue(clientTesting.findClients(1).getTitle().equals("Consumer"));
+    public void test_Edit() throws Exception{
+        Ads returnedAd = adsController.findAds(1);
+        returnedAd.setFileName("bob");
+        adsController.edit(returnedAd);
+        assertTrue(adsController.findAds(1).getFileName().equals("bob"));
     }
+    
+    /**
+     * Test to see if we can add an ad
+     * @throws RollbackFailureException 
+     */
+    /*@Ignore*/
+    @Test
+    public void test_addAds() throws RollbackFailureException{
+        Ads ads = new Ads();
+        ads.setAdId(21);
+        ads.setFileName("avengers");
+        ads.setLink("google.com");
+        adsController.create(ads);
+        assertTrue(adsController.findAdsEntities().size() == 11);
+    }
+    
+
 
 /**
      * The database is recreated before each test. If the last test is

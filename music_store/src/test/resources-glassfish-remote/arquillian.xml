@@ -9,8 +9,8 @@
       <property name="remoteServerAddress">localhost</property>
       <property name="remoteServerHttpPort">8080</property>
       <property name="remoteServerAdminPort">4848</property>
-      <property name="adminUser">CSgb1w21</property>
-      <property name="adminPassword">odeckoxb</property>
+      <property name="adminUser">admin</property>
+      <property name="adminPassword">dawscon</property>
     </configuration>
   </container>
 

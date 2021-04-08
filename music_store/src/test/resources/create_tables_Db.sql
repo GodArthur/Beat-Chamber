@@ -53,7 +53,7 @@ cost_price double not null,
 list_price double not null,
 sale_price double not null,
 removal_status boolean not null,
-removal_date boolean
+removal_date date
 );
 
 
