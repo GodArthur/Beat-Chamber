@@ -6,11 +6,16 @@
 package com.beatchamber.test;
 
 import com.beatchamber.entities.Ads;
+import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.ArtistAlbums;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.AdsJpaController;
+import com.beatchamber.jpacontroller.AlbumsJpaController;
+import com.beatchamber.jpacontroller.ArtistAlbumsJpaController;
+import com.beatchamber.jpacontroller.ArtistsJpaController;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,7 +54,7 @@ import org.junit.runner.RunWith;
  */
 
 @RunWith(Arquillian.class)
-public class AdsTest {
+public class ArtistAlbumsTest {
     @Deployment
     public static WebArchive deploy() {
 
@@ -84,105 +89,80 @@ public class AdsTest {
     }
     
     @Inject
-    private AdsJpaController adsController ; 
+    private ArtistAlbumsJpaController artistAlbumJpaController ; 
+    
+    @Inject
+    private AlbumsJpaController album;
+    
+    @Inject
+    private ArtistsJpaController artist;
     
     @Resource(lookup = "java:app/jdbc/CSgb1w21")
     private DataSource ds;
     
     /**
-     * test if we can get the correct link
+     * check to see if the create method works
      */
     /*@Ignore*/
     @Test
-    public void test_getLink(){
-        assertTrue(adsController.getAdLink(1).equals("https://www.crunchyroll.com/"));
+    public void test_create() throws RollbackFailureException{
+        ArtistAlbums createdArtistAlbum = artistAlbumJpaController.findArtistAlbums(2);
+        createdArtistAlbum.setAlbumNumber(album.findAlbums(1));
+        createdArtistAlbum.setTablekey(40);
+        artistAlbumJpaController.create(createdArtistAlbum);
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 26);
     }
     
     /**
-     * see if we can get the correct path of a specific ad
+     * check to see if the destroy method works
      */
     /*@Ignore*/
     @Test
-    public void test_getAdPath(){
-        System.out.println(adsController.getAdLink(1) + " %");
-        assertTrue(adsController.getAdPath(1).equals("ads/anime.png"));
+    public void test_destroy() throws RollbackFailureException, NonexistentEntityException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+        artistAlbumJpaController.destroy(2);
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 24);
     }
     
     /**
-     * see if we can get the correct number of add that are in the database
+     * check to see if the edit method works
      */
     /*@Ignore*/
     @Test
-    public void test_getCount(){
-        assertTrue(adsController.getAdsCount() == 10);
+    public void test_edit() throws RollbackFailureException, NonexistentEntityException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException, Exception{
+        ArtistAlbums artistAlbum = artistAlbumJpaController.findArtistAlbums(9);
+        artistAlbum.setAlbumNumber(album.findAlbums(1));
+        artistAlbumJpaController.edit(artistAlbum);
+        assertTrue(artistAlbumJpaController.findArtistAlbums(9).getAlbumNumber().getAlbumTitle().equals(album.findAlbums(1).getAlbumTitle()));
     }
     
     /**
-     * see if we can find a specific ad
-     */
-    @Test
-    public void test_findAd(){
-        assertTrue(adsController.findAds(1).getLink().equals("https://www.crunchyroll.com/"));
-    }
-    
-    /**
-     * an alternative way to get all ads
+     * This method will check if we can get the correct number of entries in the table
      */
     /*@Ignore*/
     @Test
-    public void test_findAllAds(){
-        assertTrue(adsController.findAdsEntities().size() == 10);
+    public void test_allNumbers(){
+        assertTrue(artistAlbumJpaController.findArtistAlbumsEntities().size() == 25);
     }
     
     /**
-     * This test will see if we can delete an ad
-     * @throws IllegalOrphanException
-     * @throws NonexistentEntityException
-     * @throws NotSupportedException
-     * @throws SystemException
-     * @throws RollbackFailureException
-     * @throws RollbackException
-     * @throws HeuristicMixedException
-     * @throws HeuristicRollbackException 
+     * This will test if we can find a specific ArtistAlbum
      */
-    /*@Ignore*/
     @Test
-    public void test_destroyAds() throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
-        adsController.destroy(1);
-        assertTrue(adsController.getAdsCount()==9);
+    public void test_findAnEntrie(){
+        assertTrue(artistAlbumJpaController.findArtistAlbums(2).getAlbumNumber().getAlbumNumber() == 2);
     }
     
     /**
-     * Test to see if the edit works
-     * @throws Exception 
+     * This method will check if we can get the correct number of entries in the table
      */
     /*@Ignore*/
     @Test
-    public void test_Edit() throws Exception{
-        Ads returnedAd = adsController.findAds(1);
-        returnedAd.setFileName("bob");
-        adsController.edit(returnedAd);
-        assertTrue(adsController.findAds(1).getFileName().equals("bob"));
+    public void test_totalCount(){
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 25);
     }
+    
     
     /**
-     * Test to see if we can add an ad
-     * @throws RollbackFailureException 
-     */
-    /*@Ignore*/
-    @Test
-    public void test_addAds() throws RollbackFailureException{
-        Ads ads = new Ads();
-        ads.setAdId(21);
-        ads.setFileName("avengers");
-        ads.setLink("google.com");
-        adsController.create(ads);
-        assertTrue(adsController.findAdsEntities().size() == 11);
-    }
-    
-
-
-/**
      * The database is recreated before each test. If the last test is
      * destructive then the database is in an unstable state. @AfterClass is
      * called just once when the test class is finished with by the JUnit
@@ -258,4 +238,6 @@ public class AdsTest {
         return line.startsWith("--") || line.startsWith("//")
                 || line.startsWith("/*");
     }
+    
+    
 }
