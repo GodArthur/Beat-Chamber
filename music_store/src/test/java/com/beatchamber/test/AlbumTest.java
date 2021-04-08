@@ -233,7 +233,7 @@ public class AlbumTest {
         album.setListPrice(3.2);
         album.setRecordingLabel("dawson sound");
         album.setReleaseDate(new Date());
-        album.setRemovalDate(false);
+        album.setRemovalDate(new Date());
         album.setSalePrice(5.2);
         album.setTotalTracks(4);
         albumController.create(album);
