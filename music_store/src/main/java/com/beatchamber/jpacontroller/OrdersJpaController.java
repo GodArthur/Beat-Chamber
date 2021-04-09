@@ -199,7 +199,7 @@ public class OrdersJpaController implements Serializable {
      * @return String
      * @author Ibrahim 
      */
-    public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList){
+    public String addOrdersToTable(int ClientNumber,ArrayList<Albums> albumList,ArrayList<Tracks> trackList,double totalPrice){
         //set variables
         Orders order = new Orders();
         Date date = new Date();
@@ -211,6 +211,7 @@ public class OrdersJpaController implements Serializable {
         order.setClientNumber(clientController.findClients(ClientNumber));
         order.setVisible(true);
         order.setOrderId(newOrderId);
+        order.setOrderTotal(totalPrice);
         try {
             create(order);
         } catch (RollbackFailureException ex) {
