@@ -14,6 +14,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Managed bean for the Albums, passing to the album page
@@ -24,9 +26,14 @@ import javax.inject.Named;
 @SessionScoped
 public class AlbumBean implements Serializable {
     
+    private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
+
+    
     private int albumId;
      
     private List<Albums> similarAlbums;
+    private MusicComponent sendComponent;
+    
     
     @Inject
     private AlbumsJpaController albumController;
@@ -55,6 +62,7 @@ public class AlbumBean implements Serializable {
     
     public List<Albums> getSimilarAlbums(){
         
+        LOG.info("Similar albums amount in album bean: " + similarAlbums.size());
         return similarAlbums.subList(0, 3);
     }
     
@@ -73,10 +81,21 @@ public class AlbumBean implements Serializable {
     
     public String sendAlbum(Albums album){
         
+        LOG.info("send alum is called from browse music");
         this.albumId = album.getAlbumNumber();
         storeSimilarAlbums(albumController.findGenre(albumId));
         return "album_page.xhtml";
     }
+    
+    public String sendAlbum(int id, String title){
+        
+        this.albumId = id;
+        storeSimilarAlbums(albumController.findGenre(albumId));
+        
+        return "album_page.xhtml";
+    }
+    
+    
     
     /**
      * Method gets albums that are similar to the contents
@@ -87,6 +106,7 @@ public class AlbumBean implements Serializable {
      */
     public void storeSimilarAlbums(Genres genre){
         
+        LOG.info("" + albumController.toString());
         String title = albumController.findAlbums(albumId).getAlbumTitle();
         similarAlbums = albumController.findAlbumsByGenre(genre, title);
         
@@ -95,6 +115,12 @@ public class AlbumBean implements Serializable {
         Collections.shuffle(similarAlbums);
     }
     
+    
+    
 
+    public String toString(){
+     
+       return "ALBUM BEEN EXISTS";
+    }
 }
 

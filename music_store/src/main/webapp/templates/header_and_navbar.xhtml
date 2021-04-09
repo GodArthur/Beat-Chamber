@@ -57,9 +57,9 @@
                 Added calendar functions, selected Item labels
                 and ajax
                 -->
-                <p:calendar id="startCalendar" a:placeholder="#{msgs.startDate}" styleClass="search" value="#{search.searchValue}" navigator="true"
+                <p:calendar id="startCalendar" a:placeholder="#{msgs.startDate}" value="#{search.startDate}" navigator="true"
                         pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
-                <p:calendar id="endCalendar" a:placeholder="#{msgs.endDate}" styleClass="search" value="#{search.searchValue}" navigator="true"
+                <p:calendar id="endCalendar" a:placeholder="#{msgs.endDate}"  value="#{search.endDate}" navigator="true"
                         pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
                 
                 <h:selectOneMenu value="#{search.searchCondition}" styleClass="search-dropdown">

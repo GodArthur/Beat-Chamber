@@ -53,7 +53,8 @@
                                     </h:commandLink> 
                                 </h:form>
                                 <!-- need to add action="{cookies.addTrackToCart(trackItem.trackId)}" -->
-                                <p:commandButton icon="pi pi-shopping-cart" value="#{msgs.addToCart}" action="#{cookies.addTrackToCart(trackItem.trackId)}"/>
+                                <p:commandButton icon="pi pi-shopping-cart" value="#{msgs.addToCart}" action="#{cookies.addTrackToCart(trackItem.trackId)}"
+                                                 rendered="#{tracks.trackId != trackItem.trackId}"/>
                                 <!--<h:button value="{msgs.addToCart}"  rendered="{tracks.trackId != trackItem.trackId}"/> -->
                             </div>
                         </li>
