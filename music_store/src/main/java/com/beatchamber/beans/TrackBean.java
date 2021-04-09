@@ -1,10 +1,12 @@
 package com.beatchamber.beans;
 
 import com.beatchamber.entities.Tracks;
+import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -26,9 +28,14 @@ public class TrackBean implements Serializable {
     private int trackId;
     private String trackTitle;
     private String musicCategory;
+    private MusicComponent sendComponent;
+
 
     @Inject
     private TracksJpaController tracksController;
+    
+    @Inject
+    private AlbumsJpaController albumsController;
 
     @Inject
     private AlbumBean album;
@@ -36,9 +43,10 @@ public class TrackBean implements Serializable {
     private List<Tracks> trackList;
 
     public TrackBean() {
-
+        
     }
-
+    
+  
     public TrackBean(int trackId, String trackTitle, String musicCategory) {
         this.trackId = trackId;
         this.trackTitle = trackTitle;
@@ -69,6 +77,16 @@ public class TrackBean implements Serializable {
         this.musicCategory = musicCat;
     }
 
+    public MusicComponent getSendComponent() {
+        return sendComponent;
+    }
+
+    public void setSendComponent(MusicComponent sendComponent) {
+        this.sendComponent = sendComponent;
+    }
+    
+    
+
     public List<Tracks> getTrackList() {
 
         return trackList;
@@ -85,6 +103,7 @@ public class TrackBean implements Serializable {
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
         this.trackId = Integer.parseInt(params.get("trackId"));
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
+                
         storeSimilarAlbums();
 
         return "track.xhtml";
@@ -98,17 +117,44 @@ public class TrackBean implements Serializable {
      * @param track
      * @return
      */
-    public String sendTrack(Tracks track) {
+    public String sendTrackFromComponent() {
 
-        this.trackId = track.getTrackId();
-        this.trackTitle = track.getTrackTitle();
+        this.trackId = sendComponent.getId();
+        this.trackTitle = sendComponent.getTitle();
+        Tracks track = tracksController.findTracks(trackId);
+        album.setAlbumId(albumsController.findAlbumByTrackId(track.getTrackId()).getAlbumNumber());
+        trackList = tracksController.findTracksByAlbum(album.getAlbumId());
+        
         storeSimilarAlbums();
 
         return "track.xhtml";
     }
+    
+       /**
+     * Method sends url to the track page for a specific song on the browse
+     * music page
+     *
+     * @param track
+     * @return
+     */
+    public String sendTrack(int id, String title) {
+
+        this.trackId = id;
+        this.trackTitle = title;
+        Tracks track = tracksController.findTracks(trackId);
+        album.setAlbumId(albumsController.findAlbumByTrackId(track.getTrackId()).getAlbumNumber());
+        trackList = tracksController.findTracksByAlbum(album.getAlbumId());
+        
+        storeSimilarAlbums();
+
+        return "track.xhtml";
+    }
+    
+    
 
     private void storeSimilarAlbums() {
 
+        LOG.info("album bean: " + album);
         album.storeSimilarAlbums(tracksController.findGenre(trackId));
     }
 
@@ -131,6 +177,12 @@ public class TrackBean implements Serializable {
 
         storeSimilarAlbums();
         return "track.xhtml";
+    }
+    
+    
+    public String toString(){
+        
+        return "TRACK BEAN IS CREATED";
     }
 
 }

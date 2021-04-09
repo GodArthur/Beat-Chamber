@@ -34,18 +34,35 @@ public class SearchEngine implements Serializable {
     //The query String
     private String searchValue;
     
-    //Data structure containing tracks and albums
-    private List<MusicComponent> musicComponents;
+
+    //Data structure containing tracks
+    private List<MusicComponent> trackComponents;
     
-    private String firstDate;
+    //Data structure containing albums
+    private List<MusicComponent> albumComponents;
     
-    private String lastDate;
+    /**
+     *Data structure containing the item
+     *(album or track) that the user wishes
+     *to see in more detail
+     */
+    private MusicComponent sendComponent;
+    
+    private Date startDate;
+    
+    private Date endDate;
 
     @Inject
     AlbumsJpaController albumController;
     
     @Inject
     TracksJpaController trackController;
+    
+    @Inject
+    private TrackBean trackBean;
+    
+    @Inject
+    private AlbumBean albumBean;
     
     
     public SearchEngine() {
@@ -64,41 +81,57 @@ public class SearchEngine implements Serializable {
     }
 
     public String getSearchValue() {
-        return searchValue;
+        return this.searchValue;
     }
 
     public void setSearchValue(String searchValue) {
         this.searchValue = searchValue;
     }
 
-    public String getFirstDate() {
-        return firstDate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setFirstDate(String firstDate) {
-        this.firstDate = firstDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public String getLastDate() {
-        return lastDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setLastDate(String lastDate) {
-        this.lastDate = lastDate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
-    
-    public List<MusicComponent> getMusicComponents(){
-        
-        return musicComponents;
+
+    public MusicComponent getSendComponent() {
+        return sendComponent;
     }
-    
-    public void setMusicComponents(List<MusicComponent> musicComponents){
-        
-        this.musicComponents = musicComponents;
+
+    public void setSendComponent(MusicComponent sendComponent) {
+        this.sendComponent = sendComponent;
     }
-    
+
+    public List<MusicComponent> getTrackComponents() {
+        return trackComponents;
+    }
+
+    public void setTrackComponents(List<MusicComponent> trackComponents) {
+        this.trackComponents = trackComponents;
+    }
+
+    public List<MusicComponent> getAlbumComponents() {
+        return albumComponents;
+    }
+
+    public void setAlbumComponents(List<MusicComponent> albumComponents) {
+        this.albumComponents = albumComponents;
+    }
+      
+   
     
 
+    
     /**
      * Method checks if the selected search condition is based on the date added
      *
@@ -112,33 +145,37 @@ public class SearchEngine implements Serializable {
     /**
      * Method finds Music content (albums and/or tracks)
      * based on a search condition
+     * @return the browse music page
      */
     public String findMusicContent(){
         
-        musicComponents = new ArrayList<>();
-
+        LOG.info("Calling finding music content");
+          
+        trackComponents = new ArrayList<>();
+        albumComponents = new ArrayList<>();
         
         switch(searchCondition){
             
             
             case "trackName":
                 
+                LOG.info("Finding tracks");
                 findTracks();
                 break;
             
             case "dateAdded":
-                
+                LOG.info("Finding by date");
                 findMusicContentByDate();
                 break;
                 
             case "artistName":
-                
+                LOG.info("finding by artist");
                 findMusicContentByArtist();
                 break;
                 
                 
             default:
-                
+                LOG.info("Finding by album");
                 findAlbums();
         }
         
@@ -151,27 +188,28 @@ public class SearchEngine implements Serializable {
      */
     public void findMusicContentByDate(){
         
-        try {     
-            var startDate = new SimpleDateFormat("yyyy/MM/dd").parse(firstDate);
-            var endDate = new SimpleDateFormat("yyyy/MM/dd").parse(lastDate);
+        LOG.info("LOOKING FOR MUSIC BY DATE");
+           
 
-            List<Tracks> tracks = trackController.findTracksByDate(startDate, endDate);
-            List<Albums> albums = albumController.findAlbumsByDate(startDate, endDate);
-            
-            storeTracks(tracks);
-            storeAlbums(albums);
+        List<Tracks> tracks = trackController.findTracksByDate(startDate, endDate);
+        List<Albums> albums = albumController.findAlbumsByDate(startDate, endDate);
 
-        } catch (ParseException ex) {
-            Logger.getLogger(SearchEngine.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-
-        
+        storeTracks(tracks);
+        storeAlbums(albums);
+     
     }
     
+    /**
+     * Method finds music content (albums and tracks)
+     * made by a specific artist
+     */
     private void findMusicContentByArtist(){
         
+       List<Tracks> tracks = trackController.findTracksByArtist(searchValue);
+       List<Albums> albums = albumController.findAlbumsByArtist(searchValue);
        
+       storeTracks(tracks);
+       storeAlbums(albums);
     }
     
     /**
@@ -195,7 +233,7 @@ public class SearchEngine implements Serializable {
             trackBackingBean.setCoverPath(albumController.getAlbumPath(track.getAlbumNumber().getAlbumNumber(), true));
             trackBackingBean.setArtists(trackController.findArtists(track.getTrackId()));
             
-            musicComponents.add(trackBackingBean);
+            trackComponents.add(trackBackingBean);
         }
     }
     
@@ -209,6 +247,18 @@ public class SearchEngine implements Serializable {
         
     }
     
+    public String sendComponentPage(){
+
+
+        if(sendComponent instanceof TrackBackingBean){
+              
+           return trackBean.sendTrack(sendComponent.getId(), sendComponent.getTitle());
+        }
+
+        return albumBean.sendAlbum(sendComponent.getId(), sendComponent.getTitle());
+    }
+        
+               
     
     /**
      * Method stores albums into a music component
@@ -220,14 +270,23 @@ public class SearchEngine implements Serializable {
         //Looping through every album
         //Creating a bean with the album
         //Storing the bean in the interface
-        albums.stream().map((Albums album) -> {
+        albums.stream().map((var album) -> {
             var albumBackingBean = new AlbumBackingBean(album);
             albumBackingBean.setCoverPath(albumController.getAlbumPath(album.getAlbumNumber(), true));
             albumBackingBean.setArtists(albumController.findArtists(album.getAlbumNumber()));
             return albumBackingBean;
-        }).forEachOrdered(albumBackingBean -> {
-            musicComponents.add(albumBackingBean);
+        }).forEachOrdered((var albumBackingBean) -> {
+            albumComponents.add(albumBackingBean);
         });
     }
+    
+    
+    public boolean isEmptyList(){
+        
+        LOG.info("Album size: " + albumComponents.size() + " || Track size: " + trackComponents.size());
+        
+        return albumComponents.size() <= 0 && trackComponents.size() <= 0;
+    }
+    
 
 }
