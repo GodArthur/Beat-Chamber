@@ -757,6 +757,24 @@ button {
   max-width: 100%;
 }
 
+
+#browse-no-results{
+    
+    text-align: center;
+}
+
+#no-results-container{
+    
+    height:250px;
+    color: red;
+}
+
+#no-results-container-span{
+    
+    position: relative;
+    top: 42%;
+}
+
 /* yan added for management page*/
 
 .container-page {

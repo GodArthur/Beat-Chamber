@@ -454,6 +454,25 @@ public class TracksJpaController implements Serializable {
         return query.getSingleResult();
 
     }
+    
+    /**
+     * Method finds tracks based on the artist on
+     * the track
+     * @param artistName
+     * @return 
+     */
+    public List<Tracks> findTracksByArtist(String artistName){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tracks> cq = cb.createQuery(Tracks.class);
+        Root<Tracks> rt = cq.from(Tracks.class);
+        Join artistToTracks = rt.join("artistsToTracksCollection");
+        Join artists = artistToTracks.join("artistId");
+        cq.where(cb.like(artists.get("artistName"), "%" + artistName + "%"));
+        TypedQuery<Tracks> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
 
     public int getTracksCount() {
 
@@ -528,4 +547,5 @@ public class TracksJpaController implements Serializable {
         return Integer.parseInt(strToParse);
     }
 
+    
 }

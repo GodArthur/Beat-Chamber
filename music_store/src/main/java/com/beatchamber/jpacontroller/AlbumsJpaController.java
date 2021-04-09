@@ -310,6 +310,7 @@ public class AlbumsJpaController implements Serializable {
     }
 
     public Albums findAlbums(Integer id) {
+        
         return em.find(Albums.class, id);
     }
     public Albums findAlbums(Integer id,EntityManager em2) {
@@ -344,7 +345,6 @@ public class AlbumsJpaController implements Serializable {
      */
     public String getAlbumPath(Integer id, boolean isSmall){
         
-        LOG.info("GETTING ALBUM PATH FROM ALBUM ID: " + id);
         Albums foundAlbum = em.find(Albums.class, id);
         //Find the genre the album belongs to. Each album images are separated by genre
         List<GenreToAlbum> genreList = foundAlbum.getGenreToAlbumList();
@@ -459,7 +459,6 @@ public class AlbumsJpaController implements Serializable {
      */
     public List<Albums> findAlbumsByTitle(String title){
         
-        LOG.info("REACHING FINDING ALBUMS BY TITLE QUERY");
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
@@ -467,7 +466,6 @@ public class AlbumsJpaController implements Serializable {
         cq.where(cb.like(rt.get("albumTitle"), "%" + title + "%"));
         TypedQuery<Albums> query = em.createQuery(cq);
         
-        LOG.info("fINISHED QUERY");
         return query.getResultList();
     }
     
@@ -514,6 +512,25 @@ public class AlbumsJpaController implements Serializable {
         
     }
     
+    /**
+     * Method finds albums based on the artist on
+     * the album
+     * @param artistName
+     * @return 
+     */
+    public List<Albums> findAlbumsByArtist(String artistName){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
+        Root<Albums> rt = cq.from(Albums.class);
+        Join artistAlbums = rt.join("artistAlbumsList");
+        Join artists = artistAlbums.join("artistId");
+        cq.where(cb.like(artists.get("artistName"), "%" + artistName + "%"));
+        TypedQuery<Albums> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
+    
      /**
      * Method finds Artists on a specific track
      * @param id
@@ -532,10 +549,19 @@ public class AlbumsJpaController implements Serializable {
         return query.getResultList();
     }
     
-    public String toString(){
+    
+    public Albums findAlbumByTrackId(Integer trackId){
         
-        return "I EXISTTTTT";
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Albums> cq = cb.createQuery(Albums.class);
+        Root <Albums> rt = cq.from(Albums.class);
+        Join tracksList = rt.join("tracksList");
+        cq.where(cb.equal(tracksList.get("trackId"), trackId));
+        TypedQuery<Albums> query = em.createQuery(cq);
+        
+        return query.getSingleResult();
     }
+    
 }
 
 
