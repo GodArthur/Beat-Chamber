@@ -1,5 +1,218 @@
+drop database CSgb1w21;
+CREATE DATABASE CSgb1w21;
 USE CSgb1w21;
---USE beat_chamber;
+
+
+
+
+create table Artists (
+artist_id int not null primary key auto_increment,
+artist_name varchar(40) not null
+);
+
+create table Albums (
+album_number int not null primary key auto_increment,
+album_title varchar(50) not null,
+release_date date not null,
+recording_label varchar(40) not null,
+total_tracks int not null,
+entry_date date not null,
+cost_price double not null,
+list_price double not null,
+sale_price double not null,
+removal_status boolean not null,
+removal_date boolean
+);
+
+
+
+create table Tracks (
+track_id int not null primary key auto_increment,
+album_number int not null,
+track_title varchar(40) not null,
+play_length varchar(10) not null,
+selection_number int not null,
+music_category varchar(20) not null,
+cost_price double not null,
+list_price double not null,
+sale_price double not null,
+entry_date date not null,
+removed boolean not null,
+pst double not null,
+gst double not null,
+hst double not null,
+FOREIGN KEY (album_number) REFERENCES Albums(album_number)
+);
+
+create table Artists_to_tracks(
+tablekey int primary key auto_increment ,
+artist_id int not null,
+track_id int not null,
+FOREIGN KEY (artist_id) REFERENCES Artists(artist_id),
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
+);
+
+
+create table genres(
+genre_id int primary key auto_increment,
+genre_name varchar(40) not null unique
+);
+
+create table genre_to_tracks(
+tablekey int primary key auto_increment,
+track_id int,
+genre_id int,
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id),
+FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+);
+
+create table genre_to_album(
+tablekey int primary key auto_increment,
+album_number int,
+genre_id int,
+FOREIGN KEY (album_number) REFERENCES Albums(album_number),
+FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+);
+
+
+create table Artist_Albums(
+tablekey int primary key auto_increment,
+artist_id int not null ,
+album_number int not null,
+FOREIGN KEY (artist_id) REFERENCES Artists(artist_id),
+FOREIGN KEY (album_number) REFERENCES Albums(album_number)
+);
+
+
+create table Clients (
+client_number int primary key auto_increment,
+title varchar(40) not null,
+last_name varchar(40) not null,
+first_name varchar(40) not null,
+company_name varchar(40),
+address1 varchar(40),
+address2 varchar(40),
+city varchar(20),
+province varchar(20),
+country varchar(40),
+postal_code varchar(20),
+home_phone varchar(20),
+cell_phone varchar(20),
+email varchar(40) not null,
+username varchar(40) not null,
+salt varchar(32),
+hash varchar(32)
+);
+
+
+create table Customer_reviews(
+review_number int not null primary key auto_increment,
+track_id int not null,
+client_number int not null,
+review_date date not null,
+rating int not null,
+review_text varchar(300) not null,
+approval_status boolean not null,
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id),
+FOREIGN KEY (client_number) REFERENCES Clients(client_number)
+);
+
+
+create table invoices(
+sale_number int not null primary key auto_increment,
+sale_date datetime not null,
+client_number int not null,
+total_net_value double not null,
+PST double not null,
+GST double not null,
+HST double not null,
+total_gross_value double not null,
+FOREIGN KEY (client_number) REFERENCES Clients(client_number)
+);
+
+
+create table Invoice_Details(
+tablekey int primary key auto_increment,
+sale_number int not null,
+track_id int not null,
+PST double not null,
+GST double not null,
+HST double not null,
+FOREIGN KEY (sale_number) REFERENCES invoices(sale_number),
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
+);
+
+
+create table Ads (
+ad_id int primary key auto_increment,
+file_name varchar(60) not null,
+link varchar(100) not null
+);
+
+
+create table RSS_Feeds (
+rss_id int primary key auto_increment,
+link varchar(1000) not null
+);
+
+
+create table Surveys (
+survey_id int primary key auto_increment,
+title varchar(80) not null
+);
+
+
+create table Choices (
+choice_id int primary key auto_increment,
+choice_name varchar(40) not null,
+votes int not null
+);
+
+
+create table Survey_to_Choice (
+tablekey int primary key auto_increment,
+survey_id int,
+choice_id int,
+FOREIGN KEY (survey_id) REFERENCES Surveys(survey_id),
+FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
+);
+
+create table Orders(
+tablekey int primary key auto_increment,
+order_id int not null,
+client_number int not null,
+order_date date,
+visible boolean,
+FOREIGN KEY (client_number) REFERENCES Clients(client_number)
+);
+
+
+create table Provinces(
+province_id int primary key auto_increment,
+choice_name varchar(30) not null,
+pst double not null,
+gst double not null,
+hst double not null
+);
+
+
+
+create table order_track(
+tablekey int primary key auto_increment,
+order_id int not null,
+track_id int not null,
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
+);
+
+
+create table order_album(
+tablekey int primary key auto_increment,
+order_id int ,
+album_id int not null,
+FOREIGN KEY (album_id) REFERENCES albums(album_number)
+);
+
+USE CSgb1w21;
 
 insert into genres (genre_name) values
 ('Hip Hop'),
@@ -10,58 +223,58 @@ insert into genres (genre_name) values
 ;
 
 insert into Albums (album_title,release_date,recording_label,total_tracks,entry_date,cost_price,list_price,sale_price,removal_status,removal_date) values 
-('Please Excuse Me For Being Antisocial','2019-12-06','Atlantic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--1
-('Year Of The Gentleman','2008-08-11','Def Jam Japan',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--2
-('After Hours','2020-03-20','XO and Republic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--3
-('If You''re Reading This It''s Too Late','2015-02-13','OVO Sound',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--4
-('ASTROWORLD','2018-09-03','Epic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--5
-('BOSSANOVA','1990-08-13','4AD',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--6
-('NEVERMIND','1991-09-24','Geffen Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--7
-('THE DARK SIDE OF THE MOON','1973-03-01','Capitol Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--8
-('TUBULAR BELLS','1973-05-25','Virgin Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--9
-('OK COMPUTER','1997-5-21','Parlophone',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--10
-('The Dark Knight','2008-07-15','Reprise Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--11
-('The Mandalorian Season 2 vol.2','2020-12-18','WALT DISNEY RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--12
-('Star Wars: The Empire Strikes Back','1980-05-16','RSO Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--13
-('Harry Potter and The Sorcerer''s Stone','2001-10-30','Warner Sunset RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--14
-('Spider-man: Far From Home','2019-06-28','Sony Classical',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--15
-('Come Away With Me','2002-02-26','Blue Note Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),--16
-('What A Wonderful World','1967-08-1','Universal Music Group',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--17
-('Time Out','1959-12-14','cbs',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),--18
-('Wallflower','2015-02-03','Virgin Records America Inc',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--19
-('Piano Piano','2021-01-22','Dualtone Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--20
-('10','2020-10-23','Sony Music Masterworks',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--21
-('Bones in the Ocean','2013-05-27','The Longest Johns',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--22
-('Pure Piano Improv','2015-12-04','Musser Music',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),--23
-('Tree of Life','2013-07-16','Lakeshore Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null);--24
+('Please Excuse Me For Being Antisocial','2019-12-06','Atlantic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Year Of The Gentleman','2008-08-11','Def Jam Japan',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('After Hours','2020-03-20','XO and Republic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('If You''re Reading This It''s Too Late','2015-02-13','OVO Sound',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('ASTROWORLD','2018-09-03','Epic Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('BOSSANOVA','1990-08-13','4AD',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('NEVERMIND','1991-09-24','Geffen Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('THE DARK SIDE OF THE MOON','1973-03-01','Capitol Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('TUBULAR BELLS','1973-05-25','Virgin Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('OK COMPUTER','1997-5-21','Parlophone',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('The Dark Knight','2008-07-15','Reprise Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('The Mandalorian Season 2 vol.2','2020-12-18','WALT DISNEY RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Star Wars: The Empire Strikes Back','1980-05-16','RSO Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Harry Potter and The Sorcerer''s Stone','2001-10-30','Warner Sunset RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Spider-man: Far From Home','2019-06-28','Sony Classical',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Come Away With Me','2002-02-26','Blue Note Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('What A Wonderful World','1967-08-1','Universal Music Group',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Time Out','1959-12-14','cbs',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Wallflower','2015-02-03','Virgin Records America Inc',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Piano Piano','2021-01-22','Dualtone Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('10','2020-10-23','Sony Music Masterworks',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Bones in the Ocean','2013-05-27','The Longest Johns',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Pure Piano Improv','2015-12-04','Musser Music',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Tree of Life','2013-07-16','Lakeshore Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null);
 
 
 insert into Artists (artist_name) values
-('Roddy Ricch'), /* Please Excuse Me For Being Antisocial 1*/
-('Ne-Yo'), /* Year Of The Gentleman  2*/
-('The Weeknd'), /* After Hours 3*/
-('Drake'), /* If Youre Reading This It's Too Late 4*/
-('Travis Scott'), /* ASTROWORLD 5*/
-('Pixies'), /* BOSSANOVA 6*/
-('Nirvana'), /* NEVERMIND  7*/
-('Pink Floyd'), /* THE DARK SIDE OF THE MOON 8*/
-('Mike Oldfield'), /* TUBULAR BELLS 9*/
-('Radiohead'), /* OK COMPUTER 10*/
-('Hans Zimmer'),/* The Dark Knight 11*/
-('James Newton Howard'), /* The Dark Knight 12*/
-('Ludwig Göransson'),/* The Mandalorian Season 2 vol.2 13*/
-('Orchestre symphonique de Londres'), /* Star Wars: The Empire Strikes Back album artist 14*/
-('John Williams'), /* Harry Potter and The Sorcerer s Stone 15*/ 
-('Michael Giacchino'), /* Spider-man: Far From Home 16*/
-('Norah Jones'), /* COME AWAY WITH ME 17*/
-('Louis Armstrong'),/* WHAT A WONDERFUL WORLD 18*/
-('Dave Brubeck'), /* TIME OUT 19*/
-('Diana Krall'),/* WALLFLOWER  20*/
-('Jeremiah Fraites'), /* Piano Piano 21*/
-('The Piano Guys'), /* 10 22*/
-('The Long Johns'), /* Bones in the Ocean 23*/
-('Brandon Musser'), /* Pure Piano Improv, Pt.2 24*/
-('Audiomachine') /* Tree of Life 25*/;
+('Roddy Ricch'), 
+('Ne-Yo'), 
+('The Weeknd'), 
+('Drake'), 
+('Travis Scott'), 
+('Pixies'), 
+('Nirvana'),
+('Pink Floyd'), 
+('Mike Oldfield'),
+('Radiohead'), 
+('Hans Zimmer'),
+('James Newton Howard'), 
+('Ludwig Göransson'),
+('Orchestre symphonique de Londres'), 
+('John Williams'),
+('Michael Giacchino'),
+('Norah Jones'), 
+('Louis Armstrong'),
+('Dave Brubeck'),
+('Diana Krall'),
+('Jeremiah Fraites'),
+('The Piano Guys'), 
+('The Long Johns'), 
+('Brandon Musser'), 
+('Audiomachine') ;
 
 
 
@@ -476,46 +689,46 @@ insert into surveys(title) values
 ('What is the best season of Legend of Korra?');
 
 insert into Choices(choice_name,votes) values
-/* survey#1 */
+
 ('0-25',0),
 ('25-100',0),
 ('101-500',0),
 ('501-1000',0),
 ('1000 or more ',0),
 
-/* survey#2 */
+
 ('None',0),
 ('1',0),
 ('2',0),
 ('300',0),
 ('more than 300',0),
 
-/* survey#3 */
+
 ('Blue',0),
 ('Red',0),
 ('Purple',0),
 ('Other',0),
 
-/* survey#4 */
+
 ('1 foot',0),
 ('4 foot',0),
 ('5 foot',0),
 ('12 foot',0),
 
-/* survey#5 */
+
 ('The Dark Knight',0),
 ('Shawshank Redemption',0),
 ('Spider-man: Into The Spider-verse',0),
 ('Godfather',0),
 ('Other (The wrong answer)',0),
 
-/* survey#6 */
+
 ('Wolf',0),
 ('Moose',0),
 ('Bear',0),
 ('Mongoose',0),
 
-/* survey#7 */
+
 ('Season 1',0),
 ('Season 2',0),
 ('Season 3',0),
@@ -523,65 +736,64 @@ insert into Choices(choice_name,votes) values
 
 insert into Survey_to_Choice(survey_id,choice_id) values
 
-/* survey#1 */
+
 (1,1),
 (1,2),
 (1,3),
 (1,4),
 (1,5),
 
-/* survey#2 */
+
 (2,6),
 (2,7),
 (2,8),
 (2,9),
 (2,10),
 
-/* survey#3 */
+
 (3,11),
 (3,12),
 (3,13),
 (3,14),
 
-/* survey#4 */
+
 (4,15),
 (4,16),
 (4,17),
 (4,18),
 
-/* survey#5 */
+
 (5,19),
 (5,20),
 (5,21),
 (5,22),
 (5,23),
 
-/* survey#6 */
+
 (6,24),
 (6,25),
 (6,26),
 (6,27),
 
-/* survey#7 */
+
 (7,28),
 (7,29),
 (7,30),
 (7,31);
 
-insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, hash) values 
-(1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
-(2, 'Consumer', 'Riggey', 'Phillis', 'Dabvine', '12 Pankratz Avenue', '1796 Coleman Lane', 'Deep River', 'Alberta', 'Canada', 'M4J 4T3', '(974)586-1706', '(579)113-6429', 'cst.send@gmail.com', 'DawsonConsumer', 'dawsoncollege'),
-(3, 'Consumer', 'Widdop', 'Zeke', 'Zoovu', '61 Veith Street', '738 Schurz Hill', 'Dieppe', 'New Brunswick', 'Canada', 'E1A 4S3', '(879)573-6174', '(264)385-8093', 'zwiddop2@mlb.com', 'zwiddop2', 'UErBWw'),
-(4, 'Consumer', 'Disdel', 'Elysia', 'Livefish', '02 Holy Cross Pass', '94 Sutherland Center', 'Clarence-Rockland', 'Ontario', 'Canada', 'K4K F5S', '(455)378-4970', '(202)239-3454', 'edisdel3@tripod.com', 'edisdel3', 'y8u9GMfhyNU'),
-(5, 'Consumer', 'Brokenbrow', 'Farrel', 'Jabberbean', '09161 Mitchell Pass', '761 Dexter Avenue', 'Saskatoon', 'Quebec', 'Canada', 'S7W 3G4', '(112)372-3925', '(963)314-2333', 'fbrokenbrow4@mozilla.com', 'fbrokenbrow4','ZhvTGcWID'),
-(6, 'Consumer', 'Charlot', 'Kalina', 'Podcat', '94 Iowa Park', '988 Weeping Birch Junction', 'Papineauville', 'Yukon', 'Canada', 'G5N 5S3', '(972)674-8773', '(768)500-1272', 'kcharlot5@webmd.com', 'kcharlot5','5Gq5J1'),
-(7, 'Consumer', 'Dilon', 'Mab', 'Trudoo', '8 Artisan Plaza', '98384 Alpine Drive', 'Pincher Creek', 'New Brunswick', 'Canada', 'J0J 6J6', '(974)585-9826', '(236)286-7175', 'mdilon6@delicious.com', 'mdilon6','pXRGzPE'),
-(8, 'Consumer', 'Speariett', 'Petronilla', 'Vidoo', '0208 Cardinal Road', '95 Stang Pass', 'Fox Creek', 'Nova Scotia', 'Canada', 'E4B 3F4', '(143)234-5437', '(605)876-1228', 'pspeariett7@g.co', 'pspeariett7','F9lBbU8Z'),
-(9, 'Consumer', 'La Rosa', 'Major', 'Eazzy', '8 Lighthouse Bay Center', '58266 Monterey Crossing', 'St. Thomas', 'Manitoba', 'Canada', 'N5R 5S2', '(140)986-4159', '(838)357-4253', 'mlarosa8@stanford.edu', 'mlarosa8','2lYiNfaEIn'),
-(10, 'Consumer', 'MacKay', 'Kristo', 'Divanoodle', '21 Kingsford Terrace', '28024 Sunbrook Place', 'Sherwood Park', 'Prince Edward Island', 'Canada', 'T8A 7J3', '(544)584-8160', '(839)675-3263', 'kmackay9@harvard.edu', 'kmackay9','WPgoKZW0cJh');
+insert into Clients (client_number, title, last_name, first_name, company_name, address1, address2, city, province, country, postal_code, home_phone, cell_phone, email, username, hash,salt) values 
+(1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson','test'),
+(2, 'Consumer', 'Riggey', 'Phillis', 'Dabvine', '12 Pankratz Avenue', '1796 Coleman Lane', 'Deep River', 'Alberta', 'Canada', 'M4J 4T3', '(974)586-1706', '(579)113-6429', 'cst.send@gmail.com', 'DawsonConsumer', 'dawsoncollege','test'),
+(3, 'Consumer', 'Widdop', 'Zeke', 'Zoovu', '61 Veith Street', '738 Schurz Hill', 'Dieppe', 'New Brunswick', 'Canada', 'E1A 4S3', '(879)573-6174', '(264)385-8093', 'zwiddop2@mlb.com', 'zwiddop2', 'UErBWw','test'),
+(4, 'Consumer', 'Disdel', 'Elysia', 'Livefish', '02 Holy Cross Pass', '94 Sutherland Center', 'Clarence-Rockland', 'Ontario', 'Canada', 'K4K F5S', '(455)378-4970', '(202)239-3454', 'edisdel3@tripod.com', 'edisdel3', 'y8u9GMfhyNU','test'),
+(5, 'Consumer', 'Brokenbrow', 'Farrel', 'Jabberbean', '09161 Mitchell Pass', '761 Dexter Avenue', 'Saskatoon', 'Quebec', 'Canada', 'S7W 3G4', '(112)372-3925', '(963)314-2333', 'fbrokenbrow4@mozilla.com', 'fbrokenbrow4','ZhvTGcWID','test'),
+(6, 'Consumer', 'Charlot', 'Kalina', 'Podcat', '94 Iowa Park', '988 Weeping Birch Junction', 'Papineauville', 'Yukon', 'Canada', 'G5N 5S3', '(972)674-8773', '(768)500-1272', 'kcharlot5@webmd.com', 'kcharlot5','5Gq5J1','test'),
+(7, 'Consumer', 'Dilon', 'Mab', 'Trudoo', '8 Artisan Plaza', '98384 Alpine Drive', 'Pincher Creek', 'New Brunswick', 'Canada', 'J0J 6J6', '(974)585-9826', '(236)286-7175', 'mdilon6@delicious.com', 'mdilon6','pXRGzPE','test'),
+(8, 'Consumer', 'Speariett', 'Petronilla', 'Vidoo', '0208 Cardinal Road', '95 Stang Pass', 'Fox Creek', 'Nova Scotia', 'Canada', 'E4B 3F4', '(143)234-5437', '(605)876-1228', 'pspeariett7@g.co', 'pspeariett7','F9lBbU8Z','test'),
+(9, 'Consumer', 'La Rosa', 'Major', 'Eazzy', '8 Lighthouse Bay Center', '58266 Monterey Crossing', 'St. Thomas', 'Manitoba', 'Canada', 'N5R 5S2', '(140)986-4159', '(838)357-4253', 'mlarosa8@stanford.edu', 'mlarosa8','2lYiNfaEIn','test'),
+(10, 'Consumer', 'MacKay', 'Kristo', 'Divanoodle', '21 Kingsford Terrace', '28024 Sunbrook Place', 'Sherwood Park', 'Prince Edward Island', 'Canada', 'T8A 7J3', '(544)584-8160', '(839)675-3263', 'kmackay9@harvard.edu', 'kmackay9','WPgoKZW0cJh','test');
 
 
-/* website for pst gst and hst https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-by-province/*/
 insert into provinces (province_id,choice_name,pst,gst,hst) values
 (1,'Alberta',5,5,0),
 (2,'British Columbia',7,5,0),

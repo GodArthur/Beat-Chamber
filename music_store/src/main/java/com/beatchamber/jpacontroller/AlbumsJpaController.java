@@ -476,7 +476,7 @@ public class AlbumsJpaController implements Serializable {
      * @param genre
      * @param title
      * @return the list of Albums in the same genre
-     * @author Korjon Chang-jones
+     * @author Korjon Chang-jones and Ibrahim Kebe
      */
     public List<Albums> findAlbumsByGenre(Genres genre, String title){
         
@@ -489,7 +489,17 @@ public class AlbumsJpaController implements Serializable {
         cq.where(cb.and(cb.equal(genres.get("genreName"), genre.getGenreName()), cb.notEqual(rt.get("albumTitle"), title)));
         TypedQuery<Albums> query = em.createQuery(cq);
         
-        return query.getResultList();
+        List<Albums> returnedData = query.getResultList();
+        List<Albums> returnedList = new ArrayList<Albums>();
+        
+        //This one last verification to be sure that we got all of the albums that match the string given
+        for (Albums item:returnedData) {
+            if(item.getAlbumTitle().contains(title)){
+                returnedList.add(item);
+            }
+        }
+        
+        return returnedList;
     }
     
       /**

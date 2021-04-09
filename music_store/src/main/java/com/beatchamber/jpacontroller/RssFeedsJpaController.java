@@ -6,7 +6,10 @@ import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -143,4 +146,14 @@ public class RssFeedsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+    /**
+     * @return A random rss feed to display
+     * @author Susan Vuu
+     */
+    public String getRandomRssFeed(){
+        List<RssFeeds> rssFeeds = findRssFeedsEntities(true, 0, 0);
+        Random random = new Random();
+        int randomIndex = random.nextInt(rssFeeds.size());
+        return rssFeeds.get(randomIndex).getLink();
+    }
 }

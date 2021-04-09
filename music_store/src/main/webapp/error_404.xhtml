@@ -4,7 +4,6 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>404 Page</title>
         <h:outputStylesheet library="styles" name="main.css"/>
     </h:head>
     <h:body>
@@ -12,7 +11,7 @@
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
                 <section class="error-section">
-                    <h1>This webpage does not exist!</h1>
+                    <h1>#{msgs.invalidPage}</h1>
                     <h:graphicImage library="images" name="404image.jpg"/>
                 </section>
             </ui:define>

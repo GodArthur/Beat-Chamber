@@ -8,7 +8,7 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css"/>
-        <title>Home Page</title>
+        <title>#{msgs.homePage}</title>
     </h:head>
     <h:body>
         <!-- Base template of the page -->
@@ -172,7 +172,7 @@
                             </div>
                         </div>
                     </section>
-                    <section>
+                    <section class="survey-and-rss">
                         <!-- Vertical ad -->
                         <div class="left-ad-display">
                             <h:outputLink value="#{adsJpaController.getAdLink(6)}" target="_blank">
@@ -188,15 +188,15 @@
                                 </c:forEach>
                             </h:selectOneRadio>
                         </div>
-                        <!-- Getting the link from the db doesn't work. Probably because of a security feature? -->
                         <div class="rss-display flow-root">
-                            <script type="text/javascript" language="javascript" src="#{rssFeedsJpaController.findRssFeeds(1).link}"></script>
-                            <noscript> You apparently do not have JavaScript enabled on your browser lest you would be viewing an RSS Feed here from <a href="http://www.rssdog.com/">RSS Dog</a> </noscript>
-                        </div>
-                        <!-- Hardcoding the link works -->
-                        <div class="rss-display flow-root">
-                            <script type="text/javascript" language="javascript" src="https://www.rssdog.com/index.php?url=http%3A%2F%2Fwww.nasa.gov%2Frss%2Fdyn%2Fbreaking_news.rss&amp;mode=javascript&amp;showonly=&amp;maxitems=3&amp;showdescs=1&amp;desctrim=320&amp;descmax=0&amp;tabwidth=100%25&amp;linktarget=_blank&amp;bordercol=%23800080&amp;headbgcol=%23000000&amp;headtxtcol=%23ffffff&amp;titlebgcol=%231a1a1a&amp;titletxtcol=%238c9cff&amp;itembgcol=%23b3b3b3&amp;itemtxtcol=%23000000&amp;ctl=0"></script>
-                            <noscript> You apparently do not have JavaScript enabled on your browser lest you would be viewing an RSS Feed here from <a href="http://www.rssdog.com/">RSS Dog</a> </noscript>
+                            <p:feedReader value="#{rssFeedsJpaController.randomRssFeed}" var="feed" size="3">
+                                <h:outputLink value="#{feed.link}" styleClass="rss-title">#{feed.title}</h:outputLink>
+                                <h:outputText value="#{feed.description.value}" escape="false"/>
+                                <p:divider/>
+                                <f:facet name="error">
+                                    <h:outputText value="Error reading RSS Feed" style="color:red;"/>
+                                </f:facet>
+                            </p:feedReader>
                         </div>
                     </section>
                     <section>

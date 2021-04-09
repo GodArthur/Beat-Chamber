@@ -1,6 +1,8 @@
 
 package com.beatchamber.beans;
 
+import com.beatchamber.jpacontroller.OrderTrackJpaController;
+import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +22,16 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Named("cookies")
 @RequestScoped
+
+
+
 public class CookieManager {
     private String cartKey = "CartItemsKey";
     FacesContext context = FacesContext.getCurrentInstance();
     Map<String,Object> cookies = new HashMap();
     
+    @Inject
+    private TracksJpaController tracks;
 
     
     /**
@@ -295,6 +303,7 @@ public class CookieManager {
         String dataResult = findValue(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
         return dataResult.split(",");
     }
+    
     
     
     
