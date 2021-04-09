@@ -72,7 +72,7 @@ This page will be used by the manager to approve the reviews
                         <p:column style="width:calc(100px)" headerText="Approval Status">
                             <h:outputText value="#{customerReview.approvalStatus}" 
                                           styleClass="badge badge-primary"/>
-                            <p:toggleSwitch value="#{reviews.approved}"/>
+                            <p:toggleSwitch value="#{reviews.approved}">
                                 <p:ajax listener="#{reviews.addMessage}" update="messages"/>
                             </p:toggleSwitch>
 
