@@ -4,7 +4,7 @@ import com.beatchamber.entities.Artists;
 import java.util.List;
 
 /**
- * Interface for commpon needed functions for
+ * Interface for commmon needed functions for
  * musical items (albums and tracks)
  *
  * @author Korjon Chang-Jones
@@ -15,7 +15,11 @@ public interface MusicComponent {
 
     void setArtists(List<Artists> artists);
     
-    List<Artists> getArtists();
+    int getId();
+        
+    double getPrice();
+    
+    String getArtists();
 
     /**
      * Gets the file path for the song or album cover
@@ -31,6 +35,6 @@ public interface MusicComponent {
      *
      * @return webpage url String
      */
-    String sendComponentPage();
+    //String sendComponentPage();
 
 }

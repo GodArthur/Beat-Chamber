@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class is a wrapper for an Album entity
- *
+ * Display purposes on the browse music tab
  * @author Korjon Chang-Jones
  */
 @Named("albumWrapper")
@@ -25,10 +25,11 @@ public class AlbumBackingBean implements Serializable, MusicComponent {
     private Albums album;
     private List<Artists> artists;
     private String coverPath;
+    private double price;
 
     @Inject
     AlbumsJpaController albumController;
-    
+
     @Inject
     AlbumBean albumBean;
 
@@ -49,9 +50,23 @@ public class AlbumBackingBean implements Serializable, MusicComponent {
     }
 
     @Override
-    public List<Artists> getArtists() {
+    public String getArtists() {
 
-        return artists;
+        StringBuilder artistNames = new StringBuilder();
+
+        for (int i = 0; i < artists.size(); i++) {
+
+            if (i < artists.size() - 1) {
+
+                artistNames.append(artists.get(i).getArtistName() + ", ");
+            } else {
+
+                artistNames.append(artists.get(i).getArtistName());
+
+            }
+        }
+
+        return artistNames.toString();
     }
 
     public void setArtists(List<Artists> artists) {
@@ -68,10 +83,17 @@ public class AlbumBackingBean implements Serializable, MusicComponent {
     public void setCoverPath(String coverPath) {
         this.coverPath = coverPath;
     }
-    
+
     @Override
-    public String sendComponentPage(){
-        
-        return albumBean.sendAlbum(album);
+    public int getId() {
+
+        return album.getAlbumNumber();
     }
+
+    @Override
+    public double getPrice() {
+        
+        return album.getListPrice();
+    }
+
 }
