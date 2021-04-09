@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class is a wrapper for an Album entity
- *
+ * Display purposes on the browse music tab
  * @author Korjon Chang-Jones
  */
 @Named("albumWrapper")

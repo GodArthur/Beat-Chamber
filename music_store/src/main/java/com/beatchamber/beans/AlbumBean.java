@@ -62,6 +62,7 @@ public class AlbumBean implements Serializable {
     
     public List<Albums> getSimilarAlbums(){
         
+        LOG.info("Similar albums amount in album bean: " + similarAlbums.size());
         return similarAlbums.subList(0, 3);
     }
     

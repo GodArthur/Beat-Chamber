@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class is a wrapper for a Track entity.
- *
+ * Display purposes on the browse music tab
  * @author Korjon Chang-jones
  */
 @Named("trackWrapper")

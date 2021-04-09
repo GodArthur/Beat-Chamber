@@ -494,7 +494,7 @@ public class AlbumsJpaController implements Serializable {
         
         //This one last verification to be sure that we got all of the albums that match the string given
         for (Albums item:returnedData) {
-            if(item.getAlbumTitle().contains(title)){
+            if(!(item.getAlbumTitle().contains(title))){
                 returnedList.add(item);
             }
         }
