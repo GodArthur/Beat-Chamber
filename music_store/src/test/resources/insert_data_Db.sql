@@ -609,5 +609,7 @@ insert into Ads (ad_id,file_name,link) values
 (9,'Dogs','https://www.petfinder.com/pet-adoption/dog-adoption/'),
 (10,'Online classes','https://zoom.us/');
 
-insert into rss_feeds (link) values 
-('https://www.rssdog.com/index.php?url=http%3A%2F%2Fwww.nasa.gov%2Frss%2Fdyn%2Fbreaking_news.rss&amp;mode=javascript&amp;showonly=&amp;maxitems=3&amp;showdescs=1&amp;desctrim=320&amp;descmax=0&amp;tabwidth=100%25&amp;linktarget=_blank&amp;bordercol=%23800080&amp;headbgcol=%23000000&amp;headtxtcol=%23ffffff&amp;titlebgcol=%231a1a1a&amp;titletxtcol=%238c9cff&amp;itembgcol=%23b3b3b3&amp;itemtxtcol=%23000000&amp;ctl=0&type=html');
+insert into rss_feeds (link) values
+('https://www.nasa.gov/rss/dyn/breaking_news.rss'),
+('https://www.nasa.gov/rss/dyn/educationnews.rss'),
+('https://www.nasa.gov/rss/dyn/ames_news.rss');

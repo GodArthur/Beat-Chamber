@@ -241,7 +241,6 @@ public class ArtistsJpaController implements Serializable {
 
     private List<Artists> findArtistsEntities(boolean all, int maxResults, int firstResult) {
 
-        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Artists.class));
             Query q = em.createQuery(cq);
@@ -250,31 +249,23 @@ public class ArtistsJpaController implements Serializable {
                 q.setFirstResult(firstResult);
             }
             return q.getResultList();
-        } finally {
-            em.close();
-        }
+
     }
 
     public Artists findArtists(Integer id) {
 
-        try {
             return em.find(Artists.class, id);
-        } finally {
-            em.close();
-        }
+
     }
 
     public int getArtistsCount() {
 
-        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Artists> rt = cq.from(Artists.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+
     }
     
     
