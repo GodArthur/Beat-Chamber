@@ -110,16 +110,16 @@ public class ReviewBackingBean implements Serializable {
 //    }
 
 
-    public void addMessage(CustomerReviewBean customerReviewBean) {
+    public void addMessage() {
         String isReviewApproved = this.approval_status ? "True" : "False";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(isReviewApproved));
         
-        changeApprovalStatus(customerReviewBean, this.approval_status);
+//        changeApprovalStatus(customerReviewBean, this.approval_status);
         
     }
 
     
-    public void changeApprovalStatus(CustomerReviewBean custReviewbean, boolean isApproved){
-        
-    }
+//    public void changeApprovalStatus(CustomerReviewBean custReviewbean, boolean isApproved){
+//        
+//    }
 }

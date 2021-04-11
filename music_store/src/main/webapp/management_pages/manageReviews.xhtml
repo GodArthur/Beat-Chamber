@@ -64,7 +64,7 @@ This page will be used by the manager to approve the reviews
                         <p:column style="width:calc(100px)" headerText="Approval Status">
                             <h:outputText value="#{customerReview.approvalStatus}"/>
                             <p:toggleSwitch value="#{reviewBackingBean.approval_Status}">
-                                <p:ajax listener="#{reviewBackingBean.addMessage(customerReview)}" update="messages"/>
+                                <p:ajax listener="#{reviewBackingBean.addMessage()}" update="messages"/>
                             </p:toggleSwitch>
                         </p:column>
 
