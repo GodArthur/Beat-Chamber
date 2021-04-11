@@ -2,8 +2,11 @@ package com.beatchamber.beans.manager;
 
 import com.beatchamber.beans.CustomerReviewBean;
 import com.beatchamber.entities.CustomerReviews;
+import com.beatchamber.jpacontroller.ClientsJpaController;
 import com.beatchamber.jpacontroller.CustomerReviewsJpaController;
+import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
@@ -30,14 +33,26 @@ public class ReviewBackingBean implements Serializable {
 
     @Inject
     private CustomerReviewsJpaController customerReviewsJpaController;
+    
+    @Inject
+    private TracksJpaController tracksJpaController;
 
     private List<CustomerReviews> customerReviewsList;
 
     private CustomerReviews selectedCustomerReview;
+    
+    private ClientsJpaController clientsJpaController;
+
+    private int track_id;
+    private int client_number;
+    private Date review_date;
+    private int rating;
+    private String review_text;
+    
+    private boolean approval_status;
 
     private List<CustomerReviews> filteredCustomerReviewList;
     
-    private boolean approval_status;
 
     /**
      * Initialization.
@@ -45,6 +60,13 @@ public class ReviewBackingBean implements Serializable {
     @PostConstruct
     public void init() {
         this.customerReviewsList = customerReviewsJpaController.findCustomerReviewsEntities();
+    }
+    
+    /**
+     * Constructor, creates the selected Customer Review
+     */
+    public ReviewBackingBean(){
+        this.selectedCustomerReview = new CustomerReviews();
     }
 
     /**
@@ -109,17 +131,17 @@ public class ReviewBackingBean implements Serializable {
 //        this.selectedCustomerReview = new CustomerReviews();
 //    }
 
-
-    public void addMessage() {
-        String isReviewApproved = this.approval_status ? "True" : "False";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(isReviewApproved));
-        
-//        changeApprovalStatus(customerReviewBean, this.approval_status);
-        
-    }
-
     
-//    public void changeApprovalStatus(CustomerReviewBean custReviewbean, boolean isApproved){
-//        
-//    }
+    public void changeApprovalStatus(CustomerReviewBean custReviewbean, boolean isApproved) throws Exception{
+        
+        //Create the customer review with values
+        this.selectedCustomerReview.setTrackId(tracksJpaController.findTracks(custReviewbean.getTrack_id()));
+        this.selectedCustomerReview.setReviewDate(custReviewbean.getReview_date());
+        //Might need to change
+        this.selectedCustomerReview.setApprovalStatus(isApproved);
+        this.selectedCustomerReview.setClientNumber(this.clientsJpaController.findClients(custReviewbean.getClient_number()));
+        this.selectedCustomerReview.setRating(custReviewbean.getRating());
+        this.selectedCustomerReview.setReviewText(custReviewbean.getReview_Text());
+        customerReviewsJpaController.edit(selectedCustomerReview);
+    }
 }

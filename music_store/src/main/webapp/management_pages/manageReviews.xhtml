@@ -63,9 +63,12 @@ This page will be used by the manager to approve the reviews
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Approval Status">
                             <h:outputText value="#{customerReview.approvalStatus}"/>
-                            <p:toggleSwitch value="#{reviewBackingBean.approval_Status}">
-                                <p:ajax listener="#{reviewBackingBean.addMessage()}" update="messages"/>
-                            </p:toggleSwitch>
+                            <p:selectBooleanButton onLabel="Approved" offLabel="Not Approved"
+                                onIcon="pi pi-check" offIcon="pi pi-times" style="width:7rem" 
+                                value="#{customerReview.approvalStatus}">
+                                <p:ajax listener="#{reviewBackingBean.changeApprovalStatus(customerReview, customerReview.approvalStatus)}" event="change"/> 
+                            </p:selectBooleanButton>
+                            
                         </p:column>
 
                     </p:dataTable>
