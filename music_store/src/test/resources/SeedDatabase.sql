@@ -233,20 +233,20 @@ insert into Albums (album_title,release_date,recording_label,total_tracks,entry_
 ('THE DARK SIDE OF THE MOON','1973-03-01','Capitol Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
 ('TUBULAR BELLS','1973-05-25','Virgin Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
 ('OK COMPUTER','1997-5-21','Parlophone',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('The Dark Knight','2008-07-15','Reprise Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('The Mandalorian Season 2 vol.2','2020-12-18','WALT DISNEY RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Star Wars: The Empire Strikes Back','1980-05-16','RSO Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Harry Potter and The Sorcerer''s Stone','2001-10-30','Warner Sunset RECORDS',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Spider-man: Far From Home','2019-06-28','Sony Classical',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('The Dark Knight','2008-07-15','Reprise Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('The Mandalorian Season 2 vol.2','2020-12-18','WALT DISNEY RECORDS',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Star Wars: The Empire Strikes Back','1980-05-16','RSO Records',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Harry Potter and The Sorcerer''s Stone','2001-10-30','Warner Sunset RECORDS',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Spider-man: Far From Home','2019-06-28','Sony Classical',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
 ('Come Away With Me','2002-02-26','Blue Note Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
 ('What A Wonderful World','1967-08-1','Universal Music Group',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
 ('Time Out','1959-12-14','cbs',5,CURRENT_DATE(),5.00,10.00,15.00,false,null),
 ('Wallflower','2015-02-03','Virgin Records America Inc',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Piano Piano','2021-01-22','Dualtone Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('10','2020-10-23','Sony Music Masterworks',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Bones in the Ocean','2013-05-27','The Longest Johns',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Pure Piano Improv','2015-12-04','Musser Music',6,CURRENT_DATE(),5.00,10.00,15.00,false,null),
-('Tree of Life','2013-07-16','Lakeshore Records',6,CURRENT_DATE(),5.00,10.00,15.00,false,null);
+('Piano Piano','2021-01-22','Dualtone Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('10','2020-10-23','Sony Music Masterworks',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Bones in the Ocean','2013-05-27','The Longest Johns',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Pure Piano Improv','2015-12-04','Musser Music',4,CURRENT_DATE(),5.00,10.00,15.00,false,null),
+('Tree of Life','2013-07-16','Lakeshore Records',4,CURRENT_DATE(),5.00,10.00,15.00,false,null);
 
 
 insert into Artists (artist_name) values
