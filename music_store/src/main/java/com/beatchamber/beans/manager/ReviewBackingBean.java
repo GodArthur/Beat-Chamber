@@ -1,11 +1,13 @@
 package com.beatchamber.beans.manager;
 
+import com.beatchamber.beans.CustomerReviewBean;
 import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.jpacontroller.CustomerReviewsJpaController;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -20,8 +22,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
-@Named("reviews")
-@ViewScoped
+@Named()
+@RequestScoped
 public class ReviewBackingBean implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(ReviewBackingBean.class);
@@ -35,7 +37,7 @@ public class ReviewBackingBean implements Serializable {
 
     private List<CustomerReviews> filteredCustomerReviewList;
     
-    private boolean approval_status = false;
+    private boolean approval_status;
 
     /**
      * Initialization.
@@ -90,48 +92,34 @@ public class ReviewBackingBean implements Serializable {
     public void setFilteredCustomerReviewList(List<CustomerReviews> filteredCustomerReviewList) {
         this.filteredCustomerReviewList = filteredCustomerReviewList;
     }
-    
-    public boolean isApproved() {
-        return approval_status;
-    }
 
-    public void setApprovalStatus(boolean approval_status) {
+    public boolean getApproval_Status(){
+        return this.approval_status;
+    }
+    
+    public void setApproval_Status(boolean approval_status) {
         this.approval_status = approval_status;
     }
 
-    /**
-     * Initialize the selectedCustomerReview field when opening the add new
-     * dialog.
-     */
-    public void openNew() {
-        this.selectedCustomerReview = new CustomerReviews();
+//    /**
+//     * Initialize the selectedCustomerReview field when opening the add new
+//     * dialog.
+//     */
+//    public void openNew() {
+//        this.selectedCustomerReview = new CustomerReviews();
+//    }
+
+
+    public void addMessage(CustomerReviewBean customerReviewBean) {
+        String isReviewApproved = this.approval_status ? "True" : "False";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(isReviewApproved));
+        
+        changeApprovalStatus(customerReviewBean, this.approval_status);
+        
     }
 
-    /**
-     * It is used for a global search.
-     *
-     * @param value
-     * @param filter
-     * @param locale
-     * @return
-     */
-    public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
-        String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
-        if (LangUtils.isValueBlank(filterText)) {
-            return true;
-        }
-
-        /*CustomerReviews customerReviews = (CustomerReviews) value;
-        return customerReviews.getClientNumber().toLowerCase().contains(filterText)
-                || customerReviews.getRating() .toLowerCase().contains(filterText)
-                || customerReviews.getReviewDate() .toLowerCase().contains(filterText);*/
-        return false;
+    
+    public void changeApprovalStatus(CustomerReviewBean custReviewbean, boolean isApproved){
+        
     }
-
-    public void addMessage() {
-        String summary = this.approval_status ? "True" : "False";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
-        PrimeFaces.current().ajax().update("messages");
-    }
-
 }

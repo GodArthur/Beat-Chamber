@@ -7,7 +7,6 @@ This page will be used by the manager to approve the reviews
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css" />
@@ -21,22 +20,19 @@ This page will be used by the manager to approve the reviews
             <ui:define name="dataTableContent">
 
                 <h:form>
-                    <p:growl id="messages" showDetail="true"/>
-                    <p:dataTable id="dt-customerReviews" widgetVar="dtCustomerReviews" var="customerReview" value="#{reviews.customerReviews}"
+                    
+                    
+                    <p:dataTable id="dt-customerReviews" widgetVar="dtCustomerReviews" var="customerReview" value="#{reviewBackingBean.customerReviews}"
                                  reflow="true" 
-                                 selection="#{reviews.selectedCustomerReviews}" rowKey="#{customerReview.reviewNumber}" paginator="true"
+                                 selection="#{reviewBackingBean.selectedCustomerReviews}" rowKey="#{customerReview.reviewNumber}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom"
-                                 filteredValue="#{reviews.filteredCustomerReviewList}">
+                                 filteredValue="#{reviewBackingBean.filteredCustomerReviewList}">
 
+                        <p:growl id="messages" />
                         <f:facet name="header">
                             <div>
                                 <span class="table-title">
                                     Customer Reviews
-                                </span>
-                                <span class="filter-container ui-input-icon-left">
-                                    <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" 
-                                                 onkeyup="PF('dtCustomerReviews').filter()" placeholder="Search"/>
                                 </span>
                             </div>
                         </f:facet>
@@ -51,31 +47,25 @@ This page will be used by the manager to approve the reviews
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Rating" sortBy="#{customerReview.rating}"
                                   filterBy="#{customerReview.rating}" filterMatchMode="contains">
-                            <h:outputText value="#{customerReview.rating}" 
-                                          styleClass="badge badge-primary"/>
+                            <h:outputText value="#{customerReview.rating}"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Review Text" sortBy="#{customerReview.reviewText}"
                                   filterBy="#{customerReview.reviewText}" filterMatchMode="contains">
-                            <h:outputText value="#{customerReview.reviewText}" 
-                                          styleClass="badge badge-primary"/>
+                            <h:outputText value="#{customerReview.reviewText}"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Client Number" sortBy="#{customerReview.clientNumber.clientNumber}"
                                   filterBy="#{customerReview.clientNumber.clientNumber}" filterMatchMode="contains">
-                            <h:outputText value="#{customerReview.clientNumber.clientNumber}" 
-                                          styleClass="badge badge-primary"/>
+                            <h:outputText value="#{customerReview.clientNumber.clientNumber}"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Track ID" sortBy="#{customerReview.trackId.trackId}"
                                   filterBy="#{customerReview.trackId.trackId}" filterMatchMode="contains">
-                            <h:outputText value="#{customerReview.trackId.trackId}" 
-                                          styleClass="badge badge-primary"/>
+                            <h:outputText value="#{customerReview.trackId.trackId}"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Approval Status">
-                            <h:outputText value="#{customerReview.approvalStatus}" 
-                                          styleClass="badge badge-primary"/>
-                            <p:toggleSwitch value="#{reviews.approved}">
-                                <p:ajax listener="#{reviews.addMessage}" update="messages"/>
+                            <h:outputText value="#{customerReview.approvalStatus}"/>
+                            <p:toggleSwitch value="#{reviewBackingBean.approval_Status}">
+                                <p:ajax listener="#{reviewBackingBean.addMessage(customerReview)}" update="messages"/>
                             </p:toggleSwitch>
-
                         </p:column>
 
                     </p:dataTable>
