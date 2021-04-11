@@ -122,6 +122,10 @@ public class CustomerReviewBean implements Serializable {
         this.approval_status = approvStatus;
     }
 
+    /**
+     * This method is called when the button to add a review is clicked
+     * @throws RollbackFailureException 
+     */
     public void addCustomerReview() throws RollbackFailureException {
 
         try {
@@ -149,13 +153,15 @@ public class CustomerReviewBean implements Serializable {
 
                 customerReviewsJpaController.create(selectedCustomerReviews);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Review Added! It will be shown once it is approved"));
-                //FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "track.xhtml");
             }
 
         } catch (RollbackFailureException ex) {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+    }
+    
+    public void returnToTrackPage(){
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "track.xhtml");
     }
 
 }
