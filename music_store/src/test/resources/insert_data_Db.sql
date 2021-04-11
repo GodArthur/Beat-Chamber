@@ -613,3 +613,9 @@ insert into rss_feeds (link) values
 ('https://www.nasa.gov/rss/dyn/breaking_news.rss'),
 ('https://www.nasa.gov/rss/dyn/educationnews.rss'),
 ('https://www.nasa.gov/rss/dyn/ames_news.rss');
+
+insert into Customer_reviews(review_number, track_id, client_number, review_date, rating, review_text, approval_status) values
+(1, 11, 2, '2021-04-10', 4, 'A great winter song', false),
+(2, 25, 2, '2021-04-10', 5, 'One of the best songs in 2018 EASYYYYYYY!', true);
+
+
