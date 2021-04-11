@@ -47,6 +47,7 @@ public class CustomerReviewBean implements Serializable {
 
     private CustomerReviews selectedCustomerReviews;
 
+    private int review_number;
     private int track_id;
     private int client_number;
     private Date review_date;
@@ -63,6 +64,14 @@ public class CustomerReviewBean implements Serializable {
      */
     public CustomerReviewBean() {
         this.selectedCustomerReviews = new CustomerReviews();
+    }
+    
+    public int getReview_number(){
+        return this.review_number;
+    }
+    
+    public void setReview_number(int reviewNum){
+        this.review_number = reviewNum;
     }
 
     public int getTrack_id() {

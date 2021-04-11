@@ -5,6 +5,7 @@ import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import com.beatchamber.jpacontroller.CustomerReviewsJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
@@ -12,10 +13,14 @@ import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
 import org.slf4j.Logger;
@@ -33,14 +38,14 @@ public class ReviewBackingBean implements Serializable {
 
     @Inject
     private CustomerReviewsJpaController customerReviewsJpaController;
-    
+
     @Inject
     private TracksJpaController tracksJpaController;
 
     private List<CustomerReviews> customerReviewsList;
 
     private CustomerReviews selectedCustomerReview;
-    
+
     private ClientsJpaController clientsJpaController;
 
     private int track_id;
@@ -48,11 +53,10 @@ public class ReviewBackingBean implements Serializable {
     private Date review_date;
     private int rating;
     private String review_text;
-    
+
     private boolean approval_status;
 
     private List<CustomerReviews> filteredCustomerReviewList;
-    
 
     /**
      * Initialization.
@@ -61,11 +65,11 @@ public class ReviewBackingBean implements Serializable {
     public void init() {
         this.customerReviewsList = customerReviewsJpaController.findCustomerReviewsEntities();
     }
-    
+
     /**
      * Constructor, creates the selected Customer Review
      */
-    public ReviewBackingBean(){
+    public ReviewBackingBean() {
         this.selectedCustomerReview = new CustomerReviews();
     }
 
@@ -115,10 +119,10 @@ public class ReviewBackingBean implements Serializable {
         this.filteredCustomerReviewList = filteredCustomerReviewList;
     }
 
-    public boolean getApproval_Status(){
+    public boolean getApproval_Status() {
         return this.approval_status;
     }
-    
+
     public void setApproval_Status(boolean approval_status) {
         this.approval_status = approval_status;
     }
@@ -130,18 +134,53 @@ public class ReviewBackingBean implements Serializable {
 //    public void openNew() {
 //        this.selectedCustomerReview = new CustomerReviews();
 //    }
+    public void changeReviewApproval(CustomerReviews custRev) throws Exception {
 
-    
-    public void changeApprovalStatus(CustomerReviewBean custReviewbean, boolean isApproved) throws Exception{
-        
-        //Create the customer review with values
-        this.selectedCustomerReview.setTrackId(tracksJpaController.findTracks(custReviewbean.getTrack_id()));
-        this.selectedCustomerReview.setReviewDate(custReviewbean.getReview_date());
-        //Might need to change
-        this.selectedCustomerReview.setApprovalStatus(isApproved);
-        this.selectedCustomerReview.setClientNumber(this.clientsJpaController.findClients(custReviewbean.getClient_number()));
-        this.selectedCustomerReview.setRating(custReviewbean.getRating());
-        this.selectedCustomerReview.setReviewText(custReviewbean.getReview_Text());
-        customerReviewsJpaController.edit(selectedCustomerReview);
+        //Set the selected Customer Review
+        this.selectedCustomerReview = custRev;
+
+        LOG.debug("Listener is called");
+        LOG.debug("the approval status was " + this.selectedCustomerReview.getApprovalStatus());
+
+        this.approval_status = this.selectedCustomerReview.getApprovalStatus();
+        //calls a method that will change the approval status of the property
+        changeApprovalStatus();
+
+        this.selectedCustomerReview.setApprovalStatus(this.approval_status);
+        customerReviewsJpaController.edit(this.selectedCustomerReview);
+
+        LOG.debug("the approval status has been changed to " + this.approval_status);
+
+    }
+
+    /**
+     * This method changes the approval status when the commandbutton is clicked
+     */
+    private void changeApprovalStatus() {
+
+        //if the approval status is true switch it
+        if (this.approval_status) {
+            this.approval_status = false;
+        } else {
+            this.approval_status = true;
+        }
+    }
+
+    /**
+     * This method pops up a dialog box that says that the approval status was
+     * changed
+     */
+    public void showApprovalStatus() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message", "Approval Status Changed");
+    }
+
+    /**
+     * This method refreshes the page when a review is approved
+     *
+     * @throws IOException
+     */
+    public void reloadManagerReviewPage() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
     }
 }

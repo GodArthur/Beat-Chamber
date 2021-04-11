@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This page will be used by the manager to approve the reviews
+By Massimo Di Girolamo
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -19,9 +20,8 @@ This page will be used by the manager to approve the reviews
             <!-- Promotion banner -->
             <ui:define name="dataTableContent">
 
-                <h:form>
-                    
-                    
+                <h:form id="form">                  
+
                     <p:dataTable id="dt-customerReviews" widgetVar="dtCustomerReviews" var="customerReview" value="#{reviewBackingBean.customerReviews}"
                                  reflow="true" 
                                  selection="#{reviewBackingBean.selectedCustomerReviews}" rowKey="#{customerReview.reviewNumber}" paginator="true"
@@ -62,17 +62,21 @@ This page will be used by the manager to approve the reviews
                             <h:outputText value="#{customerReview.trackId.trackId}"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="Approval Status">
-                            <h:outputText value="#{customerReview.approvalStatus}"/>
-                            <p:selectBooleanButton onLabel="Approved" offLabel="Not Approved"
-                                onIcon="pi pi-check" offIcon="pi pi-times" style="width:7rem" 
-                                value="#{customerReview.approvalStatus}">
-                                <p:ajax listener="#{reviewBackingBean.changeApprovalStatus(customerReview, customerReview.approvalStatus)}" event="change"/> 
-                            </p:selectBooleanButton>
-                            
-                        </p:column>
+                            <h:outputText value="#{customerReview.approvalStatus}" 
+                                          style=" border-radius: 7px;border: 3px solid #1a75ff;padding: 5px;width: 10px;height: 15px;"/>
 
+                            <p:commandButton value="Change Approval" 
+                                             actionListener="#{reviewBackingBean.changeReviewApproval(customerReview)}"
+                                             oncomplete="PF('ApprovalStatusDialog').show()"/>  
+                        </p:column>
                     </p:dataTable>
 
+
+                    <p:confirmDialog widgetVar="ApprovalStatusDialog" showEffect="fade" width="300"
+                                     message="Status changed!" header="Confirm">
+                        <p:commandButton value="Okay" icon="pi pi-check" actionListener="#{reviewBackingBean.reloadManagerReviewPage()}"
+                                         oncomplete="PF('ApprovalStatusDialog').hide()"/>
+                    </p:confirmDialog>
 
 
                 </h:form>
