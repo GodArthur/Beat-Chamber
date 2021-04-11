@@ -29,19 +29,26 @@
                             <h:form>
                                 <div class="stars">
                                     <p:growl id="messages" showDetail="true"/>
-                                    <!--<h:selectOneRadio value="{customerReviews.rating}">-->
-                                        <p:rating value="#{customerReviews.rating}"/>
+                                    <p:rating value="#{customerReviews.rating}"/>
 
                                 </div>
                                 <div class="review-textbox">
                                     <h:inputTextarea rows = "5" cols = "60"
                                                      a:placeholder="Leave you review here..."
                                                      value="#{customerReviews.review_Text}"/>
-                                    </div>
-                                <div>
-                                    <h:commandButton class="reviewbtn" type="submit" value="Add Review"
-                                                     action="#{customerReviews.addCustomerReview()}"/>                                   
                                 </div>
+                                <div>
+                                    <p:commandButton class="reviewbtn" type="submit" value="Add Review"
+                                                     action="#{customerReviews.addCustomerReview()}"
+                                                     oncomplete="PF('ReviewAddedDialog').show()"/>                                   
+                                </div>
+
+                                <p:confirmDialog widgetVar="ReviewAddedDialog" showEffect="fade" width="300"
+                                                 message="Review Added!" header="Confirm">
+                                    <p:commandButton value="Okay" icon="pi pi-check" actionListener="#{customerReviews.returnToTrackPage()}"
+                                                     oncomplete="PF('ApprovalStatusDialog').hide()"/>
+                                </p:confirmDialog>
+
                             </h:form>
                         </div>
                     </div>

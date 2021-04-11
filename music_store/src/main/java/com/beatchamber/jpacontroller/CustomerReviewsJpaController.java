@@ -203,5 +203,7 @@ public class CustomerReviewsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
 
     }
+    
+    
 
 }
