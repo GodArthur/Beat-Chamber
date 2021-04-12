@@ -756,14 +756,25 @@ button {
   margin-top: 40px;
 }
 
+.review-container{
+    
+    text-align: left;
+    width: 40%;
+    margin-bottom: 20px;
+}
+
+h3{
+    
+    margin-top: 10px;
+}
+
 #anime-ad-wrapper {
   width: 700px;
   text-align: center;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  position: relative;
-  top: 16%;
+  margin-top: 30px;
 }
 #anime-ad {
   height: auto;

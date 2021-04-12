@@ -163,5 +163,18 @@ public class CustomerReviewBean implements Serializable {
     public void returnToTrackPage(){
         FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "track.xhtml");
     }
+    
+    
+    
+    /**
+     * Method gets all reviews for a specific track
+     * @return the list of reviews
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> getTrackReviews(){
+        
+        return customerReviewsJpaController.findCustomerReviewsByTrackId(trackBean.getTrackId());
+    }
 
 }

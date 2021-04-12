@@ -16,6 +16,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -204,6 +207,17 @@ public class CustomerReviewsJpaController implements Serializable {
 
     }
     
+    public List<CustomerReviews> findCustomerReviewsByTrackId(Integer trackId){
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<CustomerReviews> cq = cb.createQuery(CustomerReviews.class);
+        Root<CustomerReviews> rt = cq.from(CustomerReviews.class);
+        Join track = rt.join("trackId");
+        cq.where(cb.equal(rt.get("trackId").get("trackId"), trackId));
+        TypedQuery<CustomerReviews> query = em.createQuery(cq);
+        
+        return query.getResultList();  
+    }
     
 
 }
