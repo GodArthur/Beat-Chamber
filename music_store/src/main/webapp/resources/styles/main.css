@@ -235,6 +235,10 @@ a:visited {
     height: 50%;
 }
 
+.album_img {
+    width: 30%;
+}
+
 .ad-max-height {
     max-height: 500px;
 }

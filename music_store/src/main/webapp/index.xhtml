@@ -182,11 +182,12 @@
                         <!-- Survey display -->
                         <div class="survey-display">
                             <h2>#{surveysJpaController.findSurveys(1).title}</h2>
-                            <h:selectOneRadio>
+                            <p:selectOneRadio value="#{surveyBean.selectedChoice}">
                                 <c:forEach var="choice" items="#{surveysJpaController.getSurveyChoices(1)}">
-                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName}" class="choice-radio-btn"/>
+                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName} - #{choice.votes}" class="choice-radio-btn"/>
                                 </c:forEach>
-                            </h:selectOneRadio>
+                            </p:selectOneRadio>
+                            <p:button value="Vote"/>
                         </div>
                         <div class="rss-display flow-root">
                             <p:feedReader value="#{rssFeedsJpaController.randomRssFeed}" var="feed" size="3">
