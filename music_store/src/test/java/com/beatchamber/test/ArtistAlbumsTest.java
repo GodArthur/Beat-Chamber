@@ -82,7 +82,7 @@ public class ArtistAlbumsTest {
                 .addAsWebInfResource(new File("src/main/webapp/WEB-INF/payara-resources.xml"), "payara-resources.xml")
                 .addAsResource(new File("src/main/resources/META-INF/persistence.xml"), "META-INF/persistence.xml")
                 .addAsResource(new File("src/main/resources/log4j2.xml"), "log4j2.xml")
-                .addAsResource("SeedDatabase.sql")
+                .addAsResource("create_Table_And_Data.sql")
                 .addAsLibraries(dependencies);
 
         return webArchive;
@@ -186,7 +186,7 @@ public class ArtistAlbumsTest {
      */
     @Before
     public void seedDatabase() {
-        final String seedDataScript = loadAsString("SeedDatabase.sql");
+        final String seedDataScript = loadAsString("create_Table_And_Data.sql");
         try (Connection connection = ds.getConnection()) {
             for (String statement : splitStatements(new StringReader(
                     seedDataScript), ";")) {
