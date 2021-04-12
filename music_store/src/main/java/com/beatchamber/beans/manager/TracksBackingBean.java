@@ -310,8 +310,8 @@ public class TracksBackingBean implements Serializable {
                 this.saveGenreToTrack();
                 this.deleteArtistsToTrack();
                 this.saveArtistsToTrack();
-                this.tracksJpaController.edit(this.selectedTrack);
                 this.setTotalTracksToAlbum();
+                this.tracksJpaController.edit(this.selectedTrack);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Track Updated"));
 
             }
