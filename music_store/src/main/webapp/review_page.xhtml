@@ -34,17 +34,17 @@
                                 </div>
                                 <div class="review-textbox">
                                     <h:inputTextarea rows = "5" cols = "60"
-                                                     a:placeholder="Leave you review here..."
+                                                     a:placeholder="#{msgs.reviewPlaceHolder}"
                                                      value="#{customerReviews.review_Text}"/>
                                 </div>
                                 <div>
-                                    <p:commandButton class="reviewbtn" type="submit" value="Add Review"
+                                    <p:commandButton class="reviewbtn" type="submit" value="#{msgs.addReview}"
                                                      action="#{customerReviews.addCustomerReview()}"
                                                      oncomplete="PF('ReviewAddedDialog').show()"/>                                   
                                 </div>
 
                                 <p:confirmDialog widgetVar="ReviewAddedDialog" showEffect="fade" width="300"
-                                                 message="Review Added!" header="Confirm">
+                                                 message="#{msgs.reviewAdded}" header="#{msgs.confReview}">
                                     <p:commandButton value="Okay" icon="pi pi-check" actionListener="#{customerReviews.returnToTrackPage()}"
                                                      oncomplete="PF('ApprovalStatusDialog').hide()"/>
                                 </p:confirmDialog>
