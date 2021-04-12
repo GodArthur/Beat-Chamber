@@ -344,7 +344,7 @@ public class TracksBackingBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-tracks");
 
     }
-    
+
     /**
      * Set all the necessary fields when add a new track to the selected track.
      */
@@ -471,7 +471,7 @@ public class TracksBackingBean implements Serializable {
             this.selectedTrack.getArtistsToTracksCollection().forEach(artistTrack -> {
                 try {
                     this.artistsToTracksJpaController.destroy(artistTrack.getTablekey());
-                } catch (NotSupportedException | SystemException | RollbackFailureException | RollbackException | HeuristicMixedException | HeuristicRollbackException | IllegalOrphanException | com.beatchamber.jpacontroller.exceptions.NonexistentEntityException ex) {
+                } catch (NonexistentEntityException | NotSupportedException | SystemException | RollbackFailureException | RollbackException | HeuristicMixedException | HeuristicRollbackException | IllegalOrphanException ex) {
                     java.util.logging.Logger.getLogger(TracksBackingBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
