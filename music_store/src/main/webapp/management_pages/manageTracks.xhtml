@@ -111,23 +111,25 @@
                                     </p:selectBooleanCheckbox>
                                     <h:message for="removalStatus" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                <div>
-                                    <p:outputLabel for="albumTitle" value="#{msgs.albumTitle}"/>
-                                    <p:selectOneMenu id="albumTitle" value="#{theTracks.selectedAlbum}"
-                                                     required="true" requiredMessage="#{msgs.chooseAlbum}"
-                                                     converter="AlbumConverter" >
-                                        <f:selectItem itemValue="" itemLabel="Select the Album..." noSelectionOption="true"/>
-                                        <f:selectItems value="#{theTracks.allAlbums}" var="allAlbums"
-                                                       itemLabel="#{allAlbums.albumTitle}"
-                                                       itemValue="#{allAlbums}"/>
-                                        <f:ajax />
-                                    </p:selectOneMenu>
-                                    <h:message for="albumTitle" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                                <p:outputPanel rendered="#{not empty theTracks.selectedAlbum.albumNumber}">
+                                <p:outputPanel id="manage-image-content" rendered="#{not empty theTracks.selectedTrack}">
                                     <div>
-                                        <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(theTracks.selectedAlbum.albumNumber, true)}" styleClass="album-img-small"/>
+                                        <p:outputLabel for="albumTitle" value="#{msgs.albumTitle}"/>
+                                        <p:selectOneMenu id="albumTitle" value="#{theTracks.selectedAlbum}"
+                                                         required="true" requiredMessage="#{msgs.chooseAlbum}"
+                                                         converter="AlbumConverter" >
+                                            <f:selectItem itemValue="" itemLabel="Select the Album..." noSelectionOption="true"/>
+                                            <f:selectItems value="#{theTracks.allAlbums}" var="allAlbums"
+                                                           itemLabel="#{allAlbums.albumTitle}"
+                                                           itemValue="#{allAlbums}"/>
+                                            <f:ajax /> 
+                                        </p:selectOneMenu>
+                                        <h:message for="albumTitle" styleClass="errorMessage" style="color:red"/>
                                     </div>
+                                    <p:outputPanel rendered="#{not empty theTracks.selectedAlbum.albumNumber}">
+                                        <div>
+                                            <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(theTracks.selectedAlbum.albumNumber, true)}" styleClass="album-img-small"/>
+                                        </div>
+                                    </p:outputPanel>
                                 </p:outputPanel>
                                 <div>
                                     <p:outputLabel for="genreList1" value="#{msgs.genre}"/>
@@ -154,7 +156,6 @@
                                     </p:selectCheckboxMenu>
                                     <h:message for="artistList1" styleClass="errorMessage" style="color:red"/>
                                 </div>
-
                                 <div>
                                     <p:outputLabel for="trackCostPrice" value="#{msgs.costPrice}"/>
                                     <div class="ui-inputgroup">

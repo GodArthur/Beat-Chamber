@@ -9,18 +9,15 @@ import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Artists;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.entities.Genres;
-import com.beatchamber.entities.GenreToAlbum;
-import com.beatchamber.entities.ArtistAlbums;
 import com.beatchamber.entities.GenreToTracks;
 import com.beatchamber.entities.ArtistsToTracks;
+import com.beatchamber.entities.Clients;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
-import com.beatchamber.jpacontroller.ArtistAlbumsJpaController;
 import com.beatchamber.jpacontroller.ArtistsJpaController;
 import com.beatchamber.jpacontroller.ArtistsToTracksJpaController;
-import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
 import com.beatchamber.jpacontroller.GenreToTracksJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import com.beatchamber.jpacontroller.GenresJpaController;
@@ -31,7 +28,9 @@ import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -77,6 +76,7 @@ public class TracksBackingBean implements Serializable {
     private List<Tracks> tracks;
     private Tracks selectedTrack;
     private Albums selectedAlbum;
+    private Albums oldSelectedTrack;
 
     private boolean isRemoved;
 
@@ -120,13 +120,16 @@ public class TracksBackingBean implements Serializable {
     public void setSelectedTrack(Tracks selectedTrack) {
         this.selectedTrack = selectedTrack;
     }
-    
+
     /**
      * Get the selected album.
      *
      * @return the selected track.
      */
     public Albums getSelectedAlbum() {
+        if (this.selectedAlbum == null) {
+            this.selectedAlbum = new Albums();
+        }
         return selectedAlbum;
     }
 
@@ -137,7 +140,7 @@ public class TracksBackingBean implements Serializable {
      */
     public void setSelectedAlbum(Albums selectedAlbum) {
         this.selectedAlbum = selectedAlbum;
-        PrimeFaces.current().ajax().update("form:messages", "form:manage-track-content");
+        PrimeFaces.current().ajax().update("form:messages", "form:manage-image-content");
     }
 
     /**
@@ -259,6 +262,7 @@ public class TracksBackingBean implements Serializable {
     public void openNew() {
         this.selectedTrack = new Tracks();
         this.selectedAlbum = new Albums();
+        this.oldSelectedTrack = new Albums();
         List<Integer> selectedList = new ArrayList<>();
         this.setSelectedGenres(selectedList.toArray(new Integer[selectedList.size()]));
         this.setSelectedArtists(selectedList.toArray(new Integer[selectedList.size()]));
@@ -283,6 +287,7 @@ public class TracksBackingBean implements Serializable {
 
         this.setIsRemoved(selectedTrack.getRemoved());
         this.setSelectedAlbum(selectedTrack.getAlbumNumber());
+        this.oldSelectedTrack = new Albums();
     }
 
     /**
@@ -293,8 +298,8 @@ public class TracksBackingBean implements Serializable {
         try {
             if (this.selectedTrack.getTrackId() == null) {
                 this.setTrackFields();
-                this.setTotalTracksToAlbum();
                 this.tracksJpaController.create(this.selectedTrack);
+                this.setTotalTracksToAlbum();
                 this.saveGenreToTrack();
                 this.saveArtistsToTrack();
                 this.tracks.add(this.selectedTrack);
@@ -306,6 +311,7 @@ public class TracksBackingBean implements Serializable {
                 this.deleteArtistsToTrack();
                 this.saveArtistsToTrack();
                 this.tracksJpaController.edit(this.selectedTrack);
+                this.setTotalTracksToAlbum();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Track Updated"));
 
             }
@@ -338,15 +344,25 @@ public class TracksBackingBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-tracks");
 
     }
-
+    
     /**
      * Set all the necessary fields when add a new track to the selected track.
      */
     private void setTrackFields() {
         if (this.selectedTrack.getTrackId() == null) {
-            this.selectedTrack.setSelectionNumber(this.selectedTrack.getAlbumNumber().getTotalTracks() + 1);
             this.selectedTrack.setPlayLength("1:00");
             this.selectedTrack.setEntryDate(new Date());
+        }
+
+        if (this.selectedTrack.getTrackId() != null
+                && this.selectedTrack.getAlbumNumber().getAlbumNumber().intValue() != this.selectedAlbum.getAlbumNumber().intValue()) {
+            this.oldSelectedTrack = this.selectedTrack.getAlbumNumber();
+        }
+
+        if (this.selectedTrack.getTrackId() == null
+                || this.selectedTrack.getAlbumNumber().getAlbumNumber().intValue() != this.selectedAlbum.getAlbumNumber().intValue()) {
+            this.selectedTrack.setSelectionNumber(this.selectedAlbum.getTracksList().size() + 1);
+            this.selectedTrack.setAlbumNumber(this.selectedAlbum);
         }
 
         this.selectedTrack.setRemoved(this.isRemoved);
@@ -363,12 +379,25 @@ public class TracksBackingBean implements Serializable {
      */
     private void setTotalTracksToAlbum() {
         if (this.selectedTrack.getAlbumNumber() != null) {
-            int numOfTracks = this.selectedTrack.getAlbumNumber().getTracksList().size() + 1;
+            int numOfTracks = this.selectedTrack.getAlbumNumber().getTracksList().size();
             this.selectedTrack.getAlbumNumber().setTotalTracks(numOfTracks);
-            
+
             try {
                 Albums album = this.selectedTrack.getAlbumNumber();
                 this.albumsJpaController.edit(album);
+            } catch (NonexistentEntityException ex) {
+                java.util.logging.Logger.getLogger(TracksBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(TracksBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (this.oldSelectedTrack.getAlbumNumber() != null) {
+            int numOfTracks = this.oldSelectedTrack.getTracksList().size();
+            this.oldSelectedTrack.setTotalTracks(numOfTracks);
+
+            try {
+                this.albumsJpaController.edit(this.oldSelectedTrack);
             } catch (NonexistentEntityException ex) {
                 java.util.logging.Logger.getLogger(TracksBackingBean.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
