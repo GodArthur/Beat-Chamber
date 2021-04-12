@@ -1,9 +1,27 @@
-drop database CSgb1w21;
-CREATE DATABASE CSgb1w21;
 USE CSgb1w21;
 
 
-
+DROP TABLE IF EXISTS order_album;
+DROP TABLE IF EXISTS order_track;
+DROP TABLE IF EXISTS Provinces;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS Survey_to_Choice;
+DROP TABLE IF EXISTS Choices;
+DROP TABLE IF EXISTS Surveys;
+DROP TABLE IF EXISTS RSS_Feeds;
+DROP TABLE IF EXISTS Ads;
+DROP TABLE IF EXISTS Invoice_Details;
+DROP TABLE IF EXISTS invoices;
+DROP TABLE IF EXISTS Customer_reviews;
+DROP TABLE IF EXISTS Clients;
+DROP TABLE IF EXISTS Artist_Albums;
+DROP TABLE IF EXISTS genre_to_album;
+DROP TABLE IF EXISTS genre_to_tracks;
+DROP TABLE IF EXISTS genres;
+DROP TABLE IF EXISTS Artists_to_tracks;
+DROP TABLE IF EXISTS Tracks;
+DROP TABLE IF EXISTS Albums;
+DROP TABLE IF EXISTS Artists;
 
 create table Artists (
 artist_id int not null primary key auto_increment,
