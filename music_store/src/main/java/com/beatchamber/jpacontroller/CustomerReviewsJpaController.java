@@ -206,18 +206,45 @@ public class CustomerReviewsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
 
     }
-    
-    public List<CustomerReviews> findCustomerReviewsByTrackId(Integer trackId){
-        
+
+    /**
+     * Method finds customer reviews based on the track Id
+     *where the approval status is true
+     * @param trackId
+     * @return
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> findCustomerReviewsByTrackId(Integer trackId) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<CustomerReviews> cq = cb.createQuery(CustomerReviews.class);
+        Root<CustomerReviews> rt = cq.from(CustomerReviews.class);
+        cq.where(cb.and(cb.equal(rt.get("trackId").get("trackId"), trackId),cb.equal(rt.get("approvalStatus"), true)));
+        TypedQuery<CustomerReviews> query = em.createQuery(cq);
+
+        return query.getResultList();
+    }
+
+    /**
+     * Method finds reviews for all tracks on a specific album
+     * where the approval status is true
+     * @param albumNumber
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> findAllReviews(Integer albumNumber) {
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<CustomerReviews> cq = cb.createQuery(CustomerReviews.class);
         Root<CustomerReviews> rt = cq.from(CustomerReviews.class);
         Join track = rt.join("trackId");
-        cq.where(cb.equal(rt.get("trackId").get("trackId"), trackId));
+        Join album = track.join("albumNumber");
+        cq.where(cb.and(cb.equal(album.get("albumNumber"), albumNumber), cb.equal(rt.get("approvalStatus"), true)));
         TypedQuery<CustomerReviews> query = em.createQuery(cq);
-        
-        return query.getResultList();  
+
+        return query.getResultList();
     }
-    
 
 }

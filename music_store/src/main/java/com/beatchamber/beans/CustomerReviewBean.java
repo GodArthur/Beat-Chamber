@@ -39,6 +39,9 @@ public class CustomerReviewBean implements Serializable {
 
     @Inject
     private LoginRegisterBean userLoginBean;
+    
+    @Inject
+    private AlbumBean albumBean;
 
     @Inject
     private TrackBean trackBean;
@@ -176,5 +179,43 @@ public class CustomerReviewBean implements Serializable {
         
         return customerReviewsJpaController.findCustomerReviewsByTrackId(trackBean.getTrackId());
     }
+    
+    
+    /**
+     * Method gets reviews from all tracks on a specific
+     * album
+     * @return the list of reviews
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> getAllReviews(){
+        
+        return customerReviewsJpaController.findAllReviews(albumBean.getAlbumId());
+    }
+    
+    /**
+     * Method checks if there are any reviews for a track
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public boolean isEmptyTrackReviewsList(){
+        
+        return customerReviewsJpaController.findCustomerReviewsByTrackId(trackBean.getTrackId()).size() <= 0;
+
+    }
+    
+    /**
+     * Method checks if there are any reviews for any track on an album
+     * @return 
+     */
+    public boolean isAllEmptyReviewsList(){
+        
+        return customerReviewsJpaController.findAllReviews(albumBean.getAlbumId()).size() <= 0;
+
+    }
+    
+    
+    
 
 }

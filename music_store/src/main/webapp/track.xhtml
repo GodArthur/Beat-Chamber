@@ -67,7 +67,7 @@
                     <!--<h:button value="{msgs.addToCart}"/>-->
                     <hr />
                     <p class="item-extra">#{msgs.otherViewed}</p>
-
+                    <!-- Everything past the track list -->
                     <!-- Items similar to the track being viewed -->
                     <div id="viewed-items-container">
                         <c:forEach var="albumItem" items="#{album.similarAlbums}">
@@ -102,14 +102,16 @@
                     <div id="reviewContainer">
                         <c:forEach var="review" items="#{customerReviews.trackReviews}">
                             <div class="review-container">
-                                <p>-#{review.clientNumber.firstName} #{review.clientNumber.lastName}</p>
-                                <h3>#{review.reviewText}</h3>
+                                <p class="review-client-name">-#{review.clientNumber.firstName} #{review.clientNumber.lastName}</p>
+                                <p class="review-text">#{review.reviewText}</p>
                                 <hr/>
                             </div>
 
                         </c:forEach>
                     </div>
-                    <p>There are currently no reviews</p>
+                    <h:panelGroup rendered="#{customerReviews.emptyTrackReviewsList}">
+                        <p>#{msgs.noReviews}</p>
+                    </h:panelGroup>
                     <h:form>
                         <p:commandButton value="#{msgs.addReview}" actionListener="#{tracks.reviewRedirect()}"/>
                     </h:form>
