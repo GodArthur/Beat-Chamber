@@ -207,8 +207,8 @@ public class CheckoutBean implements Serializable {
      * @return String
      * @author Ibrahim
      */
-    public String getToatlPriceWithTax(String total,String pstValue,String gstValue,String hstValue){
-        return convertStringToDouble(total)+convertStringToDouble(computePst(total,pstValue))+convertStringToDouble(computePst(total,gstValue))+convertStringToDouble(computePst(total,hstValue))+"";
+    public double getToatlPriceWithTax(String total,String pstValue,String gstValue,String hstValue){
+        return roundDoubleValue(convertStringToDouble(total)+convertStringToDouble(computePst(total,pstValue))+convertStringToDouble(computePst(total,gstValue))+convertStringToDouble(computePst(total,hstValue)));
     }
     
     /**

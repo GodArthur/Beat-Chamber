@@ -89,6 +89,7 @@ public class Clients implements Serializable {
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull()
     @Size(min = 1, max = 40)
@@ -282,6 +283,14 @@ public class Clients implements Serializable {
         this.city = city;
     }
 
+    /*public String getGenreOfLastSearch() {
+        return genreOfLastSearch;
+    }
+
+    public void setGenreOfLastSearch(String genreOfLastSearch) {
+        this.genreOfLastSearch = genreOfLastSearch;
+    }*/
+
     public String getProvince() {
         return province;
     }
@@ -289,6 +298,14 @@ public class Clients implements Serializable {
     public void setProvince(String province) {
         this.province = province;
     }
+
+    /*public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }*/
 
     public String getCountry() {
         return country;
@@ -306,14 +323,6 @@ public class Clients implements Serializable {
         this.email = email;
     }
 
-    /*public String getGenreOfLastSearch() {
-        return genreOfLastSearch;
-    }
-
-    public void setGenreOfLastSearch(String genreOfLastSearch) {
-        this.genreOfLastSearch = genreOfLastSearch;
-    }*/
-
     public String getUsername() {
         return username;
     }
@@ -321,14 +330,6 @@ public class Clients implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    /*public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }*/
 
     public String getSalt() {
         return salt;

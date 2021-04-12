@@ -34,15 +34,20 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "Orders.findByOrderDate", query = "SELECT o FROM Orders o WHERE o.orderDate = :orderDate")})
 public class Orders implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "order_id")
+    private int orderId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "order_total")
+    private double orderTotal;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "tablekey")
     private Integer tablekey;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "order_id")
-    private int orderId;
 
     @Column(name = "visible")
     private Boolean visible;
@@ -118,6 +123,14 @@ public class Orders implements Serializable {
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
+    }
+
+    public double getOrderTotal() {
+        return orderTotal;
+    }
+
+    public void setOrderTotal(double orderTotal) {
+        this.orderTotal = orderTotal;
     }
 
 
