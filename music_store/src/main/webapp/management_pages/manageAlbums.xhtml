@@ -136,7 +136,7 @@
                                 <p:columnGroup type="footer">
                                     <p:row>
                                         <p:column colspan="3" style="text-align:right" footerText="Total Tracks:"/>
-                                        <p:column style="text-align:left" footerText="#{albumItem.totalTracks}"/>
+                                        <p:column style="text-align:left" footerText="#{theAlbums.getTrackListInAlbum(albumItem.albumNumber).size()}"/>
                                     </p:row>
                                 </p:columnGroup>
                             </p:dataTable>
@@ -237,15 +237,6 @@
                                     <h:message for="salePrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
 
-                                <!--
-                                                                <div>
-                                                                    <p:outputLabel for="totalTracks" value="#{msgs.totalTracks}"/>
-                                                                    <p:spinner id="totalTracks" value="#{theAlbums.selectedAlbum.totalTracks}" min="0"/>
-                                                                    <h:message for="totalTracks" styleClass="errorMessage" style="color:red"/>
-                                                                </div>-->
-
-
-
                             </p:outputPanel>
                         </p:outputPanel>
 
@@ -295,17 +286,6 @@
                                     </div>
                                     <h:message for="trackSalePrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                <!--                                <div>
-                                                                    <p:outputLabel for="trackGenre" value="#{msgs.genre}"/>
-                                                                    <p:selectOneMenu id="trackGenre" value="#{theAlbums.selectedTrack.musicCategory}"
-                                                                                     required="true" requiredMessage="#{msgs.genreRequired}">
-                                                                        <f:selectItem itemValue="" itemLabel="Select Genre..."/>
-                                                                        <f:selectItems value="#{theAlbums.allGenres}" var="allgenres"
-                                                                                       itemLabel="#{allgenres.genreName}"
-                                                                                       itemValue="#{allgenres.genreName}"/>
-                                                                    </p:selectOneMenu>
-                                                                    <h:message for="trackGenre" styleClass="errorMessage" style="color:red"/>
-                                                                </div>-->
 
                                 <div>
                                     <p:outputLabel for="genreList1" value="#{msgs.genre}"/>
