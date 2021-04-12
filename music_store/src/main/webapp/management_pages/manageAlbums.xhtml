@@ -53,17 +53,15 @@
                                   filterBy="#{albumItem.albumTitle}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.albumTitle}"/>
                         </p:column>
+                        <p:column style="width:calc(80px)" headerText="Cover">
+                            <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, true)}" styleClass="album-img-small-in-table"/>
+                        </p:column>
                         <p:column style="width:calc(80px)" headerText="Release Date" sortBy="#{albumItem.releaseDate}"
                                   filterBy="#{albumItem.releaseDate}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.releaseDate}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </h:outputText>
                         </p:column>
-                        <p:column style="width:calc(80px)" headerText="Recording Label" sortBy="#{albumItem.recordingLabel}"
-                                  filterBy="#{albumItem.recordingLabel}" filterMatchMode="contains">
-                            <h:outputText value="#{albumItem.recordingLabel}" />
-                        </p:column>
-
                         <p:column style="width:calc(100px)" headerText="Genres" sortBy="#{theAlbums.getGenresListStr(albumItem)}"
                                   filterBy="#{theAlbums.getGenresListStr(albumItem)}" filterMatchMode="contains">
                             <h:outputText value="#{theAlbums.getGenresListStr(albumItem)}"/>

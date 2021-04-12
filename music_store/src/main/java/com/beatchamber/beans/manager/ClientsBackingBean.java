@@ -40,7 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This backing bean is used for survey management page
+ * This backing bean is used for client management page
  *
  * @author 1733570 Yan Tang
  */

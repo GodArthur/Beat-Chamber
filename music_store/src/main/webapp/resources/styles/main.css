@@ -182,6 +182,11 @@ a:visited {
     max-width: 250px;
 }
 
+.album-img-small-in-table {
+    max-height: 80px;
+    max-width: 80px;
+}
+
 .see-more-container {
     height: 250px;
     display: flex;
