@@ -163,9 +163,8 @@ public class AdsBackingBean implements Serializable {
         List<Ads> adsList = adsJpaController.findAdsEntities();
 
         for (Ads ad : adsList) {
-            if (ad.getFileName().equals(adName)
-                    && this.selectedAd.getAdId() != null
-                    && this.selectedAd.getAdId().compareTo(ad.getAdId()) != 0) {
+            if (ad.getFileName().toLowerCase().equals(adName.toLowerCase())
+                    && this.selectedAd.getAdId() != ad.getAdId()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateAdName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);
@@ -186,15 +185,14 @@ public class AdsBackingBean implements Serializable {
         LOG.debug("validateUniqueAdLink");
 
         // Retrieve the value passed to this method
-        String adLink = (String) value;
+        String adLink = "https://"+(String) value;
 
         LOG.debug("validateUniqueAdLink: " + adLink);
         List<Ads> adsList = adsJpaController.findAdsEntities();
 
         for (Ads ad : adsList) {
-            if (ad.getLink().equals(adLink)
-                    && this.selectedAd.getAdId() != null
-                    && this.selectedAd.getAdId().compareTo(ad.getAdId()) != 0) {
+            if (ad.getLink().toLowerCase().equals(adLink.toLowerCase())
+                    && this.selectedAd.getAdId() != ad.getAdId()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateAdLink']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);

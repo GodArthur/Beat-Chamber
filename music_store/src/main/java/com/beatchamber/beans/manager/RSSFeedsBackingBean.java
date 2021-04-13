@@ -157,15 +157,14 @@ public class RssFeedsBackingBean implements Serializable {
         LOG.debug("validateUniqueRssFeedLink");
 
         // Retrieve the value passed to this method
-        String rssfeedLink = (String) value;
+        String rssfeedLink = "https://"+(String) value;
 
         LOG.debug("validateUniqueRssFeedLink: " + rssfeedLink);
         List<RssFeeds> rssfeedsList = rssfeedsJpaController.findRssFeedsEntities();
 
         for (RssFeeds rssfeed : rssfeedsList) {
-            if (rssfeed.getLink().equals(rssfeedLink)
-                    && this.selectedRssFeed.getRssId() != null
-                    && this.selectedRssFeed.getRssId().compareTo(rssfeed.getRssId()) != 0) {
+            if (rssfeed.getLink().toLowerCase().equals(rssfeedLink.toLowerCase())
+                    && this.selectedRssFeed.getRssId() != rssfeed.getRssId()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateRssFeedLink']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);

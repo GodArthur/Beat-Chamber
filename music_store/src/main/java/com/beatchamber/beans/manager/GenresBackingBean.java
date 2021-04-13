@@ -58,7 +58,7 @@ public class GenresBackingBean implements Serializable {
      */
     public List<Genres> getGenres() {
         return genres;
-        
+
     }
 
     /**
@@ -130,8 +130,8 @@ public class GenresBackingBean implements Serializable {
         List<Genres> genresList = genresJpaController.findGenresEntities();
 
         for (Genres genre : genresList) {
-            if (genre.getGenreName().equals(genreName)
-                    && this.selectedGenre.getGenreId().compareTo(genre.getGenreId()) != 0) {
+            if (genre.getGenreName().toLowerCase().equals(genreName.toLowerCase())
+                    && this.selectedGenre.getGenreId() != genre.getGenreId()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateGenreName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);

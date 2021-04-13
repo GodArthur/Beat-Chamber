@@ -272,7 +272,7 @@ public class ClientsBackingBean implements Serializable {
         List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
         for (Clients client : clientsList) {
-            if (client.getUsername().equals(username)
+            if (client.getUsername().toLowerCase().equals(username.toLowerCase())
                     && this.selectedClient.getClientNumber() != client.getClientNumber()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);

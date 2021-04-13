@@ -58,7 +58,7 @@ public class ArtistsBackingBean implements Serializable {
      */
     public List<Artists> getArtists() {
         return artists;
-        
+
     }
 
     /**
@@ -130,8 +130,8 @@ public class ArtistsBackingBean implements Serializable {
         List<Artists> artistsList = artistsJpaController.findArtistsEntities();
 
         for (Artists artist : artistsList) {
-            if (artist.getArtistName().equals(artistName)
-                    && this.selectedArtist.getArtistId().compareTo(artist.getArtistId()) != 0) {
+            if (artist.getArtistName().toLowerCase().equals(artistName.toLowerCase())
+                    && this.selectedArtist.getArtistId() != artist.getArtistId()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateArtistName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);
