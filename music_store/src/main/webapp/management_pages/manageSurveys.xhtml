@@ -28,13 +28,8 @@
                                 <span class="table-title">
                                     Surveys
                                 </span>
-                                <span class="filter-container ui-input-icon-left">
-                                    <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" 
-                                                 onkeyup="PF('dtSurveys').filter()" placeholder="Search"/>
-                                </span>
                                 <span>
-                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theSurveys.openNew()}"
+                                    <p:commandButton value="Add New Survey" icon="pi pi-plus" actionListener="#{theSurveys.openNew()}"
                                                      update=":form:manage-survey-content" 
                                                      oncomplete="PF('manageSurveyDialog').show()"
                                                      styleClass="rounded-button ui-button-help float-right">

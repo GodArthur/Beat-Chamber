@@ -220,7 +220,7 @@ public class AlbumsBackingBean implements Serializable {
     public void setSelectedArtists(Integer[] artistsList) {
         this.selectedArtists = artistsList;
     }
-    
+
     /**
      * Get all the genres.
      *
@@ -453,7 +453,7 @@ public class AlbumsBackingBean implements Serializable {
         this.selectedTrack.setAlbumNumber(this.selectedAlbum);
 
         for (Genres genre : this.getAllGenres()) {
-            if (this.selectedGenres[0].compareTo(genre.getGenreId()) == 0) {
+            if (this.selectedGenres[0] != genre.getGenreId()) {
                 this.selectedTrack.setMusicCategory(genre.getGenreName());
             }
         }

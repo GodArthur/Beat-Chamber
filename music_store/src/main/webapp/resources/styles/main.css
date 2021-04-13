@@ -182,6 +182,11 @@ a:visited {
     max-width: 250px;
 }
 
+.album-img-small-in-table {
+    max-height: 80px;
+    max-width: 80px;
+}
+
 .see-more-container {
     height: 250px;
     display: flex;
@@ -659,6 +664,12 @@ div.stars {
         margin-left: 10px;
         margin-right: 10px;
     }
+    .ui-datatable-data tr.ui-widget-content td{
+        width: 100%!important;
+    }
+    .icon-bar a{
+       width: 100%!important;
+    }
 }
 
 
@@ -858,11 +869,11 @@ button {
 }
 
 .table-title{
-    font-family: 'Open Sans', sans-serif;
-    font-size: 30px;
-    font-weight: bold;
-    margin-right: 650px;
-    color:#fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  margin-right: 750px;
+  color:#fff;
 }
 
 .ui-dialog .ui-dialog-titlebar{
