@@ -664,6 +664,12 @@ div.stars {
       margin-left: 10px;
       margin-right: 10px;
     }
+    .ui-datatable-data tr.ui-widget-content td{
+        width: 100%!important;
+    }
+    .icon-bar a{
+       width: 100%!important;
+    }
 }
 
 
@@ -840,7 +846,7 @@ button {
   font-family: 'Open Sans', sans-serif;
   font-size: 30px;
   font-weight: bold;
-  margin-right: 650px;
+  margin-right: 750px;
   color:#fff;
 }
 

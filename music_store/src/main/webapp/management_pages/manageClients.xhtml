@@ -24,21 +24,14 @@
                     <p:dataTable id="dt-clients" widgetVar="dtClients" var="client" value="#{theClients.clients}"
                                  reflow="true" 
                                  selection="#{theClients.selectedClient}" rowKey="#{client.clientNumber}" paginator="true"
-                                 rows="10" rowSelectMode="add" paginatorPosition="bottom"
-                                 filteredValue="#{theClients.filteredClients}"
-                                 globalFilterFunction="#{theClients.globalFilterFunction}">
+                                 rows="10" rowSelectMode="add" paginatorPosition="bottom">
                         <f:facet name="header">
                             <div>
                                 <span class="table-title">
                                     Clients
                                 </span>
-                                <span class="filter-container ui-input-icon-left">
-                                    <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" 
-                                                 onkeyup="PF('dtClients').filter()" placeholder="Search"/>
-                                </span>
                                 <span>
-                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theClients.openNew()}"
+                                    <p:commandButton value="Add New Client" icon="pi pi-plus" actionListener="#{theClients.openNew()}"
                                                      update=":form:manage-client-content" 
                                                      oncomplete="PF('manageClientDialog').show()"
                                                      styleClass="rounded-button ui-button-help float-right">
