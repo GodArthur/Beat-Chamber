@@ -869,19 +869,11 @@ button {
 }
 
 .table-title{
-<<<<<<< HEAD
   font-family: 'Open Sans', sans-serif;
   font-size: 30px;
   font-weight: bold;
   margin-right: 750px;
   color:#fff;
-=======
-    font-family: 'Open Sans', sans-serif;
-    font-size: 30px;
-    font-weight: bold;
-    margin-right: 650px;
-    color:#fff;
->>>>>>> 555fb24c1cb6cd1d6170232dcbd42efe5832566e
 }
 
 .ui-dialog .ui-dialog-titlebar{

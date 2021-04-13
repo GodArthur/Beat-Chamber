@@ -136,7 +136,7 @@ public class LoginRegisterBean implements Serializable {
             // check username and password
             if ((dbUsername.equals(username) || dbEmail.equals(username))) {
                 boolean isPasswordMatch = false;
-                if (dbSalt != null) {
+                if (dbSalt != null && !dbSalt.equals("test")) {
                     byte[] saltByte = Base64.getDecoder().decode(dbSalt);
                     String hashpsword = getSecurePassword(password, saltByte);
                     if (dbhashPassword.equals(hashpsword)) {
@@ -281,11 +281,11 @@ public class LoginRegisterBean implements Serializable {
         }
     }
 
-
     /**
      * Create user when user register successfully.
+     *
      * @return String redirect to index
-     * @throws Exception 
+     * @throws Exception
      */
     public String doCreateUser() throws Exception {
         // set all the necessary fields which cannot get from input to DB
