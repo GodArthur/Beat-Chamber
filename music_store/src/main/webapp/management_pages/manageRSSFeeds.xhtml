@@ -44,13 +44,12 @@
                                   filterBy="#{rssfeed.rssId}" filterMatchMode="contains">
                             <h:outputText value="#{rssfeed.rssId}" />
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Rss Feed Link" sortBy="#{rssfeed.link}" 
+                        <p:column style="width:calc(300px)" headerText="Rss Feed Link" sortBy="#{rssfeed.link}" 
                                   filterBy="#{rssfeed.link}" filterMatchMode="contains">
                             <h:outputText value="#{rssfeed.link}"/>
                         </p:column>
 
-
-                        <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
+                        <p:column style="width:calc(30px)" exportable="false" headerText="Edit" >
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-rssfeed-content"
                                              actionListener="#{theRssFeeds.openEdit(rssfeed)}"
                                              oncomplete="PF('manageRssFeedDialog').show()"
@@ -59,7 +58,11 @@
                                 <p:resetInput target=":form:manage-rssfeed-content"/>
                             </p:commandButton>
                         </p:column>
-
+                        <p:column style="width:calc(30px)" headerText="Enabled">
+                            <p:selectBooleanButton id="enabled" value="#{rssfeed.enabled}" onLabel="Yes" offLabel="No" style="width:6rem">
+                                <p:ajax update="enabled" listener="#{theRssFeeds.updateEnabled(rssfeed)}"/>
+                            </p:selectBooleanButton>
+                        </p:column>
                     </p:dataTable>
 
 
@@ -76,6 +79,13 @@
                                                      validator="#{theRssFeeds.validateUniqueRssFeedLink}"/>
                                     </div>
                                     <h:message for="rssfeedName" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="enabledStatus" value="#{msgs.enabledStatus}"/><br/>
+                                    <p:selectBooleanCheckbox value="#{theRssFeeds.selectedRssFeed.enabled}" 
+                                                             id="enabledStatus"
+                                                             itemLabel="Enabled"/>
+                                    <h:message for="enabledStatus" styleClass="errorMessage" style="color:red"/>
                                 </div>
                             </p:outputPanel>
                         </p:outputPanel>

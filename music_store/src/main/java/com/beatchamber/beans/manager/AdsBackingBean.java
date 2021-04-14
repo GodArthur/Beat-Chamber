@@ -199,4 +199,19 @@ public class AdsBackingBean implements Serializable {
             }
         }
     }
+    public void updateEnabled(Ads ad) {
+        try {
+            this.adsJpaController.edit(ad);
+        } catch (RollbackFailureException | IllegalOrphanException | NonexistentEntityException ex) {
+            java.util.logging.Logger.getLogger(AdsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(AdsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (ad.getEnabled()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This AD Enabled"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This AD Disabled"));
+        }
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-ads");
+    }
 }

@@ -39,7 +39,7 @@ cost_price double not null,
 list_price double not null,
 sale_price double not null,
 removal_status boolean not null,
-removal_date boolean
+removal_date date
 );
 
 
@@ -164,19 +164,22 @@ FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
 create table Ads (
 ad_id int primary key auto_increment,
 file_name varchar(60) not null,
-link varchar(100) not null
+link varchar(100) not null,
+enabled boolean
 );
 
 
 create table RSS_Feeds (
 rss_id int primary key auto_increment,
-link varchar(1000) not null
+link varchar(1000) not null,
+enabled boolean
 );
 
 
 create table Surveys (
 survey_id int primary key auto_increment,
-title varchar(80) not null
+title varchar(80) not null,
+enabled boolean
 );
 
 
@@ -697,14 +700,14 @@ insert into genre_to_album (album_number,genre_id) values
 (24,5)
 ;
 
-insert into surveys(title) values
-('How many movies have you watched in your life?'),
-('How many cars have you built?'),
-('What is your favorite color?'),
-('How tall do you think the average height of creators of this site are?'),
-('What is your favorite film?'),
-('What is your spirit animal?'),
-('What is the best season of Legend of Korra?');
+insert into surveys(title, enabled) values
+('How many movies have you watched in your life?',true),
+('How many cars have you built?',true),
+('What is your favorite color?',false),
+('How tall do you think the average height of creators of this site are?',false),
+('What is your favorite film?',false),
+('What is your spirit animal?',false),
+('What is the best season of Legend of Korra?',false);
 
 insert into Choices(choice_name,votes) values
 
@@ -827,19 +830,19 @@ insert into provinces (province_id,choice_name,pst,gst,hst) values
 (12,'Saskatchewan',6,5,0),
 (13,'Yukon',0,5,5);
 
-insert into Ads (ad_id,file_name,link) values
-(1,'Anime','https://www.crunchyroll.com/'),
-(2,'Beans','https://en.wikipedia.org/wiki/Bean'),
-(3,'Cats','https://www.petfinder.com/pet-adoption/cat-adoption/'),
-(4,'Mobile games','https://www.apple.com/app-store/'),
-(5,'iPhone','https://www.apple.com/iphone-12/'),
-(6,'Cheese','https://cheese.com/'),
-(7,'Japan','https://en.wikipedia.org/wiki/Japan'),
-(8,'Aurora','https://en.wikipedia.org/wiki/Aurora'),
-(9,'Dogs','https://www.petfinder.com/pet-adoption/dog-adoption/'),
-(10,'Online classes','https://zoom.us/');
+insert into Ads (ad_id,file_name,link, enabled) values
+(1,'Anime','https://www.crunchyroll.com/',true),
+(2,'Beans','https://en.wikipedia.org/wiki/Bean',false),
+(3,'Cats','https://www.petfinder.com/pet-adoption/cat-adoption/',true),
+(4,'Mobile games','https://www.apple.com/app-store/',false),
+(5,'iPhone','https://www.apple.com/iphone-12/',false),
+(6,'Cheese','https://cheese.com/',false),
+(7,'Japan','https://en.wikipedia.org/wiki/Japan',false),
+(8,'Aurora','https://en.wikipedia.org/wiki/Aurora',false),
+(9,'Dogs','https://www.petfinder.com/pet-adoption/dog-adoption/',false),
+(10,'Online classes','https://zoom.us/',false);
 
-insert into rss_feeds (link) values
-('https://www.nasa.gov/rss/dyn/breaking_news.rss'),
-('https://www.nasa.gov/rss/dyn/educationnews.rss'),
-('https://www.nasa.gov/rss/dyn/ames_news.rss');
+insert into rss_feeds (link, enabled) values
+('https://www.nasa.gov/rss/dyn/breaking_news.rss',false),
+('https://www.nasa.gov/rss/dyn/educationnews.rss',true),
+('https://www.nasa.gov/rss/dyn/ames_news.rss',false);

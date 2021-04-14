@@ -22,7 +22,8 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "RssFeeds.findAll", query = "SELECT r FROM RssFeeds r"),
     @NamedQuery(name = "RssFeeds.findByRssId", query = "SELECT r FROM RssFeeds r WHERE r.rssId = :rssId"),
-    @NamedQuery(name = "RssFeeds.findByLink", query = "SELECT r FROM RssFeeds r WHERE r.link = :link")})
+    @NamedQuery(name = "RssFeeds.findByLink", query = "SELECT r FROM RssFeeds r WHERE r.link = :link"),
+    @NamedQuery(name = "RssFeeds.findByEnabled", query = "SELECT r FROM RssFeeds r WHERE r.enabled = :enabled")})
 public class RssFeeds implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,6 +37,8 @@ public class RssFeeds implements Serializable {
     @Size(min = 1, max = 1000)
     @Column(name = "link")
     private String link;
+    @Column(name = "enabled")
+    private boolean enabled;
 
     public RssFeeds() {
     }
@@ -63,6 +66,14 @@ public class RssFeeds implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+    
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

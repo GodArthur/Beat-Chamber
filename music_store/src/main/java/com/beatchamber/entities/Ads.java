@@ -28,7 +28,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Ads.findAll", query = "SELECT a FROM Ads a"),
     @NamedQuery(name = "Ads.findByAdId", query = "SELECT a FROM Ads a WHERE a.adId = :adId"),
     @NamedQuery(name = "Ads.findByFileName", query = "SELECT a FROM Ads a WHERE a.fileName = :fileName"),
-    @NamedQuery(name = "Ads.findByLink", query = "SELECT a FROM Ads a WHERE a.link = :link")})
+    @NamedQuery(name = "Ads.findByLink", query = "SELECT a FROM Ads a WHERE a.link = :link"),
+    @NamedQuery(name = "Ads.findByEnabled", query = "SELECT a FROM Ads a WHERE a.enabled = :enabled")})
 public class Ads implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +48,8 @@ public class Ads implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "link")
     private String link;
+    @Column(name = "enabled")
+    private boolean enabled;
 
     public Ads() {
     }
@@ -85,6 +88,14 @@ public class Ads implements Serializable {
         this.link = link;
     }
 
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -109,5 +120,5 @@ public class Ads implements Serializable {
     public String toString() {
         return "com.beatchamber.entities.Ads[ adId=" + adId + " ]";
     }
-    
+
 }
