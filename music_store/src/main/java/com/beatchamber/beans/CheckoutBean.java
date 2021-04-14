@@ -7,6 +7,17 @@ package com.beatchamber.beans;
 
 
 
+import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.OrderAlbum;
+import com.beatchamber.entities.OrderTrack;
+import com.beatchamber.entities.Orders;
+import com.beatchamber.entities.Tracks;
+import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.jpacontroller.ClientsJpaController;
+import com.beatchamber.jpacontroller.OrderAlbumJpaController;
+import com.beatchamber.jpacontroller.OrderTrackJpaController;
+import com.beatchamber.jpacontroller.OrdersJpaController;
+import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
@@ -17,6 +28,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.faces.application.FacesMessage;
+import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -42,6 +59,26 @@ public class CheckoutBean implements Serializable {
     private double totalHst = 0;
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
+    
+    @Inject
+    private LoginRegisterBean userLoginBean;
+    
+    @Inject 
+    OrdersJpaController orderController;
+    
+    @Inject
+    ClientsJpaController clientController;
+    
+    @Inject
+    private OrderAlbumJpaController orderAlbumController; 
+    
+    @Inject
+    private OrderTrackJpaController orderTrackController;
+    
+    @Inject
+    private TracksJpaController trackController;
+    
+    private final static Logger LOG = LoggerFactory.getLogger(OrdersJpaController.class);
 
 
     
@@ -243,5 +280,75 @@ public class CheckoutBean implements Serializable {
         DecimalFormat df = new DecimalFormat("#.##");
         return Double.valueOf(df.format(value));
     }
+    
+    /**
+     * This method will check if the use is logged in if they are not they will go to the login page
+     * @param fileToGoTo
+     * @return String
+     */
+    public String checkoutRedirect(String fileToGoTo) {
+
+        if (userLoginBean.getClient().getFirstName() == null) {
+            return "login.xhtml";
+        } else {
+            return fileToGoTo;
+        }
+    }
+    
+    /**
+     * This method will add the orders in the appropriate order tables
+     *
+     * @param ClientNumber
+     * @param albumList
+     * @param trackList
+     * @return String
+     * @author Ibrahim
+     */
+    public String addOrdersToTable(int ClientNumber, ArrayList<Albums> albumList, ArrayList<Tracks> trackList, double totalPrice) {
+        //set variables
+        Orders order = new Orders();
+        Date date = new Date();
+        CookieManager cookiesManager = new CookieManager();
+        int newOrderId = orderController.getOrdersCount() + 1;
+        //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
+        //creating the order
+        order.setOrderDate(date);
+        order.setClientNumber(clientController.findClients(ClientNumber));
+        order.setVisible(true);
+        order.setOrderId(newOrderId);
+        order.setOrderTotal(totalPrice);
+        try {
+            orderController.create(order);
+        } catch (RollbackFailureException ex) {
+            LOG.error("orders order roll back error");
+        }
+
+        //creating the orderAlbums
+        for (Albums item : albumList) {
+            OrderAlbum orderAlbum = new OrderAlbum();
+            orderAlbum.setAlbumId(item);
+            orderAlbum.setOrderId(newOrderId);
+            try {
+                orderAlbumController.create(orderAlbum);
+            } catch (RollbackFailureException ex) {
+                LOG.error("order rollback error");
+            }
+        }
+
+        //creating the orderTrack
+        for (Tracks item : trackList) {
+            OrderTrack orderTrack = new OrderTrack();
+            orderTrack.setOrderId(newOrderId);
+            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
+            try {
+                orderTrackController.create(orderTrack);
+            } catch (RollbackFailureException ex) {
+                LOG.error("order track error");
+            }
+        }
+        cookiesManager.clearTheCart();
+        return "about.xhtml";
+    }
+    
     
 }

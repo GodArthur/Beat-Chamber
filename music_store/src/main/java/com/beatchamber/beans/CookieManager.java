@@ -400,7 +400,6 @@ public class CookieManager {
         
         //get the total number of tracks for the album id given
         int countOfTracks=albumJpaController.findAlbums(albumId).getTotalTracks();
-        System.out.println(countOfTracks+" $$$$$$$$$$verification");
         
         //get the id of the of the orders that the client has had
         for(Orders item:orderController.findOrdersEntities()){
@@ -467,6 +466,7 @@ public class CookieManager {
      * @author Ibrahim
      */
     public String adjustDisplay(String albumId,String buttonText,int clientID){
+        System.out.println("boi " + clientID);
         if(checkIfAllTracksHaveBeenBought(Integer.parseInt(albumId),clientID)){
             return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","Album_Alredy_Ordered",null).getDetail();
         }
