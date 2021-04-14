@@ -53,17 +53,15 @@
                                   filterBy="#{albumItem.albumTitle}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.albumTitle}"/>
                         </p:column>
+                        <p:column style="width:calc(80px)" headerText="Cover">
+                            <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, true)}" styleClass="album-img-small-in-table"/>
+                        </p:column>
                         <p:column style="width:calc(80px)" headerText="Release Date" sortBy="#{albumItem.releaseDate}"
                                   filterBy="#{albumItem.releaseDate}" filterMatchMode="contains">
                             <h:outputText value="#{albumItem.releaseDate}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </h:outputText>
                         </p:column>
-                        <p:column style="width:calc(80px)" headerText="Recording Label" sortBy="#{albumItem.recordingLabel}"
-                                  filterBy="#{albumItem.recordingLabel}" filterMatchMode="contains">
-                            <h:outputText value="#{albumItem.recordingLabel}" />
-                        </p:column>
-
                         <p:column style="width:calc(100px)" headerText="Genres" sortBy="#{theAlbums.getGenresListStr(albumItem)}"
                                   filterBy="#{theAlbums.getGenresListStr(albumItem)}" filterMatchMode="contains">
                             <h:outputText value="#{theAlbums.getGenresListStr(albumItem)}"/>
@@ -136,7 +134,7 @@
                                 <p:columnGroup type="footer">
                                     <p:row>
                                         <p:column colspan="3" style="text-align:right" footerText="Total Tracks:"/>
-                                        <p:column style="text-align:left" footerText="#{albumItem.totalTracks}"/>
+                                        <p:column style="text-align:left" footerText="#{theAlbums.getTrackListInAlbum(albumItem.albumNumber).size()}"/>
                                     </p:row>
                                 </p:columnGroup>
                             </p:dataTable>
@@ -160,6 +158,13 @@
                                     <h:message for="albumTitle" styleClass="errorMessage" style="color:red"/>
                                 </div>
                                 <div>
+                                    <p:outputLabel for="removalStatus" value="#{msgs.removalStatus}"/><br/>
+                                    <p:selectBooleanCheckbox value="#{theAlbums.isRemoved}" id="removalStatus"
+                                                             itemLabel="Removed">
+                                    </p:selectBooleanCheckbox>
+                                    <h:message for="removalStatus" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
                                     <p:outputLabel for="releaseDate" value="#{msgs.releaseDate}"/>
                                     <p:datePicker id="releaseDate" value="#{theAlbums.selectedAlbum.releaseDate}" 
                                                   required="true" requiredMessage="#{msgs.releaseDateRequired}"/>
@@ -170,31 +175,6 @@
                                     <p:inputText id="recordingLabel"  value="#{theAlbums.selectedAlbum.recordingLabel}"
                                                  required="true" requiredMessage="#{msgs.recordingLabelRequired}"/>
                                     <h:message for="recordingLabel" styleClass="errorMessage" style="color:red"/>
-                                </div>
-
-                                <div>
-                                    <p:outputLabel for="costPrice" value="#{msgs.costPrice}"/>
-                                    <div class="ui-inputgroup">
-                                        <span class="ui-inputgroup-addon">$</span>
-                                        <p:spinner id="costPrice" value="#{theAlbums.selectedAlbum.costPrice}" stepFactor="0.25" min="0"/>
-                                    </div>
-                                    <h:message for="costPrice" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                                <div>
-                                    <p:outputLabel for="listPrice" value="#{msgs.listPrice}"/>
-                                    <div class="ui-inputgroup">
-                                        <span class="ui-inputgroup-addon">$</span>
-                                        <p:spinner id="listPrice" value="#{theAlbums.selectedAlbum.listPrice}" stepFactor="0.25" min="0"/>
-                                    </div>
-                                    <h:message for="listPrice" styleClass="errorMessage" style="color:red"/>
-                                </div>
-                                <div>
-                                    <p:outputLabel for="salePrice" value="#{msgs.salePrice}"/>
-                                    <div class="ui-inputgroup">
-                                        <span class="ui-inputgroup-addon">$</span>
-                                        <p:spinner id="salePrice" value="#{theAlbums.selectedAlbum.salePrice}" stepFactor="0.25" min="0"/>
-                                    </div>
-                                    <h:message for="salePrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
 
                                 <div>
@@ -229,19 +209,30 @@
                                     </p:selectCheckboxMenu>
                                     <h:message for="artistList" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                <!--
-                                                                <div>
-                                                                    <p:outputLabel for="totalTracks" value="#{msgs.totalTracks}"/>
-                                                                    <p:spinner id="totalTracks" value="#{theAlbums.selectedAlbum.totalTracks}" min="0"/>
-                                                                    <h:message for="totalTracks" styleClass="errorMessage" style="color:red"/>
-                                                                </div>-->
 
                                 <div>
-                                    <p:outputLabel for="removalStatus" value="#{msgs.removalStatus}"/><br/>
-                                    <p:selectBooleanCheckbox value="#{theAlbums.isRemoved}" id="removalStatus"
-                                                             itemLabel="Removed">
-                                    </p:selectBooleanCheckbox>
-                                    <h:message for="removalStatus" styleClass="errorMessage" style="color:red"/>
+                                    <p:outputLabel for="costPrice" value="#{msgs.costPrice}"/>
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">$</span>
+                                        <p:spinner id="costPrice" value="#{theAlbums.selectedAlbum.costPrice}" stepFactor="0.25" min="0"/>
+                                    </div>
+                                    <h:message for="costPrice" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="listPrice" value="#{msgs.listPrice}"/>
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">$</span>
+                                        <p:spinner id="listPrice" value="#{theAlbums.selectedAlbum.listPrice}" stepFactor="0.25" min="0"/>
+                                    </div>
+                                    <h:message for="listPrice" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="salePrice" value="#{msgs.salePrice}"/>
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">$</span>
+                                        <p:spinner id="salePrice" value="#{theAlbums.selectedAlbum.salePrice}" stepFactor="0.25" min="0"/>
+                                    </div>
+                                    <h:message for="salePrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
 
                             </p:outputPanel>
@@ -293,17 +284,6 @@
                                     </div>
                                     <h:message for="trackSalePrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
-                                <!--                                <div>
-                                                                    <p:outputLabel for="trackGenre" value="#{msgs.genre}"/>
-                                                                    <p:selectOneMenu id="trackGenre" value="#{theAlbums.selectedTrack.musicCategory}"
-                                                                                     required="true" requiredMessage="#{msgs.genreRequired}">
-                                                                        <f:selectItem itemValue="" itemLabel="Select Genre..."/>
-                                                                        <f:selectItems value="#{theAlbums.allGenres}" var="allgenres"
-                                                                                       itemLabel="#{allgenres.genreName}"
-                                                                                       itemValue="#{allgenres.genreName}"/>
-                                                                    </p:selectOneMenu>
-                                                                    <h:message for="trackGenre" styleClass="errorMessage" style="color:red"/>
-                                                                </div>-->
 
                                 <div>
                                     <p:outputLabel for="genreList1" value="#{msgs.genre}"/>

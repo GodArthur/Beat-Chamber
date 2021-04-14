@@ -476,6 +476,7 @@ public class AlbumsJpaController implements Serializable {
      * @param genre
      * @param title
      * @return the list of Albums in the same genre
+     * 
      * @author Korjon Chang-jones and Ibrahim Kebe
      */
     public List<Albums> findAlbumsByGenre(Genres genre, String title){
@@ -507,6 +508,7 @@ public class AlbumsJpaController implements Serializable {
      * based on its ID
      * @param id
      * @return The genre of the Album
+     * 
      * @author Korjon Chang-Jones
      */
     public Genres findGenre(Integer id){
@@ -527,6 +529,8 @@ public class AlbumsJpaController implements Serializable {
      * the album
      * @param artistName
      * @return 
+     * 
+     * @author Korjon Chang-Jones
      */
     public List<Albums> findAlbumsByArtist(String artistName){
         
@@ -545,6 +549,7 @@ public class AlbumsJpaController implements Serializable {
      * Method finds Artists on a specific track
      * @param id
      * @return The list of artists on the track
+     * 
      * @author Korjon Chang-Jones
      */
     public List<Artists> findArtists(Integer id){
@@ -559,7 +564,15 @@ public class AlbumsJpaController implements Serializable {
         return query.getResultList();
     }
     
-    
+    /**
+     * Method finds albums based on the trackIds
+     * In other words, it finds the album that
+     * a track belongs to
+     * @param trackId
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
     public Albums findAlbumByTrackId(Integer trackId){
         
         CriteriaBuilder cb = em.getCriteriaBuilder();

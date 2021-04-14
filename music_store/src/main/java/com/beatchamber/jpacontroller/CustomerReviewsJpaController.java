@@ -16,6 +16,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -203,7 +206,45 @@ public class CustomerReviewsJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
 
     }
-    
-    
+
+    /**
+     * Method finds customer reviews based on the track Id
+     *where the approval status is true
+     * @param trackId
+     * @return
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> findCustomerReviewsByTrackId(Integer trackId) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<CustomerReviews> cq = cb.createQuery(CustomerReviews.class);
+        Root<CustomerReviews> rt = cq.from(CustomerReviews.class);
+        cq.where(cb.and(cb.equal(rt.get("trackId").get("trackId"), trackId),cb.equal(rt.get("approvalStatus"), true)));
+        TypedQuery<CustomerReviews> query = em.createQuery(cq);
+
+        return query.getResultList();
+    }
+
+    /**
+     * Method finds reviews for all tracks on a specific album
+     * where the approval status is true
+     * @param albumNumber
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> findAllReviews(Integer albumNumber) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<CustomerReviews> cq = cb.createQuery(CustomerReviews.class);
+        Root<CustomerReviews> rt = cq.from(CustomerReviews.class);
+        Join track = rt.join("trackId");
+        Join album = track.join("albumNumber");
+        cq.where(cb.and(cb.equal(album.get("albumNumber"), albumNumber), cb.equal(rt.get("approvalStatus"), true)));
+        TypedQuery<CustomerReviews> query = em.createQuery(cq);
+
+        return query.getResultList();
+    }
 
 }
