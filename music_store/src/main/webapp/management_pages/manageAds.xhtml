@@ -48,7 +48,7 @@
                                   filterBy="#{ad.fileName}" filterMatchMode="contains">
                             <h:outputText value="#{ad.fileName}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Ad Link" sortBy="#{ad.link}" 
+                        <p:column style="width:calc(200px)" headerText="Ad Link" sortBy="#{ad.link}" 
                                   filterBy="#{ad.link}" filterMatchMode="contains">
                             <h:outputText value="#{ad.link}"/>
                         </p:column>
@@ -62,6 +62,11 @@
                                 <f:setPropertyActionListener value="#{ad}" target="#{theAds.selectedAd}"/>
                                 <p:resetInput target=":form:manage-ad-content"/>
                             </p:commandButton>
+                        </p:column>
+                        <p:column style="width:calc(30px)" headerText="Enabled">
+                            <p:selectBooleanButton id="enabled" value="#{ad.enabled}" onLabel="Yes" offLabel="No" style="width:6rem">
+                                <p:ajax update="enabled" listener="#{theAds.updateEnabled(ad)}"/>
+                            </p:selectBooleanButton>
                         </p:column>
 
                     </p:dataTable>
@@ -79,14 +84,21 @@
                                     <h:message for="adfileName" styleClass="errorMessage" style="color:red"/>
                                 </div>
                                 <div>
-                                    <p:outputLabel for="adName" value="#{msgs.adLink}"/>
+                                    <p:outputLabel for="adLink" value="#{msgs.adLink}"/>
                                     <div class="ui-inputgroup">
                                         <span class="ui-inputgroup-addon">https://</span>
-                                        <p:inputText id="adName"  value="#{theAds.link}" 
+                                        <p:inputText id="adLink"  value="#{theAds.link}" 
                                                      required="true" requiredMessage="#{msgs.adLinkRequired}"
                                                      validator="#{theAds.validateUniqueAdLink}"/>
                                     </div>
-                                    <h:message for="adName" styleClass="errorMessage" style="color:red"/>
+                                    <h:message for="adLink" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="enabledStatus" value="#{msgs.enabledStatus}"/><br/>
+                                    <p:selectBooleanCheckbox value="#{theAds.selectedAd.enabled}" 
+                                                             id="enabledStatus"
+                                                             itemLabel="Enabled"/>
+                                    <h:message for="enabledStatus" styleClass="errorMessage" style="color:red"/>
                                 </div>
                             </p:outputPanel>
                         </p:outputPanel>

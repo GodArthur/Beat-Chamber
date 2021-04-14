@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named("theRssFeeds")
 @ViewScoped
-public class RssFeedsBackingBean implements Serializable {
+public class RSSFeedsBackingBean implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(RssFeedsBackingBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RSSFeedsBackingBean.class);
 
     @Inject
     private RssFeedsJpaController rssfeedsJpaController;
@@ -135,9 +135,9 @@ public class RssFeedsBackingBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("RssFeed Updated"));
             }
         } catch (RollbackFailureException | IllegalOrphanException | NonexistentEntityException ex) {
-            java.util.logging.Logger.getLogger(RssFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(RssFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         PrimeFaces.current().executeScript("PF('manageRssFeedDialog').hide()");
@@ -157,7 +157,7 @@ public class RssFeedsBackingBean implements Serializable {
         LOG.debug("validateUniqueRssFeedLink");
 
         // Retrieve the value passed to this method
-        String rssfeedLink = "https://"+(String) value;
+        String rssfeedLink = "https://" + (String) value;
 
         LOG.debug("validateUniqueRssFeedLink: " + rssfeedLink);
         List<RssFeeds> rssfeedsList = rssfeedsJpaController.findRssFeedsEntities();
@@ -170,5 +170,21 @@ public class RssFeedsBackingBean implements Serializable {
                 throw new ValidatorException(msg);
             }
         }
+    }
+
+    public void updateEnabled(RssFeeds rssfeed) {
+        try {
+            rssfeedsJpaController.edit(rssfeed);
+        } catch (RollbackFailureException | IllegalOrphanException | NonexistentEntityException ex) {
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (rssfeed.getEnabled()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This RSS Enabled"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This RSS Disabled"));
+        }
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-rssfeeds");
     }
 }

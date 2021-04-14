@@ -91,6 +91,10 @@ public class TrackBean implements Serializable {
 
         return trackList;
     }
+    
+    public double getTracksPrice(){
+        return tracksController.findTracks(trackId).getListPrice();
+    }
 
     /**
      * Method sends the url to the track page for a specific song on an album
