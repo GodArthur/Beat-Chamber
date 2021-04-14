@@ -84,7 +84,7 @@ public class AlbumBean implements Serializable {
         LOG.info("send alum is called from browse music");
         this.albumId = album.getAlbumNumber();
         storeSimilarAlbums(albumController.findGenre(albumId));
-        return "album_page.xhtml";
+        return "album_page.xhtml?faces-redirect=true";
     }
     
     public String sendAlbum(int id, String title){
@@ -92,7 +92,7 @@ public class AlbumBean implements Serializable {
         this.albumId = id;
         storeSimilarAlbums(albumController.findGenre(albumId));
         
-        return "album_page.xhtml";
+        return "album_page.xhtml?faces-redirect=true";
     }
     
     
