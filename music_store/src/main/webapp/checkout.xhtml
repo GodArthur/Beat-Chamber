@@ -107,13 +107,13 @@ and open the template in the editor.
                                 <p>
                                 <h1>#{msgs.albumsboughtTitle}</h1>
                                 <c:forEach var="albumItem" items="#{albumsJpaController.retrieveAllAlbumsInTheCart()}">
-                                    <h3>#{albumItem.albumTitle} #{albumItem.costPrice}$</h3><br/>
+                                    <h3>#{albumItem.albumTitle} #{albumItem.listPrice}$</h3><br/>
                                 </c:forEach>
                                 </p>
                                 <h1>#{msgs.trackboughtTitle}</h1>
                                 <p>
                                     <c:forEach var="trackItem" items="#{tracksController.retrieveAllTracksInTheCart()}">
-                                        <h3>#{trackItem.trackTitle} #{trackItem.costPrice}$</h3><br/>
+                                        <h3>#{trackItem.trackTitle} #{trackItem.listPrice}$</h3><br/>
                                 </c:forEach>
                                 </p>
 				<hr class="hrColor" />
