@@ -18,6 +18,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -215,5 +218,17 @@ public class SurveysJpaController implements Serializable {
         });
         
         return choicesList;
+    }
+    
+    public Choices getSurveyChoice(String choice){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Choices> cq = cb.createQuery(Choices.class);
+        Root<Choices> rt = cq.from(Choices.class);
+        Join surveysToChoices = rt.join("surveysToChoicesList");
+        Join choices = surveysToChoices.join("surveyId");
+        cq.where(cb.equal(choices.get("choiceName"), choice));
+        TypedQuery<Choices> query = em.createQuery(cq);
+
+        return query.getSingleResult();
     }
 }

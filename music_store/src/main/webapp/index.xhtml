@@ -16,13 +16,13 @@
             <!-- Promotion banner -->
             <ui:define name="content">
                 <h:form>
+                    <p:growl id="growl" showDetail="true" sticky="true" />
                     <!-- Recommended section. Will be used for cookies -->
                     <section class="recommended">
                         <h2 class="main-title">#{msgs.welcomeGreeting}</h2>
                         <p class="album-description">#{msgs.recommendedDesc}</p>
                         <div class="recommended-list">
                             <div class="recommended-album">
-                                <!-- Links that don't redirect (URL stays the same) -->
                                 <h:commandLink action="#{album.sendAlbum}">
                                     <f:param name="albumId" value="2"/>
                                     <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(2, true)}" styleClass="album-img-small"/>
@@ -181,13 +181,14 @@
                         </div>
                         <!-- Survey display -->
                         <div class="survey-display">
+                            <p:outputLabel rendered="#{surveyBean.surveyExists}">#{surveyBean.survey.title}</p:outputLabel>
                             <h2>#{surveysJpaController.findSurveys(1).title}</h2>
                             <p:selectOneRadio value="#{surveyBean.selectedChoice}">
                                 <c:forEach var="choice" items="#{surveysJpaController.getSurveyChoices(1)}">
                                     <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName} - #{choice.votes}" class="choice-radio-btn"/>
                                 </c:forEach>
                             </p:selectOneRadio>
-                            <p:button value="Vote"/>
+                            <p:commandButton value="Vote" action="#{surveyBean.voteSurvey()}" update="growl"/>
                         </div>
                         <div class="rss-display flow-root">
                             <p:feedReader value="#{rssFeedsJpaController.randomRssFeed}" var="feed" size="3">
