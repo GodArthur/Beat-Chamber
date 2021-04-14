@@ -91,6 +91,26 @@ public class TrackBean implements Serializable {
 
         return trackList;
     }
+    
+    /**
+     * Method gets an aggregate of the rating for a track
+     * @return 
+     */
+    public int getRating(){
+        
+        Tracks track = tracksController.findTracks(trackId);
+        
+        /**
+         * The  stream filters by approval status
+         * collects all of the ratings of the remaining reviews
+         * calculates the average
+         * if there is no rating, the avg will return 0
+         */
+        return (int)track.getCustomerReviewsList().stream()
+                .filter(review -> review.getApprovalStatus() == true)
+                .mapToInt(review -> review.getRating()).average()
+                .orElse(0);
+    }
 
     /**
      * Method sends the url to the track page for a specific song on an album
@@ -177,6 +197,9 @@ public class TrackBean implements Serializable {
         return "track.xhtml";
     }
 
+    /**
+     * Method redirects a user to login or to the review page
+     */
     public void reviewRedirect() {
 
         if (userLoginBean.getClient().getFirstName() == null) {
@@ -186,6 +209,7 @@ public class TrackBean implements Serializable {
             FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "review_page.xhtml");
         }
     }
+    
 
     public String toString() {
 
