@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Browse Music page, will also serve as the search results page @Author Susan Vuu - 1735488 -->
+<!-- Browse Music page, will also serve as the search results page @Author Susan Vuu - 1735488 | Korjon Chang-Jones -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -20,13 +20,13 @@
                 <h:panelGroup rendered="#{search.isEmptyList()}">
                     <div id="no-results-container">
                     <h:panelGroup id="no-results-container-span" >
-                        <h2 id="browse-no-results">No Results Found</h2>
+                        <h2 id="browse-no-results">#{msgs.noResults}</h2>
                     </h:panelGroup>
                     </div>
                 </h:panelGroup>
                 <!-- PrimeFaces's DataView to display all the current albums -->
                 <h:form rendered="#{search.albumComponents.size() > 0}">
-                    <h1 >Albums</h1>
+                    <h1 >#{msgs.albums}</h1>
                     <p:dataView var="musicItem" value="#{search.albumComponents}" 
                                 multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                         <!-- Grid View -->
@@ -96,7 +96,7 @@
 
                 <!-- TRACKS VIEW -->
                 <h:form rendered="#{search.trackComponents.size() > 0}">
-                    <h1 >Tracks</h1>
+                    <h1 >#{msgs.tracks}</h1>
                     <p:dataView var="musicItem" value="#{search.trackComponents}" 
                                 multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 

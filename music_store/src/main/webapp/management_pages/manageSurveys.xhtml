@@ -28,13 +28,8 @@
                                 <span class="table-title">
                                     Surveys
                                 </span>
-                                <span class="filter-container ui-input-icon-left">
-                                    <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" 
-                                                 onkeyup="PF('dtSurveys').filter()" placeholder="Search"/>
-                                </span>
                                 <span>
-                                    <p:commandButton value="Add New" icon="pi pi-plus" actionListener="#{theSurveys.openNew()}"
+                                    <p:commandButton value="Add New Survey" icon="pi pi-plus" actionListener="#{theSurveys.openNew()}"
                                                      update=":form:manage-survey-content" 
                                                      oncomplete="PF('manageSurveyDialog').show()"
                                                      styleClass="rounded-button ui-button-help float-right">
@@ -45,10 +40,10 @@
                         </f:facet>
 
 
-                        <p:column style="width:calc(150px)" headerText="ID" sortBy="#{survey.surveyId}">
+                        <p:column style="width:calc(50px)" headerText="ID" sortBy="#{survey.surveyId}">
                             <h:outputText value="#{survey.surveyId}"/>
                         </p:column>
-                        <p:column style="width:calc(800px)" headerText="Title" sortBy="#{survey.title}"
+                        <p:column style="width:calc(400px)" headerText="Title" sortBy="#{survey.title}"
                                   filterBy="#{survey.title}" filterMatchMode="contains">
                             <h:outputText value="#{survey.title}"/>
                         </p:column>
@@ -69,6 +64,11 @@
                                 <f:setPropertyActionListener value="#{survey}" target="#{theSurveys.selectedSurvey}"/>
                             </p:commandButton>
                         </p:column>
+                        <p:column style="width:calc(50px)" headerText="Enabled">
+                            <p:selectBooleanButton id="enabled" value="#{survey.enabled}" onLabel="Yes" offLabel="No" style="width:6rem">
+                                <p:ajax update="enabled" listener="#{theSurveys.updateEnabled(survey)}"/>
+                            </p:selectBooleanButton>
+                        </p:column>
                     </p:dataTable>
 
 
@@ -81,6 +81,13 @@
                                     <p:inputTextarea id="title"  value="#{theSurveys.selectedSurvey.title}" required="true"
                                                      requiredMessage="#{msgs.surveyTitleRequired}"/>
                                     <h:message for="title" styleClass="errorMessage" style="color:red"/>
+                                </div>
+                                <div>
+                                    <p:outputLabel for="enabledStatus" value="#{msgs.enabledStatus}"/><br/>
+                                    <p:selectBooleanCheckbox value="#{theSurveys.selectedSurvey.enabled}" 
+                                                             id="enabledStatus"
+                                                             itemLabel="Enabled"/>
+                                    <h:message for="enabledStatus" styleClass="errorMessage" style="color:red"/>
                                 </div>
                                 <div>
                                     <p:outputLabel for="numOfChoices" value="Please choose Number Of Choices"/>

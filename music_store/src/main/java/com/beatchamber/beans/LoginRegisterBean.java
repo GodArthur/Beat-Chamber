@@ -136,7 +136,7 @@ public class LoginRegisterBean implements Serializable {
             // check username and password
             if ((dbUsername.equals(username) || dbEmail.equals(username))) {
                 boolean isPasswordMatch = false;
-                if (dbSalt != null) {
+                if (dbSalt != null && !dbSalt.equals("test")) {
                     byte[] saltByte = Base64.getDecoder().decode(dbSalt);
                     String hashpsword = getSecurePassword(password, saltByte);
                     if (dbhashPassword.equals(hashpsword)) {
@@ -235,7 +235,7 @@ public class LoginRegisterBean implements Serializable {
         List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
         for (Clients client : clientsList) {
-            if (client.getUsername().equals(username)) {
+            if (client.getUsername().toLowerCase().equals(username.toLowerCase())) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);
@@ -273,7 +273,7 @@ public class LoginRegisterBean implements Serializable {
         List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
         for (Clients client : clientsList) {
-            if (client.getEmail().equals(username)) {
+            if (client.getEmail().toLowerCase().equals(username.toLowerCase())) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateEmail']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
                 throw new ValidatorException(msg);
@@ -281,20 +281,12 @@ public class LoginRegisterBean implements Serializable {
         }
     }
 
-//
-//    public void validatePostalCodeFormat(FacesContext context, UIComponent component,
-//            Object value) {
-//        // Retrieve the value passed to this method
-//        String postalcode = (String) value;
-//        // Reqular expression pattern to validate the format submitted
-//        String validator = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z]?[0-9][A-Z][0-9]$";
-//
-//        if (!postalcode.matches(validator)) {
-//            String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['invalidPostalCode']}", String.class);
-//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);
-//            throw new ValidatorException(msg);
-//        }
-//    }
+    /**
+     * Create user when user register successfully.
+     *
+     * @return String redirect to index
+     * @throws Exception
+     */
     public String doCreateUser() throws Exception {
         // set all the necessary fields which cannot get from input to DB
         setClientFields();

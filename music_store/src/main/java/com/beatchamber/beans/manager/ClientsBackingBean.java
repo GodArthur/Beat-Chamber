@@ -40,7 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This backing bean is used for survey management page
+ * This backing bean is used for client management page
  *
  * @author 1733570 Yan Tang
  */
@@ -272,7 +272,7 @@ public class ClientsBackingBean implements Serializable {
         List<Clients> clientsList = clientsJpaController.findClientsEntities();
 
         for (Clients client : clientsList) {
-            if (client.getUsername().equals(username)
+            if (client.getUsername().toLowerCase().equals(username.toLowerCase())
                     && this.selectedClient.getClientNumber() != client.getClientNumber()) {
                 String message = context.getApplication().evaluateExpressionGet(context, "#{msgs['duplicateName']}", String.class);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message);

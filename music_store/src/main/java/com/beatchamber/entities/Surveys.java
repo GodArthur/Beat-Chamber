@@ -24,7 +24,8 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Surveys.findAll", query = "SELECT s FROM Surveys s"),
     @NamedQuery(name = "Surveys.findBySurveyId", query = "SELECT s FROM Surveys s WHERE s.surveyId = :surveyId"),
-    @NamedQuery(name = "Surveys.findByTitle", query = "SELECT s FROM Surveys s WHERE s.title = :title")})
+    @NamedQuery(name = "Surveys.findByTitle", query = "SELECT s FROM Surveys s WHERE s.title = :title"),
+    @NamedQuery(name = "Surveys.findByEnabled", query = "SELECT s FROM Surveys s WHERE s.enabled = :enabled")})
 public class Surveys implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +39,8 @@ public class Surveys implements Serializable {
     @Size(min = 1, max = 80)
     @Column(name = "title")
     private String title;
+    @Column(name = "enabled")
+    private boolean enabled;
     @OneToMany(mappedBy = "surveyId")
     private List<SurveyToChoice> surveyToChoiceList;
 
@@ -67,6 +70,14 @@ public class Surveys implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public List<SurveyToChoice> getSurveyToChoiceList() {
@@ -101,5 +112,5 @@ public class Surveys implements Serializable {
     public String toString() {
         return "com.beatchamber.entities.Surveys[ surveyId=" + surveyId + " ]";
     }
-    
+
 }

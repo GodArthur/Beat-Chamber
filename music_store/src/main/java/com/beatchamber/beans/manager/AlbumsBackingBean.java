@@ -408,18 +408,6 @@ public class AlbumsBackingBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Track Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-albums");
 
-        //Decrease the number of totalTracks in the album table by one.
-        try {
-            this.selectedAlbum = this.selectedTrack.getAlbumNumber();
-            this.selectedAlbum.setTotalTracks(this.selectedAlbum.getTotalTracks() - 1);
-            this.selectedTrack.setAlbumNumber(this.selectedAlbum);
-            this.tracksJpaController.edit(selectedTrack);
-            this.albumsJpaController.edit(selectedAlbum);
-        } catch (NonexistentEntityException ex) {
-            java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(AlbumsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -444,7 +432,7 @@ public class AlbumsBackingBean implements Serializable {
         //Increase the number of totalTracks in the album table by one.
         try {
             this.selectedAlbum = this.selectedTrack.getAlbumNumber();
-            this.selectedAlbum.setTotalTracks(this.selectedAlbum.getTotalTracks() + 1);
+            this.selectedAlbum.setTotalTracks(this.selectedAlbum.getTracksList().size());
             this.selectedTrack.setAlbumNumber(this.selectedAlbum);
             this.tracksJpaController.edit(selectedTrack);
             this.albumsJpaController.edit(selectedAlbum);
@@ -459,13 +447,13 @@ public class AlbumsBackingBean implements Serializable {
      * Set all the necessary fields when add a new track to the selected album.
      */
     private void setTrackFields() {
-        this.selectedTrack.setSelectionNumber(this.selectedAlbum.getTotalTracks() + 1);
+        this.selectedTrack.setSelectionNumber(this.selectedAlbum.getTracksList().size() + 1);
         this.selectedTrack.setPlayLength("1:00");
         this.selectedTrack.setEntryDate(new Date());
         this.selectedTrack.setAlbumNumber(this.selectedAlbum);
 
         for (Genres genre : this.getAllGenres()) {
-            if (this.selectedGenres[0].compareTo(genre.getGenreId()) == 0) {
+            if (this.selectedGenres[0] != genre.getGenreId()) {
                 this.selectedTrack.setMusicCategory(genre.getGenreName());
             }
         }

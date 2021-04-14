@@ -37,10 +37,12 @@ public class CustomerReviewBean implements Serializable {
     @Inject
     private TracksJpaController tracksJpaController;
 
-
     @Inject
     private LoginRegisterBean userLoginBean;
-            
+    
+    @Inject
+    private AlbumBean albumBean;
+
     @Inject
     private TrackBean trackBean;
 
@@ -48,6 +50,7 @@ public class CustomerReviewBean implements Serializable {
 
     private CustomerReviews selectedCustomerReviews;
 
+    private int review_number;
     private int track_id;
     private int client_number;
     private Date review_date;
@@ -64,6 +67,14 @@ public class CustomerReviewBean implements Serializable {
      */
     public CustomerReviewBean() {
         this.selectedCustomerReviews = new CustomerReviews();
+    }
+    
+    public int getReview_number(){
+        return this.review_number;
+    }
+    
+    public void setReview_number(int reviewNum){
+        this.review_number = reviewNum;
     }
 
     public int getTrack_id() {
@@ -114,6 +125,10 @@ public class CustomerReviewBean implements Serializable {
         this.approval_status = approvStatus;
     }
 
+    /**
+     * This method is called when the button to add a review is clicked
+     * @throws RollbackFailureException 
+     */
     public void addCustomerReview() throws RollbackFailureException {
 
         try {
@@ -127,29 +142,80 @@ public class CustomerReviewBean implements Serializable {
             if (this.rating == 0 || this.review_text.isEmpty()) {
 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The review must have a rating and a written review"));
-            
-            }
-            //Else if check if the client is logged in
-            else if(userLoginBean.getClient().getFirstName() == null){
+
+            } //Else if check if the client is logged in
+            else if (userLoginBean.getClient().getFirstName() == null) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You must be logged in to leave a review"));
                 FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "login.xhtml");
-            }
-            else {
-                
+            } else {
+
                 LOG.trace("Creating new review entity object");
                 selectedCustomerReviews.setClientNumber(userLoginBean.getClient());
                 selectedCustomerReviews.setRating(this.rating);
                 selectedCustomerReviews.setReviewText(this.review_text);
-                
+
                 customerReviewsJpaController.create(selectedCustomerReviews);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Review Added! It will be shown once it is approved"));
-
             }
 
         } catch (RollbackFailureException ex) {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void returnToTrackPage(){
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "track.xhtml");
+    }
+    
+    
+    
+    /**
+     * Method gets all reviews for a specific track
+     * @return the list of reviews
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> getTrackReviews(){
+        
+        return customerReviewsJpaController.findCustomerReviewsByTrackId(trackBean.getTrackId());
+    }
+    
+    
+    /**
+     * Method gets reviews from all tracks on a specific
+     * album
+     * @return the list of reviews
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public List<CustomerReviews> getAllReviews(){
+        
+        return customerReviewsJpaController.findAllReviews(albumBean.getAlbumId());
+    }
+    
+    /**
+     * Method checks if there are any reviews for a track
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public boolean isEmptyTrackReviewsList(){
+        
+        return customerReviewsJpaController.findCustomerReviewsByTrackId(trackBean.getTrackId()).size() <= 0;
 
     }
+    
+    /**
+     * Method checks if there are any reviews for any track on an album
+     * @return 
+     */
+    public boolean isAllEmptyReviewsList(){
+        
+        return customerReviewsJpaController.findAllReviews(albumBean.getAlbumId()).size() <= 0;
+
+    }
+    
+    
+    
 
 }
