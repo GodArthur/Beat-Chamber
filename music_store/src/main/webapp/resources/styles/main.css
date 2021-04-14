@@ -524,7 +524,6 @@ div.stars {
 }
 
 .reviewbtn{
-    clear:both;
     background-color:#a58cff;
     border: none;
     color: white;
@@ -532,7 +531,16 @@ div.stars {
     text-align: center;
     text-decoration: none;
     font-size: 12px;
-    float: right;
+}
+
+.rtnTrackbtn{
+    background-color:#a58cff;
+    border: none;
+    color: white;
+    padding-right: 50px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
 }
 
 
