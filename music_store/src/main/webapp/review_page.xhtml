@@ -46,7 +46,7 @@
                                 <p:confirmDialog widgetVar="ReviewAddedDialog" showEffect="fade" width="300"
                                                  message="#{msgs.reviewAdded}" header="#{msgs.confReview}">
                                     <p:commandButton value="Okay" icon="pi pi-check" actionListener="#{customerReviews.returnToTrackPage()}"
-                                                     oncomplete="PF('ApprovalStatusDialog').hide()"/>
+                                                     oncomplete="if(#{(customerReviews.rating>0&&customerReviews.rating<=5)&&(!customerReviews.review_Text.isEmpty())}) {PF('ApprovalStatusDialog').hide()}"/>
                                 </p:confirmDialog>
 
                             </h:form>

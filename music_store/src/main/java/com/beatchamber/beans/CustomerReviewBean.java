@@ -55,10 +55,11 @@ public class CustomerReviewBean implements Serializable {
     private String review_text;
     private boolean approval_status;
 
-    /*@PostConstruct
+    @PostConstruct
     public void init() {
         this.customerReviews = customerReviewsJpaController.findCustomerReviewsEntities();
-    }*/
+    }
+    
     /**
      * Constructor
      */
@@ -146,6 +147,7 @@ public class CustomerReviewBean implements Serializable {
                 FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "login.xhtml");
             } else {
 
+                LOG.debug("The review rating is: " + this.rating);
                 LOG.trace("Creating new review entity object");
                 selectedCustomerReviews.setClientNumber(userLoginBean.getClient());
                 selectedCustomerReviews.setRating(this.rating);

@@ -52,7 +52,7 @@ public class OrderBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        this.filteredOrdersList = ordersJpaController.findOrdersEntities();
+        this.ordersList = ordersJpaController.findOrdersEntities();
     }
     
     /**
