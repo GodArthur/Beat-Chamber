@@ -1,7 +1,6 @@
 
 package com.beatchamber.beans;
 
-import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
@@ -498,7 +497,7 @@ public class CookieManager {
             return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","Track_Alredy_In_Cart",null).getDetail();
         }
         else{
-            return buttonText;
+            return buttonText + " " +trackJpaController.findTracks(Integer.parseInt(trackId)).getListPrice()+"$";
         }
     }
     

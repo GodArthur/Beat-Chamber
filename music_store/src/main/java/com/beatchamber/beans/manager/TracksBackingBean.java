@@ -368,7 +368,7 @@ public class TracksBackingBean implements Serializable {
         this.selectedTrack.setRemoved(this.isRemoved);
 
         for (Genres genre : this.getAllGenres()) {
-            if (this.selectedGenres[0].compareTo(genre.getGenreId()) == 0) {
+            if (this.selectedGenres[0] != genre.getGenreId()) {
                 this.selectedTrack.setMusicCategory(genre.getGenreName());
             }
         }

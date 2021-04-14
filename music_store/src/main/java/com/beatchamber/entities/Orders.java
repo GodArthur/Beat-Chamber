@@ -38,6 +38,7 @@ public class Orders implements Serializable {
     @NotNull
     @Column(name = "order_id")
     private int orderId;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "order_total")

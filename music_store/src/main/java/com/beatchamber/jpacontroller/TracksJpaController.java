@@ -537,7 +537,7 @@ public class TracksJpaController implements Serializable {
         SetListOfItems();
         double total = 0;
         for (Tracks item : listOfTracksInTheCart) {
-            total = total + item.getCostPrice();
+            total = total + item.getListPrice();
             System.out.println(total + "   ------------------------");
         }
         return total + "";
