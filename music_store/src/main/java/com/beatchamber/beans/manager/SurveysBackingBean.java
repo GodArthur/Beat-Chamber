@@ -523,4 +523,20 @@ public class SurveysBackingBean implements Serializable {
     public void cancelAction(){
         this.openNew();
     }
+    
+    public void updateEnabled(Surveys survey) {
+        try {
+            this.surveysJpaController.edit(survey);
+        } catch (RollbackFailureException | IllegalOrphanException | NonexistentEntityException ex) {
+            java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (survey.getEnabled()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This Survey Enabled"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This Survey Disabled"));
+        }
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-surveys");
+    }
 }
