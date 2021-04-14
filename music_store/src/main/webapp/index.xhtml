@@ -15,6 +15,7 @@
         <ui:composition template="templates/master_template.xhtml">
             <!-- Promotion banner -->
             <ui:define name="content">
+                #{cookies.removeItemsInCartThatAreAlreadyOrdered(theLoginRegister.client.clientNumber)}
                 <h:form>
                     <p:growl id="growl" showDetail="true" sticky="true" />
                     <!-- Recommended section. Will be used for cookies -->
