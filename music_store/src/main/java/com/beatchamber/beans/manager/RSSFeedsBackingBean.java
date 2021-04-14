@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named("theRssFeeds")
 @ViewScoped
-public class RssFeedsBackingBean implements Serializable {
+public class RSSFeedsBackingBean implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(RssFeedsBackingBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RSSFeedsBackingBean.class);
 
     @Inject
     private RssFeedsJpaController rssfeedsJpaController;
@@ -135,9 +135,9 @@ public class RssFeedsBackingBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("RssFeed Updated"));
             }
         } catch (RollbackFailureException | IllegalOrphanException | NonexistentEntityException ex) {
-            java.util.logging.Logger.getLogger(RssFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(RssFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         PrimeFaces.current().executeScript("PF('manageRssFeedDialog').hide()");
@@ -176,9 +176,9 @@ public class RssFeedsBackingBean implements Serializable {
         try {
             rssfeedsJpaController.edit(rssfeed);
         } catch (RollbackFailureException | IllegalOrphanException | NonexistentEntityException ex) {
-            java.util.logging.Logger.getLogger(RssFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(RssFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RSSFeedsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (rssfeed.getEnabled()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This RSS Enabled"));
