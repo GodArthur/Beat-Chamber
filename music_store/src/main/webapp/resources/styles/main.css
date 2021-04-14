@@ -698,6 +698,11 @@ div.stars {
     right: 12%;
 }
 
+audio{
+    
+    margin-top: 15px;
+}
+
 #photoshoot-ad-wrapper {
     left: 1px;
     position: absolute;

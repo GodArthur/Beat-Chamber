@@ -36,6 +36,8 @@
                         <div id="image-wrapper">
                             <h:graphicImage id="track-img" library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}" width="320" height="320"/> 
                             <p id="track-title">#{tracks.trackTitle}</p>
+                            <p:audio value="/resources/audio/fireflies.mp3" player="mp3" controls="true"/>
+
                         </div>
                     </div>
 
