@@ -37,35 +37,35 @@ By Massimo Di Girolamo
                             </div>
                         </f:facet>
 
-                        <p:column style="width:calc(20px)" headerText="ID" sortBy="#{customerReview.reviewNumber}" 
+                        <p:column style="width:calc(20px)" headerText="#{msgs.managerRevId}" sortBy="#{customerReview.reviewNumber}" 
                                   filterBy="#{customerReview.reviewNumber}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.reviewNumber}" />
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Review Date" sortBy="#{customerReview.reviewDate}" 
+                        <p:column style="width:calc(100px)" headerText="#{msgs.managerRevDate}" sortBy="#{customerReview.reviewDate}" 
                                   filterBy="#{customerReview.reviewDate}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.reviewDate}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Rating" sortBy="#{customerReview.rating}"
+                        <p:column style="width:calc(100px)" headerText="#{msgs.managerRevRating}" sortBy="#{customerReview.rating}"
                                   filterBy="#{customerReview.rating}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.rating}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Review Text" sortBy="#{customerReview.reviewText}"
+                        <p:column style="width:calc(100px)" headerText="#{msgs.managerRevText}" sortBy="#{customerReview.reviewText}"
                                   filterBy="#{customerReview.reviewText}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.reviewText}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Client Number" sortBy="#{customerReview.clientNumber.clientNumber}"
+                        <p:column style="width:calc(100px)" headerText="#{msgs.managerRevClient}" sortBy="#{customerReview.clientNumber.clientNumber}"
                                   filterBy="#{customerReview.clientNumber.clientNumber}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.clientNumber.clientNumber}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Track ID" sortBy="#{customerReview.trackId.trackId}"
+                        <p:column style="width:calc(100px)" headerText="#{msgs.managerRevTrack}" sortBy="#{customerReview.trackId.trackId}"
                                   filterBy="#{customerReview.trackId.trackId}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.trackId.trackId}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Approval Status">
+                        <p:column style="width:calc(100px)" headerText="#{msgs.manageRevApprovStat}">
                             <h:outputText value="#{customerReview.approvalStatus}" 
                                           style=" border-radius: 7px;border: 3px solid #1a75ff;padding: 5px;width: 10px;height: 15px;"/>
 
-                            <p:commandButton value="Change Approval" 
+                            <p:commandButton value="#{msgs.manageChangeRevApprovStat}" 
                                              actionListener="#{reviewBackingBean.changeReviewApproval(customerReview)}"
                                              oncomplete="PF('ApprovalStatusDialog').show()"/>  
                         </p:column>
@@ -73,15 +73,12 @@ By Massimo Di Girolamo
 
 
                     <p:confirmDialog widgetVar="ApprovalStatusDialog" showEffect="fade" width="300"
-                                     message="Status changed!" header="Confirm">
+                                     message="#{msgs.manageStatChang}" header="Confirm">
                         <p:commandButton value="Okay" icon="pi pi-check" actionListener="#{reviewBackingBean.reloadManagerReviewPage()}"
                                          oncomplete="PF('ApprovalStatusDialog').hide()"/>
                     </p:confirmDialog>
 
-
                 </h:form>
-
-
             </ui:define>
         </ui:composition>
     </h:body>

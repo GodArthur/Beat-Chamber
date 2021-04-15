@@ -1,28 +1,18 @@
 package com.beatchamber.beans.manager;
 
-import com.beatchamber.beans.CustomerReviewBean;
 import com.beatchamber.entities.CustomerReviews;
-import com.beatchamber.jpacontroller.ClientsJpaController;
 import com.beatchamber.jpacontroller.CustomerReviewsJpaController;
-import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import org.primefaces.PrimeFaces;
-import org.primefaces.util.LangUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
-@Named()
+@Named
 @RequestScoped
 public class ReviewBackingBean implements Serializable {
 
@@ -39,20 +29,9 @@ public class ReviewBackingBean implements Serializable {
     @Inject
     private CustomerReviewsJpaController customerReviewsJpaController;
 
-    @Inject
-    private TracksJpaController tracksJpaController;
-
     private List<CustomerReviews> customerReviewsList;
 
     private CustomerReviews selectedCustomerReview;
-
-    private ClientsJpaController clientsJpaController;
-
-    private int track_id;
-    private int client_number;
-    private Date review_date;
-    private int rating;
-    private String review_text;
 
     private boolean approval_status;
 
@@ -95,7 +74,7 @@ public class ReviewBackingBean implements Serializable {
     /**
      * Set the selected customer review.
      *
-     * @param selectedCustomerReview the selected client.
+     * @param selectedCustomerReview the selected customer review.
      */
     public void setSelectedCustomerReviews(CustomerReviews selectedCustomerReview) {
         this.selectedCustomerReview = selectedCustomerReview;
