@@ -164,6 +164,8 @@ public class CustomerReviewBean implements Serializable {
                 selectedCustomerReviews.setReviewText(this.review_text);
 
                 customerReviewsJpaController.create(selectedCustomerReviews);
+                
+                //Display review added msg
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Review Added! It will be shown once it is approved"));
             }
 
