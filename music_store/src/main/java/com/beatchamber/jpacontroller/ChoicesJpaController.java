@@ -11,9 +11,12 @@ import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
@@ -171,40 +174,39 @@ public class ChoicesJpaController implements Serializable {
     }
 
     private List<Choices> findChoicesEntities(boolean all, int maxResults, int firstResult) {
-
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Choices.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Choices.class));
+        Query q = em.createQuery(cq);
+        if (!all) {
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
         }
+        return q.getResultList();
     }
 
     public Choices findChoices(Integer id) {
-
-        try {
-            return em.find(Choices.class, id);
-        } finally {
-            em.close();
-        }
+        return em.find(Choices.class, id);
     }
 
     public int getChoicesCount() {
-
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        Root<Choices> rt = cq.from(Choices.class);
+        cq.select(em.getCriteriaBuilder().count(rt));
+        Query q = em.createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
+    
+    public void increaseChoicesNumber(int choiceId) {
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Choices> rt = cq.from(Choices.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
+            UserTransaction transaction = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+            transaction.begin();
+            Choices choice = (Choices)em.find(Choices.class, choiceId);
+            choice.setVotes(choice.getVotes() + 1);
+            transaction.commit();
+        } catch (NamingException | RollbackException | HeuristicMixedException | 
+                HeuristicRollbackException | SecurityException | IllegalStateException | 
+                SystemException | NotSupportedException ex) {
+            java.util.logging.Logger.getLogger(ChoicesJpaController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

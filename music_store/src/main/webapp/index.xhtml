@@ -181,14 +181,13 @@
                         </div>
                         <!-- Survey display -->
                         <div class="survey-display">
-                            <p:outputLabel rendered="#{surveyBean.surveyExists}">#{surveyBean.survey.title}</p:outputLabel>
-                            <h2>#{surveysJpaController.findSurveys(1).title}</h2>
-                            <p:selectOneRadio value="#{surveyBean.selectedChoice}">
-                                <c:forEach var="choice" items="#{surveysJpaController.getSurveyChoices(1)}">
-                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName} - #{choice.votes}" class="choice-radio-btn"/>
+                            <p:outputLabel rendered="#{surveyBean.survey != null}">#{surveyBean.survey.title}</p:outputLabel>
+                            <p:selectOneRadio value="#{surveyBean.selectedChoice}" rendered="#{surveyBean.survey != null}">
+                                <c:forEach var="choice" items="#{surveyBean.surveyChoices}" rendered="#{surveyBean.survey != null}">
+                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName} - #{choice.votes}" class="choice-radio-btn" rendered="#{surveyBean.survey != null}"/>
                                 </c:forEach>
                             </p:selectOneRadio>
-                            <p:commandButton value="Vote" action="#{surveyBean.voteSurvey()}" update="growl"/>
+                            <p:commandButton value="Vote" action="#{surveyBean.voteSurvey()}" update="growl" rendered="#{surveyBean.survey != null}"/>
                         </div>
                         <div class="rss-display flow-root">
                             <p:feedReader value="#{rssFeedsJpaController.randomRssFeed}" var="feed" size="3">

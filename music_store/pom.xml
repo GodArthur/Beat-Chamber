@@ -7,6 +7,10 @@
     <packaging>war</packaging>
     <name>music_store</name>
     
+    <build>
+        <finalName>gb1w21</finalName>
+    </build>
+    
     <!-- Global settings for the project. Settings can be accessed in the pom -->
     <!-- by placing the tag name in ${...}/                                   -->
     <properties>
