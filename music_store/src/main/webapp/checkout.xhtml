@@ -88,9 +88,8 @@ and open the template in the editor.
                                     <br/>
                                     <br/>
                                     <br/>
-                                    
-                                    <h:commandButton action="#{checkoutData.addOrdersToTable(theLoginRegister.client.clientNumber,albumsJpaController.retrieveAllAlbumsInTheCart(),tracksController.retrieveAllTracksInTheCart(),checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice,albumsJpaController.totalPrice),provincesJpaController.findProvinces(checkoutData.province).pst,provincesJpaController.findProvinces(checkoutData.province).gst,provincesJpaController.findProvinces(checkoutData.province).hst))}"  styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/>
-                                    
+
+                                    <h:commandButton action="#{checkoutData.addOrdersToTable(theLoginRegister.client.clientNumber,albumsJpaController.retrieveAllAlbumsInTheCart(),tracksController.retrieveAllTracksInTheCart(),checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice,albumsJpaController.totalPrice),provincesJpaController.findProvinces(checkoutData.province).pst,provincesJpaController.findProvinces(checkoutData.province).gst,provincesJpaController.findProvinces(checkoutData.province).hst))}" styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/>
 				</h:form>
                             
                             

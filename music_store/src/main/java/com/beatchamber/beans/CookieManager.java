@@ -1,11 +1,13 @@
 
 package com.beatchamber.beans;
 
+import com.beatchamber.entities.GenreToAlbum;
 import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
+import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
 import com.beatchamber.jpacontroller.OrderAlbumJpaController;
 import com.beatchamber.jpacontroller.OrderTrackJpaController;
 import com.beatchamber.jpacontroller.OrdersJpaController;
@@ -54,6 +56,10 @@ public class CookieManager {
     
     @Inject
     private AlbumsJpaController albumJpaController;
+    
+        @Inject
+    private GenreToAlbumJpaController genreToAlbumController;
+    
     
     
 
@@ -717,7 +723,7 @@ public class CookieManager {
             for(String item:allItemsInCart){
                 newCookieList = newCookieList+","+item;
             }
-            
+            createCookie(cartKey,newCookieList);
         }
         
     }
@@ -754,6 +760,7 @@ public class CookieManager {
                     else{
                         //if tracks are in the orders of the client remove it
                         if(isTrackInOrders(clientId,cleanIdToMatchDatabaseId(item)) || isAlbumInOrders(clientId,trackJpaController.findTracks(Integer.parseInt(item)).getAlbumNumber().getAlbumNumber() )){
+                            System.out.println("removedd " + item);
                             ItemIdToRemove.add(item);
                         }
                     }
@@ -773,7 +780,25 @@ public class CookieManager {
         for(String item:returnedIds){
             newCookieList = newCookieList+","+item;
         }
+        createCookie(cartKey,newCookieList);
         
+    }
+    
+    /**
+     * This method will find the genre id that matches the genre of the album
+     * @param albumId 
+     */
+    public void addAlbumGenreToCookies(int albumId){
+        List<GenreToAlbum> listOfGenreToAlbum = genreToAlbumController.findGenreToAlbumEntities();
+        GenreToAlbum foundConnection = new GenreToAlbum();
+        
+        for(GenreToAlbum item:listOfGenreToAlbum){
+            if(item.getAlbumNumber().getAlbumNumber() == albumId){
+                foundConnection = item;
+            }
+        }
+        
+        createCookie("selectGenre",foundConnection.getGenreId().getGenreId()+"");
         
     }
     

@@ -301,6 +301,7 @@ public class CheckoutBean implements Serializable {
      * @param ClientNumber
      * @param albumList
      * @param trackList
+     * @param totalPrice
      * @return String
      * @author Ibrahim
      */
@@ -346,8 +347,10 @@ public class CheckoutBean implements Serializable {
                 LOG.error("order track error");
             }
         }
+        
         cookiesManager.clearTheCart();
-        return "about.xhtml";
+        
+        return "index.xhtml";
     }
     
     
