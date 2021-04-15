@@ -14,7 +14,7 @@
     <h:body>
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
-                <h:form>
+                <h:form id="form">
                     <section>
                         <div>
                             <h2>Write a Review for "#{tracks.trackTitle}"</h2>
@@ -46,7 +46,9 @@
 
                             <p:growl id="messages" showDetail="true"/>
                             <p:commandButton class="reviewbtn" type="submit" value="#{msgs.addReview}"
-                                             action="#{customerReviews.addCustomerReview()}" update="messages"/>
+                                             action="#{customerReviews.addCustomerReview()}" update="messages">
+                                <f:ajax render="@form" resetValues="true"/>
+                            </p:commandButton>
                         </div>
                     </section>
                 </h:form>
