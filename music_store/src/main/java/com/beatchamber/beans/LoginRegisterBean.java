@@ -55,6 +55,9 @@ public class LoginRegisterBean implements Serializable {
 
     @Inject
     private ProvincesJpaController provincesJpaController;
+    
+    @Inject 
+    private CookieManager cookiesManager;
 
     // ------------------------------
     // Getters & Setters
@@ -123,7 +126,7 @@ public class LoginRegisterBean implements Serializable {
     /**
      * Login operation.
      *
-     * @return
+     * @return String
      */
     public String doLogin() {
         List<Clients> clientsList = getClients();

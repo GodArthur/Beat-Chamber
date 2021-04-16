@@ -3,6 +3,7 @@ package com.beatchamber.beans;
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Genres;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
+import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.Collections;
@@ -37,6 +38,9 @@ public class AlbumBean implements Serializable {
     
     @Inject
     private AlbumsJpaController albumController;
+    
+    @Inject
+    private CookieManager cookies;
 
     /**
      * Default constructor
@@ -68,9 +72,13 @@ public class AlbumBean implements Serializable {
     
     /**
      * Stores the sent param in albumId, and navigates to the album page
+     * @param currentAlbumId
      * @return The album page
      */
-    public String sendAlbum(){
+    public String sendAlbum(int currentAlbumId){
+        
+        cookies.addAlbumGenreToCookies(currentAlbumId);
+        
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
         this.albumId = Integer.parseInt(params.get("albumId"));

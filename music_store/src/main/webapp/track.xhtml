@@ -60,8 +60,8 @@
                                                 </h:commandLink> 
                                             </h:form>
                                             <!-- need to add action="{cookies.addTrackToCart(trackItem.trackId)}" -->
-                                            <p:commandButton icon="pi pi-shopping-cart" value="#{cookies.adjustDisplayForTracks(trackItem.trackId, msgs.addToCart, 1)}" action="#{cookies.addTrackToCart(trackItem.trackId)}"
-                                                             rendered="#{tracks.trackId != trackItem.trackId}" disabled="#{cookies.shouldTheAddToCartBeDisabledForTracks(trackItem.trackId, 1)}" />
+                                            <p:commandButton icon="pi pi-shopping-cart" value="#{cookies.adjustDisplayForTracks(trackItem.trackId, msgs.addToCart, theLoginRegister.client.clientNumber)}" action="#{cookies.addTrackToCart(trackItem.trackId)}"
+                                                             rendered="#{tracks.trackId != trackItem.trackId}" disabled="#{cookies.shouldTheAddToCartBeDisabledForTracks(trackItem.trackId, theLoginRegister.client.clientNumber)}" />
                                             <!--<h:button value="{msgs.addToCart}"  rendered="{tracks.trackId != trackItem.trackId}"/> -->
                                         </div>
                                     </li>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <!-- Button to add the displayed track to cart -->
-                    <p:commandButton icon="pi pi-shopping-cart" value="#{cookies.adjustDisplayForTracks(tracks.trackId, msgs.addToCart, 1)}" action="#{cookies.addTrackToCart(tracks.trackId)}" disabled="#{cookies.shouldTheAddToCartBeDisabledForTracks(tracks.trackId, 1)}"/>
+                    <p:commandButton icon="pi pi-shopping-cart" value="#{cookies.adjustDisplayForTracks(tracks.trackId, msgs.addToCart, theLoginRegister.client.clientNumber)}" action="#{cookies.addTrackToCart(tracks.trackId)}" disabled="#{cookies.shouldTheAddToCartBeDisabledForTracks(tracks.trackId, theLoginRegister.client.clientNumber)}"/>
                     <!--<h:button value="{msgs.addToCart}"/>-->
                     <hr />
                     <p class="item-extra">#{msgs.otherViewed}</p>
