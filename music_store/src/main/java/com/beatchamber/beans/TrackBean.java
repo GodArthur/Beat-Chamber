@@ -130,7 +130,7 @@ public class TrackBean implements Serializable {
 
         storeSimilarAlbums();
 
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
 
     }
 
@@ -171,7 +171,7 @@ public class TrackBean implements Serializable {
 
         storeSimilarAlbums();
 
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
     }
 
     private void storeSimilarAlbums() {
@@ -198,7 +198,7 @@ public class TrackBean implements Serializable {
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
 
         storeSimilarAlbums();
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
     }
 
     /**

@@ -472,7 +472,7 @@ public class AlbumsJpaController implements Serializable {
     
      /**
      * Method finds specific Albums based on its
-     * genre
+     * genre Query omits the album that is being displayed
      * @param genre
      * @param title
      * @return the list of Albums in the same genre
@@ -502,6 +502,31 @@ public class AlbumsJpaController implements Serializable {
         
         return returnedList;
     }
+    
+    
+    /**
+     * Method finds specific Albums based on its
+     * genre. 
+     * @param genre
+     * @return the list of Albums in the same genre
+     * 
+     * @author Korjon Chang-jones
+     */
+    public List<Albums> findAlbumsByGenre(String genre){
+        
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Albums>  cq = cb.createQuery(Albums.class);
+        Root<Albums> rt = cq.from(Albums.class);
+        Join genreToAlbums = rt.join("genreToAlbumList");
+        Join genres = genreToAlbums.join("genreId");
+        cq.where(cb.equal(genres.get("genreName"), genre));
+        TypedQuery<Albums> query = em.createQuery(cq);
+        
+        return query.getResultList();
+       
+    }
+    
     
       /**
      * Method finds one of the genres for a specific Album

@@ -226,7 +226,7 @@ public class SurveysJpaController implements Serializable {
         Root<Choices> rt = cq.from(Choices.class);
         Join surveysToChoices = rt.join("surveysToChoicesList");
         Join choices = surveysToChoices.join("surveyId");
-        cq.where(cb.equal(choices.get("choiceName"), choice));
+        cq.where(cb.equal(rt.get("choiceName"), choice));
         TypedQuery<Choices> query = em.createQuery(cq);
 
         return query.getSingleResult();

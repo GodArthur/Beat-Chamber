@@ -129,7 +129,8 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <h:commandLink action="redirectToBrowseMusic">
+                                <h:commandLink action="#{search.findAlbumsByGenre}">
+                                    <f:param name="genre" value="Classical"/>
                                     <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
@@ -166,7 +167,8 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <h:commandLink action="redirectToBrowseMusic">
+                                <h:commandLink action="#{search.findAlbumsByGenre}">
+                                    <f:param name="genre" value="Hip Hop"/>
                                     <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
@@ -232,7 +234,8 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <h:commandLink action="redirectToBrowseMusic">
+                                <h:commandLink action="#{search.findAlbumsByGenre}">
+                                    <f:param name="genre" value="Jazz"/>
                                     <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
@@ -269,7 +272,8 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <h:commandLink action="redirectToBrowseMusic">
+                                <h:commandLink action="#{search.findAlbumsByGenre}">
+                                    <f:param name="genre" value="Movie Soundtracks"/>
                                     <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
@@ -306,7 +310,8 @@
                                 </h:commandLink>
                             </div>
                             <div class="see-more-container right">
-                                <h:commandLink action="redirectToBrowseMusic">
+                                <h:commandLink action="#{search.findAlbumsByGenre}">
+                                    <f:param name="genre" value="Rock"/>
                                     <p:button value="#{msgs.seeMore}"/>
                                 </h:commandLink>
                             </div>
