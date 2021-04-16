@@ -70,10 +70,11 @@
                                   filterBy="#{client.cellPhone}" filterMatchMode="contains">
                             <h:outputText value="#{client.cellPhone}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="Total Consumption" sortBy="#{theClients.getTotalConsumption(client)}"
+                        <p:column style="width:calc(100px)" headerText="Total value of purchase" sortBy="#{theClients.getTotalConsumption(client)}"
                                   filterBy="#{theClients.getTotalConsumption(client)}" filterMatchMode="contains">
-                                <span class="ui-inputgroup-addon">$</span>
-                                <h:outputText value="#{theClients.getTotalConsumption(client)}"/>
+                            <h:outputText value="#{theClients.getTotalConsumption(client)}">
+                                <f:convertNumber pattern="$#,##0.00" currencySymbol="$" />
+                            </h:outputText>
                         </p:column>
 
                         <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
