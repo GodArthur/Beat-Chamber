@@ -848,3 +848,13 @@ insert into rss_feeds (link, enabled) values
 ('https://www.nasa.gov/rss/dyn/breaking_news.rss',false),
 ('https://www.nasa.gov/rss/dyn/educationnews.rss',true),
 ('https://www.nasa.gov/rss/dyn/ames_news.rss',false);
+
+insert into Customer_reviews(review_number, track_id, client_number, review_date, rating, review_text, approval_status) values
+(1, 4, 4, '2020-01-14', 4, 'This song is amazing!', true),
+(2, 5, 8, '2020-08-19', 1, 'swear word swear word this song sucks', false),
+(3, 6, 7, '2020-05-15', 5, 'This song is so good but I also hate it', true);
+
+insert into Orders (tablekey, order_total, order_id, client_number, order_date, visible) values
+(1, 45.00, 1, 7, '2020-03-01', true),
+(2, 4.00, 2, 8, '2020-03-08', true),
+(3, 7.11, 3, 9, '2020-07-11', true);
