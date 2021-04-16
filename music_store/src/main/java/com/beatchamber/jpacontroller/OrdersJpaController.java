@@ -12,7 +12,6 @@ import com.beatchamber.entities.Clients;
 import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
-import com.beatchamber.entities.Orders_;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
@@ -208,7 +207,11 @@ public class OrdersJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    public List<Orders> getClientOrders(Integer clientNumber) {
+    /**
+     * @param clientNumber
+     * @return The current logged in client's purchases
+     */
+    public List<OrderTrack> getClientOrders(Integer clientNumber) {
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Orders> cq = cb.createQuery(Orders.class);
@@ -216,7 +219,13 @@ public class OrdersJpaController implements Serializable {
         
         cq.where(cb.equal(rt.get("clientNumber").get("clientNumber"), clientNumber));
         TypedQuery<Orders> query = em.createQuery(cq);
+        List<Orders> clientOrders = query.getResultList();
         
-        return query.getResultList();
+        List<OrderTrack> clientOrderTracks = new ArrayList<>();
+        clientOrders.forEach(clientOrder -> {
+            clientOrderTracks.addAll(orderTrackController.getOrderTracksByOrderId(clientOrder.getOrderId()));
+        });
+        
+        return clientOrderTracks;
     }
 }

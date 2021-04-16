@@ -30,10 +30,11 @@
                     <h:link value="#{msgs.management}" outcome="redirectToManagement"
                             rendered="#{theLoginRegister.loggedIn and theLoginRegister.manager}"/>
 
-                    <h:commandLink action="cart">
+                    <h:commandLink action="redirectToCart">
                         <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
                         <h:outputLabel>#{cookies.findNumberOfItemsInCart()}</h:outputLabel>
                     </h:commandLink>
+                    <h:commandLink value="#{msgs.viewPurchases}" action="redirectToPurchases" rendered="#{theLoginRegister.loggedIn}"/>
                     <h:outputText value="#{msgs.welcome} #{theLoginRegister.username}" styleClass="welcome-label"
                                   rendered="#{theLoginRegister.loggedIn}"/>
                     <h:commandLink id="logout" action="#{theLoginRegister.doLogout}"
