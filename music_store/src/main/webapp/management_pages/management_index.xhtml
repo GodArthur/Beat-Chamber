@@ -18,8 +18,8 @@
             <ui:define name="content">
                 <div>
                     <div class="container-page">
-                        <div class="icon-bar">                         
-                                                        <p:link id="clientButton" outcome="manageClients">
+                        <h:panelGrid columns="4" cellspacing = "50" class="container-panel">                    
+                            <p:link id="clientButton" outcome="manageClients">
                                 <i class="fas fa-user-edit fa-lg"></i><br/><h6>Clients</h6>
                             </p:link>
                             <p:link  id="albumButton" outcome="manageAlbums">
@@ -52,11 +52,7 @@
                             <p:link  id="adButton" outcome="manageAds">
                                 <i class="fas fa-ad fa-lg"></i><br/><h6>#{msgs.ads}</h6>
                             </p:link>
-                        </div>
-
-                        <div class="container-table">
-                            <ui:insert name = "dataTableContent" ></ui:insert>
-                        </div>
+                        </h:panelGrid>
 
                     </div>
                 </div>
