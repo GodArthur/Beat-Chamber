@@ -87,6 +87,16 @@ public class AlbumBean implements Serializable {
         return "album_page.xhtml?faces-redirect=true";
     }
     
+    public String sendAlbum(){
+        
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
+        this.albumId = Integer.parseInt(params.get("albumId"));
+        
+        storeSimilarAlbums(albumController.findGenre(albumId));
+        return "album_page.xhtml?faces-redirect=true";
+    }
+    
     public String sendAlbum(Albums album){
         
         LOG.info("send alum is called from browse music");

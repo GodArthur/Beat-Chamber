@@ -82,7 +82,7 @@
                                 <div>
                                     <!-- making the image a link -->
                                     <h:form>
-                                        <h:commandLink action="#{album.sendAlbum}">
+                                        <h:commandLink action="#{album.sendAlbum(albumItem.albumNumber)}">
                                             <f:param name="albumId" value="#{albumItem.albumNumber}"/>
 
                                             <h:graphicImage
@@ -96,7 +96,7 @@
                                 </div>
                                 <!-- Making the text a link -->
                                 <h:form>
-                                    <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum}">
+                                    <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum(albumItem.albumNumber)}">
                                         <f:param name="albumId" value="#{albumItem.albumNumber}"/>
                                     </h:commandLink>
                                 </h:form>

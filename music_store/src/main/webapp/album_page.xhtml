@@ -45,9 +45,9 @@
                         <br/>
                         <h:form><!--@author Korjon Chang-Jones and Ibrahim Kebe-->
 
-                            <h:commandLink action="#{tracks.sendDefaultTrack}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}">
+                            <h:commandLink action="#{tracks.sendDefaultTrack}" > <!-- disabled="{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}" -->
                                 <f:param name="albumId" value="#{album.albumId}"/>
-                                <p:commandButton value="#{cookies.formatViewTracks(msgs.viewTracks, album.albumId, theLoginRegister.client.clientNumber)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}" />
+                                <p:commandButton value="#{cookies.formatViewTracks(msgs.viewTracks, album.albumId, theLoginRegister.client.clientNumber)}"  /> <!-- disabled="{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}" -->
                                 <!--<button>{msgs.viewTracks}</button>-->
                             </h:commandLink>
                         </h:form>
@@ -60,7 +60,7 @@
                                 <div class="album-cover-group">
                                     <div>
                                         <h:form>
-                                            <h:commandLink action="#{album.sendAlbum}">
+                                            <h:commandLink action="#{album.sendAlbum(albumItem.albumNumber)}">
                                                 <f:param name="albumId" value="#{albumItem.albumNumber}"/>
 
                                                 <h:graphicImage
@@ -73,7 +73,7 @@
                                         </h:form>
                                     </div>
                                     <h:form>
-                                        <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum}">
+                                        <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum(albumItem.albumNumber)}">
                                             <f:param name="albumId" value="#{albumItem.albumNumber}"/>
                                         </h:commandLink>
                                     </h:form>
