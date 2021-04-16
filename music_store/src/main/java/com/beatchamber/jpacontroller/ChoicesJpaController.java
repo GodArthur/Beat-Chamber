@@ -196,7 +196,12 @@ public class ChoicesJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
     
-    public void increaseChoicesNumber(int choiceId) {
+    /**
+     * Increase the number of votes of a choice
+     * 
+     * @param choiceId 
+     */
+    public void increaseChoicesVotes(int choiceId) {
         try {
             UserTransaction transaction = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
             transaction.begin();

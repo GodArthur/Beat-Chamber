@@ -11,6 +11,7 @@ import com.beatchamber.entities.Clients;
 import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
+import com.beatchamber.entities.Orders_;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
@@ -24,6 +25,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.ParameterExpression;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -255,4 +260,15 @@ public class OrdersJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+    public List<Orders> getClientOrders(Integer clientNumber) {
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Orders> cq = cb.createQuery(Orders.class);
+        Root<Orders> rt = cq.from(Orders.class);
+        
+        cq.where(cb.equal(rt.get("clientNumber").get("clientNumber"), clientNumber));
+        TypedQuery<Orders> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
 }
