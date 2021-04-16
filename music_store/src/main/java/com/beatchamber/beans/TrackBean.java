@@ -3,11 +3,17 @@ package com.beatchamber.beans;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -90,6 +96,26 @@ public class TrackBean implements Serializable {
         return trackList;
     }
     
+    /**
+     * Method gets an aggregate of the rating for a track
+     * @return 
+     */
+    public int getRating(){
+        
+        Tracks track = tracksController.findTracks(trackId);
+        
+        /**
+         * The  stream filters by approval status
+         * collects all of the ratings of the remaining reviews
+         * calculates the average
+         * if there is no rating, the avg will return 0
+         */
+        return (int)track.getCustomerReviewsList().stream()
+                .filter(review -> review.getApprovalStatus() == true)
+                .mapToInt(review -> review.getRating()).average()
+                .orElse(0);
+    }
+
     public double getTracksPrice(){
         return tracksController.findTracks(trackId).getListPrice();
     }
@@ -108,7 +134,7 @@ public class TrackBean implements Serializable {
 
         storeSimilarAlbums();
 
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
 
     }
 
@@ -149,7 +175,7 @@ public class TrackBean implements Serializable {
 
         storeSimilarAlbums();
 
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
     }
 
     private void storeSimilarAlbums() {
@@ -176,9 +202,12 @@ public class TrackBean implements Serializable {
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
 
         storeSimilarAlbums();
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
     }
 
+    /**
+     * Method redirects a user to login or to the review page
+     */
     public void reviewRedirect() {
 
         if (userLoginBean.getClient().getFirstName() == null) {
@@ -187,6 +216,38 @@ public class TrackBean implements Serializable {
         } else {
             FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "review_page.xhtml");
         }
+    }
+    
+    /**
+     * Download a track for the user
+     * Source: https://stackoverflow.com/questions/9391838/how-to-provide-a-file-download-from-a-jsf-backing-bean
+     * 
+     * @throws IOException
+     * @author Susan Vuu - 1735488
+     */
+    public void downloadTrack() throws IOException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+
+        ec.responseReset();
+        ec.setResponseContentType("audio/ogg");
+        ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + "/audio/fireflies.ogg" + "\"");
+        
+        try (OutputStream output = ec.getResponseOutputStream()) {
+            File trackFile = new File("/audio/fireflies.ogg");
+            try (InputStream fileInputStream = new FileInputStream(trackFile)) {
+                byte[] bytesBuffer = new byte[2048];
+                int bytesRead;
+                while ((bytesRead = fileInputStream.read(bytesBuffer)) > 0)
+                {
+                    output.write(bytesBuffer, 0, bytesRead);
+                }
+                
+                output.flush();
+            }
+        }
+
+        fc.responseComplete();
     }
 
     public String toString() {

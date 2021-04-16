@@ -6,6 +6,7 @@
 package com.beatchamber.beans.manager;
 
 import com.beatchamber.entities.Clients;
+import com.beatchamber.entities.Orders;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
@@ -61,7 +62,7 @@ public class ClientsBackingBean implements Serializable {
     private Clients selectedClient;
 
     private List<Clients> filteredClients;
-
+        
     /**
      * Initialization.
      */
@@ -342,5 +343,13 @@ public class ClientsBackingBean implements Serializable {
                 || client.getFirstName().toLowerCase().contains(filterText)
                 || client.getLastName().toLowerCase().contains(filterText)
                 || client.getCellPhone().toLowerCase().contains(filterText);
+    }
+    
+    public double getTotalConsumption(Clients client){
+        double totalConsumption = 0;
+        for(Orders order: client.getOrdersCollection()){
+            totalConsumption += order.getOrderTotal();
+        }
+        return totalConsumption;
     }
 }

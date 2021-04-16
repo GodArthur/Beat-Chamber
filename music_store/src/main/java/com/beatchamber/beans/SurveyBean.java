@@ -106,7 +106,7 @@ public class SurveyBean implements Serializable {
         }
         
         //Add 1 to the choice's votes
-        choicesJpaController.increaseChoicesNumber(choiceId);
+        choicesJpaController.increaseChoicesVotes(choiceId);
         Choices changedChoice = choicesJpaController.findChoices(choiceId);
         
         //Check if the voting was successful
