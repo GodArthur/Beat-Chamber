@@ -6,14 +6,12 @@ import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import javax.inject.Named;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -92,6 +90,26 @@ public class TrackBean implements Serializable {
         return trackList;
     }
     
+    /**
+     * Method gets an aggregate of the rating for a track
+     * @return 
+     */
+    public int getRating(){
+        
+        Tracks track = tracksController.findTracks(trackId);
+        
+        /**
+         * The  stream filters by approval status
+         * collects all of the ratings of the remaining reviews
+         * calculates the average
+         * if there is no rating, the avg will return 0
+         */
+        return (int)track.getCustomerReviewsList().stream()
+                .filter(review -> review.getApprovalStatus() == true)
+                .mapToInt(review -> review.getRating()).average()
+                .orElse(0);
+    }
+
     public double getTracksPrice(){
         return tracksController.findTracks(trackId).getListPrice();
     }
@@ -110,7 +128,7 @@ public class TrackBean implements Serializable {
 
         storeSimilarAlbums();
 
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
 
     }
 
@@ -151,7 +169,7 @@ public class TrackBean implements Serializable {
 
         storeSimilarAlbums();
 
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
     }
 
     private void storeSimilarAlbums() {
@@ -178,9 +196,12 @@ public class TrackBean implements Serializable {
         this.trackTitle = tracksController.findTracks(trackId).getTrackTitle();
 
         storeSimilarAlbums();
-        return "track.xhtml";
+        return "track.xhtml?faces-redirect=true";
     }
 
+    /**
+     * Method redirects a user to login or to the review page
+     */
     public void reviewRedirect() {
 
         if (userLoginBean.getClient().getFirstName() == null) {
@@ -190,6 +211,7 @@ public class TrackBean implements Serializable {
             FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "review_page.xhtml");
         }
     }
+    
 
     public String toString() {
 
