@@ -890,6 +890,10 @@ button {
     background:#000!important;
 }
 
+.ui-menu{
+    margin-top: 0px!important;
+}
+
 .table-title{
   font-family: 'Open Sans', sans-serif;
   font-size: 30px;

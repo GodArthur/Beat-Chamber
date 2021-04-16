@@ -854,10 +854,27 @@ insert into Customer_reviews(review_number, track_id, client_number, review_date
 (2, 5, 8, '2020-08-19', 1, 'swear word swear word this song sucks', false),
 (3, 6, 7, '2020-05-15', 5, 'This song is so good but I also hate it', true);
 
-insert into Orders (tablekey, order_total, order_id, client_number, order_date, visible) values
-(1, 45.00, 1, 7, '2020-03-01', true),
-(2, 4.00, 2, 8, '2020-03-08', true),
-(3, 7.11, 3, 9, '2020-07-11', true);
+insert into Orders (order_total, order_id, client_number, order_date, visible) values
+(100.6, 1, 1, '2021-03-02', true),
+(84,    2, 1, '2021-03-02', true),
+(34.8,  3, 1, '2021-03-03', true),
+(298.6, 4, 1, '2021-03-04', true),
+(2.01,  5, 1, '2021-03-12', true),
+(43.2,  6, 2, '2021-03-01', true),
+(103.5, 7, 2, '2021-03-02', true),
+(43.2, 8, 2, '2021-03-11', true),
+(43.2, 9, 3, '2021-03-11', true),
+(43.2, 10, 3, '2021-03-15', true),
+(43.2, 11, 4, '2021-03-15', true),
+(43.2, 12, 5, '2021-03-18', true),
+(43.2, 13, 5, '2021-03-19', true),
+(43.2, 14, 6, '2021-03-03', true),
+(43.2, 15, 6, '2021-03-06', true),
+(43.2, 16, 7, '2021-03-23', true),
+(43.2, 17, 7, '2021-03-23', true),
+(45.00, 18, 7, '2021-03-01', true),
+(4.00, 19, 8, '2021-03-08', true),
+(7.11, 20, 9, '2021-07-11', true);
 
 
 insert into order_album (order_id,album_id) values
