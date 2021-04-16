@@ -3,11 +3,17 @@ package com.beatchamber.beans;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -212,6 +218,37 @@ public class TrackBean implements Serializable {
         }
     }
     
+    /**
+     * Download a track for the user
+     * Source: https://stackoverflow.com/questions/9391838/how-to-provide-a-file-download-from-a-jsf-backing-bean
+     * 
+     * @throws IOException
+     * @author Susan Vuu - 1735488
+     */
+    public void downloadTrack() throws IOException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+
+        ec.responseReset();
+        ec.setResponseContentType("audio/ogg");
+        ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + "/audio/fireflies.ogg" + "\"");
+        
+        try (OutputStream output = ec.getResponseOutputStream()) {
+            File trackFile = new File("/audio/fireflies.ogg");
+            try (InputStream fileInputStream = new FileInputStream(trackFile)) {
+                byte[] bytesBuffer = new byte[2048];
+                int bytesRead;
+                while ((bytesRead = fileInputStream.read(bytesBuffer)) > 0)
+                {
+                    output.write(bytesBuffer, 0, bytesRead);
+                }
+                
+                output.flush();
+            }
+        }
+
+        fc.responseComplete();
+    }
 
     public String toString() {
 

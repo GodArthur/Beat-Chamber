@@ -16,6 +16,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -169,5 +171,16 @@ public class OrderTrackJpaController implements Serializable {
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
+    }
+    
+    public List<OrderTrack> getOrderTracksByOrderId(Integer orderId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<OrderTrack> cq = cb.createQuery(OrderTrack.class);
+        Root<OrderTrack> rt = cq.from(OrderTrack.class);
+        
+        cq.where(cb.equal(rt.get("orderId"), orderId));
+        TypedQuery<OrderTrack> query = em.createQuery(cq);
+        
+        return query.getResultList();
     }
 }
