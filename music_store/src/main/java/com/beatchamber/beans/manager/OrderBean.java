@@ -1,5 +1,6 @@
 package com.beatchamber.beans.manager;
 
+import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
 import com.beatchamber.jpacontroller.OrderAlbumJpaController;
 import com.beatchamber.jpacontroller.OrderTrackJpaController;
@@ -33,6 +34,8 @@ public class OrderBean implements Serializable {
     @Inject
     private OrderTrackJpaController orderTrackJpaController;
     
+    private List<OrderTrack> orderTrackList;
+    
     private List<Orders> ordersList;
 
     private Orders selectedOrder;
@@ -47,12 +50,19 @@ public class OrderBean implements Serializable {
     private Date order_date;
     private boolean visible;
     
+    //Order Track
+    private int orderTrackId;
+    
+    //Order Album
+    private int orderAlbumId;
+    
     /**
      * Initialization.
      */
     @PostConstruct
     public void init() {
         this.ordersList = ordersJpaController.findOrdersEntities();
+        this.orderTrackList = orderTrackJpaController.findOrderTrackEntities();
     }
     
     /**
@@ -111,6 +121,22 @@ public class OrderBean implements Serializable {
         this.visible = isVisible;
     }
     
+    public int getOrderTrackId(){
+        return this.orderTrackId;
+    }
+    
+    public void setOrderTrackId(int trackId){
+        this.orderTrackId = trackId;
+    }
+    
+    public int getOrderAlbumId(){
+        return this.orderAlbumId;
+    }
+    
+    public void setOrderAlbumId(int albumId){
+        this.orderAlbumId = albumId;
+    }
+    
     
     /**
      * Get all the orders.
@@ -157,5 +183,7 @@ public class OrderBean implements Serializable {
     public void setFilteredOrdersList(List<Orders> filteredOrdersList) {
         this.filteredOrdersList = filteredOrdersList;
     }
+    
+    
     
 }
