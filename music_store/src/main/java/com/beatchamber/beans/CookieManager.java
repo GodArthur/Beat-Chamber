@@ -306,6 +306,13 @@ public class CookieManager {
      * @author Ibrahim
      */
     public String shouldTheAddToCartBeDisabledForTracks(int trackId,int clientId){
+     if(isIdInCart("a"+trackJpaController.findTracks(trackId).getAlbumNumber().getAlbumNumber())){
+         return "true";
+     }
+     if(isAlbumInOrders(clientId,trackJpaController.findTracks(trackId).getAlbumNumber().getAlbumNumber())){
+         return "true";
+     }
+             
      if(isTrackInOrders(clientId,trackId)){
          return "true";
      }
@@ -496,6 +503,12 @@ public class CookieManager {
      * @author Ibrahim
      */
     public String adjustDisplayForTracks(String trackId,String buttonText,int clientID){
+        if(isIdInCart("a"+trackJpaController.findTracks(Integer.parseInt(trackId)).getAlbumNumber().getAlbumNumber())){
+         return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","Album_Alredy_In_Cart",null).getDetail();
+        }
+        if(isAlbumInOrders(clientID,trackJpaController.findTracks(Integer.parseInt(trackId)).getAlbumNumber().getAlbumNumber())){
+         return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","The Album has already been ordered",null).getDetail();
+        }
         if(isTrackInOrders(clientID,Integer.parseInt(trackId))){
             return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","Track_Alredy_Ordered",null).getDetail();
         }
@@ -508,7 +521,7 @@ public class CookieManager {
     }
     
     /**
-     * This method will clear the items the in the cart
+     * This method will clear the items in the cart
      * @author Ibrahim
      */
     public void clearTheCart(){
@@ -518,6 +531,14 @@ public class CookieManager {
         } catch (IOException ex) {
             Logger.getLogger(CookieManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * This method will clear the items in the cart
+     * @author Ibrahim
+     */
+    public void clearTheCartWithoutRefresh(){
+        clearCookie(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
     }
     
     /**

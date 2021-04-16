@@ -360,7 +360,7 @@ public class CheckoutBean implements Serializable {
             }
         }
 
-        cookiesManager.clearTheCart();
+        cookiesManager.clearTheCartWithoutRefresh();
 
         return "index.xhtml";
     }
@@ -411,7 +411,7 @@ public class CheckoutBean implements Serializable {
             storeOrderTracks(trackList, newOrderId);
         });
 
-        cookiesManager.clearTheCart();
+        cookiesManager.clearTheCartWithoutRefresh();
 
         return "index.xhtml";
     }
