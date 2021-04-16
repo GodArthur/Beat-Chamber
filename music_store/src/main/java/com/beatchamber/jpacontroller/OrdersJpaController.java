@@ -1,5 +1,6 @@
 package com.beatchamber.jpacontroller;
 
+import com.beatchamber.beans.CheckoutBean;
 import com.beatchamber.beans.CookieManager;
 import com.beatchamber.entities.Albums;
 import java.io.Serializable;
@@ -45,6 +46,8 @@ public class OrdersJpaController implements Serializable {
 
     @Resource
     private UserTransaction utx;
+    
+    private CheckoutBean checkoutBean;
 
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
@@ -189,61 +192,6 @@ public class OrdersJpaController implements Serializable {
     public Orders findOrders(Integer id) {
 
         return em.find(Orders.class, id);
-    }
-
-    /**
-     * This method will add the orders in the appropriate order tables
-     *
-     * @param ClientNumber
-     * @param albumList
-     * @param trackList
-     * @return String
-     * @author Ibrahim
-     */
-    public String addOrdersToTable(int ClientNumber, ArrayList<Albums> albumList, ArrayList<Tracks> trackList, double totalPrice) {
-        //set variables
-        Orders order = new Orders();
-        Date date = new Date();
-        CookieManager cookiesManager = new CookieManager();
-        int newOrderId = findTotalOrders() + 1;
-        //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
-        //creating the order
-        order.setOrderDate(date);
-        order.setClientNumber(clientController.findClients(ClientNumber));
-        order.setVisible(true);
-        order.setOrderId(newOrderId);
-        order.setOrderTotal(totalPrice);
-        try {
-            create(order);
-        } catch (RollbackFailureException ex) {
-            LOG.error("orders order roll back error");
-        }
-
-        //creating the orderAlbums
-        for (Albums item : albumList) {
-            OrderAlbum orderAlbum = new OrderAlbum();
-            orderAlbum.setAlbumId(item);
-            orderAlbum.setOrderId(newOrderId);
-            try {
-                orderAlbumController.create(orderAlbum);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order rollback error");
-            }
-        }
-
-        //creating the orderTrack
-        for (Tracks item : trackList) {
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(newOrderId);
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order track error");
-            }
-        }
-        cookiesManager.clearTheCart();
-        return "index.xhtml";
     }
 
     public int getOrdersCount() {

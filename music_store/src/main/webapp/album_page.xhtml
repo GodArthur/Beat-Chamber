@@ -40,14 +40,14 @@
                         </div>
 
                         <h:form styleClass=""><!-- @author Ibrahim -->
-                            <p:commandButton icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart,1)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,1)}"/>
+                            <p:commandButton icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart,theLoginRegister.client.clientNumber)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}"/>
                         </h:form>
                         <br/>
                         <h:form><!--@author Korjon Chang-Jones and Ibrahim Kebe-->
 
-                            <h:commandLink action="#{tracks.sendDefaultTrack}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,1)}">
+                            <h:commandLink action="#{tracks.sendDefaultTrack}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}">
                                 <f:param name="albumId" value="#{album.albumId}"/>
-                                <p:commandButton value="#{cookies.formatViewTracks(msgs.viewTracks, album.albumId, 1)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,1)}" />
+                                <p:commandButton value="#{cookies.formatViewTracks(msgs.viewTracks, album.albumId, theLoginRegister.client.clientNumber)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}" />
                                 <!--<button>{msgs.viewTracks}</button>-->
                             </h:commandLink>
                         </h:form>

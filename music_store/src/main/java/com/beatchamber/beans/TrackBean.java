@@ -6,14 +6,12 @@ import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import javax.inject.Named;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
