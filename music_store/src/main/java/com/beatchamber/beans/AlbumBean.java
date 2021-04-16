@@ -142,13 +142,17 @@ public class AlbumBean implements Serializable {
      */
     public List<Albums> recommendAlbums() {
         CookieManager cookieManager = new CookieManager();
-        String lastViewedGenre = genreController.findGenres(Integer.parseInt(cookieManager.findValue("selectGenre"))).getGenreName();
-        LOG.debug(lastViewedGenre);
-        List<Albums> albumsGenre = albumController.findAlbumsByGenre(lastViewedGenre);
+        String genreCookie = cookieManager.findValue("selectGenre");
         
+        List<Albums> albumsGenre;
         //If it's the client's first visit, display a sample list of albums
-        if(albumsGenre.isEmpty()){
+        if(genreCookie.isEmpty()){
             albumsGenre = albumController.findAlbumsByGenre("Classical");
+        }
+        else{
+            String lastViewedGenre = genreController.findGenres(Integer.parseInt(genreCookie)).getGenreName();
+            LOG.debug(lastViewedGenre);
+            albumsGenre = albumController.findAlbumsByGenre(lastViewedGenre);
         }
         
         Collections.shuffle(albumsGenre);
