@@ -137,7 +137,7 @@ public class LoginRegisterBean implements Serializable {
             String dbhashPassword = clientItem.getHash();
 
             // check username and password
-            if ((dbUsername.equals(username) || dbEmail.equals(username))) {
+            if ((dbUsername.toLowerCase().equals(username.toLowerCase()) || dbEmail.toLowerCase().equals(username.toLowerCase()))) {
                 boolean isPasswordMatch = false;
                 if (dbSalt != null && !dbSalt.equals("test")) {
                     byte[] saltByte = Base64.getDecoder().decode(dbSalt);
