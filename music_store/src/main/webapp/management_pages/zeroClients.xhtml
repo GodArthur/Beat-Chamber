@@ -19,6 +19,7 @@
             <ui:define name="dataTableContent">
                 <h:form  id="form">
                     <p:growl id="messages" showDetail="true"/>
+
                     <p:toolbar style="width: 60%; margin-left: 20%">
                         <p:toolbarGroup>  
                             <p:outputLabel for="start_date" value="start date"/>
@@ -38,16 +39,16 @@
                             <p:menuitem value="Top Sellers"/>
                             <p:menuitem value="Top Clients"  outcome="topClients"/>
                             <p:menuitem value="Zero Tracks"/>
-                            <p:menuitem value="Zero Clients" outcome="zeroClients"/>
+                            <p:menuitem value="Zero Clients"  outcome="zeroClients"/>
                         </p:tieredMenu>
 
 
-                        <p:dataTable id="dt-report" widgetVar="dtOrders" var="item" value="#{OrdersByClients.totalSales}"
+                        <p:dataTable id="dt-report" widgetVar="dtZeroOrders" var="item" value="#{OrdersByClients.zeroTotalSales}"
                                      reflow="true" paginator="true"
                                      rows="10" paginatorPosition="bottom">
                             <f:facet name="header">
                                 <div>
-                                    <span class="table-title">Report: Top Clients</span>
+                                    <span class="table-title">Report: Zero Clients</span>
                                 </div>
                             </f:facet>
 
