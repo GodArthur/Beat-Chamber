@@ -477,5 +477,19 @@ public class TracksBackingBean implements Serializable {
             });
         }
     }
+    
+    /**
+     * Get a total sales number for a track.
+     *
+     * @param track the track need to show the total sales
+     * @return the number of total sales
+     */
+    public int getTotalSales(Tracks track) {
+        int totalSales = 0;
+        if (track.getOrderTrackCollection() != null) {
+            totalSales = track.getOrderTrackCollection().size();
+        }
+        return totalSales;
+    }
 
 }

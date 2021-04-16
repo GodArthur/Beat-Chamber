@@ -72,9 +72,9 @@
                             <h:outputText value="#{theAlbums.getArtistsListStr(albumItem)}"/>
                         </p:column>
 
-                        <p:column style="width:calc(50px)" headerText="Total sales" sortBy="#{theAlbums.selectedAlbum.orderAlbumCollection.size}"
-                                  filterBy="#{theAlbums.selectedAlbum.orderAlbumCollection.size}" filterMatchMode="contains">
-                            <h:outputText value="#{theAlbums.selectedAlbum.orderAlbumCollection.size}"/>
+                        <p:column style="width:calc(50px)" headerText="Total sales" sortBy="#{theAlbums.getTotalSales(albumItem)}"
+                                  filterBy="#{theAlbums.getTotalSales(albumItem)}" filterMatchMode="contains">
+                            <h:outputText value="#{theAlbums.getTotalSales(albumItem)}"/>
                         </p:column>
 
                         <p:column style="width:calc(50px)" headerText="Removed" sortBy="#{albumItem.removalStatus}"

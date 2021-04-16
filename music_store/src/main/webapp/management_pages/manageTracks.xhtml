@@ -68,6 +68,10 @@
                             <h:outputText value="#{theTracks.getArtistsListStr(trackItem)}"/>
                         </p:column>
 
+                        <p:column style="width:calc(50px)" headerText="Total sales" sortBy="#{theTracks.getTotalSales(trackItem)}"
+                                  filterBy="#{theTracks.getTotalSales(trackItem)}" filterMatchMode="contains">
+                            <h:outputText value="#{theTracks.getTotalSales(trackItem)}"/>
+                        </p:column>
                         <p:column style="width:calc(50px)" headerText="Removed" sortBy="#{trackItem.removed}"
                                   filterBy="#{trackItem.removed?'Yes':'No'}" filterMatchMode="contains">
                             <p:tag value="#{trackItem.removed?'Yes':'No'}" severity="#{trackItem.removed?'danger':'success'}" styleClass="p-mr-2"/>
