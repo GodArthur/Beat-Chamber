@@ -176,7 +176,10 @@
                                     <p:outputLabel for="trackSalePrice" value="#{msgs.salePrice}"/>
                                     <div class="ui-inputgroup">
                                         <span class="ui-inputgroup-addon">$</span>
-                                        <p:spinner id="trackSalePrice" value="#{theTracks.selectedTrack.salePrice}" stepFactor="0.25" min="0"/>
+                                        <p:spinner id="trackSalePrice" value="#{theTracks.selectedTrack.salePrice}" stepFactor="0.25" min="0">
+                                            <f:validator validatorId="SalePriceValidator" />
+                                            <f:attribute name="listedPrice" value="form:trackListPrice"/>
+                                        </p:spinner>
                                     </div>
                                     <h:message for="trackSalePrice" styleClass="errorMessage" style="color:red"/>
                                 </div>
