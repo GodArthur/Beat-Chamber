@@ -30,6 +30,10 @@
                         <div class="album-info">
                             <h2 class="album-title">#{albumsJpaController.findAlbums(album.albumId).albumTitle}</h2>
                             <h2>#{albumsJpaController.getAlbumArtist(album.albumId).artistName}</h2>
+                            <h:outputText value="#{albumsJpaController.findAlbums(album.albumId).recordingLabel}"/>
+                            <br/>
+                            <h:outputText value="#{albumsJpaController.findAlbums(album.albumId).releaseDate}"/>
+                            <br/>
                             <a href="../java/com/beatchamber/beans/AlbumBean.java"></a>
                             <h:outputText value="#{albumsJpaController.findAlbums(album.albumId).listPrice}" styleClass="album-price">
                                 <f:convertNumber currencySymbol="$" type="currency"/>

@@ -4,6 +4,7 @@ import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Genres;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
+import com.beatchamber.jpacontroller.GenresJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.Collections;
@@ -28,7 +29,6 @@ import org.slf4j.LoggerFactory;
 public class AlbumBean implements Serializable {
     
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
-
     
     private int albumId;
      
@@ -38,6 +38,9 @@ public class AlbumBean implements Serializable {
     
     @Inject
     private AlbumsJpaController albumController;
+    
+    @Inject
+    private GenresJpaController genreController;
     
     @Inject
     private CookieManager cookies;
@@ -133,8 +136,24 @@ public class AlbumBean implements Serializable {
         Collections.shuffle(similarAlbums);
     }
     
-    
-    
+    /**
+     * @return Recommended albums for the user
+     * @author Susan Vuu - 1735488
+     */
+    public List<Albums> recommendAlbums() {
+        CookieManager cookieManager = new CookieManager();
+        String lastViewedGenre = genreController.findGenres(Integer.parseInt(cookieManager.findValue("selectGenre"))).getGenreName();
+        LOG.debug(lastViewedGenre);
+        List<Albums> albumsGenre = albumController.findAlbumsByGenre(lastViewedGenre);
+        
+        //If it's the client's first visit, display a sample list of albums
+        if(albumsGenre.isEmpty()){
+            albumsGenre = albumController.findAlbumsByGenre("Classical");
+        }
+        
+        Collections.shuffle(albumsGenre);
+        return albumsGenre;
+    }
 
     public String toString(){
      

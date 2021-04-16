@@ -19,12 +19,6 @@
                     <!-- Links that redirect -->
                     <h:link value="#{msgs.homeTab}" outcome="redirectToIndex"/>
                     <h:link value="#{msgs.HelpTab}" outcome="redirectToAbout"/>
-                    <h:commandLink action="#{localeChanger.setLanguage('fr', 'CA')}" rendered="#{localeChanger.currentEnglish}">
-                        #{msgs.changeLanguage}
-                    </h:commandLink>
-                    <h:commandLink action="#{localeChanger.setLanguage('en', 'CA')}" rendered="#{!localeChanger.currentEnglish}">
-                        #{msgs.changeLanguage}
-                    </h:commandLink>
                     <h:link value="#{msgs.loginRegister}" outcome="redirectToLogin"
                             rendered="#{!theLoginRegister.loggedIn}"/>
                     <h:link value="#{msgs.management}" outcome="redirectToManagement"
@@ -40,6 +34,12 @@
                     <h:commandLink id="logout" action="#{theLoginRegister.doLogout}"
                                    rendered="#{theLoginRegister.loggedIn}" title="#{msgs.logout}" >
                         <i class="pi pi-fw pi-power-off"></i>
+                    </h:commandLink>
+                    <h:commandLink action="#{localeChanger.setLanguage('fr', 'CA')}" rendered="#{localeChanger.currentEnglish}">
+                        #{msgs.changeLanguage}
+                    </h:commandLink>
+                    <h:commandLink action="#{localeChanger.setLanguage('en', 'CA')}" rendered="#{!localeChanger.currentEnglish}">
+                        #{msgs.changeLanguage}
                     </h:commandLink>
                 </div>
             </nav>
