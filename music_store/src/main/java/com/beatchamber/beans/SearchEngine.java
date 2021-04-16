@@ -11,7 +11,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.LoggerFactory;
@@ -64,13 +66,13 @@ public class SearchEngine implements Serializable {
     @Inject
     private AlbumBean albumBean;
     
-    
     public SearchEngine() {
 
         //default search Condition
         searchCondition = "albumTitle";
         
     }
+    
 
     public String getSearchCondition() {
         return searchCondition;
@@ -150,9 +152,11 @@ public class SearchEngine implements Serializable {
     public String findMusicContent(){
         
         LOG.info("Calling finding music content");
-          
-        trackComponents = new ArrayList<>();
+        
         albumComponents = new ArrayList<>();
+        trackComponents = new ArrayList<>();
+          
+        
         
         switch(searchCondition){
             
@@ -179,7 +183,7 @@ public class SearchEngine implements Serializable {
                 findAlbums();
         }
         
-        return "browse_music.xhtml";
+        return "browse_music.xhtml?faces-redirect=true";
     }
     
     /**
@@ -267,17 +271,27 @@ public class SearchEngine implements Serializable {
     private void storeAlbums(List<Albums> albums){
         
         
-        //Looping through every album
-        //Creating a bean with the album
-        //Storing the bean in the interface
-        albums.stream().map((var album) -> {
+        
+        for(var album : albums){
+            
             var albumBackingBean = new AlbumBackingBean(album);
             albumBackingBean.setCoverPath(albumController.getAlbumPath(album.getAlbumNumber(), true));
             albumBackingBean.setArtists(albumController.findArtists(album.getAlbumNumber()));
-            return albumBackingBean;
-        }).forEachOrdered((var albumBackingBean) -> {
+            
             albumComponents.add(albumBackingBean);
-        });
+        }
+        
+        //Looping through every album
+        //Creating a bean with the album
+        //Storing the bean in the interface
+//        albums.stream().map((var album) -> {
+//            var albumBackingBean = new AlbumBackingBean(album);
+//            albumBackingBean.setCoverPath(albumController.getAlbumPath(album.getAlbumNumber(), true));
+//            albumBackingBean.setArtists(albumController.findArtists(album.getAlbumNumber()));
+//            return albumBackingBean;
+//        }).forEachOrdered((var albumBackingBean) -> {
+//            albumComponents.add(albumBackingBean);
+//        });
     }
     
     
@@ -288,5 +302,19 @@ public class SearchEngine implements Serializable {
         return albumComponents.size() <= 0 && trackComponents.size() <= 0;
     }
     
+    public String findAlbumsByGenre(){
+        
+        albumComponents = new ArrayList<>();
+        trackComponents = new ArrayList<>();
+        
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
+        String genre = params.get("genre");
+        List<Albums> albums = albumController.findAlbumsByGenre(genre);
+        LOG.info("Album list size: " + albums.size());
+        storeAlbums(albums);
+        
+        return "browse_music.xhtml?faces-redirect=true";
+    }
 
 }

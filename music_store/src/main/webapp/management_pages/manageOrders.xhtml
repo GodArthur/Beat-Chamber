@@ -25,7 +25,7 @@
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  filteredValue="#{orderBean.filteredOrdersList}">
 
-                        <p:growl id="messages" />
+                        <p:growl id="messages"/>
                         <f:facet name="header">
                             <div>
                                 <span class="table-title">
@@ -42,7 +42,7 @@
                         <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdId}" sortBy="#{orders.orderId}" 
                                   filterBy="#{orders.orderId}" filterMatchMode="contains">
                             <h:outputText value="#{orders.orderId}" />
-                        </p:column>
+                        </p:column> 
                         
                         <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdTotal}" sortBy="#{orders.orderTotal}" 
                                   filterBy="#{orders.orderTotal}" filterMatchMode="contains">
@@ -59,13 +59,13 @@
                             <h:outputText value="#{orders.orderDate}" />
                         </p:column>
                         
-                        <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdVisible}" sortBy="#{orders.visible}" 
-                                  filterBy="#{orders.visible}" filterMatchMode="contains">
-                            <h:outputText value="#{orders.visible}" />
+                        <p:column style="width:calc(50px)" headerText="#{msgs.managerOrdVisible}">
+                            <p:selectBooleanButton id="visible" value="#{orders.visible}" onLabel="Visible" offLabel="Not Visible" style="width:6rem">
+                                <p:ajax update="visible"/>
+                            </p:selectBooleanButton>
                         </p:column>
 
                     </p:dataTable>
-
 
                 </h:form>
             </ui:define>

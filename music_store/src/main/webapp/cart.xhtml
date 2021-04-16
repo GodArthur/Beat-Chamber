@@ -31,7 +31,7 @@ and open the template in the editor.
                                 <div class="itemPicture"><h:graphicImage  library="images" name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, true)}" styleClass="album-img-small"/></div>
                                 <div class="dataInformation">
                                 <h2>#{msgs.showTitle} #{albumItem.albumTitle}</h2><br/>
-                                <h2>#{msgs.showPrice} #{albumItem.costPrice}$</h2><br/>
+                                <h2>#{msgs.showPrice} #{albumItem.listPrice}$</h2><br/>
                                 <h2>#{msgs.showNumberTracks} #{albumItem.totalTracks} </h2><br/>
                                 <h2>#{msgs.showDateRealease} #{albumItem.formatedDate}</h2><br/>
                                 <h2>#{msgs.showRecordLabel} #{albumItem.recordingLabel}</h2>
@@ -57,7 +57,7 @@ and open the template in the editor.
                                     <br/>
                                     <h2>#{msgs.showGenre} #{trackItem.musicCategory}</h2>
                                     <br/>
-                                    <h2>#{msgs.showPrice} #{trackItem.costPrice}$</h2>
+                                    <h2>#{msgs.showPrice} #{trackItem.listPrice}$</h2>
                                     <br/>
                                     <h2>#{msgs.showLength} #{trackItem.playLength}</h2>
                                     <br/>
@@ -75,7 +75,7 @@ and open the template in the editor.
                     
                     <!-- Button that will allow the user to get to the checkout page -->
                     <h:form>
-                    <h:commandLink action="checkout.xhtml" >
+                    <h:commandLink action="#{checkoutData.checkoutRedirect('checkout.xhtml')}"  >
                         <p:button value="#{msgs.goToCheckout}" class="roundedButton2" />
                     </h:commandLink>
                     </h:form>

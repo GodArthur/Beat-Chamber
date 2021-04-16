@@ -1,11 +1,13 @@
 
 package com.beatchamber.beans;
 
+import com.beatchamber.entities.GenreToAlbum;
 import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
+import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
 import com.beatchamber.jpacontroller.OrderAlbumJpaController;
 import com.beatchamber.jpacontroller.OrderTrackJpaController;
 import com.beatchamber.jpacontroller.OrdersJpaController;
@@ -54,6 +56,10 @@ public class CookieManager {
     
     @Inject
     private AlbumsJpaController albumJpaController;
+    
+        @Inject
+    private GenreToAlbumJpaController genreToAlbumController;
+    
     
     
 
@@ -400,7 +406,6 @@ public class CookieManager {
         
         //get the total number of tracks for the album id given
         int countOfTracks=albumJpaController.findAlbums(albumId).getTotalTracks();
-        System.out.println(countOfTracks+" $$$$$$$$$$verification");
         
         //get the id of the of the orders that the client has had
         for(Orders item:orderController.findOrdersEntities()){
@@ -467,6 +472,7 @@ public class CookieManager {
      * @author Ibrahim
      */
     public String adjustDisplay(String albumId,String buttonText,int clientID){
+        System.out.println("boi " + clientID);
         if(checkIfAllTracksHaveBeenBought(Integer.parseInt(albumId),clientID)){
             return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","Album_Alredy_Ordered",null).getDetail();
         }
@@ -671,7 +677,130 @@ public class CookieManager {
         return returnedList;
     }
     
+    /**
+     * This method will remove the items that are already in the clients order
+     * @param clientId 
+     */
+    public void removeItemsInCartThatAreAlreadyOrdered(int clientId){
+        if(clientId > 0){
+
+            List<String> allItemsInCart = getAllIdFromCartInList();
+            List<String> ItemIdToRemove = new ArrayList<String>();
+
+            for(String item:allItemsInCart){
+                if(!item.equals("")){
+                    //if it is an album
+                    if(item.contains("a")){
+                        //if it is in the orders of the client remove it
+                        if(isAlbumInOrders(clientId,cleanIdToMatchDatabaseId(item))){
+                            ItemIdToRemove.add(item);
+                        }
+                    }
+                    //if it is a track
+                    else{
+                        //if it is in the orders of the client remove it
+                        if(isTrackInOrders(clientId,cleanIdToMatchDatabaseId(item))){
+                            ItemIdToRemove.add(item);
+                        }
+                    }
+                }
+            }
+            //these next line will remove the item in the list from the cart
+            String newCookieList = "";
+            List<String> returnedIds = getAllIdFromCartInList();
+            //remove the items from the list
+            for(String item:ItemIdToRemove){
+                if(allItemsInCart.contains(item)){
+                    allItemsInCart.remove(item);
+                }
+            }
+            //clear the cart if nothing is left
+            if(allItemsInCart.isEmpty()){
+                clearCookie(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
+            }
+
+            //create the new list with the items removed
+            for(String item:allItemsInCart){
+                newCookieList = newCookieList+","+item;
+            }
+            createCookie(cartKey,newCookieList);
+        }
+        
+    }
     
+    /**
+     * This method will convert the string used to store the items in the cookies to the id that the database will use
+     * @param Id
+     * @return int
+     */
+    private int cleanIdToMatchDatabaseId(String id){
+        String retunedStr = id.replace("a", "");
+        return Integer.parseInt(retunedStr);
+    } 
+    
+    
+    /**
+     * This method will updated and remove the items in the cart if they were ordered
+     * @param clientId 
+     */
+    public void cleanCart(int clientId){
+        List<String> returnedIds = getAllIdFromCartInList();
+        List<String> ItemIdToRemove = new ArrayList<String>();
+        
+        for(String item:returnedIds){
+                if(!item.equals("")){
+                    //if it is an album
+                    if(item.contains("a")){
+                        //if it is in the orders of the client remove it
+                        if(isAlbumInOrders(clientId,cleanIdToMatchDatabaseId(item))){
+                            ItemIdToRemove.add(item);
+                        }
+                    }
+                    //if it is a track
+                    else{
+                        //if tracks are in the orders of the client remove it
+                        if(isTrackInOrders(clientId,cleanIdToMatchDatabaseId(item)) || isAlbumInOrders(clientId,trackJpaController.findTracks(Integer.parseInt(item)).getAlbumNumber().getAlbumNumber() )){
+                            System.out.println("removedd " + item);
+                            ItemIdToRemove.add(item);
+                        }
+                    }
+                }
+            }
+        
+        String newCookieList = "";
+        for(String item:ItemIdToRemove){
+            if(returnedIds.contains(item)){
+                returnedIds.remove(item);
+            }
+        }
+        if(returnedIds.isEmpty()){
+            clearCookie(com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","cartKey",null).getDetail());
+        }
+        
+        for(String item:returnedIds){
+            newCookieList = newCookieList+","+item;
+        }
+        createCookie(cartKey,newCookieList);
+        
+    }
+    
+    /**
+     * This method will find the genre id that matches the genre of the album
+     * @param albumId 
+     */
+    public void addAlbumGenreToCookies(int albumId){
+        List<GenreToAlbum> listOfGenreToAlbum = genreToAlbumController.findGenreToAlbumEntities();
+        GenreToAlbum foundConnection = new GenreToAlbum();
+        
+        for(GenreToAlbum item:listOfGenreToAlbum){
+            if(item.getAlbumNumber().getAlbumNumber() == albumId){
+                foundConnection = item;
+            }
+        }
+        
+        createCookie("selectGenre",foundConnection.getGenreId().getGenreId()+"");
+        
+    }
     
     
     
