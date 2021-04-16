@@ -2,6 +2,7 @@ package com.beatchamber.beans;
 
 import com.beatchamber.beans.manager.SurveysBackingBean;
 import com.beatchamber.entities.CustomerReviews;
+import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.jpacontroller.CustomerReviewsJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
@@ -57,6 +58,9 @@ public class CustomerReviewBean implements Serializable {
     private int rating;
     private String review_text;
     private boolean approval_status;
+    
+    //for page
+    private String trackName;
     
 
     @PostConstruct
@@ -127,6 +131,14 @@ public class CustomerReviewBean implements Serializable {
         this.approval_status = approvStatus;
     }
     
+    public String getTrackName(){
+        return this.review_text;
+    }
+    
+    public void setTrackName(String trackName){
+        this.trackName = trackName;
+    }
+    
 
     /**
      * This method is called when the button to add a review is clicked
@@ -172,6 +184,13 @@ public class CustomerReviewBean implements Serializable {
         } catch (RollbackFailureException ex) {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public String returnTrackName(int trackId){
+         //to display for review page
+            Tracks track = (tracksJpaController.findTracks(trackId));
+            this.trackName = track.getTrackTitle();
+            return this.trackName;
     }
 
     /**

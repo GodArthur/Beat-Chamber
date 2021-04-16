@@ -17,15 +17,14 @@
             <!-- Promotion banner -->
             <ui:define name="dataTableContent">
 
-                <h:form>                  
-
+                <h:form>
+                    <p:growl id="messages" showDetail="true"/>
                     <p:dataTable id="dt-orders" widgetVar="dtOrders" var="orders" value="#{orderBean.ordersList}"
                                  reflow="true" 
                                  selection="#{orderBean.selectedOrder}" rowKey="#{orderBean.tableKey}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  filteredValue="#{orderBean.filteredOrdersList}">
 
-                        <p:growl id="messages"/>
                         <f:facet name="header">
                             <div>
                                 <span class="table-title">
@@ -61,7 +60,7 @@
                         
                         <p:column style="width:calc(50px)" headerText="#{msgs.managerOrdVisible}">
                             <p:selectBooleanButton id="visible" value="#{orders.visible}" onLabel="Visible" offLabel="Not Visible" style="width:6rem">
-                                <p:ajax update="visible"/>
+                                <p:ajax update="visible" listener="#{orderBean.showVisibleMessage()}"/>
                             </p:selectBooleanButton>
                         </p:column>
 
