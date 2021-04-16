@@ -7,61 +7,56 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
-        <header>
-            <h:link outcome="redirectToIndex">
-                <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
-            </h:link>
-        </header>
-        <!-- Main links -->
-        <nav>
-            <div class="topnav">
-                <!-- Links that redirect -->
-                <h:link value="#{msgs.home}" outcome="redirectToIndex"/>
-                <h:link value="#{msgs.help}" outcome="redirectToAbout"/>
+        <h:form>
+            <header>
+                <h:link outcome="redirectToIndex">
+                    <h:graphicImage library="images" name="UPDATED_BeatChamberLogo.png" styleClass="main-icon"/>
+                </h:link>
+            </header>
+            <!-- Main links -->
+            <nav>
+                <div class="topnav">
+                    <!-- Links that redirect -->
+                    <h:link value="#{msgs.homeTab}" outcome="redirectToIndex"/>
+                    <h:link value="#{msgs.HelpTab}" outcome="redirectToAbout"/>
+                    <h:link value="#{msgs.loginRegister}" outcome="redirectToLogin"
+                            rendered="#{!theLoginRegister.loggedIn}"/>
+                    <h:link value="#{msgs.management}" outcome="redirectToManagement"
+                            rendered="#{theLoginRegister.loggedIn and theLoginRegister.manager}"/>
 
-                <h:form>
-                    <h:commandLink action="#{localeChanger.setLanguage('fr', 'CA')}" rendered="#{localeChanger.currentEnglish}">
-                        #{msgs.changeLanguage}
-                    </h:commandLink>
-                    <h:commandLink action="#{localeChanger.setLanguage('en', 'CA')}" rendered="#{!localeChanger.currentEnglish}">
-                        #{msgs.changeLanguage}
-                    </h:commandLink>
-                </h:form>
-                <h:link value="#{msgs.loginRegister}" outcome="redirectToLogin"
-                        rendered="#{!theLoginRegister.loggedIn}"/>
-                <h:link value="#{msgs.management}" outcome="redirectToManagement"
-                        rendered="#{theLoginRegister.loggedIn and theLoginRegister.manager}"/>               
-
-                <h:form>
-                    <h:commandLink action="cart">
+                    <h:commandLink action="redirectToCart">
                         <h:graphicImage library="images" name="shopping-cart.png" styleClass="cart-icon"/>
                         <h:outputLabel>#{cookies.findNumberOfItemsInCart()}</h:outputLabel>
                     </h:commandLink>
-                </h:form>
-
-                <h:form>
+                    <h:commandLink value="#{msgs.viewPurchases}" action="redirectToPurchases" rendered="#{theLoginRegister.loggedIn}"/>
                     <h:outputText value="#{msgs.welcome} #{theLoginRegister.username}" styleClass="welcome-label"
                                   rendered="#{theLoginRegister.loggedIn}"/>
                     <h:commandLink id="logout" action="#{theLoginRegister.doLogout}"
                                    rendered="#{theLoginRegister.loggedIn}" title="#{msgs.logout}" >
                         <i class="pi pi-fw pi-power-off"></i>
                     </h:commandLink>
-                </h:form>
-            </div>
-        </nav>
+                    <h:commandLink action="#{localeChanger.setLanguage('fr', 'CA')}" rendered="#{localeChanger.currentEnglish}">
+                        #{msgs.changeLanguage}
+                    </h:commandLink>
+                    <h:commandLink action="#{localeChanger.setLanguage('en', 'CA')}" rendered="#{!localeChanger.currentEnglish}">
+                        #{msgs.changeLanguage}
+                    </h:commandLink>
+                </div>
+            </nav>
+        </h:form>
         <div class="search-form">
             <h:form id="searchFunctions">
                 <h:inputText id="searchBar" a:placeholder="#{msgs.searchMusic}" value="#{search.searchValue}" styleClass="search" rendered="#{!search.dateCondition}"/>
-                
+
                 <!--@author Korjon Chan-Jones
                 Added calendar functions, selected Item labels
                 and ajax
                 -->
                 <p:calendar id="startCalendar" a:placeholder="#{msgs.startDate}" value="#{search.startDate}" navigator="true"
-                        pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
+                            pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
                 <p:calendar id="endCalendar" a:placeholder="#{msgs.endDate}"  value="#{search.endDate}" navigator="true"
-                        pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
-                
+                            pattern="yyyy-MM-dd" rendered="#{search.dateCondition}"/>
+
                 <h:selectOneMenu value="#{search.searchCondition}" styleClass="search-dropdown">
                     <f:selectItem itemValue="albumTtitle" itemLabel="#{msgs.albumMenuItem}" />
                     <f:selectItem itemValue="trackName" itemLabel="#{msgs.trackMenuItem}" />
@@ -69,7 +64,7 @@
                     <f:selectItem itemValue="artistName" itemLabel="#{msgs.artistMenuItem}" />
                     <f:ajax render="searchFunctions"/>
                 </h:selectOneMenu>
-                
+
                 <h:commandButton action="#{search.findMusicContent}" styleClass="search-button" value="#{msgs.search}"/>
             </h:form>
         </div>

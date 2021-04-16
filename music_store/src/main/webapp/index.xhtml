@@ -23,46 +23,16 @@
                         <h2 class="main-title">#{msgs.welcomeGreeting}</h2>
                         <p class="album-description">#{msgs.recommendedDesc}</p>
                         <div class="recommended-list">
-                            <div class="recommended-album">
-                                <h:commandLink action="#{album.sendAlbum(2)}">
-                                    <f:param name="albumId" value="2"/>
-                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(2, true)}" styleClass="album-img-small"/>
-                                    <p>#{albumsJpaController.findAlbums(2).albumTitle}</p>
-                                    <p>#{albumsJpaController.getAlbumArtist(2).artistName}</p>
-                                </h:commandLink>
-                            </div>
-                            <div class="recommended-album">
-                                <h:commandLink action="#{album.sendAlbum(4)}">
-                                    <f:param name="albumId" value="4"/>
-                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(4, true)}" styleClass="album-img-small"/>
-                                    <p>#{albumsJpaController.findAlbums(4).albumTitle}</p>
-                                    <p>#{albumsJpaController.getAlbumArtist(4).artistName}</p>
-                                </h:commandLink>
-                            </div>
-                            <div class="recommended-album">
-                                <h:commandLink action="#{album.sendAlbum(3)}">
-                                    <f:param name="albumId" value="3"/>
-                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(3, true)}" styleClass="album-img-small"/>
-                                    <p>#{albumsJpaController.findAlbums(3).albumTitle}</p>
-                                    <p>#{albumsJpaController.getAlbumArtist(3).artistName}</p>
-                                </h:commandLink>
-                            </div>
-                            <div class="recommended-album">
-                                <h:commandLink action="#{album.sendAlbum}">
-                                    <f:param name="albumId" value="1"/>
-                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(1, true)}" styleClass="album-img-small"/>
-                                    <p>#{albumsJpaController.findAlbums(1).albumTitle}</p>
-                                    <p>#{albumsJpaController.getAlbumArtist(1).artistName}</p>
-                                </h:commandLink>
-                            </div>
-                            <div class="recommended-album">
-                                <h:commandLink action="#{album.sendAlbum(5)}">
-                                    <f:param name="albumId" value="5"/>
-                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(5, true)}" styleClass="album-img-small"/>
-                                    <p>#{albumsJpaController.findAlbums(5).albumTitle}</p>
-                                    <p>#{albumsJpaController.getAlbumArtist(5).artistName}</p>
-                                </h:commandLink>
-                            </div>
+                            <p:repeat value="#{album.recommendAlbums()}" var="recommendedAlbums">
+                                <div class="recommended-album">
+                                    <h:commandLink action="#{album.sendAlbum(recommendedAlbums.albumNumber)}">
+                                        <f:param name="albumId" value="#{recommendedAlbums.albumNumber}"/>
+                                        <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(recommendedAlbums.albumNumber, true)}" styleClass="album-img-small"/>
+                                        <p>#{albumsJpaController.findAlbums(recommendedAlbums.albumNumber).albumTitle}</p>
+                                        <p>#{albumsJpaController.getAlbumArtist(recommendedAlbums.albumNumber).artistName}</p>
+                                    </h:commandLink>
+                                </div>
+                            </p:repeat>
                         </div>
                     </section>
                     <!-- Recent Music -->

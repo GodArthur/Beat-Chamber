@@ -609,4 +609,17 @@ public class AlbumsBackingBean implements Serializable {
         this.selectedTrack.setArtistsToTracksCollection(artistTrackList);
     }
 
+    /**
+     * Get a total sales number for a album
+     *
+     * @param album the album need to show the total sales
+     * @return the number of total sales
+     */
+    public int getTotalSales(Albums album) {
+        int totalSales = 0;
+        if (album.getOrderAlbumCollection() != null) {
+            totalSales = album.getOrderAlbumCollection().size();
+        }
+        return totalSales;
+    }
 }

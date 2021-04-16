@@ -4,6 +4,7 @@ import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Genres;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
+import com.beatchamber.jpacontroller.GenresJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.Collections;
@@ -28,7 +29,6 @@ import org.slf4j.LoggerFactory;
 public class AlbumBean implements Serializable {
     
     private final static Logger LOG = LoggerFactory.getLogger(AlbumsJpaController.class);
-
     
     private int albumId;
      
@@ -38,6 +38,9 @@ public class AlbumBean implements Serializable {
     
     @Inject
     private AlbumsJpaController albumController;
+    
+    @Inject
+    private GenresJpaController genreController;
     
     @Inject
     private CookieManager cookies;
@@ -87,6 +90,16 @@ public class AlbumBean implements Serializable {
         return "album_page.xhtml?faces-redirect=true";
     }
     
+    public String sendAlbum(){
+        
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
+        this.albumId = Integer.parseInt(params.get("albumId"));
+        
+        storeSimilarAlbums(albumController.findGenre(albumId));
+        return "album_page.xhtml?faces-redirect=true";
+    }
+    
     public String sendAlbum(Albums album){
         
         LOG.info("send alum is called from browse music");
@@ -123,8 +136,28 @@ public class AlbumBean implements Serializable {
         Collections.shuffle(similarAlbums);
     }
     
-    
-    
+    /**
+     * @return Recommended albums for the user
+     * @author Susan Vuu - 1735488
+     */
+    public List<Albums> recommendAlbums() {
+        CookieManager cookieManager = new CookieManager();
+        String genreCookie = cookieManager.findValue("selectGenre");
+        
+        List<Albums> albumsGenre;
+        //If it's the client's first visit, display a sample list of albums
+        if(genreCookie.isEmpty()){
+            albumsGenre = albumController.findAlbumsByGenre("Classical");
+        }
+        else{
+            String lastViewedGenre = genreController.findGenres(Integer.parseInt(genreCookie)).getGenreName();
+            LOG.debug(lastViewedGenre);
+            albumsGenre = albumController.findAlbumsByGenre(lastViewedGenre);
+        }
+        
+        Collections.shuffle(albumsGenre);
+        return albumsGenre;
+    }
 
     public String toString(){
      

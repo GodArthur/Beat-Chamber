@@ -25,6 +25,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.ParameterExpression;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -203,4 +207,25 @@ public class OrdersJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+    /**
+     * @param clientNumber
+     * @return The current logged in client's purchases
+     */
+    public List<OrderTrack> getClientOrders(Integer clientNumber) {
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Orders> cq = cb.createQuery(Orders.class);
+        Root<Orders> rt = cq.from(Orders.class);
+        
+        cq.where(cb.equal(rt.get("clientNumber").get("clientNumber"), clientNumber));
+        TypedQuery<Orders> query = em.createQuery(cq);
+        List<Orders> clientOrders = query.getResultList();
+        
+        List<OrderTrack> clientOrderTracks = new ArrayList<>();
+        clientOrders.forEach(clientOrder -> {
+            clientOrderTracks.addAll(orderTrackController.getOrderTracksByOrderId(clientOrder.getOrderId()));
+        });
+        
+        return clientOrderTracks;
+    }
 }

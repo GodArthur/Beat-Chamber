@@ -5,18 +5,18 @@
  */
 package com.beatchamber.beans;
 
-
-
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import com.beatchamber.jpacontroller.OrderAlbumJpaController;
 import com.beatchamber.jpacontroller.OrderTrackJpaController;
 import com.beatchamber.jpacontroller.OrdersJpaController;
+import com.beatchamber.jpacontroller.ProvincesJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.IOException;
 import java.io.Serializable;
@@ -30,12 +30,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 
 /**
  *
@@ -44,8 +43,7 @@ import org.slf4j.LoggerFactory;
 @Named("checkoutData")
 @RequestScoped
 public class CheckoutBean implements Serializable {
-    
-            
+
     private String cardNumber = "";
     private String expDate = "";
     private String cvv = "";
@@ -59,184 +57,193 @@ public class CheckoutBean implements Serializable {
     private double totalHst = 0;
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
-    
+
     @Inject
     private LoginRegisterBean userLoginBean;
-    
-    @Inject 
+
+    @Inject
     OrdersJpaController orderController;
-    
+
     @Inject
     ClientsJpaController clientController;
-    
+
     @Inject
-    private OrderAlbumJpaController orderAlbumController; 
-    
+    private OrderAlbumJpaController orderAlbumController;
+
     @Inject
     private OrderTrackJpaController orderTrackController;
-    
+
     @Inject
     private TracksJpaController trackController;
-    
+
+    @Inject
+    private AlbumsJpaController albumController;
+
+    @Inject
+    private ProvincesJpaController provinceController;
+
     private final static Logger LOG = LoggerFactory.getLogger(OrdersJpaController.class);
 
-
-    
     /*all of the setters */
-    public void setCardNumber(String value){
-        this.cardNumber=value;
+    public void setCardNumber(String value) {
+        this.cardNumber = value;
     }
-    
-    public void setDate(String value){
-        this.expDate=value;
+
+    public void setDate(String value) {
+        this.expDate = value;
     }
-    
-    public void setCvv(String value){
-        this.cvv=value;
+
+    public void setCvv(String value) {
+        this.cvv = value;
     }
-    
-    public void setName(String value){
-        this.name=value;
+
+    public void setName(String value) {
+        this.name = value;
     }
-    
-    public void setAddress(String value){
-        this.address=value;
+
+    public void setAddress(String value) {
+        this.address = value;
     }
-    
-    public void setCity(String value){
-        this.city=value;
+
+    public void setCity(String value) {
+        this.city = value;
     }
-    
-    public void setProvince(String value){
+
+    public void setProvince(String value) {
         this.province = value;
     }
-    
+
     /*all of the getters*/
-    public String getProvince(){
+    public String getProvince() {
         return this.province;
     }
-    
-    public String getCardNumber(){
+
+    public String getCardNumber() {
         return this.cardNumber;
     }
-    
-    public String getCvv(){
+
+    public String getCvv() {
         return this.cvv;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    
-    public String getAddress(){
+
+    public String getAddress() {
         return this.address;
     }
-    
-    public String getCity(){
+
+    public String getCity() {
         return this.city;
     }
-    
-    public String getDate(){
+
+    public String getDate() {
         return this.expDate;
     }
-    
+
     /*overiding the toString method*/
     @Override
     public String toString() {
         return "";
     }
-    
+
     /**
-     * This method will reload the page 
+     * This method will reload the page
      */
     public void reload() throws IOException {
-    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-    ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
-}
-    
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+    }
 
-    
     /**
      * This method will return the int value of the string
+     *
      * @param strToParse
      * @return in
      * @author Ibrahim
      */
-    private int parseStringToInt(String strToParse){
+    private int parseStringToInt(String strToParse) {
         return Integer.parseInt(strToParse);
     }
-    
 
     /**
-     * This method will get the total price of the items that are in the cart and return the value 
+     * This method will get the total price of the items that are in the cart
+     * and return the value
+     *
      * @param trackTotal
      * @param albumTotal
      * @return String
      * @author Ibrahim
      */
-    public String computePrices(String trackTotal,String albumTotal){
-        totalPrice = (convertStringToDouble(trackTotal)+convertStringToDouble(albumTotal));
+    public String computePrices(String trackTotal, String albumTotal) {
+        totalPrice = (convertStringToDouble(trackTotal) + convertStringToDouble(albumTotal));
         return totalPrice + "";
     }
-    
+
     /**
      * This method will convert a string into a double
+     *
      * @param data
      * @return double
      * @author Ibrahim
      */
-    private double convertStringToDouble(String data){
+    private double convertStringToDouble(String data) {
         return Double.parseDouble(data);
     }
 
-
     /**
      * This method will compute the pst value from the total price before tax
+     *
      * @param total
      * @param percentage
-     * @return String 
+     * @return String
      * @author Ibrahim
-     */    
-    public String computePst(String total,String percentage){
-        this.totalPst = getPercentagePrice(convertStringToDouble(total),convertStringToDouble(percentage));
-        return this.totalPst+"";
+     */
+    public String computePst(String total, String percentage) {
+        this.totalPst = getPercentagePrice(convertStringToDouble(total), convertStringToDouble(percentage));
+        return this.totalPst + "";
     }
+
     /**
      * This method will compute the gst value from the total price before tax
+     *
      * @param total
      * @param percentage
      * @return String
      * @author Ibrahim
      */
-    public String computeGst(String total,String percentage){
-        this.totalGst = getPercentagePrice(convertStringToDouble(total),convertStringToDouble(percentage));
-        return this.totalGst+"";
+    public String computeGst(String total, String percentage) {
+        this.totalGst = getPercentagePrice(convertStringToDouble(total), convertStringToDouble(percentage));
+        return this.totalGst + "";
     }
-    
-    /**
-     * This method will compute the pst value from the total price before tax
-     * @param total
-     * @param percentage
-     * @return String
-     * @author Ibrahim
-     */
-    public String computeHst(String total,String percentage){
-        this.totalHst = getPercentagePrice(convertStringToDouble(total),convertStringToDouble(percentage));
-        return this.totalHst+"";
-    }
-    
 
     /**
-     * This method will return the string of the total price 
+     * This method will compute the pst value from the total price before tax
+     *
+     * @param total
+     * @param percentage
      * @return String
      * @author Ibrahim
      */
-    public String getPriceBeforeTax(){
-        return this.totalPrice+"";
+    public String computeHst(String total, String percentage) {
+        this.totalHst = getPercentagePrice(convertStringToDouble(total), convertStringToDouble(percentage));
+        return this.totalHst + "";
     }
-    
+
+    /**
+     * This method will return the string of the total price
+     *
+     * @return String
+     * @author Ibrahim
+     */
+    public String getPriceBeforeTax() {
+        return this.totalPrice + "";
+    }
+
     /**
      * This method will return the total price with the tax added to it
+     *
      * @param total
      * @param pstValue
      * @param gstValue
@@ -244,45 +251,50 @@ public class CheckoutBean implements Serializable {
      * @return String
      * @author Ibrahim
      */
-    public double getToatlPriceWithTax(String total,String pstValue,String gstValue,String hstValue){
-        return roundDoubleValue(convertStringToDouble(total)+convertStringToDouble(computePst(total,pstValue))+convertStringToDouble(computePst(total,gstValue))+convertStringToDouble(computePst(total,hstValue)));
+    public double getTotalPriceWithTax(String total, String pstValue, String gstValue, String hstValue) {
+        return roundDoubleValue(convertStringToDouble(total) + convertStringToDouble(computePst(total, pstValue)) + convertStringToDouble(computePst(total, gstValue)) + convertStringToDouble(computePst(total, hstValue)));
     }
-    
+
     /**
-     * This method will compute the percentage of the double value that has been passed (it will also round the value to 2 digits)
+     * This method will compute the percentage of the double value that has been
+     * passed (it will also round the value to 2 digits)
+     *
      * @param value
      * @param percentage
      * @return double
      * @author Ibrahim
      */
-    private double getPercentagePrice(double value,double percentage){
+    private double getPercentagePrice(double value, double percentage) {
         double result = 0;
-        if(percentage == 0){
+        if (percentage == 0) {
             result = 0;
+        } else {
+            result = roundDoubleValue((value * percentage) / 100);
         }
-        else{
-            result = roundDoubleValue((value*percentage)/100);
-        }
-        
+
         return result;
-        
+
     }
-    
+
     /**
-     * This method will round the double to 2 digit 
-     * found some help on this website : https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+     * This method will round the double to 2 digit found some help on this
+     * website :
+     * https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+     *
      * @param value
      * @return Double
      * @author Ibrahim
-     * 
+     *
      */
-    private Double roundDoubleValue(double value){
+    private Double roundDoubleValue(double value) {
         DecimalFormat df = new DecimalFormat("#.##");
         return Double.valueOf(df.format(value));
     }
-    
+
     /**
-     * This method will check if the use is logged in if they are not they will go to the login page
+     * This method will check if the use is logged in if they are not they will
+     * go to the login page
+     *
      * @param fileToGoTo
      * @return String
      */
@@ -294,7 +306,7 @@ public class CheckoutBean implements Serializable {
             return fileToGoTo;
         }
     }
-    
+
     /**
      * This method will add the orders in the appropriate order tables
      *
@@ -347,11 +359,120 @@ public class CheckoutBean implements Serializable {
                 LOG.error("order track error");
             }
         }
-        
-        cookiesManager.clearTheCart();
-        
+
+        cookiesManager.clearTheCartWithoutRefresh();
+
         return "index.xhtml";
     }
+
     
-    
+    /**
+     * Method adds a new order to the database
+     * 
+     * @return 
+     * 
+     * @Korjon Chang-Jones Ibrahim Kebe
+     */
+    public String addOrders() {
+
+        //getting the tracks and albums from a cart
+        List<Albums> albums = albumController.retrieveAllAlbumsInTheCart();
+        List<Tracks> tracks = trackController.retrieveAllTracksInTheCart();
+
+        //the total price (taxes included)
+        double totalTaxedPrice = combinePrices();
+
+        //Creating an order entity
+        Orders order = new Orders();
+        Date date = new Date();
+        CookieManager cookiesManager = new CookieManager();
+        int newOrderId = orderController.getOrdersCount() + 1;
+
+        order.setOrderDate(date);
+        order.setClientNumber(clientController.findClients(userLoginBean.getClientId()));
+        order.setVisible(true);
+        order.setOrderId(newOrderId);
+        order.setOrderTotal(totalTaxedPrice);
+
+        try {
+            orderController.create(order);
+        } catch (RollbackFailureException ex) {
+            LOG.error("orders order roll back error");
+        }
+
+        //All the tracks from different purchased albums
+        List<List<Tracks>> albumTracks = getTracksFromAlbums(albums);
+        
+        //storing randomly purchased songs
+        storeOrderTracks(tracks, newOrderId);
+
+        //storing songs from purchased albums
+        albumTracks.forEach(trackList -> {
+            storeOrderTracks(trackList, newOrderId);
+        });
+
+        cookiesManager.clearTheCartWithoutRefresh();
+
+        return "index.xhtml";
+    }
+
+    /**
+     * Method combines the prices and taxes to get the complete price
+     *
+     * @return
+     * 
+     * @Korjon Chang-Jones Ibrahim Kebe
+     */
+    private double combinePrices() {
+
+        String total = computePrices(trackController.getTotalPrice(), albumController.getTotalPrice());
+        String hst = Double.toString(provinceController.findProvinces(Integer.parseInt(province)).getPst());
+        String gst = Double.toString(provinceController.findProvinces(Integer.parseInt(province)).getGst());
+        String pst = Double.toString(provinceController.findProvinces(Integer.parseInt(province)).getHst());
+
+        double totalTaxedPrice = getTotalPriceWithTax(total, pst, gst, hst);
+
+        return totalTaxedPrice;
+    }
+
+    /**
+     * Method stores tracks into the order_tracks bridging table
+     * 
+     * @Korjon Chang-Jones Ibrahim Kebe
+     */
+    private void storeOrderTracks(List<Tracks> trackList, int orderId) {
+
+        //creating the orderTrack
+        for (Tracks track : trackList) {
+            OrderTrack orderTrack = new OrderTrack();
+            orderTrack.setOrderId(orderId);
+            orderTrack.setTrackId(track);
+            try {
+                orderTrackController.create(orderTrack);
+            } catch (RollbackFailureException ex) {
+                LOG.error("order track error");
+            }
+        }
+    }
+
+    /**
+     * Method gets all of the tracks from every ordered album
+     *
+     * @param albums
+     * @return
+     * 
+     * @Korjon Chang-Jones
+     */
+    private List<List<Tracks>> getTracksFromAlbums(List<Albums> albums) {
+
+        List<List<Tracks>> allTracks = new ArrayList<>();
+
+        for (var album : albums) {
+
+            allTracks.add(trackController.findTracksByAlbum(album.getAlbumNumber()));
+        }
+
+        return allTracks;
+    }
+
 }

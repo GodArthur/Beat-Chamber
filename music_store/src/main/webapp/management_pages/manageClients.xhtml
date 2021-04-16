@@ -70,6 +70,12 @@
                                   filterBy="#{client.cellPhone}" filterMatchMode="contains">
                             <h:outputText value="#{client.cellPhone}"/>
                         </p:column>
+                        <p:column style="width:calc(100px)" headerText="Total value of purchase" sortBy="#{theClients.getTotalConsumption(client)}"
+                                  filterBy="#{theClients.getTotalConsumption(client)}" filterMatchMode="contains">
+                            <h:outputText value="#{theClients.getTotalConsumption(client)}">
+                                <f:convertNumber pattern="$#,##0.00" currencySymbol="$" />
+                            </h:outputText>
+                        </p:column>
 
                         <p:column style="width:calc(50px)" exportable="false" headerText="Edit" >
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-client-content"

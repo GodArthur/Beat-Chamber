@@ -853,6 +853,11 @@ button {
     padding: 30px;
 }
 
+.container-panel .ui-widget{
+    font-size: 30px!important;
+    color:#ddd;
+}
+
 .container-table {
     width: 95%;
     border-radius: 10px;
@@ -883,6 +888,10 @@ button {
 
 .ui-datatable-header{
     background:#000!important;
+}
+
+.ui-menu{
+    margin-top: 0px!important;
 }
 
 .table-title{
