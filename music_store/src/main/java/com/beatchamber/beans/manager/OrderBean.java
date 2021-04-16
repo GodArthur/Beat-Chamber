@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.Logger;
@@ -184,6 +186,19 @@ public class OrderBean implements Serializable {
         this.filteredOrdersList = filteredOrdersList;
     }
     
+    /**
+     * The message that shows when visibility changes
+     */
+    public void showVisibleMessage(){
+        if(this.visible){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The order is visible"));
+        }
+        
+        else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The order is no longer visible"));
+        }
+        
+    }
     
     
 }
