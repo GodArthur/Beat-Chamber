@@ -10,8 +10,9 @@
                           pool-resize-quantity="2"
                           res-type="javax.sql.ConnectionPoolDataSource"
                           steady-pool-size="8">
+        
+        <property name="URL" value="jdbc:mysql://localhost:3306/CSgb1w21?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
         <property name="User" value="CSgb1w21"/>
         <property name="Password" value="odeckoxb"/>
-        <property name="URL" value="jdbc:mysql://localhost:3306/CSgb1w21?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;useSSL=false&amp;serverTimezone=UTC"/>
     </jdbc-connection-pool>
 </resources>
