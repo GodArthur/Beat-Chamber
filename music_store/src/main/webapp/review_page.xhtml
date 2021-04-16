@@ -7,52 +7,51 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <h:outputStylesheet library="styles" name="main.css" />
-        <!--Style for the star radio buttons -->
         <h:outputStylesheet library="stylesheet" name="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+        <h:outputStylesheet library="styles" name="main.css" />
         <title>Review Page</title>
     </h:head>
     <h:body>
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
-                <section>
-                    <div>
-                        <h2>Write a Review for "#{tracks.trackTitle}"</h2>
-                        <div id="album-list">
-                            <div class="album-display-small">
-                                <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}" styleClass="album-img-small"/>
-                            </div>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <h:form>
+                <h:form id="form">
+                    <section>
+                        <div>
+                            <h2>Write a Review for "#{tracks.trackTitle}"</h2>
+                            <div id="album-list">
+                                <div class="album-display-small">
+                                    <h:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(album.albumId, false)}" styleClass="album-img-small"/>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+
                                 <div class="stars">
-                                    <p:growl id="messages" showDetail="true"/>
                                     <p:rating value="#{customerReviews.rating}"/>
 
                                 </div>
                                 <div class="review-textbox">
                                     <h:inputTextarea rows = "5" cols = "60"
-                                                     a:placeholder="Leave you review here..."
+                                                     a:placeholder="#{msgs.reviewPlaceHolder}"
                                                      value="#{customerReviews.review_Text}"/>
                                 </div>
-                                <div>
-                                    <p:commandButton class="reviewbtn" type="submit" value="Add Review"
-                                                     action="#{customerReviews.addCustomerReview()}"
-                                                     oncomplete="PF('ReviewAddedDialog').show()"/>                                   
-                                </div>
 
-                                <p:confirmDialog widgetVar="ReviewAddedDialog" showEffect="fade" width="300"
-                                                 message="Review Added!" header="Confirm">
-                                    <p:commandButton value="Okay" icon="pi pi-check" actionListener="#{customerReviews.returnToTrackPage()}"
-                                                     oncomplete="PF('ApprovalStatusDialog').hide()"/>
-                                </p:confirmDialog>
-
-                            </h:form>
+                            </div>
                         </div>
-                    </div>
-                </section>
+
+                        <div>
+                            <p:commandButton class="rtnTrackbtn" style="margin-right: 10px;" type='submit' value="#{msgs.returnToTrack}"
+                                             action="#{customerReviews.returnToTrackPage()}"/>
+
+                            <p:growl id="messages" showDetail="true"/>
+                            <p:commandButton class="reviewbtn" type="submit" value="#{msgs.addReview}"
+                                             action="#{customerReviews.addCustomerReview()}" update="messages">
+                                <f:ajax render="@form" resetValues="true"/>
+                            </p:commandButton>
+                        </div>
+                    </section>
+                </h:form>
             </ui:define>
         </ui:composition>
     </h:body>

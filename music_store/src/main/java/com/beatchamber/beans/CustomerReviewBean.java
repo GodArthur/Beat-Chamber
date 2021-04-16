@@ -39,7 +39,7 @@ public class CustomerReviewBean implements Serializable {
 
     @Inject
     private LoginRegisterBean userLoginBean;
-    
+
     @Inject
     private AlbumBean albumBean;
 
@@ -57,23 +57,25 @@ public class CustomerReviewBean implements Serializable {
     private int rating;
     private String review_text;
     private boolean approval_status;
+    
 
-    /*@PostConstruct
+    @PostConstruct
     public void init() {
         this.customerReviews = customerReviewsJpaController.findCustomerReviewsEntities();
-    }*/
+    }
+
     /**
      * Constructor
      */
     public CustomerReviewBean() {
         this.selectedCustomerReviews = new CustomerReviews();
     }
-    
-    public int getReview_number(){
+
+    public int getReview_number() {
         return this.review_number;
     }
-    
-    public void setReview_number(int reviewNum){
+
+    public void setReview_number(int reviewNum) {
         this.review_number = reviewNum;
     }
 
@@ -124,10 +126,12 @@ public class CustomerReviewBean implements Serializable {
     public void setApprovalStatus(boolean approvStatus) {
         this.approval_status = approvStatus;
     }
+    
 
     /**
      * This method is called when the button to add a review is clicked
-     * @throws RollbackFailureException 
+     *
+     * @throws RollbackFailureException
      */
     public void addCustomerReview() throws RollbackFailureException {
 
@@ -141,20 +145,27 @@ public class CustomerReviewBean implements Serializable {
             //If the rating and the review are filled in then review can be made
             if (this.rating == 0 || this.review_text.isEmpty()) {
 
+                LOG.debug("Not all input given for rating");
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The review must have a rating and a written review"));
 
             } //Else if check if the client is logged in
             else if (userLoginBean.getClient().getFirstName() == null) {
+                
+                LOG.debug("Client not logged in and therefore cant leave a review");
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You must be logged in to leave a review"));
                 FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "login.xhtml");
             } else {
 
+                LOG.debug("The review rating is: " + this.rating);
                 LOG.trace("Creating new review entity object");
+                
                 selectedCustomerReviews.setClientNumber(userLoginBean.getClient());
                 selectedCustomerReviews.setRating(this.rating);
                 selectedCustomerReviews.setReviewText(this.review_text);
 
                 customerReviewsJpaController.create(selectedCustomerReviews);
+                
+                //Display review added msg
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Review Added! It will be shown once it is approved"));
             }
 
@@ -162,60 +173,62 @@ public class CustomerReviewBean implements Serializable {
             java.util.logging.Logger.getLogger(SurveysBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void returnToTrackPage(){
+
+    /**
+     * Returns the user to the track after a successful review is made
+     */
+    public void returnToTrackPage() {
+
         FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "track.xhtml");
     }
     
-    
-    
+
     /**
      * Method gets all reviews for a specific track
+     *
      * @return the list of reviews
-     * 
+     *
      * @author Korjon Chang-Jones
      */
-    public List<CustomerReviews> getTrackReviews(){
-        
+    public List<CustomerReviews> getTrackReviews() {
+
         return customerReviewsJpaController.findCustomerReviewsByTrackId(trackBean.getTrackId());
     }
-    
-    
+
     /**
-     * Method gets reviews from all tracks on a specific
-     * album
+     * Method gets reviews from all tracks on a specific album
+     *
      * @return the list of reviews
-     * 
+     *
      * @author Korjon Chang-Jones
      */
-    public List<CustomerReviews> getAllReviews(){
-        
+    public List<CustomerReviews> getAllReviews() {
+
         return customerReviewsJpaController.findAllReviews(albumBean.getAlbumId());
     }
-    
+
     /**
      * Method checks if there are any reviews for a track
-     * @return 
-     * 
+     *
+     * @return
+     *
      * @author Korjon Chang-Jones
      */
-    public boolean isEmptyTrackReviewsList(){
-        
+    public boolean isEmptyTrackReviewsList() {
+
         return customerReviewsJpaController.findCustomerReviewsByTrackId(trackBean.getTrackId()).size() <= 0;
 
     }
-    
+
     /**
      * Method checks if there are any reviews for any track on an album
-     * @return 
+     *
+     * @return
      */
-    public boolean isAllEmptyReviewsList(){
-        
+    public boolean isAllEmptyReviewsList() {
+
         return customerReviewsJpaController.findAllReviews(albumBean.getAlbumId()).size() <= 0;
 
     }
-    
-    
-    
 
 }

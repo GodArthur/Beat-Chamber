@@ -219,6 +219,7 @@ public class SurveysJpaController implements Serializable {
         
         return choicesList;
     }
+
     
     public Choices getSurveyChoice(String choice){
         CriteriaBuilder cb = em.getCriteriaBuilder();

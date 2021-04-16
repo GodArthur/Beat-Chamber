@@ -621,3 +621,9 @@ insert into Customer_reviews(review_number, track_id, client_number, review_date
 (2, 25, 2, '2021-04-10', 5, 'One of the best songs in 2018 EASYYYYYYY!', true);
 
 
+insert into Orders(tablekey, order_id, order_total, client_number, order_date, visible) values
+(1, 1, 30.00, 7, '2021-03-10', true),
+(2, 2, 75.00, 6, '2020-08-19', true),
+(3, 3, 4.00, 5, '2020-07-11', true);
+
+
