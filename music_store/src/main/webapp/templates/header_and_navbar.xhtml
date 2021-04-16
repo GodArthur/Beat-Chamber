@@ -17,8 +17,8 @@
             <nav>
                 <div class="topnav">
                     <!-- Links that redirect -->
-                    <h:link value="#{msgs.home}" outcome="redirectToIndex"/>
-                    <h:link value="#{msgs.help}" outcome="redirectToAbout"/>
+                    <h:link value="#{msgs.homeTab}" outcome="redirectToIndex"/>
+                    <h:link value="#{msgs.HelpTab}" outcome="redirectToAbout"/>
                     <h:commandLink action="#{localeChanger.setLanguage('fr', 'CA')}" rendered="#{localeChanger.currentEnglish}">
                         #{msgs.changeLanguage}
                     </h:commandLink>

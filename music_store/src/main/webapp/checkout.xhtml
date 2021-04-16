@@ -84,8 +84,8 @@
                                     <br/>
                                     <br/>
 
-<!--                                    <h:commandButton action="#{checkoutData.addOrdersToTable(theLoginRegister.client.clientNumber,albumsJpaController.retrieveAllAlbumsInTheCart(),tracksController.retrieveAllTracksInTheCart(),checkoutData.getTotalPriceWithTax(checkoutData.computePrices(tracksController.totalPrice,albumsJpaController.totalPrice),provincesJpaController.findProvinces(checkoutData.province).pst,provincesJpaController.findProvinces(checkoutData.province).gst,provincesJpaController.findProvinces(checkoutData.province).hst))}" styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/>-->
-                                    <h:commandButton action="#{checkoutData.addOrders}" value="#{msgs.completeCheckout}" type="submit"/>
+                                 <h:commandButton action="#{checkoutData.addOrdersToTable(theLoginRegister.client.clientNumber,albumsJpaController.retrieveAllAlbumsInTheCart(),tracksController.retrieveAllTracksInTheCart(),checkoutData.getTotalPriceWithTax(checkoutData.computePrices(tracksController.totalPrice,albumsJpaController.totalPrice),provincesJpaController.findProvinces(checkoutData.province).pst,provincesJpaController.findProvinces(checkoutData.province).gst,provincesJpaController.findProvinces(checkoutData.province).hst))}" styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/>
+                                    <!--<h:commandButton action="#{checkoutData.addOrders}" value="#{msgs.completeCheckout}" type="submit"/>-->
 				</h:form>
                             
                             
@@ -121,7 +121,7 @@
                                 <h3>#{msgs.hst} <h:outputText id="renderHst" value="#{provincesJpaController.findProvinces(checkoutData.province).hst}"  /> %  -------➤    <h:outputText id="renderHstRealPrice" value="#{checkoutData.computeHst(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h3><br/>
 				<hr class="hrColor"/>
                                 <br/>
-                                <h1>#{msgs.total} <h:outputText id="rendertotalPrice"  value="#{checkoutData.getToatlPriceWithTax(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst, provincesJpaController.findProvinces(checkoutData.province).gst, provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h1>
+                                <h1>#{msgs.total} <h:outputText id="rendertotalPrice"  value="#{checkoutData.getTotalPriceWithTax(checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice), provincesJpaController.findProvinces(checkoutData.province).pst, provincesJpaController.findProvinces(checkoutData.province).gst, provincesJpaController.findProvinces(checkoutData.province).hst)}"/> $</h1>
 
                                 
 			</div>
