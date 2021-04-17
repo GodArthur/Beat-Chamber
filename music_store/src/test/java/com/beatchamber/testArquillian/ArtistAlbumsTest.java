@@ -3,12 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.beatchamber.test;
+package com.beatchamber.testArquillian;
 
+import com.beatchamber.entities.Ads;
+import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.ArtistAlbums;
 import com.beatchamber.entities.Clients;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
+import com.beatchamber.jpacontroller.AdsJpaController;
+import com.beatchamber.jpacontroller.AlbumsJpaController;
+import com.beatchamber.jpacontroller.ArtistAlbumsJpaController;
+import com.beatchamber.jpacontroller.ArtistsJpaController;
 import com.beatchamber.jpacontroller.ClientsJpaController;
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +42,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -46,8 +52,9 @@ import org.junit.runner.RunWith;
  *
  * @author kibra
  */
+
 @RunWith(Arquillian.class)
-public class ClientTest {
+public class ArtistAlbumsTest {
     @Deployment
     public static WebArchive deploy() {
 
@@ -82,96 +89,80 @@ public class ClientTest {
     }
     
     @Inject
-    private ClientsJpaController clientTesting ; 
+    private ArtistAlbumsJpaController artistAlbumJpaController ; 
+    
+    @Inject
+    private AlbumsJpaController album;
+    
+    @Inject
+    private ArtistsJpaController artist;
     
     @Resource(lookup = "java:app/jdbc/CSgb1w21")
     private DataSource ds;
     
     /**
-     * This method will check if the total number of clients is right
+     * check to see if the create method works
      */
+    /*@Ignore*/
     @Test
-    public void test_clientNumber(){
-        assertTrue(clientTesting.findClientsEntities().size()==10);
+    public void test_create() throws RollbackFailureException{
+        ArtistAlbums createdArtistAlbum = artistAlbumJpaController.findArtistAlbums(2);
+        createdArtistAlbum.setAlbumNumber(album.findAlbums(1));
+        createdArtistAlbum.setTablekey(40);
+        artistAlbumJpaController.create(createdArtistAlbum);
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 26);
     }
     
     /**
-     * This method is an alternative way of getting the total number of clients
+     * check to see if the destroy method works
      */
+    /*@Ignore*/
     @Test
-    public void test_clientNumberWithMethod(){
-        assertTrue(clientTesting.getClientsCount()==10);
+    public void test_destroy() throws RollbackFailureException, NonexistentEntityException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+        artistAlbumJpaController.destroy(2);
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 24);
     }
     
     /**
-     * This test will test to see if we are able to retrieve a specific client
+     * check to see if the edit method works
      */
+    /*@Ignore*/
     @Test
-    public void test_getClient(){
-        //this should be (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
-        assertTrue(clientTesting.findClients(1).getTitle().equals("Manager"));
+    public void test_edit() throws RollbackFailureException, NonexistentEntityException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException, Exception{
+        ArtistAlbums artistAlbum = artistAlbumJpaController.findArtistAlbums(9);
+        artistAlbum.setAlbumNumber(album.findAlbums(1));
+        artistAlbumJpaController.edit(artistAlbum);
+        assertTrue(artistAlbumJpaController.findArtistAlbums(9).getAlbumNumber().getAlbumTitle().equals(album.findAlbums(1).getAlbumTitle()));
     }
     
     /**
-     * This test will destroy a user and check the size of the clients that are in the database
-     * @throws IllegalOrphanException
-     * @throws NonexistentEntityException
-     * @throws NotSupportedException
-     * @throws SystemException
-     * @throws RollbackFailureException
-     * @throws RollbackException
-     * @throws HeuristicMixedException
-     * @throws HeuristicRollbackException 
+     * This method will check if we can get the correct number of entries in the table
      */
+    /*@Ignore*/
     @Test
-    public void test_destroyClient() throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
-        //id 1 should be  (1, 'Manager', 'Collingridge', 'Morton', 'DabZ', '8132 Lyons Plaza', '45059 Dottie Circle', 'Donnacona', 'Manitoba', 'Canada', 'G3M 3G5', '(546)267-4199', '(762)159-2854', 'cst.receive@gmail.com', 'DawsonManager','collegedawson'),
-        clientTesting.destroy(1);
-        
-        assertTrue(clientTesting.getClientsCount()==9);
+    public void test_allNumbers(){
+        assertTrue(artistAlbumJpaController.findArtistAlbumsEntities().size() == 25);
     }
     
     /**
-     * This test will create a new user and check the new size of the list of clients returned
-     * @throws RollbackFailureException 
+     * This will test if we can find a specific ArtistAlbum
      */
     @Test
-    public void test_createClient() throws RollbackFailureException{
-        Clients newCreateClient = new Clients();
-        newCreateClient.setAddress1("dawson 123");
-        newCreateClient.setAddress2("dawson2 123");
-        newCreateClient.setCellPhone("5144565456");
-        newCreateClient.setCity("Montreal");
-        newCreateClient.setClientNumber(30);//It is 100% sure that it is not in the table 
-        newCreateClient.setCompanyName("dawson.inc");
-        newCreateClient.setCountry("Canada");
-        newCreateClient.setEmail("myEmail@emails.com");
-        newCreateClient.setFirstName("Bobby");
-        newCreateClient.setHomePhone("5145454545");
-        newCreateClient.setLastName("ybbob");
-        newCreateClient.setPostalCode("h3b4v5");
-        newCreateClient.setProvince("Quebec");
-        newCreateClient.setSalt("asdasd");
-        newCreateClient.setTitle("Consumer");
-        newCreateClient.setUsername("qwerasdf");
-        clientTesting.create(newCreateClient);
-        assertTrue(clientTesting.getClientsCount() == 11);
+    public void test_findAnEntrie(){
+        assertTrue(artistAlbumJpaController.findArtistAlbums(2).getAlbumNumber().getAlbumNumber() == 2);
     }
     
     /**
-     * This test will test if when you edit a client the changes will be made
-     * @throws NonexistentEntityException
-     * @throws Exception 
+     * This method will check if we can get the correct number of entries in the table
      */
+    /*@Ignore*/
     @Test
-    public void test_editClient() throws NonexistentEntityException, Exception {
-        Clients newCreateClient = clientTesting.findClients(1);
-        newCreateClient.setTitle("Consumer");
-        clientTesting.edit(newCreateClient);
-        assertTrue(clientTesting.findClients(1).getTitle().equals("Consumer"));
+    public void test_totalCount(){
+        assertTrue(artistAlbumJpaController.getArtistAlbumsCount() == 25);
     }
-
-/**
+    
+    
+    /**
      * The database is recreated before each test. If the last test is
      * destructive then the database is in an unstable state. @AfterClass is
      * called just once when the test class is finished with by the JUnit
@@ -247,4 +238,6 @@ public class ClientTest {
         return line.startsWith("--") || line.startsWith("//")
                 || line.startsWith("/*");
     }
+    
+    
 }
