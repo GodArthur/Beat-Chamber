@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.transaction.SystemException;
 import org.slf4j.Logger;
@@ -57,6 +56,11 @@ public class CheckoutBean implements Serializable {
     private double totalPst = 0;
     private double totalGst = 0;
     private double totalHst = 0;
+    
+    private double pstVal = 0;
+    private double gstVal = 0;
+    private double hstVal = 0;
+    
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
 
@@ -64,10 +68,10 @@ public class CheckoutBean implements Serializable {
     private LoginRegisterBean userLoginBean;
 
     @Inject
-    OrdersJpaController orderController;
+    private OrdersJpaController orderController;
 
     @Inject
-    ClientsJpaController clientController;
+    private ClientsJpaController clientController;
 
     @Inject
     private OrderAlbumJpaController orderAlbumController;
@@ -203,6 +207,7 @@ public class CheckoutBean implements Serializable {
      * @author Ibrahim
      */
     public String computePst(String total, String percentage) {
+        pstVal=convertStringToDouble(percentage);
         this.totalPst = getPercentagePrice(convertStringToDouble(total), convertStringToDouble(percentage));
         return this.totalPst + "";
     }
@@ -216,6 +221,7 @@ public class CheckoutBean implements Serializable {
      * @author Ibrahim
      */
     public String computeGst(String total, String percentage) {
+        gstVal=convertStringToDouble(percentage);
         this.totalGst = getPercentagePrice(convertStringToDouble(total), convertStringToDouble(percentage));
         return this.totalGst + "";
     }
@@ -229,6 +235,7 @@ public class CheckoutBean implements Serializable {
      * @author Ibrahim
      */
     public String computeHst(String total, String percentage) {
+        hstVal=convertStringToDouble(percentage);
         this.totalHst = getPercentagePrice(convertStringToDouble(total), convertStringToDouble(percentage));
         return this.totalHst + "";
     }
@@ -344,7 +351,7 @@ public class CheckoutBean implements Serializable {
         for (Albums item : albumList) {
             OrderAlbum orderAlbum = new OrderAlbum();
             orderAlbum.setAlbumId(item);
-            orderAlbum.setOrderId(newOrderId);
+            orderAlbum.setOrderId(orderController.findOrders(newOrderId));
             try {
                 orderAlbumController.create(orderAlbum);
             } catch (RollbackFailureException ex) {
@@ -355,7 +362,7 @@ public class CheckoutBean implements Serializable {
         //creating the orderTrack
         for (Tracks item : trackList) {
             OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(newOrderId);
+            orderTrack.setOrderId(orderController.findOrders(newOrderId));
             orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
             try {
                 orderTrackController.create(orderTrack);
@@ -377,7 +384,7 @@ public class CheckoutBean implements Serializable {
      * 
      * @Korjon Chang-Jones Ibrahim Kebe
      */
-    public String addOrders() {
+    public String addOrders(int clientId) {
 
         //getting the tracks and albums from a cart
         List<Albums> albums = albumController.retrieveAllAlbumsInTheCart();
@@ -393,10 +400,14 @@ public class CheckoutBean implements Serializable {
         int newOrderId = orderController.getOrdersCount() + 1;
 
         order.setOrderDate(date);
-        order.setClientNumber(clientController.findClients(userLoginBean.getClientId()));
+        order.setGst(this.gstVal);
+        order.setPst(this.pstVal);
+        order.setHst(this.hstVal);
+        order.setClientNumber(clientController.findClients(clientId));
         order.setVisible(true);
         order.setOrderId(newOrderId);
-        order.setOrderTotal(totalTaxedPrice);
+        order.setOrderTotal(convertStringToDouble(computePrices(trackController.getTotalPrice(), albumController.getTotalPrice())));
+        order.setOrderGrossTotal(totalTaxedPrice);
 
         try {
             orderController.create(order);
@@ -405,8 +416,33 @@ public class CheckoutBean implements Serializable {
         } catch (SystemException ex) {
             java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        for (Albums item : albumController.retrieveAllAlbumsInTheCart()) {
+            OrderAlbum orderAlbum = new OrderAlbum();
+            orderAlbum.setAlbumId(item);
+            orderAlbum.setOrderId(orderController.findOrders(newOrderId));
+            orderAlbum.setPriceDuringOrder(item.getListPrice());
+            try {
+                orderAlbumController.create(orderAlbum);
+            } catch (RollbackFailureException ex) {
+                LOG.error("order rollback error");
+            }
+        }
 
-        //All the tracks from different purchased albums
+        //creating the orderTrack
+        for (Tracks item : trackController.retrieveAllTracksInTheCart()) {
+            OrderTrack orderTrack = new OrderTrack();
+            orderTrack.setOrderId(orderController.findOrders(newOrderId));
+            orderTrack.setPriceDuringOrder(item.getListPrice());
+            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
+            try {
+                orderTrackController.create(orderTrack);
+            } catch (RollbackFailureException ex) {
+                LOG.error("order track error");
+            }
+        }
+
+        /*//All the tracks from different purchased albums
         List<List<Tracks>> albumTracks = getTracksFromAlbums(albums);
         
         //storing randomly purchased songs
@@ -415,7 +451,7 @@ public class CheckoutBean implements Serializable {
         //storing songs from purchased albums
         albumTracks.forEach(trackList -> {
             storeOrderTracks(trackList, newOrderId);
-        });
+        });*/
 
         cookiesManager.clearTheCartWithoutRefresh();
 
@@ -451,7 +487,7 @@ public class CheckoutBean implements Serializable {
         //creating the orderTrack
         for (Tracks track : trackList) {
             OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderId);
+            orderTrack.setOrderId(orderController.findOrders(orderId));
             orderTrack.setTrackId(track);
             try {
                 orderTrackController.create(orderTrack);
