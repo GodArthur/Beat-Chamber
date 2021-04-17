@@ -36,6 +36,13 @@ public class Orders implements Serializable {
     @NotNull
     @Column(name = "order_total")
     private double orderTotal;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "pst")
+    private Double pst;
+    @Column(name = "gst")
+    private Double gst;
+    @Column(name = "hst")
+    private Double hst;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Collection<OrderTrack> orderTrackCollection;
     @OneToMany(mappedBy = "orderId")
@@ -151,6 +158,30 @@ public class Orders implements Serializable {
 
     public void setOrderAlbumCollection(Collection<OrderAlbum> orderAlbumCollection) {
         this.orderAlbumCollection = orderAlbumCollection;
+    }
+
+    public Double getPst() {
+        return pst;
+    }
+
+    public void setPst(Double pst) {
+        this.pst = pst;
+    }
+
+    public Double getGst() {
+        return gst;
+    }
+
+    public void setGst(Double gst) {
+        this.gst = gst;
+    }
+
+    public Double getHst() {
+        return hst;
+    }
+
+    public void setHst(Double hst) {
+        this.hst = hst;
     }
 
 
