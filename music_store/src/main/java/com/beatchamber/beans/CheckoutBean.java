@@ -31,8 +31,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
+import javax.transaction.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -334,6 +336,8 @@ public class CheckoutBean implements Serializable {
             orderController.create(order);
         } catch (RollbackFailureException ex) {
             LOG.error("orders order roll back error");
+        } catch (SystemException ex) {
+            java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         //creating the orderAlbums
@@ -398,6 +402,8 @@ public class CheckoutBean implements Serializable {
             orderController.create(order);
         } catch (RollbackFailureException ex) {
             LOG.error("orders order roll back error");
+        } catch (SystemException ex) {
+            java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         //All the tracks from different purchased albums

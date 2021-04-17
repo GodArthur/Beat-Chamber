@@ -1,6 +1,8 @@
 package com.beatchamber.entities;
 
+import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.Serializable;
+import javax.inject.Inject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,6 +52,10 @@ public class OrderTrack implements Serializable {
     @ManyToOne(optional = false)
     private Tracks trackId;
 
+    @Inject
+    private OrdersJpaController ordersController;
+    
+    
     public OrderTrack() {
     }
 
@@ -63,6 +69,10 @@ public class OrderTrack implements Serializable {
 
     public void setOrderId(Orders orderId) {
         this.orderId = orderId;
+    }
+    
+    public void setOrderId(int orderId){
+        this.orderId = ordersController.findOrders(orderId);
     }
 
     public Tracks getTrackId() {
