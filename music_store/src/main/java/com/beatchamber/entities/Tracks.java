@@ -275,6 +275,12 @@ public class Tracks implements Serializable {
     public void setOrderTrackCollection(Collection<OrderTrack> orderTrackCollection) {
         this.orderTrackCollection = orderTrackCollection;
     }
+    public Collection<ArtistsToTracks> getArtistsToTracksCollection() {
+        return artistsToTracksCollection;
+    }
+    public void setArtistsToTracksCollection(Collection<ArtistsToTracks> artistsToTracksCollection) {
+        this.artistsToTracksCollection = artistsToTracksCollection;
+    }
 
     public boolean getRemoved() {
         return removed;
@@ -306,14 +312,6 @@ public class Tracks implements Serializable {
 
     public void setHst(double hst) {
         this.hst = hst;
-    }
-
-    public Collection<ArtistsToTracks> getArtistsToTracksCollection() {
-        return artistsToTracksCollection;
-    }
-
-    public void setArtistsToTracksCollection(Collection<ArtistsToTracks> artistsToTracksCollection) {
-        this.artistsToTracksCollection = artistsToTracksCollection;
     }
     
 }

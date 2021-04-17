@@ -1,8 +1,10 @@
 package com.beatchamber.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,13 +34,18 @@ public class Orders implements Serializable {
 
     @Basic(optional = false)
     @NotNull
+    @Column(name = "order_total")
+    private double orderTotal;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
+    private Collection<OrderTrack> orderTrackCollection;
+    @OneToMany(mappedBy = "orderId")
+    private Collection<OrderAlbum> orderAlbumCollection;
+
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "order_id")
     private int orderId;
     
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "order_total")
-    private double orderTotal;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -127,6 +135,22 @@ public class Orders implements Serializable {
 
     public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
+    }
+
+    public Collection<OrderTrack> getOrderTrackCollection() {
+        return orderTrackCollection;
+    }
+
+    public void setOrderTrackCollection(Collection<OrderTrack> orderTrackCollection) {
+        this.orderTrackCollection = orderTrackCollection;
+    }
+
+    public Collection<OrderAlbum> getOrderAlbumCollection() {
+        return orderAlbumCollection;
+    }
+
+    public void setOrderAlbumCollection(Collection<OrderAlbum> orderAlbumCollection) {
+        this.orderAlbumCollection = orderAlbumCollection;
     }
 
 

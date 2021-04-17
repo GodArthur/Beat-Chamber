@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -25,18 +24,22 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "OrderAlbum.findByOrderId", query = "SELECT o FROM OrderAlbum o WHERE o.orderId = :orderId")})
 public class OrderAlbum implements Serializable {
 
+    /*@JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @ManyToOne
+    private Orders orderId;*/
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "tablekey")
-    private Integer tablekey;
+    @Column(name = "order_id")
+    private Integer orderId;
 
     private static final long serialVersionUID = 1L;
 
-    @Basic(optional = false)
+    /*@Basic(optional = false)
     @NotNull
     @Column(name = "order_id")
-    private Integer orderId;
+    private Integer orderId;*/
     @JoinColumn(name = "album_id", referencedColumnName = "album_number")
     @ManyToOne(optional = false)
     private Albums albumId;
@@ -89,13 +92,15 @@ public class OrderAlbum implements Serializable {
         return "com.beatchamber.entities.OrderAlbum[ orderId=" + orderId + " ]";
     }
 
-    public Integer getTablekey() {
+    /*public Integer getTablekey() {
         return tablekey;
     }
 
     public void setTablekey(Integer tablekey) {
         this.tablekey = tablekey;
-    }
+    }*/
+
+
 
     
 }
