@@ -402,6 +402,8 @@ public class CheckoutBean implements Serializable {
             orderController.create(order);
         } catch (RollbackFailureException ex) {
             LOG.error("orders order roll back error");
+        } catch (SystemException ex) {
+            java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         //All the tracks from different purchased albums
