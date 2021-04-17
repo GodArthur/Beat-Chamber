@@ -45,8 +45,6 @@ public class OrderAlbum implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    @Inject
-    OrdersJpaController orderController;
 
     /*@Basic(optional = false)
     @NotNull
@@ -78,10 +76,6 @@ public class OrderAlbum implements Serializable {
 
     public void setOrderId(Orders orderId) {
         this.orderId = orderId;
-    }
-    
-    public void setOrderId(int orderId) {
-        this.orderId = orderController.findOrders(orderId);
     }
 
     public Albums getAlbumId() {

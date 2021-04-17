@@ -346,6 +346,16 @@ public class CookieManager {
         
         List<OrderAlbum> listOfALbumOrders = orderAlbumController.findOrderAlbumEntities();
         
+        
+        for(OrderAlbum item:listOfALbumOrders){
+            if(item.getOrderId() != null){
+            System.out.println(item.getOrderId().getHst() + " hello");
+            }
+            else{
+                System.out.println("why!!!");
+            }
+        }
+        
         for(int item:listOfId){
             for(OrderAlbum items:listOfALbumOrders){
                 if(items.getAlbumId().getAlbumNumber() == albumId && items.getOrderId().getOrderId() == item){
