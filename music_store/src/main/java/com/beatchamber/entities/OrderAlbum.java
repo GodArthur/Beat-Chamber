@@ -57,6 +57,15 @@ public class OrderAlbum implements Serializable {
         this.orderId = orderId;
     }
 
+    
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
+    }
+    
     public Orders getOrderId() {
         return orderId;
     }
