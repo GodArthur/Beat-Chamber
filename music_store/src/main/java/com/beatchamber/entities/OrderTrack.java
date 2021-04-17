@@ -25,15 +25,25 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "OrderTrack.findByOrderId", query = "SELECT o FROM OrderTrack o WHERE o.orderId = :orderId")})
 public class OrderTrack implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "price_during_order")
+    private double priceDuringOrder;
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "tablekey")
-    private Integer tablekey;
+    /*private Integer tablekey;
     @Basic(optional = false)
     @NotNull
     @Column(name = "order_id")
-    private int orderId;
+    private int orderId;*/
+    
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @ManyToOne(optional = false)
+    private Orders orderId;
 
     private static final long serialVersionUID = 1L;
     @JoinColumn(name = "track_id", referencedColumnName = "track_id")
@@ -43,15 +53,15 @@ public class OrderTrack implements Serializable {
     public OrderTrack() {
     }
 
-    public OrderTrack(Integer orderId) {
+    public OrderTrack(Orders orderId) {
         this.orderId = orderId;
     }
 
-    public Integer getOrderId() {
+    public Orders getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(Orders orderId) {
         this.orderId = orderId;
     }
 
@@ -68,23 +78,15 @@ public class OrderTrack implements Serializable {
         return "com.beatchamber.entities.OrderTrack[ orderId=" + orderId + " ]";
     }
 
-    public OrderTrack(Integer tablekey, int orderId) {
-        this.tablekey = tablekey;
-        this.orderId = orderId;
+    public double getPriceDuringOrder() {
+        return priceDuringOrder;
     }
 
-    public Integer getTablekey() {
-        return tablekey;
-    }
-
-    public void setTablekey(Integer tablekey) {
-        this.tablekey = tablekey;
+    public void setPriceDuringOrder(double priceDuringOrder) {
+        this.priceDuringOrder = priceDuringOrder;
     }
 
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
 
 
     

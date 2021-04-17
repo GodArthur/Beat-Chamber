@@ -1,8 +1,10 @@
 package com.beatchamber.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,19 +34,35 @@ public class Orders implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "order_id")
-    private int orderId;
-    
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "order_total")
     private double orderTotal;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "order_gross_total")
+    private double orderGrossTotal;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "pst")
+    private Double pst;
+    @Column(name = "gst")
+    private Double gst;
+    @Column(name = "hst")
+    private Double hst;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
+    private Collection<OrderTrack> orderTrackCollection;
+    @OneToMany(mappedBy = "orderId")
+    private Collection<OrderAlbum> orderAlbumCollection;
+
+    /*@Basic(optional = false)
+    @NotNull
+    @Column(name = "order_id")
+    private int orderId;*/
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "tablekey")
-    private Integer tablekey;
+    @Column(name = "order_id")
+    private Integer orderId;
 
     @Column(name = "visible")
     private Boolean visible;
@@ -103,7 +122,7 @@ public class Orders implements Serializable {
 
 
 
-    public Orders(Integer tablekey, int orderId) {
+    /*public Orders(Integer tablekey, int orderId) {
         this.tablekey = tablekey;
         this.orderId = orderId;
     }
@@ -114,7 +133,7 @@ public class Orders implements Serializable {
 
     public void setTablekey(Integer tablekey) {
         this.tablekey = tablekey;
-    }
+    }*/
 
 
     public void setOrderId(int orderId) {
@@ -127,6 +146,54 @@ public class Orders implements Serializable {
 
     public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
+    }
+
+    public Collection<OrderTrack> getOrderTrackCollection() {
+        return orderTrackCollection;
+    }
+
+    public void setOrderTrackCollection(Collection<OrderTrack> orderTrackCollection) {
+        this.orderTrackCollection = orderTrackCollection;
+    }
+
+    public Collection<OrderAlbum> getOrderAlbumCollection() {
+        return orderAlbumCollection;
+    }
+
+    public void setOrderAlbumCollection(Collection<OrderAlbum> orderAlbumCollection) {
+        this.orderAlbumCollection = orderAlbumCollection;
+    }
+
+    public Double getPst() {
+        return pst;
+    }
+
+    public void setPst(Double pst) {
+        this.pst = pst;
+    }
+
+    public Double getGst() {
+        return gst;
+    }
+
+    public void setGst(Double gst) {
+        this.gst = gst;
+    }
+
+    public Double getHst() {
+        return hst;
+    }
+
+    public void setHst(Double hst) {
+        this.hst = hst;
+    }
+
+    public double getOrderGrossTotal() {
+        return orderGrossTotal;
+    }
+
+    public void setOrderGrossTotal(double orderGrossTotal) {
+        this.orderGrossTotal = orderGrossTotal;
     }
 
 
