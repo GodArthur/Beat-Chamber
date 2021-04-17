@@ -12,6 +12,7 @@
         <!-- Base template of the page -->
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
+                <h2>#{msgs.viewPurchases}</h2>
                 <p:dataView var="items" value="#{ordersJpaController.getClientOrders(theLoginRegister.client.clientNumber)}" 
                             multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                     <p:dataViewGridItem>
@@ -22,7 +23,7 @@
                         <p:outputLabel>#{items.trackId.trackTitle}</p:outputLabel>
                         <br/>
                         <p:media value="audio/fireflies.mp3" width="100%" height="300px">
-                            <h:outputLink value="#{request.contextPath}/audio/fireflies.ogg">Download</h:outputLink>
+                            <h:outputLink value="#{request.contextPath}/audio/fireflies.mp3">Download</h:outputLink>
                         </p:media>
                     </p:dataViewGridItem>
                     <p:dataViewListItem>
@@ -33,7 +34,7 @@
                         <p:outputLabel>#{items.trackId.trackTitle}</p:outputLabel>
                         <br/>
                         <p:media value="audio/fireflies.mp3" width="100%" height="300px">
-                            <h:outputLink value="#{request.contextPath}/audio/fireflies.ogg">Download</h:outputLink>
+                            <h:outputLink value="#{request.contextPath}/audio/fireflies.mp3">Download</h:outputLink>
                         </p:media>
                     </p:dataViewListItem>
                 </p:dataView>

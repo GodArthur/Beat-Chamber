@@ -203,7 +203,7 @@ public class ChoicesJpaController implements Serializable {
      * 
      * @param choiceId 
      */
-    public void increaseChoicesVotes(int choiceId) {
+    public void increaseChoiceVotes(int choiceId) {
         try {
             UserTransaction transaction = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
             transaction.begin();
@@ -213,7 +213,7 @@ public class ChoicesJpaController implements Serializable {
         } catch (NamingException | RollbackException | HeuristicMixedException | 
                 HeuristicRollbackException | SecurityException | IllegalStateException | 
                 SystemException | NotSupportedException ex) {
-            displayMessage(FacesMessage.SEVERITY_ERROR, ex.getClass().toString(), ex.getMessage());
+            displayMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getCause().toString());
         }
     }
     
