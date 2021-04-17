@@ -346,13 +346,9 @@ public class AlbumsJpaController implements Serializable {
     public String getAlbumPath(Integer id, boolean isSmall){
         
         Albums foundAlbum = em.find(Albums.class, id);
-        //Find the genre the album belongs to. Each album images are separated by genre
-        List<GenreToAlbum> genreList = foundAlbum.getGenreToAlbumList();
-        Genres firstGenre = genreList.get(0).getGenreId();
-        String genreName = firstGenre.getGenreName().replace(" ", "_");
         
         //Starting album path
-        String startingPath = "albums/" + genreName.toLowerCase() + "/";
+        String startingPath = "albums/";
         //The album name included in the path
         String albumName = foundAlbum.getAlbumTitle().replace(" ", "_").toLowerCase();
         //Probably a better way with regex but unsure
