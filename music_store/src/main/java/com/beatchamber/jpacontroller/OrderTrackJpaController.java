@@ -149,10 +149,11 @@ public class OrderTrackJpaController implements Serializable {
     }
 
     private List<OrderTrack> findOrderTrackEntities(boolean all, int maxResults, int firstResult) {
-
+        
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(OrderTrack.class));
         Query q = em.createQuery(cq);
+        
         if (!all) {
             q.setMaxResults(maxResults);
             q.setFirstResult(firstResult);

@@ -25,6 +25,10 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(name = "OrderTrack.findAll", query = "SELECT o FROM OrderTrack o"),
     @NamedQuery(name = "OrderTrack.findByOrderId", query = "SELECT o FROM OrderTrack o WHERE o.orderId = :orderId")})
+
+
+
+
 public class OrderTrack implements Serializable {
 
     @Basic(optional = false)
@@ -33,15 +37,21 @@ public class OrderTrack implements Serializable {
     private double priceDuringOrder;
 
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "tablekey")
-    /*private Integer tablekey;
+    private Integer tablekey;
     @Basic(optional = false)
     @NotNull
     @Column(name = "order_id")
     private int orderId;*/
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "tablekey")
+    private Integer tablekey;
     
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     @ManyToOne(optional = false)
@@ -52,8 +62,7 @@ public class OrderTrack implements Serializable {
     @ManyToOne(optional = false)
     private Tracks trackId;
 
-    @Inject
-    private OrdersJpaController ordersController;
+    
     
     
     public OrderTrack() {
@@ -70,13 +79,17 @@ public class OrderTrack implements Serializable {
     public void setOrderId(Orders orderId) {
         this.orderId = orderId;
     }
-    
-    public void setOrderId(int orderId){
-        this.orderId = ordersController.findOrders(orderId);
-    }
 
     public Tracks getTrackId() {
         return trackId;
+    }
+    
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
     }
 
     public void setTrackId(Tracks trackId) {
