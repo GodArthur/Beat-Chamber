@@ -276,6 +276,5 @@ public class Albums implements Serializable {
     public String getCookieId(){
         return "a"+this.albumNumber;
     }
-
     
 }

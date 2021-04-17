@@ -10,8 +10,6 @@ DROP TABLE IF EXISTS Choices;
 DROP TABLE IF EXISTS Surveys;
 DROP TABLE IF EXISTS RSS_Feeds;
 DROP TABLE IF EXISTS Ads;
-DROP TABLE IF EXISTS Invoice_Details;
-DROP TABLE IF EXISTS invoices;
 DROP TABLE IF EXISTS Customer_reviews;
 DROP TABLE IF EXISTS Clients;
 DROP TABLE IF EXISTS Artist_Albums;
@@ -136,31 +134,6 @@ FOREIGN KEY (client_number) REFERENCES Clients(client_number)
 );
 
 
-create table invoices(
-sale_number int not null primary key auto_increment,
-sale_date datetime not null,
-client_number int not null,
-total_net_value double not null,
-PST double not null,
-GST double not null,
-HST double not null,
-total_gross_value double not null,
-FOREIGN KEY (client_number) REFERENCES Clients(client_number)
-);
-
-
-create table Invoice_Details(
-tablekey int primary key auto_increment,
-sale_number int not null,
-track_id int not null,
-PST double not null,
-GST double not null,
-HST double not null,
-FOREIGN KEY (sale_number) REFERENCES invoices(sale_number),
-FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
-);
-
-
 create table Ads (
 ad_id int primary key auto_increment,
 file_name varchar(60) not null,
@@ -199,9 +172,12 @@ FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
 );
 
 create table Orders(
-tablekey int primary key auto_increment,
+order_id int primary key auto_increment,
 order_total double not null,
-order_id int not null,
+order_gross_total double not null default 0,
+pst double,
+gst double,
+hst double,
 client_number int not null,
 order_date date,
 visible boolean,
@@ -218,12 +194,13 @@ hst double not null
 );
 
 
-
 create table order_track(
 tablekey int primary key auto_increment,
 order_id int not null,
 track_id int not null,
-FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
+price_during_order double not null default 0,
+FOREIGN KEY (track_id) REFERENCES Tracks(track_id),
+FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 
 
@@ -231,7 +208,9 @@ create table order_album(
 tablekey int primary key auto_increment,
 order_id int ,
 album_id int not null,
-FOREIGN KEY (album_id) REFERENCES albums(album_number)
+price_during_order double not null default 0,
+FOREIGN KEY (album_id) REFERENCES albums(album_number),
+FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 
 USE CSgb1w21;
@@ -854,27 +833,19 @@ insert into Customer_reviews(review_number, track_id, client_number, review_date
 (2, 5, 8, '2020-08-19', 1, 'swear word swear word this song sucks', false),
 (3, 6, 7, '2020-05-15', 5, 'This song is so good but I also hate it', true);
 
-insert into Orders (order_total, order_id, client_number, order_date, visible) values
-(100.6, 1, 1, '2021-03-02', true),
-(84,    2, 1, '2021-03-02', true),
-(34.8,  3, 1, '2021-03-03', true),
-(298.6, 4, 1, '2021-03-04', true),
-(2.01,  5, 1, '2021-03-12', true),
-(43.2,  6, 2, '2021-03-01', true),
-(103.5, 7, 2, '2021-03-02', true),
-(43.2, 8, 2, '2021-03-11', true),
-(43.2, 9, 3, '2021-03-11', true),
-(43.2, 10, 3, '2021-03-15', true),
-(43.2, 11, 4, '2021-03-15', true),
-(43.2, 12, 5, '2021-03-18', true),
-(43.2, 13, 5, '2021-03-19', true),
-(43.2, 14, 6, '2021-03-03', true),
-(43.2, 15, 6, '2021-03-06', true),
-(43.2, 16, 7, '2021-03-23', true),
-(43.2, 17, 7, '2021-03-23', true),
-(45.00, 18, 7, '2021-03-01', true),
-(4.00, 19, 8, '2021-03-08', true),
-(7.11, 20, 9, '2021-07-11', true);
+insert into Orders (order_total,order_gross_total,pst,gst,hst,client_number,order_date,visible) values
+(100, 102.25, 1,5,9,1,'2021-03-02', true),
+(100, 102.25, 2,6,8,1,'2021-03-02', true),
+(100, 102.25, 3,7,7,1,'2021-03-02', true),
+(100, 102.25, 4,8,6,2,'2021-03-02', true),
+(100, 102.25, 5,9,5,2,'2021-03-02', true),
+(100, 102.25, 6,1,4,1,'2021-03-02', true),
+(100, 102.25, 7,2,3,1,'2021-03-02', true),
+(100, 102.25, 8,3,2,1,'2021-03-02', true),
+(100, 102.25, 9,4,1,2,'2021-03-02', true),
+(100, 102.25, 1,1,9,1,'2021-03-02', true),
+(100, 102.25, 2,2,8,1,'2021-03-02', true);
+
 
 
 insert into order_album (order_id,album_id) values

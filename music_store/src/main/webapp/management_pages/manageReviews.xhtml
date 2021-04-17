@@ -57,9 +57,14 @@ By Massimo Di Girolamo
                                   filterBy="#{customerReview.clientNumber.clientNumber}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.clientNumber.clientNumber}"/>
                         </p:column>
-                        <p:column style="width:calc(100px)" headerText="#{msgs.managerRevTrack}" sortBy="#{customerReview.trackId.trackId}"
+                        <p:column style="width:calc(100px)" headerText="Track ID" sortBy="#{customerReview.trackId.trackId}"
                                   filterBy="#{customerReview.trackId.trackId}" filterMatchMode="contains">
                             <h:outputText value="#{customerReview.trackId.trackId}"/>
+                        </p:column>
+                        
+                        <p:column style="width:calc(100px)" headerText="#{msgs.managerRevTrack}" sortBy="#{customerReview.trackId.trackId}"
+                                  filterBy="#{customerReview.trackId.trackId}" filterMatchMode="contains">
+                            <h:outputText value="#{customerReviews.returnTrackName(customerReview.trackId.trackId)}"/>
                         </p:column>
                         <p:column style="width:calc(100px)" headerText="#{msgs.manageRevApprovStat}">
                             <h:outputText value="#{customerReview.approvalStatus}" 

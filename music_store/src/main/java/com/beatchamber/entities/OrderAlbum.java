@@ -1,6 +1,9 @@
 package com.beatchamber.entities;
 
+import com.beatchamber.jpacontroller.OrderAlbumJpaController;
+import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.Serializable;
+import javax.inject.Inject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,11 +22,20 @@ import javax.validation.constraints.NotNull;
  * @author kibra
  */
 @Entity
-@Table(name = "order_album")
+@Table(name = "order_album", catalog = "CSgb1w21", schema = "")
 @NamedQueries({
     @NamedQuery(name = "OrderAlbum.findAll", query = "SELECT o FROM OrderAlbum o"),
     @NamedQuery(name = "OrderAlbum.findByOrderId", query = "SELECT o FROM OrderAlbum o WHERE o.orderId = :orderId")})
 public class OrderAlbum implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "price_during_order")
+    private double priceDuringOrder;
+
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @ManyToOne(optional = false)
+    private Orders orderId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +44,12 @@ public class OrderAlbum implements Serializable {
     private Integer tablekey;
 
     private static final long serialVersionUID = 1L;
+    
 
-    @Basic(optional = false)
+    /*@Basic(optional = false)
     @NotNull
     @Column(name = "order_id")
-    private Integer orderId;
+    private Integer orderId;*/
     @JoinColumn(name = "album_id", referencedColumnName = "album_number")
     @ManyToOne(optional = false)
     private Albums albumId;
@@ -44,15 +57,24 @@ public class OrderAlbum implements Serializable {
     public OrderAlbum() {
     }
 
-    public OrderAlbum(Integer orderId) {
+    public OrderAlbum(Orders orderId) {
         this.orderId = orderId;
     }
 
-    public Integer getOrderId() {
+    
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
+    }
+    
+    public Orders getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(Orders orderId) {
         this.orderId = orderId;
     }
 
@@ -89,13 +111,15 @@ public class OrderAlbum implements Serializable {
         return "com.beatchamber.entities.OrderAlbum[ orderId=" + orderId + " ]";
     }
 
-    public Integer getTablekey() {
-        return tablekey;
+    public double getPriceDuringOrder() {
+        return priceDuringOrder;
     }
 
-    public void setTablekey(Integer tablekey) {
-        this.tablekey = tablekey;
+    public void setPriceDuringOrder(double priceDuringOrder) {
+        this.priceDuringOrder = priceDuringOrder;
     }
+
+
 
     
 }

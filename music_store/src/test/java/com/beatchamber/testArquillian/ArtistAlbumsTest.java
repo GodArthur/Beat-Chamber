@@ -1,5 +1,5 @@
 
-package com.beatchamber.test;
+package com.beatchamber.testArquillian;
 
 import com.beatchamber.entities.Ads;
 import com.beatchamber.entities.Albums;

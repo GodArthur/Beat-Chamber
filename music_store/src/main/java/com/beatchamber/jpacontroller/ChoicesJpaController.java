@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -201,7 +203,7 @@ public class ChoicesJpaController implements Serializable {
      * 
      * @param choiceId 
      */
-    public void increaseChoicesVotes(int choiceId) {
+    public void increaseChoiceVotes(int choiceId) {
         try {
             UserTransaction transaction = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
             transaction.begin();
@@ -211,7 +213,19 @@ public class ChoicesJpaController implements Serializable {
         } catch (NamingException | RollbackException | HeuristicMixedException | 
                 HeuristicRollbackException | SecurityException | IllegalStateException | 
                 SystemException | NotSupportedException ex) {
-            java.util.logging.Logger.getLogger(ChoicesJpaController.class.getName()).log(Level.SEVERE, null, ex);
+            displayMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getCause().toString());
         }
+    }
+    
+    /**
+     * Using p:growl to display a message
+     * 
+     * @param severity
+     * @param title
+     * @param message 
+     */
+    public void displayMessage(FacesMessage.Severity severity, String title, String message) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(severity, title, message));
     }
 }
