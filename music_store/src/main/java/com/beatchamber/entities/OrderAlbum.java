@@ -24,15 +24,15 @@ import javax.persistence.Table;
     @NamedQuery(name = "OrderAlbum.findByOrderId", query = "SELECT o FROM OrderAlbum o WHERE o.orderId = :orderId")})
 public class OrderAlbum implements Serializable {
 
-    /*@JoinColumn(name = "order_id", referencedColumnName = "order_id")
-    @ManyToOne
-    private Orders orderId;*/
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @ManyToOne(optional = false)
+    private Orders orderId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "order_id")
-    private Integer orderId;
+    @Column(name = "tablekey")
+    private Integer tablekey;
 
     private static final long serialVersionUID = 1L;
 
@@ -47,15 +47,15 @@ public class OrderAlbum implements Serializable {
     public OrderAlbum() {
     }
 
-    public OrderAlbum(Integer orderId) {
+    public OrderAlbum(Orders orderId) {
         this.orderId = orderId;
     }
 
-    public Integer getOrderId() {
+    public Orders getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(Orders orderId) {
         this.orderId = orderId;
     }
 
