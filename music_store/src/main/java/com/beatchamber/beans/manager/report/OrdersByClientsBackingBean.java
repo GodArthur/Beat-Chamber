@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,7 +38,7 @@ public class OrdersByClientsBackingBean implements Serializable {
     private Date saleEndDate;
     private List<OrderClientInfo> ordersInfos;
     private List<TotalSaleAndClientsInfo> totalSaleAndClientsInfos = new ArrayList<>();
-   private List<TotalSaleAndClientsInfo> zeroSaleAndClientsInfos = new ArrayList<>();
+    private List<TotalSaleAndClientsInfo> zeroSaleAndClientsInfos = new ArrayList<>();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -90,8 +91,8 @@ public class OrdersByClientsBackingBean implements Serializable {
 
         Root<Orders> orders = cq.from(Orders.class);
         Join clients = orders.join("clientNumber");
-        if(saleStartDate != null && saleEndDate != null){
-                    predicates.add(cb.between(orders.get("orderDate"), this.saleStartDate, this.saleEndDate));
+        if (saleStartDate != null && saleEndDate != null) {
+            predicates.add(cb.between(orders.get("orderDate"), this.saleStartDate, this.saleEndDate));
         }
         predicates.add(cb.equal(clients.get("clientNumber"), clientID));
         cq.where(predicates.toArray(new Predicate[]{}));
@@ -101,8 +102,8 @@ public class OrdersByClientsBackingBean implements Serializable {
                     clients.get("username"),
                     orders.get("orderTotal")
             ));
-        } catch (Exception e) {
-            int a = 0;
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(OrdersByClientsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         final TypedQuery<OrderClientInfo> typedQuery = entityManager.createQuery(cq);
@@ -131,7 +132,6 @@ public class OrdersByClientsBackingBean implements Serializable {
         return this.totalSaleAndClientsInfos;
     }
 
-    
     public List<TotalSaleAndClientsInfo> getZeroTotalSales() {
         return this.zeroSaleAndClientsInfos;
     }
