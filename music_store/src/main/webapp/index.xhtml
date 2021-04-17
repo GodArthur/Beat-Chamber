@@ -4,7 +4,6 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <h:outputStylesheet library="styles" name="main.css"/>
@@ -154,11 +153,9 @@
                         </div>
                         <!-- Survey display -->
                         <div class="survey-display">
-                            <p:outputLabel rendered="#{surveyBean.survey != null}">#{surveyBean.survey.title}</p:outputLabel>
+                            <p:outputLabel value="#{surveyBean.survey.title}" rendered="#{surveyBean.survey != null}"/>
                             <p:selectOneRadio value="#{surveyBean.selectedChoice}" rendered="#{surveyBean.survey != null}">
-                                <c:forEach var="choice" items="#{surveyBean.surveyChoices}" rendered="#{surveyBean.survey != null}">
-                                    <f:selectItem itemValue="#{choice.choiceName}" itemLabel="#{choice.choiceName} - #{choice.votes}" class="choice-radio-btn" rendered="#{surveyBean.survey != null}"/>
-                                </c:forEach>
+                                <f:selectItems value="#{surveyBean.surveyChoices}" var="surveyChoice" itemLabel="#{surveyChoice.choiceName} - #{surveyChoice.votes}"/>
                             </p:selectOneRadio>
                             <p:commandButton value="Vote" action="#{surveyBean.voteSurvey()}" update="growl" rendered="#{surveyBean.survey != null}"/>
                         </div>
