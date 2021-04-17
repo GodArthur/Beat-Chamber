@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
  * @author kibra
  */
 @Entity
-@Table(name = "order_album")
+@Table(name = "order_album", catalog = "CSgb1w21", schema = "")
 @NamedQueries({
     @NamedQuery(name = "OrderAlbum.findAll", query = "SELECT o FROM OrderAlbum o"),
     @NamedQuery(name = "OrderAlbum.findByOrderId", query = "SELECT o FROM OrderAlbum o WHERE o.orderId = :orderId")})
