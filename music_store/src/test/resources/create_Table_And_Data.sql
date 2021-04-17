@@ -10,8 +10,6 @@ DROP TABLE IF EXISTS Choices;
 DROP TABLE IF EXISTS Surveys;
 DROP TABLE IF EXISTS RSS_Feeds;
 DROP TABLE IF EXISTS Ads;
-DROP TABLE IF EXISTS Invoice_Details;
-DROP TABLE IF EXISTS invoices;
 DROP TABLE IF EXISTS Customer_reviews;
 DROP TABLE IF EXISTS Clients;
 DROP TABLE IF EXISTS Artist_Albums;
@@ -136,31 +134,6 @@ FOREIGN KEY (client_number) REFERENCES Clients(client_number)
 );
 
 
-create table invoices(
-sale_number int not null primary key auto_increment,
-sale_date datetime not null,
-client_number int not null,
-total_net_value double not null,
-PST double not null,
-GST double not null,
-HST double not null,
-total_gross_value double not null,
-FOREIGN KEY (client_number) REFERENCES Clients(client_number)
-);
-
-
-create table Invoice_Details(
-tablekey int primary key auto_increment,
-sale_number int not null,
-track_id int not null,
-PST double not null,
-GST double not null,
-HST double not null,
-FOREIGN KEY (sale_number) REFERENCES invoices(sale_number),
-FOREIGN KEY (track_id) REFERENCES Tracks(track_id)
-);
-
-
 create table Ads (
 ad_id int primary key auto_increment,
 file_name varchar(60) not null,
@@ -201,6 +174,10 @@ FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
 create table Orders(
 order_id int primary key auto_increment,
 order_total double not null,
+order_gross_total double not null default 0,
+pst double,
+gst double,
+hst double,
 client_number int not null,
 order_date date,
 visible boolean,
@@ -217,11 +194,11 @@ hst double not null
 );
 
 
-
 create table order_track(
 tablekey int primary key auto_increment,
 order_id int not null,
 track_id int not null,
+price_during_order double not null default 0,
 FOREIGN KEY (track_id) REFERENCES Tracks(track_id),
 FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
@@ -231,6 +208,7 @@ create table order_album(
 tablekey int primary key auto_increment,
 order_id int ,
 album_id int not null,
+price_during_order double not null default 0,
 FOREIGN KEY (album_id) REFERENCES albums(album_number),
 FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
