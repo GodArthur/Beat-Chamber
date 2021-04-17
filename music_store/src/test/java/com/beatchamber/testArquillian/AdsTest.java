@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.beatchamber.test;
+package com.beatchamber.testArquillian;
 
 import com.beatchamber.entities.Ads;
 import com.beatchamber.entities.Clients;
