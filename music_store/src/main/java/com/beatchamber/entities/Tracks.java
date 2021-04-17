@@ -107,8 +107,6 @@ public class Tracks implements Serializable {
     @Basic(optional = false)
     @Column(name = "track_id")
     private Integer trackId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId")
-    private List<InvoiceDetails> invoiceDetailsList;
     @JoinColumn(name = "album_number", referencedColumnName = "album_number")
     @ManyToOne(optional = false)
     private Albums albumNumber;
@@ -210,15 +208,6 @@ public class Tracks implements Serializable {
 
     public void setEntryDate(Date entryDate) {
         this.entryDate = entryDate;
-    }
-
-
-    public List<InvoiceDetails> getInvoiceDetailsList() {
-        return invoiceDetailsList;
-    }
-
-    public void setInvoiceDetailsList(List<InvoiceDetails> invoiceDetailsList) {
-        this.invoiceDetailsList = invoiceDetailsList;
     }
 
     public Albums getAlbumNumber() {

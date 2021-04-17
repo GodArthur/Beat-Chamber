@@ -25,7 +25,11 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "OrderTrack.findByOrderId", query = "SELECT o FROM OrderTrack o WHERE o.orderId = :orderId")})
 public class OrderTrack implements Serializable {
 
-    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "price_during_order")
+    private double priceDuringOrder;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,6 +76,14 @@ public class OrderTrack implements Serializable {
     @Override
     public String toString() {
         return "com.beatchamber.entities.OrderTrack[ orderId=" + orderId + " ]";
+    }
+
+    public double getPriceDuringOrder() {
+        return priceDuringOrder;
+    }
+
+    public void setPriceDuringOrder(double priceDuringOrder) {
+        this.priceDuringOrder = priceDuringOrder;
     }
 
 

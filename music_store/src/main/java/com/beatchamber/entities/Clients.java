@@ -92,6 +92,7 @@ public class Clients implements Serializable {
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull()
     @Size(min = 1, max = 40)
@@ -127,8 +128,6 @@ public class Clients implements Serializable {
     private Integer clientNumber;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
     private List<CustomerReviews> customerReviewsList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientNumber")
-    private List<Invoices> invoicesList;
 
     public Clients() {
     }
@@ -212,13 +211,6 @@ public class Clients implements Serializable {
         this.customerReviewsList = customerReviewsList;
     }
 
-    public List<Invoices> getInvoicesList() {
-        return invoicesList;
-    }
-
-    public void setInvoicesList(List<Invoices> invoicesList) {
-        this.invoicesList = invoicesList;
-    }
 
     @Override
     public int hashCode() {

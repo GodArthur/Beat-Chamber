@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -23,6 +24,11 @@ import javax.persistence.Table;
     @NamedQuery(name = "OrderAlbum.findAll", query = "SELECT o FROM OrderAlbum o"),
     @NamedQuery(name = "OrderAlbum.findByOrderId", query = "SELECT o FROM OrderAlbum o WHERE o.orderId = :orderId")})
 public class OrderAlbum implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "price_during_order")
+    private double priceDuringOrder;
 
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     @ManyToOne(optional = false)
@@ -99,6 +105,14 @@ public class OrderAlbum implements Serializable {
     public void setTablekey(Integer tablekey) {
         this.tablekey = tablekey;
     }*/
+
+    public double getPriceDuringOrder() {
+        return priceDuringOrder;
+    }
+
+    public void setPriceDuringOrder(double priceDuringOrder) {
+        this.priceDuringOrder = priceDuringOrder;
+    }
 
 
 
