@@ -26,6 +26,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
+ * This class is used to show and topClient and zeroClient report in the report
+ * management page.
  *
  * @author Yan Tang
  */
@@ -46,30 +48,73 @@ public class OrdersByClientsBackingBean implements Serializable {
     @Inject
     ClientsJpaController clientsJpaController;
 
+    /**
+     * Get the client id
+     * @return 
+     */
     public int getClientID() {
         return this.clientID;
     }
 
+    /**
+     * Set the client id
+     * @param id 
+     */
     public void setClientId(int id) {
         this.clientID = id;
     }
 
+    /**
+     * Get the start date of the search
+     * @return 
+     */
     public Date getSaleStartDate() {
         return this.saleStartDate;
     }
 
+    /**
+     * Set the start date of the search
+     * @param date 
+     */
     public void setSaleStartDate(Date date) {
         this.saleStartDate = date;
     }
 
+    /**
+     * Get the end date of the search
+     * @return 
+     */
     public Date getSaleEndDate() {
         return saleEndDate;
     }
 
+    /**
+     * Set the end date of the search
+     * @param date 
+     */
     public void setSaleEndDate(Date date) {
         this.saleEndDate = date;
     }
+    
+    /**
+     * get TotalSales of the client
+     * @return the client info
+     */
+    public List<TotalSaleAndClientsInfo> getTotalSales() {
+        return this.totalSaleAndClientsInfos;
+    }
 
+    /**
+     * get the zero value purchased clients
+     * @return the client info
+     */
+    public List<TotalSaleAndClientsInfo> getZeroTotalSales() {
+        return this.zeroSaleAndClientsInfos;
+    }
+
+    /**
+     * Retrieve all the client orders.
+     */
     public void retrieveAllOrdersByClient() {
         totalSaleAndClientsInfos = new ArrayList<>();
         zeroSaleAndClientsInfos = new ArrayList<>();
@@ -84,6 +129,12 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     }
 
+    /**
+     * Get all the orders by using the client id.
+     * @param saleStartDate the start date
+     * @param saleEndDate the end date
+     * @param clientID  the client id
+     */
     private void getAllOrdersByClientID(Date saleStartDate, Date saleEndDate, int clientID) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<OrderClientInfo> cq = cb.createQuery(OrderClientInfo.class);
@@ -111,10 +162,11 @@ public class OrdersByClientsBackingBean implements Serializable {
         this.ordersInfos = value;
     }
 
-    public List<OrderClientInfo> getSoldTracks() {
-        return this.ordersInfos;
-    }
-
+    /**
+     * Get the order total value of the order
+     * @param id
+     * @param username 
+     */
     private void calculateTotalSalesEachClient(int id, String username) {
         if (this.ordersInfos.isEmpty()) {
             zeroSaleAndClientsInfos.add(new TotalSaleAndClientsInfo(0, username, id));
@@ -126,13 +178,5 @@ public class OrdersByClientsBackingBean implements Serializable {
         }
         TotalSaleAndClientsInfo temp = new TotalSaleAndClientsInfo(amount, username, id);
         totalSaleAndClientsInfos.add(temp);
-    }
-
-    public List<TotalSaleAndClientsInfo> getTotalSales() {
-        return this.totalSaleAndClientsInfos;
-    }
-
-    public List<TotalSaleAndClientsInfo> getZeroTotalSales() {
-        return this.zeroSaleAndClientsInfos;
     }
 }
