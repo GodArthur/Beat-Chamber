@@ -315,21 +315,18 @@ public class OrdersJpaController implements Serializable {
      * @param clientNumber
      * @return The current logged in client's purchases
      */
-    public List<OrderTrack> getClientOrders(Integer clientNumber) {
+    public List<OrderTrack> getClientOrders(int clientNumber) {
+        System.out.println("poppop");
+        List<OrderTrack> findTracks = orderTrackController.findOrderTrackEntities();
+        List<OrderTrack> foundTracks = new ArrayList<OrderTrack>();
         
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Orders> cq = cb.createQuery(Orders.class);
-        Root<Orders> rt = cq.from(Orders.class);
+        //find all of the tracks from the user
+        for(OrderTrack item:findTracks){
+            if(item.getOrderId().getClientNumber().getClientNumber() == clientNumber){
+                foundTracks.add(item);
+            }
+        }
         
-        cq.where(cb.equal(rt.get("clientNumber").get("clientNumber"), clientNumber));
-        TypedQuery<Orders> query = em.createQuery(cq);
-        List<Orders> clientOrders = query.getResultList();
-        
-        List<OrderTrack> clientOrderTracks = new ArrayList<>();
-        clientOrders.forEach(clientOrder -> {
-            clientOrderTracks.addAll(orderTrackController.getOrderTracksByOrderId(clientOrder.getOrderId()));
-        });
-        
-        return clientOrderTracks;
+        return foundTracks;
     }
 }
