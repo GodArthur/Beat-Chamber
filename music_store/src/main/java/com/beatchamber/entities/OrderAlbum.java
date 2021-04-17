@@ -1,6 +1,9 @@
 package com.beatchamber.entities;
 
+import com.beatchamber.jpacontroller.OrderAlbumJpaController;
+import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.Serializable;
+import javax.inject.Inject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +44,9 @@ public class OrderAlbum implements Serializable {
     private Integer tablekey;
 
     private static final long serialVersionUID = 1L;
+    
+    @Inject
+    OrdersJpaController orderController;
 
     /*@Basic(optional = false)
     @NotNull
@@ -72,6 +78,10 @@ public class OrderAlbum implements Serializable {
 
     public void setOrderId(Orders orderId) {
         this.orderId = orderId;
+    }
+    
+    public void setOrderId(int orderId) {
+        this.orderId = orderController.findOrders(orderId);
     }
 
     public Albums getAlbumId() {
