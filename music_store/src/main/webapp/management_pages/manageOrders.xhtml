@@ -33,6 +33,10 @@
                             </div>
                         </f:facet>
                         
+                        <p:column style="width:2rem">
+                            <p:rowToggler/>
+                        </p:column>
+                        
                         <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdTblKey}" sortBy="#{orders.tablekey}" 
                                   filterBy="#{orders.tablekey}" filterMatchMode="contains">
                             <h:outputText value="#{orders.tablekey}" />
