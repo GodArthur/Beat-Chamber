@@ -1,6 +1,7 @@
 package com.beatchamber.jpacontroller;
 
 import com.beatchamber.entities.OrderTrack;
+import com.beatchamber.entities.Orders;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -9,11 +10,9 @@ import javax.persistence.criteria.Root;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
-import com.beatchamber.exceptions.NonexistentEntityException;
+import com.beatchamber.jpacontroller.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.annotation.Resource;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -31,8 +30,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
-@Named
-@SessionScoped
 public class OrderTrackJpaController implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(OrderTrackJpaController.class);
@@ -49,6 +46,7 @@ public class OrderTrackJpaController implements Serializable {
     public void create(OrderTrack orderTrack) throws RollbackFailureException {
 
         try {
+
             utx.begin();
             Tracks trackId = orderTrack.getTrackId();
             if (trackId != null) {
@@ -74,9 +72,10 @@ public class OrderTrackJpaController implements Serializable {
         }
     }
 
-    public void edit(OrderTrack orderTrack) throws NonexistentEntityException, Exception {
+    public void edit(OrderTrack orderTrack) throws IllegalOrphanException, NonexistentEntityException, Exception {
 
         try {
+
             utx.begin();
             OrderTrack persistentOrderTrack = em.find(OrderTrack.class, orderTrack.getOrderId());
             Tracks trackIdOld = persistentOrderTrack.getTrackId();
@@ -103,18 +102,19 @@ public class OrderTrackJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = orderTrack.getOrderId();
+                Orders id = orderTrack.getOrderId();
                 if (findOrderTrack(id) == null) {
-                    throw new NonexistentEntityException("The album with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The orderTrack with id " + id + " no longer exists.");
                 }
             }
             throw ex;
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, com.beatchamber.exceptions.NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException, NonexistentEntityException {
+    public void destroy(Orders id) throws IllegalOrphanException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException, NonexistentEntityException {
 
         try {
+
             utx.begin();
             OrderTrack orderTrack;
             try {
@@ -130,7 +130,7 @@ public class OrderTrackJpaController implements Serializable {
             }
             em.remove(orderTrack);
             utx.commit();
-        } catch (NotSupportedException | SystemException | com.beatchamber.exceptions.NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -161,7 +161,12 @@ public class OrderTrackJpaController implements Serializable {
     }
 
     public OrderTrack findOrderTrack(Integer id) {
+
         return em.find(OrderTrack.class, id);
+    }
+
+    public OrderTrack findOrderTrack(Orders id) {
+        return findOrderTrack(id.getOrderId());
     }
 
     public int getOrderTrackCount() {
@@ -172,6 +177,7 @@ public class OrderTrackJpaController implements Serializable {
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
+
     
     public List<OrderTrack> getOrderTracksByOrderId(Integer orderId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
