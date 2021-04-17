@@ -36,6 +36,10 @@ public class Orders implements Serializable {
     @NotNull
     @Column(name = "order_total")
     private double orderTotal;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "order_gross_total")
+    private double orderGrossTotal;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "pst")
     private Double pst;
@@ -48,17 +52,17 @@ public class Orders implements Serializable {
     @OneToMany(mappedBy = "orderId")
     private Collection<OrderAlbum> orderAlbumCollection;
 
-    @Basic(optional = false)
+    /*@Basic(optional = false)
     @NotNull
     @Column(name = "order_id")
-    private int orderId;
+    private int orderId;*/
     
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "tablekey")
-    private Integer tablekey;
+    @Column(name = "order_id")
+    private Integer orderId;
 
     @Column(name = "visible")
     private Boolean visible;
@@ -118,7 +122,7 @@ public class Orders implements Serializable {
 
 
 
-    public Orders(Integer tablekey, int orderId) {
+    /*public Orders(Integer tablekey, int orderId) {
         this.tablekey = tablekey;
         this.orderId = orderId;
     }
@@ -129,7 +133,7 @@ public class Orders implements Serializable {
 
     public void setTablekey(Integer tablekey) {
         this.tablekey = tablekey;
-    }
+    }*/
 
 
     public void setOrderId(int orderId) {
@@ -182,6 +186,14 @@ public class Orders implements Serializable {
 
     public void setHst(Double hst) {
         this.hst = hst;
+    }
+
+    public double getOrderGrossTotal() {
+        return orderGrossTotal;
+    }
+
+    public void setOrderGrossTotal(double orderGrossTotal) {
+        this.orderGrossTotal = orderGrossTotal;
     }
 
 

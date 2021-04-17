@@ -174,6 +174,7 @@ FOREIGN KEY (choice_id) REFERENCES Choices(choice_id)
 create table Orders(
 order_id int primary key auto_increment,
 order_total double not null,
+order_gross_total double not null default 0,
 pst double,
 gst double,
 hst double,
@@ -193,11 +194,11 @@ hst double not null
 );
 
 
-
 create table order_track(
 tablekey int primary key auto_increment,
 order_id int not null,
 track_id int not null,
+price_during_order double not null default 0,
 FOREIGN KEY (track_id) REFERENCES Tracks(track_id),
 FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
@@ -207,6 +208,7 @@ create table order_album(
 tablekey int primary key auto_increment,
 order_id int ,
 album_id int not null,
+price_during_order double not null default 0,
 FOREIGN KEY (album_id) REFERENCES albums(album_number),
 FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
