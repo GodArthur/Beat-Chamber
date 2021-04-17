@@ -98,13 +98,13 @@ public class OrderAlbum implements Serializable {
         return "com.beatchamber.entities.OrderAlbum[ orderId=" + orderId + " ]";
     }
 
-    /*public Integer getTablekey() {
+    public Integer getTablekey() {
         return tablekey;
     }
 
     public void setTablekey(Integer tablekey) {
         this.tablekey = tablekey;
-    }*/
+    }
 
     public double getPriceDuringOrder() {
         return priceDuringOrder;
