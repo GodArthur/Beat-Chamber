@@ -9,7 +9,6 @@ import javax.persistence.criteria.Root;
 import com.beatchamber.entities.CustomerReviews;
 import java.util.ArrayList;
 import java.util.List;
-import com.beatchamber.entities.Invoices;
 import com.beatchamber.entities.Orders;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
@@ -52,9 +51,6 @@ public class ClientsJpaController implements Serializable {
         if (clients.getCustomerReviewsList() == null) {
             clients.setCustomerReviewsList(new ArrayList<CustomerReviews>());
         }
-        if (clients.getInvoicesList() == null) {
-            clients.setInvoicesList(new ArrayList<Invoices>());
-        }
         if (clients.getOrdersCollection() == null) {
             clients.setOrdersCollection(new ArrayList<Orders>());
         }
@@ -67,12 +63,6 @@ public class ClientsJpaController implements Serializable {
                 attachedCustomerReviewsList.add(customerReviewsListCustomerReviewsToAttach);
             }
             clients.setCustomerReviewsList(attachedCustomerReviewsList);
-            List<Invoices> attachedInvoicesList = new ArrayList<Invoices>();
-            for (Invoices invoicesListInvoicesToAttach : clients.getInvoicesList()) {
-                invoicesListInvoicesToAttach = em.getReference(invoicesListInvoicesToAttach.getClass(), invoicesListInvoicesToAttach.getSaleNumber());
-                attachedInvoicesList.add(invoicesListInvoicesToAttach);
-            }
-            clients.setInvoicesList(attachedInvoicesList);
             Collection<Orders> attachedOrdersCollection = new ArrayList<Orders>();
             for (Orders ordersCollectionOrdersToAttach : clients.getOrdersCollection()) {
                 ordersCollectionOrdersToAttach = em.getReference(ordersCollectionOrdersToAttach.getClass(), ordersCollectionOrdersToAttach.getOrderId());
@@ -87,15 +77,6 @@ public class ClientsJpaController implements Serializable {
                 if (oldClientNumberOfCustomerReviewsListCustomerReviews != null) {
                     oldClientNumberOfCustomerReviewsListCustomerReviews.getCustomerReviewsList().remove(customerReviewsListCustomerReviews);
                     oldClientNumberOfCustomerReviewsListCustomerReviews = em.merge(oldClientNumberOfCustomerReviewsListCustomerReviews);
-                }
-            }
-            for (Invoices invoicesListInvoices : clients.getInvoicesList()) {
-                Clients oldClientNumberOfInvoicesListInvoices = invoicesListInvoices.getClientNumber();
-                invoicesListInvoices.setClientNumber(clients);
-                invoicesListInvoices = em.merge(invoicesListInvoices);
-                if (oldClientNumberOfInvoicesListInvoices != null) {
-                    oldClientNumberOfInvoicesListInvoices.getInvoicesList().remove(invoicesListInvoices);
-                    oldClientNumberOfInvoicesListInvoices = em.merge(oldClientNumberOfInvoicesListInvoices);
                 }
             }
             for (Orders ordersCollectionOrders : clients.getOrdersCollection()) {
@@ -128,8 +109,6 @@ public class ClientsJpaController implements Serializable {
             Clients persistentClients = em.find(Clients.class, clients.getClientNumber());
             List<CustomerReviews> customerReviewsListOld = persistentClients.getCustomerReviewsList();
             List<CustomerReviews> customerReviewsListNew = clients.getCustomerReviewsList();
-            List<Invoices> invoicesListOld = persistentClients.getInvoicesList();
-            List<Invoices> invoicesListNew = clients.getInvoicesList();
             Collection<Orders> ordersCollectionOld = persistentClients.getOrdersCollection();
             Collection<Orders> ordersCollectionNew = clients.getOrdersCollection();
             List<String> illegalOrphanMessages = null;
@@ -139,14 +118,6 @@ public class ClientsJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain CustomerReviews " + customerReviewsListOldCustomerReviews + " since its clientNumber field is not nullable.");
-                }
-            }
-            for (Invoices invoicesListOldInvoices : invoicesListOld) {
-                if (!invoicesListNew.contains(invoicesListOldInvoices)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Invoices " + invoicesListOldInvoices + " since its clientNumber field is not nullable.");
                 }
             }
             for (Orders ordersCollectionOldOrders : ordersCollectionOld) {
@@ -167,13 +138,6 @@ public class ClientsJpaController implements Serializable {
             }
             customerReviewsListNew = attachedCustomerReviewsListNew;
             clients.setCustomerReviewsList(customerReviewsListNew);
-            List<Invoices> attachedInvoicesListNew = new ArrayList<Invoices>();
-            for (Invoices invoicesListNewInvoicesToAttach : invoicesListNew) {
-                invoicesListNewInvoicesToAttach = em.getReference(invoicesListNewInvoicesToAttach.getClass(), invoicesListNewInvoicesToAttach.getSaleNumber());
-                attachedInvoicesListNew.add(invoicesListNewInvoicesToAttach);
-            }
-            invoicesListNew = attachedInvoicesListNew;
-            clients.setInvoicesList(invoicesListNew);
             Collection<Orders> attachedOrdersCollectionNew = new ArrayList<Orders>();
             for (Orders ordersCollectionNewOrdersToAttach : ordersCollectionNew) {
                 ordersCollectionNewOrdersToAttach = em.getReference(ordersCollectionNewOrdersToAttach.getClass(), ordersCollectionNewOrdersToAttach.getOrderId());
@@ -190,17 +154,6 @@ public class ClientsJpaController implements Serializable {
                     if (oldClientNumberOfCustomerReviewsListNewCustomerReviews != null && !oldClientNumberOfCustomerReviewsListNewCustomerReviews.equals(clients)) {
                         oldClientNumberOfCustomerReviewsListNewCustomerReviews.getCustomerReviewsList().remove(customerReviewsListNewCustomerReviews);
                         oldClientNumberOfCustomerReviewsListNewCustomerReviews = em.merge(oldClientNumberOfCustomerReviewsListNewCustomerReviews);
-                    }
-                }
-            }
-            for (Invoices invoicesListNewInvoices : invoicesListNew) {
-                if (!invoicesListOld.contains(invoicesListNewInvoices)) {
-                    Clients oldClientNumberOfInvoicesListNewInvoices = invoicesListNewInvoices.getClientNumber();
-                    invoicesListNewInvoices.setClientNumber(clients);
-                    invoicesListNewInvoices = em.merge(invoicesListNewInvoices);
-                    if (oldClientNumberOfInvoicesListNewInvoices != null && !oldClientNumberOfInvoicesListNewInvoices.equals(clients)) {
-                        oldClientNumberOfInvoicesListNewInvoices.getInvoicesList().remove(invoicesListNewInvoices);
-                        oldClientNumberOfInvoicesListNewInvoices = em.merge(oldClientNumberOfInvoicesListNewInvoices);
                     }
                 }
             }
@@ -251,13 +204,6 @@ public class ClientsJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Clients (" + clients + ") cannot be destroyed since the CustomerReviews " + customerReviewsListOrphanCheckCustomerReviews + " in its customerReviewsList field has a non-nullable clientNumber field.");
-            }
-            List<Invoices> invoicesListOrphanCheck = clients.getInvoicesList();
-            for (Invoices invoicesListOrphanCheckInvoices : invoicesListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Clients (" + clients + ") cannot be destroyed since the Invoices " + invoicesListOrphanCheckInvoices + " in its invoicesList field has a non-nullable clientNumber field.");
             }
             Collection<Orders> ordersCollectionOrphanCheck = clients.getOrdersCollection();
             for (Orders ordersCollectionOrphanCheckOrders : ordersCollectionOrphanCheck) {

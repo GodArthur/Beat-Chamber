@@ -441,7 +441,6 @@ public class CookieManager {
             }
         }
         
-        System.out.println(countOfTracks+" ----------------------------------------------");
         
         if(countOfTracks <1){
             return true;
@@ -479,7 +478,6 @@ public class CookieManager {
      * @author Ibrahim
      */
     public String adjustDisplay(String albumId,String buttonText,int clientID){
-        System.out.println("boi " + clientID);
         if(checkIfAllTracksHaveBeenBought(Integer.parseInt(albumId),clientID)){
             return com.beatchamber.util.Messages.getMessage("com.beatchamber.bundles.messages","Album_Alredy_Ordered",null).getDetail();
         }
@@ -781,7 +779,6 @@ public class CookieManager {
                     else{
                         //if tracks are in the orders of the client remove it
                         if(isTrackInOrders(clientId,cleanIdToMatchDatabaseId(item)) || isAlbumInOrders(clientId,trackJpaController.findTracks(Integer.parseInt(item)).getAlbumNumber().getAlbumNumber() )){
-                            System.out.println("removedd " + item);
                             ItemIdToRemove.add(item);
                         }
                     }

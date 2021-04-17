@@ -6,7 +6,6 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.beatchamber.entities.InvoiceDetails;
 import java.util.*;
 import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.entities.GenreToTracks;
@@ -63,9 +62,6 @@ public class TracksJpaController implements Serializable {
     }
 
     public void create(Tracks tracks) throws RollbackFailureException {
-        if (tracks.getInvoiceDetailsList() == null) {
-            tracks.setInvoiceDetailsList(new ArrayList<InvoiceDetails>());
-        }
         if (tracks.getCustomerReviewsList() == null) {
             tracks.setCustomerReviewsList(new ArrayList<CustomerReviews>());
         }
@@ -81,12 +77,6 @@ public class TracksJpaController implements Serializable {
                 albumNumber = em.getReference(albumNumber.getClass(), albumNumber.getAlbumNumber());
                 tracks.setAlbumNumber(albumNumber);
             }
-            List<InvoiceDetails> attachedInvoiceDetailsList = new ArrayList<InvoiceDetails>();
-            for (InvoiceDetails invoiceDetailsListInvoiceDetailsToAttach : tracks.getInvoiceDetailsList()) {
-                invoiceDetailsListInvoiceDetailsToAttach = em.getReference(invoiceDetailsListInvoiceDetailsToAttach.getClass(), invoiceDetailsListInvoiceDetailsToAttach.getTablekey());
-                attachedInvoiceDetailsList.add(invoiceDetailsListInvoiceDetailsToAttach);
-            }
-            tracks.setInvoiceDetailsList(attachedInvoiceDetailsList);
             List<CustomerReviews> attachedCustomerReviewsList = new ArrayList<CustomerReviews>();
             for (CustomerReviews customerReviewsListCustomerReviewsToAttach : tracks.getCustomerReviewsList()) {
                 customerReviewsListCustomerReviewsToAttach = em.getReference(customerReviewsListCustomerReviewsToAttach.getClass(), customerReviewsListCustomerReviewsToAttach.getReviewNumber());
@@ -103,15 +93,6 @@ public class TracksJpaController implements Serializable {
             if (albumNumber != null) {
                 albumNumber.getTracksList().add(tracks);
                 albumNumber = em.merge(albumNumber);
-            }
-            for (InvoiceDetails invoiceDetailsListInvoiceDetails : tracks.getInvoiceDetailsList()) {
-                Tracks oldTrackIdOfInvoiceDetailsListInvoiceDetails = invoiceDetailsListInvoiceDetails.getTrackId();
-                invoiceDetailsListInvoiceDetails.setTrackId(tracks);
-                invoiceDetailsListInvoiceDetails = em.merge(invoiceDetailsListInvoiceDetails);
-                if (oldTrackIdOfInvoiceDetailsListInvoiceDetails != null) {
-                    oldTrackIdOfInvoiceDetailsListInvoiceDetails.getInvoiceDetailsList().remove(invoiceDetailsListInvoiceDetails);
-                    oldTrackIdOfInvoiceDetailsListInvoiceDetails = em.merge(oldTrackIdOfInvoiceDetailsListInvoiceDetails);
-                }
             }
             for (CustomerReviews customerReviewsListCustomerReviews : tracks.getCustomerReviewsList()) {
                 Tracks oldTrackIdOfCustomerReviewsListCustomerReviews = customerReviewsListCustomerReviews.getTrackId();
@@ -151,21 +132,12 @@ public class TracksJpaController implements Serializable {
             Tracks persistentTracks = em.find(Tracks.class, tracks.getTrackId());
             Albums albumNumberOld = persistentTracks.getAlbumNumber();
             Albums albumNumberNew = tracks.getAlbumNumber();
-            List<InvoiceDetails> invoiceDetailsListOld = persistentTracks.getInvoiceDetailsList();
-            List<InvoiceDetails> invoiceDetailsListNew = tracks.getInvoiceDetailsList();
             List<CustomerReviews> customerReviewsListOld = persistentTracks.getCustomerReviewsList();
             List<CustomerReviews> customerReviewsListNew = tracks.getCustomerReviewsList();
             List<GenreToTracks> genreToTracksListOld = persistentTracks.getGenreToTracksList();
             List<GenreToTracks> genreToTracksListNew = tracks.getGenreToTracksList();
             List<String> illegalOrphanMessages = null;
-            for (InvoiceDetails invoiceDetailsListOldInvoiceDetails : invoiceDetailsListOld) {
-                if (!invoiceDetailsListNew.contains(invoiceDetailsListOldInvoiceDetails)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain InvoiceDetails " + invoiceDetailsListOldInvoiceDetails + " since its trackId field is not nullable.");
-                }
-            }
+            
             for (CustomerReviews customerReviewsListOldCustomerReviews : customerReviewsListOld) {
                 if (!customerReviewsListNew.contains(customerReviewsListOldCustomerReviews)) {
                     if (illegalOrphanMessages == null) {
@@ -181,13 +153,6 @@ public class TracksJpaController implements Serializable {
                 albumNumberNew = em.getReference(albumNumberNew.getClass(), albumNumberNew.getAlbumNumber());
                 tracks.setAlbumNumber(albumNumberNew);
             }
-            List<InvoiceDetails> attachedInvoiceDetailsListNew = new ArrayList<InvoiceDetails>();
-            for (InvoiceDetails invoiceDetailsListNewInvoiceDetailsToAttach : invoiceDetailsListNew) {
-                invoiceDetailsListNewInvoiceDetailsToAttach = em.getReference(invoiceDetailsListNewInvoiceDetailsToAttach.getClass(), invoiceDetailsListNewInvoiceDetailsToAttach.getTablekey());
-                attachedInvoiceDetailsListNew.add(invoiceDetailsListNewInvoiceDetailsToAttach);
-            }
-            invoiceDetailsListNew = attachedInvoiceDetailsListNew;
-            tracks.setInvoiceDetailsList(invoiceDetailsListNew);
             List<CustomerReviews> attachedCustomerReviewsListNew = new ArrayList<CustomerReviews>();
             for (CustomerReviews customerReviewsListNewCustomerReviewsToAttach : customerReviewsListNew) {
                 customerReviewsListNewCustomerReviewsToAttach = em.getReference(customerReviewsListNewCustomerReviewsToAttach.getClass(), customerReviewsListNewCustomerReviewsToAttach.getReviewNumber());
@@ -210,17 +175,6 @@ public class TracksJpaController implements Serializable {
             if (albumNumberNew != null && !albumNumberNew.equals(albumNumberOld)) {
                 albumNumberNew.getTracksList().add(tracks);
                 albumNumberNew = em.merge(albumNumberNew);
-            }
-            for (InvoiceDetails invoiceDetailsListNewInvoiceDetails : invoiceDetailsListNew) {
-                if (!invoiceDetailsListOld.contains(invoiceDetailsListNewInvoiceDetails)) {
-                    Tracks oldTrackIdOfInvoiceDetailsListNewInvoiceDetails = invoiceDetailsListNewInvoiceDetails.getTrackId();
-                    invoiceDetailsListNewInvoiceDetails.setTrackId(tracks);
-                    invoiceDetailsListNewInvoiceDetails = em.merge(invoiceDetailsListNewInvoiceDetails);
-                    if (oldTrackIdOfInvoiceDetailsListNewInvoiceDetails != null && !oldTrackIdOfInvoiceDetailsListNewInvoiceDetails.equals(tracks)) {
-                        oldTrackIdOfInvoiceDetailsListNewInvoiceDetails.getInvoiceDetailsList().remove(invoiceDetailsListNewInvoiceDetails);
-                        oldTrackIdOfInvoiceDetailsListNewInvoiceDetails = em.merge(oldTrackIdOfInvoiceDetailsListNewInvoiceDetails);
-                    }
-                }
             }
             for (CustomerReviews customerReviewsListNewCustomerReviews : customerReviewsListNew) {
                 if (!customerReviewsListOld.contains(customerReviewsListNewCustomerReviews)) {
@@ -280,13 +234,7 @@ public class TracksJpaController implements Serializable {
                 throw new NonexistentEntityException("The tracks with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<InvoiceDetails> invoiceDetailsListOrphanCheck = tracks.getInvoiceDetailsList();
-            for (InvoiceDetails invoiceDetailsListOrphanCheckInvoiceDetails : invoiceDetailsListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Tracks (" + tracks + ") cannot be destroyed since the InvoiceDetails " + invoiceDetailsListOrphanCheckInvoiceDetails + " in its invoiceDetailsList field has a non-nullable trackId field.");
-            }
+            
             List<CustomerReviews> customerReviewsListOrphanCheck = tracks.getCustomerReviewsList();
             for (CustomerReviews customerReviewsListOrphanCheckCustomerReviews : customerReviewsListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
