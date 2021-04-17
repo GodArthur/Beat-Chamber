@@ -399,6 +399,7 @@ public class CheckoutBean implements Serializable {
         } catch (RollbackFailureException ex) {
             LOG.error("orders order roll back error");
         }
+        
 
         //All the tracks from different purchased albums
         List<List<Tracks>> albumTracks = getTracksFromAlbums(albums);

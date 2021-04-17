@@ -109,6 +109,7 @@
                     <div id="reviewContainer">
                         <c:forEach var="review" items="#{customerReviews.trackReviews}">
                             <div class="review-container">
+                                <p:rating value="#{review.rating}"/>
                                 <p class="review-client-name">-#{review.clientNumber.firstName} #{review.clientNumber.lastName}</p>
                                 <p class="review-text">#{review.reviewText}</p>
                                 <hr/>
