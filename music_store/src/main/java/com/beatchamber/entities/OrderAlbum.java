@@ -1,6 +1,9 @@
 package com.beatchamber.entities;
 
+import com.beatchamber.jpacontroller.OrderAlbumJpaController;
+import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.Serializable;
+import javax.inject.Inject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +22,7 @@ import javax.validation.constraints.NotNull;
  * @author kibra
  */
 @Entity
-@Table(name = "order_album")
+@Table(name = "order_album", catalog = "CSgb1w21", schema = "")
 @NamedQueries({
     @NamedQuery(name = "OrderAlbum.findAll", query = "SELECT o FROM OrderAlbum o"),
     @NamedQuery(name = "OrderAlbum.findByOrderId", query = "SELECT o FROM OrderAlbum o WHERE o.orderId = :orderId")})
@@ -41,6 +44,7 @@ public class OrderAlbum implements Serializable {
     private Integer tablekey;
 
     private static final long serialVersionUID = 1L;
+    
 
     /*@Basic(optional = false)
     @NotNull
@@ -57,6 +61,15 @@ public class OrderAlbum implements Serializable {
         this.orderId = orderId;
     }
 
+    
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
+    }
+    
     public Orders getOrderId() {
         return orderId;
     }
@@ -97,14 +110,6 @@ public class OrderAlbum implements Serializable {
     public String toString() {
         return "com.beatchamber.entities.OrderAlbum[ orderId=" + orderId + " ]";
     }
-
-    /*public Integer getTablekey() {
-        return tablekey;
-    }
-
-    public void setTablekey(Integer tablekey) {
-        this.tablekey = tablekey;
-    }*/
 
     public double getPriceDuringOrder() {
         return priceDuringOrder;

@@ -6,12 +6,16 @@ import com.beatchamber.jpacontroller.ChoicesJpaController;
 import com.beatchamber.jpacontroller.SurveysJpaController;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Bean for survey functionality
@@ -21,6 +25,8 @@ import javax.inject.Named;
 @Named
 @SessionScoped
 public class SurveyBean implements Serializable {
+    
+    private final static Logger LOG = LoggerFactory.getLogger(SurveyBean.class);
 
     //JPA controllers used for survey functionality
     @Inject
@@ -28,6 +34,9 @@ public class SurveyBean implements Serializable {
     
     @Inject
     ChoicesJpaController choicesJpaController;
+    
+    @Inject
+    LocaleChanger localeChanger;
     
     //Stored values
     private Surveys survey;
@@ -86,35 +95,36 @@ public class SurveyBean implements Serializable {
      * @return Redirect to the index page if successful, nothing if not
      */
     public String voteSurvey() {
+        //Get the locale to display with the right language
+        ResourceBundle languageBundle = ResourceBundle.getBundle("com.beatchamber.bundles.messages", localeChanger.getLocale());
+        
         //Inform the user if they didn't select a radio button
         if(this.selectedChoice == null || this.selectedChoice.isEmpty()) {
-            displayMessage(FacesMessage.SEVERITY_WARN, "Warning", "You didn't select a choice!");
+            displayMessage(FacesMessage.SEVERITY_WARN, languageBundle.getString("warning"), languageBundle.getString("noChoiceSelected"));
             return null;
         }
         
+        LOG.debug("Choice selected:" + this.selectedChoice);
+        
+        //The choice value from the radio buttons is the choice converted with toString which only displays the choice's id
+        //Using regex, we can get the single number that's added in that toString.
+        int choiceId = Integer.parseInt(this.selectedChoice.replaceAll("[^0-9]", ""));
+        LOG.debug("Choice id:" + choiceId);
+        
         //Find the specific choice in the table using its id
-        Choices foundChoice;
-        int choiceId = 0;
-        int previousVotes = 0;
-        for(Choices choice : this.surveyChoices) {
-            if(choice.getChoiceName().equals(this.selectedChoice)) {
-                foundChoice = choice;
-                choiceId = foundChoice.getChoiceId();
-                previousVotes = foundChoice.getVotes();
-                break;
-            }
-        }
+        Choices foundChoice = choicesJpaController.findChoices(choiceId);
+        int previousVotes = foundChoice.getVotes();
         
         //Add 1 to the choice's votes
-        choicesJpaController.increaseChoicesVotes(choiceId);
-        Choices changedChoice = choicesJpaController.findChoices(choiceId);
+        choicesJpaController.increaseChoiceVotes(foundChoice.getChoiceId());
+        Choices changedChoice = choicesJpaController.findChoices(foundChoice.getChoiceId());
         
         //Check if the voting was successful
         if(changedChoice.getVotes() == previousVotes + 1) {
             return "index.xhtml?faces-redirect=true";
         }
         else {
-            displayMessage(FacesMessage.SEVERITY_FATAL, "Voting failed", "An error has occured trying to add your vote");
+            displayMessage(FacesMessage.SEVERITY_FATAL, languageBundle.getString("votingFailed"), languageBundle.getString("votingError"));
             return null;
         }
     }

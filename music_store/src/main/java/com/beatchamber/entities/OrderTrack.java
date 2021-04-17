@@ -1,6 +1,8 @@
 package com.beatchamber.entities;
 
+import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.Serializable;
+import javax.inject.Inject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +21,14 @@ import javax.validation.constraints.NotNull;
  * @author kibra
  */
 @Entity
-@Table(name = "order_track")
+@Table(name = "order_track", catalog = "CSgb1w21", schema = "")
 @NamedQueries({
     @NamedQuery(name = "OrderTrack.findAll", query = "SELECT o FROM OrderTrack o"),
     @NamedQuery(name = "OrderTrack.findByOrderId", query = "SELECT o FROM OrderTrack o WHERE o.orderId = :orderId")})
+
+
+
+
 public class OrderTrack implements Serializable {
 
     @Basic(optional = false)
@@ -31,15 +37,21 @@ public class OrderTrack implements Serializable {
     private double priceDuringOrder;
 
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "tablekey")
-    /*private Integer tablekey;
+    private Integer tablekey;
     @Basic(optional = false)
     @NotNull
     @Column(name = "order_id")
     private int orderId;*/
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "tablekey")
+    private Integer tablekey;
     
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     @ManyToOne(optional = false)
@@ -50,6 +62,9 @@ public class OrderTrack implements Serializable {
     @ManyToOne(optional = false)
     private Tracks trackId;
 
+    
+    
+    
     public OrderTrack() {
     }
 
@@ -67,6 +82,14 @@ public class OrderTrack implements Serializable {
 
     public Tracks getTrackId() {
         return trackId;
+    }
+    
+    public Integer getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(Integer tablekey) {
+        this.tablekey = tablekey;
     }
 
     public void setTrackId(Tracks trackId) {

@@ -5,19 +5,21 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.beatchamber.entities.Orders;
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.exceptions.IllegalOrphanException;
-import com.beatchamber.exceptions.RollbackFailureException;
 import com.beatchamber.exceptions.NonexistentEntityException;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import com.beatchamber.exceptions.RollbackFailureException;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
@@ -45,12 +47,21 @@ public class OrderAlbumJpaController implements Serializable {
         try {
 
             utx.begin();
+            Orders orderId = orderAlbum.getOrderId();
+            if (orderId != null) {
+                orderId = em.getReference(orderId.getClass(), orderId.getOrderId());
+                orderAlbum.setOrderId(orderId);
+            }
             Albums albumId = orderAlbum.getAlbumId();
             if (albumId != null) {
                 albumId = em.getReference(albumId.getClass(), albumId.getAlbumNumber());
                 orderAlbum.setAlbumId(albumId);
             }
             em.persist(orderAlbum);
+            if (orderId != null) {
+                orderId.getOrderAlbumCollection().add(orderAlbum);
+                orderId = em.merge(orderId);
+            }
             if (albumId != null) {
                 albumId.getOrderAlbumCollection().add(orderAlbum);
                 albumId = em.merge(albumId);
@@ -68,48 +79,34 @@ public class OrderAlbumJpaController implements Serializable {
             }
         }
     }
-    
-    public void create(OrderAlbum orderAlbum,EntityManager em2,UserTransaction utx2) throws RollbackFailureException {
-
-        try {
-
-            utx2.begin();
-            Albums albumId = orderAlbum.getAlbumId();
-            if (albumId != null) {
-                albumId = em2.getReference(albumId.getClass(), albumId.getAlbumNumber());
-                orderAlbum.setAlbumId(albumId);
-            }
-            em2.persist(orderAlbum);
-            if (albumId != null) {
-                albumId.getOrderAlbumCollection().add(orderAlbum);
-                albumId = em2.merge(albumId);
-            }
-            utx2.commit();
-        } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
-            try {
-
-                utx2.rollback();
-                LOG.error("Rollback");
-            } catch (IllegalStateException | SecurityException | SystemException re) {
-                LOG.error("Rollback2");
-
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-        }
-    }
 
     public void edit(OrderAlbum orderAlbum) throws NonexistentEntityException, Exception {
 
         try {
+
             utx.begin();
-            OrderAlbum persistentOrderAlbum = em.find(OrderAlbum.class, orderAlbum.getOrderId());
+            OrderAlbum persistentOrderAlbum = em.find(OrderAlbum.class, orderAlbum.getTablekey());
+            Orders orderIdOld = persistentOrderAlbum.getOrderId();
+            Orders orderIdNew = orderAlbum.getOrderId();
             Albums albumIdOld = persistentOrderAlbum.getAlbumId();
             Albums albumIdNew = orderAlbum.getAlbumId();
+            if (orderIdNew != null) {
+                orderIdNew = em.getReference(orderIdNew.getClass(), orderIdNew.getOrderId());
+                orderAlbum.setOrderId(orderIdNew);
+            }
             if (albumIdNew != null) {
                 albumIdNew = em.getReference(albumIdNew.getClass(), albumIdNew.getAlbumNumber());
                 orderAlbum.setAlbumId(albumIdNew);
             }
             orderAlbum = em.merge(orderAlbum);
+            if (orderIdOld != null && !orderIdOld.equals(orderIdNew)) {
+                orderIdOld.getOrderAlbumCollection().remove(orderAlbum);
+                orderIdOld = em.merge(orderIdOld);
+            }
+            if (orderIdNew != null && !orderIdNew.equals(orderIdOld)) {
+                orderIdNew.getOrderAlbumCollection().add(orderAlbum);
+                orderIdNew = em.merge(orderIdNew);
+            }
             if (albumIdOld != null && !albumIdOld.equals(albumIdNew)) {
                 albumIdOld.getOrderAlbumCollection().remove(orderAlbum);
                 albumIdOld = em.merge(albumIdOld);
@@ -127,7 +124,7 @@ public class OrderAlbumJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = orderAlbum.getOrderId();
+                Orders id = orderAlbum.getOrderId();
                 if (findOrderAlbum(id) == null) {
                     throw new NonexistentEntityException("The orderAlbum with id " + id + " no longer exists.");
                 }
@@ -136,16 +133,22 @@ public class OrderAlbumJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, com.beatchamber.exceptions.NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException, NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, NotSupportedException, SystemException, RollbackFailureException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 
         try {
+
             utx.begin();
             OrderAlbum orderAlbum;
             try {
                 orderAlbum = em.getReference(OrderAlbum.class, id);
-                orderAlbum.getOrderId();
+                orderAlbum.getTablekey();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The orderAlbum with id " + id + " no longer exists.", enfe);
+            }
+            Orders orderId = orderAlbum.getOrderId();
+            if (orderId != null) {
+                orderId.getOrderAlbumCollection().remove(orderAlbum);
+                orderId = em.merge(orderId);
             }
             Albums albumId = orderAlbum.getAlbumId();
             if (albumId != null) {
@@ -154,8 +157,7 @@ public class OrderAlbumJpaController implements Serializable {
             }
             em.remove(orderAlbum);
             utx.commit();
-
-        } catch (NotSupportedException | SystemException | com.beatchamber.exceptions.NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+        } catch (NotSupportedException | SystemException | NonexistentEntityException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             try {
                 utx.rollback();
             } catch (IllegalStateException | SecurityException | SystemException re) {
@@ -183,19 +185,21 @@ public class OrderAlbumJpaController implements Serializable {
             q.setFirstResult(firstResult);
         }
         return q.getResultList();
+
     }
 
-    public OrderAlbum findOrderAlbum(Integer id) {
+    public OrderAlbum findOrderAlbum(Orders id) {
+
         return em.find(OrderAlbum.class, id);
     }
 
     public int getOrderAlbumCount() {
-        
+
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         Root<OrderAlbum> rt = cq.from(OrderAlbum.class);
         cq.select(em.getCriteriaBuilder().count(rt));
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
-
     }
+
 }

@@ -346,9 +346,10 @@ public class CookieManager {
         
         List<OrderAlbum> listOfALbumOrders = orderAlbumController.findOrderAlbumEntities();
         
+        
         for(int item:listOfId){
             for(OrderAlbum items:listOfALbumOrders){
-                if(items.getAlbumId().getAlbumNumber() == albumId && items.getOrderId() == item){
+                if(items.getAlbumId().getAlbumNumber() == albumId && items.getOrderId().getOrderId() == item){
                     return true;
                 }
             }  
@@ -387,7 +388,7 @@ public class CookieManager {
         
         for(int item:listOfId){
             for(OrderTrack items:listOfTrackOrders){
-                if(items.getTrackId().getTrackId() == trackId && items.getOrderId() == item){
+                if(items.getTrackId().getTrackId() == trackId && items.getOrderId().getOrderId() == item){
                     return true;
                 }
             }  
@@ -422,7 +423,7 @@ public class CookieManager {
         }
         //get all of the order tracks from the specific client
         for(OrderTrack item:lisofOfAllOrderedTracks){
-            if(isItemInList(listOfId,item.getOrderId())){
+            if(isItemInList(listOfId,item.getOrderId().getOrderId())){
                 allOrderedItemByClient.add(item);
             }
         }
