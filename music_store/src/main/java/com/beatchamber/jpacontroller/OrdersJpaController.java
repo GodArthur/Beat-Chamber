@@ -317,11 +317,11 @@ public class OrdersJpaController implements Serializable {
      */
     public List<OrderTrack> getClientOrders(int clientNumber) {
         System.out.println("poppop");
-        List<OrderTrack> findTracks = orderTrackController.findOrderTrackEntities();
+        List<OrderTrack> allTracks = orderTrackController.findOrderTrackEntities();
         List<OrderTrack> foundTracks = new ArrayList<OrderTrack>();
         
         //find all of the tracks from the user
-        for(OrderTrack item:findTracks){
+        for(OrderTrack item : allTracks){
             if(item.getOrderId().getClientNumber().getClientNumber() == clientNumber){
                 foundTracks.add(item);
             }
