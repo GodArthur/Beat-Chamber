@@ -17,7 +17,7 @@
         <!-- While you should always run tests if there are any there are any -->
         <!-- at every build, sometimes there are circumstances such as just   -->
         <!-- working on the UI when testing can be turned off temporarily.    -->
-        <skipTests>false</skipTests>
+        <skipTests>true</skipTests>
     </properties>
 
     <!-- All of the sample code shares the same dependencies and build         -->
@@ -56,6 +56,13 @@
             <groupId>com.rometools</groupId>
             <artifactId>rome</artifactId>
             <version>1.15.0</version>
+        </dependency>
+        <!-- Firefox Driver Dependency for Firefox users -->
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-firefox-driver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>3.141.59</version>
         </dependency>
     </dependencies>
 
