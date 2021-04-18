@@ -384,7 +384,7 @@ public class CheckoutBean implements Serializable {
      * 
      * @Korjon Chang-Jones Ibrahim Kebe
      */
-    public String addOrders(int clientId) {
+    public String addOrders() {
 
         //getting the tracks and albums from a cart
         List<Albums> albums = albumController.retrieveAllAlbumsInTheCart();
@@ -397,15 +397,15 @@ public class CheckoutBean implements Serializable {
         Orders order = new Orders();
         Date date = new Date();
         CookieManager cookiesManager = new CookieManager();
-        int newOrderId = orderController.getOrdersCount() + 1;
+        //int newOrderId = orderController.getOrdersCount() + 1;
 
         order.setOrderDate(date);
         order.setGst(this.gstVal);
         order.setPst(this.pstVal);
         order.setHst(this.hstVal);
-        order.setClientNumber(clientController.findClients(clientId));
+        order.setClientNumber(clientController.findClients(userLoginBean.getClient().getClientNumber()));
         order.setVisible(true);
-        order.setOrderId(newOrderId);
+        //order.setOrderId(newOrderId);
         order.setOrderTotal(convertStringToDouble(computePrices(trackController.getTotalPrice(), albumController.getTotalPrice())));
         order.setOrderGrossTotal(totalTaxedPrice);
 
@@ -417,10 +417,12 @@ public class CheckoutBean implements Serializable {
             java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        LOG.info("ID of the order created: " + order.getOrderId());
+        
         for (Albums item : albumController.retrieveAllAlbumsInTheCart()) {
             OrderAlbum orderAlbum = new OrderAlbum();
             orderAlbum.setAlbumId(item);
-            orderAlbum.setOrderId(orderController.findOrders(newOrderId));
+            orderAlbum.setOrderId(orderController.findOrders(order.getOrderId()));
             orderAlbum.setPriceDuringOrder(item.getListPrice());
             try {
                 orderAlbumController.create(orderAlbum);
@@ -432,7 +434,7 @@ public class CheckoutBean implements Serializable {
         //creating the orderTrack
         for (Tracks item : trackController.retrieveAllTracksInTheCart()) {
             OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderController.findOrders(newOrderId));
+            orderTrack.setOrderId(orderController.findOrders(order.getOrderId()));
             orderTrack.setPriceDuringOrder(item.getListPrice());
             orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
             try {
@@ -456,7 +458,7 @@ public class CheckoutBean implements Serializable {
 
         cookiesManager.clearTheCartWithoutRefresh();
 
-        return "index.xhtml";
+        return "index.xhtml?faces-redirect=true";
     }
 
     /**
