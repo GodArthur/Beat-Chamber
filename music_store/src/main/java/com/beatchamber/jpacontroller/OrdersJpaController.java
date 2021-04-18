@@ -37,32 +37,32 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
-@Named
+@Named("ordersController")
 @SessionScoped
 public class OrdersJpaController implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(OrdersJpaController.class);
-    
+
     @Resource
     private UserTransaction utx;
-    
+
     private CheckoutBean checkoutBean;
 
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
-    
+
     @Inject
-    private OrderAlbumJpaController orderAlbumController; 
-    
+    private OrderAlbumJpaController orderAlbumController;
+
     @Inject
     private OrderTrackJpaController orderTrackController;
-    
+
     @Inject
-    private ClientsJpaController clientController; 
-    
+    private ClientsJpaController clientController;
+
     @Inject
     private AlbumsJpaController albumController;
-    
+
     @Inject
     private TracksJpaController trackController;
 
@@ -313,25 +313,25 @@ public class OrdersJpaController implements Serializable {
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
-    
+
     /**
      * @param clientNumber
      * @return The current logged in client's purchases
      */
     public List<OrderTrack> getClientOrders(int clientNumber) {
-        System.out.println("poppop");
+
         List<OrderTrack> allTracks = orderTrackController.findOrderTrackEntities();
         List<OrderTrack> foundTracks = new ArrayList<OrderTrack>();
-        
+
         //find all of the tracks from the user
-        for(OrderTrack item : allTracks){
-            if(item.getOrderId().getClientNumber().getClientNumber() == clientNumber){
+        for (OrderTrack item : allTracks) {
+            if (item.getOrderId().getClientNumber().getClientNumber() == clientNumber) {
                 foundTracks.add(item);
             }
         }
-        
+
         return foundTracks;
+
     }
     
     /**

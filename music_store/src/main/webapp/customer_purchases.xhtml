@@ -13,12 +13,12 @@
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
                 <h2>#{msgs.viewPurchases}</h2>
-                <p:dataView var="items" value="#{ordersJpaController.getClientOrders(theLoginRegister.clientId)}" 
+                <p:dataView var="items" value="#{ordersController.getClientOrders(theLoginRegister.client.clientNumber)}" 
                             multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                     <p:dataViewGridItem>
                         <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(items.trackId.albumNumber.albumNumber, true)}" styleClass="album-img-small"/>
                         <br/>
-                        <p:outputLabel>#{items}</p:outputLabel>
+                        <p:outputLabel>#{items.trackId.albumNumber.albumTitle}</p:outputLabel>
                         <br/>
                         <p:outputLabel>#{items.trackId.trackTitle}</p:outputLabel>
                         <br/>

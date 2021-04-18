@@ -131,6 +131,7 @@ public class LoginRegisterBean implements Serializable {
     public String doLogin() {
         List<Clients> clientsList = getClients();
         for (Clients clientItem : clientsList) {
+            ClientId = clientItem.getClientNumber();
             String dbUsername = clientItem.getUsername();
             String dbEmail = clientItem.getEmail();
             String dbSalt = clientItem.getSalt();
