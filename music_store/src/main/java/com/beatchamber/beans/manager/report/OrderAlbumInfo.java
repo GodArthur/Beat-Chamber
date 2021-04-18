@@ -5,6 +5,7 @@
  */
 package com.beatchamber.beans.manager.report;
 
+import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -23,16 +24,19 @@ public class OrderAlbumInfo {
     private double listPrice;
 
     private double salePrice;
-    
+
+    private Date orderDate;
+
     public OrderAlbumInfo() {
 
     }
 
-    public OrderAlbumInfo(int albumid, String albumTitle, double listPrice, double salePrice) {
+    public OrderAlbumInfo(int albumid, String albumTitle, double listPrice, double salePrice, Date orderDate) {
         this.albumid = albumid;
         this.albumTitle = albumTitle;
         this.listPrice = listPrice;
         this.salePrice = salePrice;
+        this.orderDate = orderDate;
     }
 
     public int getAlbumId() {
@@ -51,6 +55,10 @@ public class OrderAlbumInfo {
         return albumTitle;
     }
 
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
     public void setAlbumid(int albumid) {
         this.albumid = albumid;
     }
@@ -62,9 +70,13 @@ public class OrderAlbumInfo {
     public void setListPrice(double listPrice) {
         this.listPrice = listPrice;
     }
-        
+
     public void setAlbumTitle(String albumTitle) {
         this.albumTitle = albumTitle;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
 }

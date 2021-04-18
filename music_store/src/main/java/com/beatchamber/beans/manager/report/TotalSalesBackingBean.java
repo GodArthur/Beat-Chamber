@@ -6,11 +6,11 @@
 package com.beatchamber.beans.manager.report;
 
 import com.beatchamber.entities.Albums;
-import com.beatchamber.entities.Clients;
 import com.beatchamber.entities.OrderAlbum;
-import com.beatchamber.entities.Orders;
+import com.beatchamber.entities.OrderTrack;
+import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
-import com.beatchamber.jpacontroller.ClientsJpaController;
+import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,13 +36,10 @@ import javax.persistence.criteria.Root;
 @ViewScoped
 public class TotalSalesBackingBean implements Serializable {
 
-    private int albumId;
-    private int trackId;
     private Date saleStartDate;
     private Date saleEndDate;
-    private List<OrderAlbumInfo> orderalbumsInfos;
-    private List<OrderTrackInfo> ordertracksInfos;
-    private List<OrderAlbumInfo> totalSalesInfos = new ArrayList<>();
+    private List<OrderAlbumInfo> totalAlbumSalesInfos = new ArrayList<>();
+    private List<OrderTrackInfo> totalTrackSalesInfos = new ArrayList<>();
     private final String[] category = {"Album", "Track"};
 
     @PersistenceContext
@@ -51,23 +48,8 @@ public class TotalSalesBackingBean implements Serializable {
     @Inject
     AlbumsJpaController albumsJpaController;
 
-    /**
-     * Get the album id
-     *
-     * @return
-     */
-    public int getAlbumId() {
-        return this.albumId;
-    }
-
-    /**
-     * Set the album id
-     *
-     * @param id
-     */
-    public void setAlbumId(int id) {
-        this.albumId = id;
-    }
+    @Inject
+    TracksJpaController tracksJpaController;
 
     /**
      * Get the start date of the search
@@ -112,24 +94,43 @@ public class TotalSalesBackingBean implements Serializable {
     /**
      * get TotalSales of the albums
      *
-     * @return the client info
+     * @return the album order info
      */
-    public List<OrderAlbumInfo> getTotalSalesInfos() {
-        return this.totalSalesInfos;
+    public List<OrderAlbumInfo> getTotalAlbumSalesInfos() {
+        return this.totalAlbumSalesInfos;
+    }
+
+    /**
+     * get TotalSales of the track
+     *
+     * @return the track order info
+     */
+    public List<OrderTrackInfo> getTotalTrackSalesInfos() {
+        return this.totalTrackSalesInfos;
     }
 
     /**
      * Retrieve all the client orders.
      */
     public void retrieveAllOrders() {
-        totalSalesInfos = new ArrayList<>();
+        totalAlbumSalesInfos = new ArrayList<>();
+        totalTrackSalesInfos = new ArrayList<>();
 
         List<Albums> albums = this.albumsJpaController.findAlbumsEntities();
         for (Albums album : albums) {
             int id = album.getAlbumNumber();
             String albumtitle = album.getAlbumTitle();
             this.getAllAlbumsByID(saleStartDate, saleEndDate, id);
-            this.getTotalSales(id, albumtitle);
+            //this.getTotalSales(id, albumtitle);
+        }
+//        this.index = 1;
+
+        List<Tracks> tracks = this.tracksJpaController.findTracksEntities();
+        for (Tracks track : tracks) {
+            int id = track.getTrackId();
+            String tracktitle = track.getTrackTitle();
+            this.getAllTracksByID(saleStartDate, saleEndDate, id);
+            //this.getTotalSales(id, tracktitle);
         }
 
     }
@@ -139,7 +140,7 @@ public class TotalSalesBackingBean implements Serializable {
      *
      * @param saleStartDate the start date
      * @param saleEndDate the end date
-     * @param clientID the client id
+     * @param AlbumNumber the client id
      */
     private void getAllAlbumsByID(Date saleStartDate, Date saleEndDate, int AlbumNumber) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -159,7 +160,8 @@ public class TotalSalesBackingBean implements Serializable {
                     albums.get("albumNumber"),
                     albums.get("albumTitle"),
                     albums.get("listPrice"),
-                    albums.get("salePrice")
+                    albums.get("salePrice"),
+                    orders.get("orderDate")
             ));
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(TotalSalesBackingBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -167,22 +169,88 @@ public class TotalSalesBackingBean implements Serializable {
 
         final TypedQuery<OrderAlbumInfo> typedQuery = entityManager.createQuery(cq);
         List<OrderAlbumInfo> value = typedQuery.getResultList();
-        this.orderalbumsInfos = value;
+        if (!value.isEmpty()) {
+            for (OrderAlbumInfo orderAlbumInfo : value) {
+                OrderAlbumInfo temp = new OrderAlbumInfo(orderAlbumInfo.getAlbumId(), 
+                        orderAlbumInfo.getAlbumTitle(), orderAlbumInfo.getListPrice(), 
+                        orderAlbumInfo.getSalePrice(),orderAlbumInfo.getOrderDate());
+                this.totalAlbumSalesInfos.add(temp);
+            }
+        }
+    }
+
+    /**
+     * Get all the orders by using the track id.
+     *
+     * @param saleStartDate the start date
+     * @param saleEndDate the end date
+     * @param trackId the client id
+     */
+    private void getAllTracksByID(Date saleStartDate, Date saleEndDate, int trackId) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<OrderTrackInfo> cq = cb.createQuery(OrderTrackInfo.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        Root<OrderTrack> ordertrack = cq.from(OrderTrack.class);
+        Join tracks = ordertrack.join("trackId");
+        Join orders = ordertrack.join("orderId");
+        Join albums = tracks.join("albumNumber");
+        if (saleStartDate != null && saleEndDate != null) {
+            predicates.add(cb.between(orders.get("orderDate"), this.saleStartDate, this.saleEndDate));
+        }
+        predicates.add(cb.equal(tracks.get("trackId"), trackId));
+        cq.where(predicates.toArray(new Predicate[]{}));
+        try {
+            cq.select(cb.construct(OrderTrackInfo.class,
+                    tracks.get("trackId"),
+                    albums.get("albumNumber"),
+                    albums.get("albumTitle"),
+                    tracks.get("trackTitle"),
+                    tracks.get("listPrice"),
+                    tracks.get("salePrice"),
+                    orders.get("orderDate")
+            ));
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(TotalSalesBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        final TypedQuery<OrderTrackInfo> typedQuery = entityManager.createQuery(cq);
+        List<OrderTrackInfo> value = typedQuery.getResultList();
+        if (!value.isEmpty()) {
+            for (OrderTrackInfo orderTrackInfo : value) {
+                OrderTrackInfo temp = new OrderTrackInfo(orderTrackInfo.getTrackId(), 
+                        orderTrackInfo.getAlbumNumber(), orderTrackInfo.getAlbumTitle(), 
+                        orderTrackInfo.getTrackTitle(), orderTrackInfo.getListPrice(), 
+                        orderTrackInfo.getSalePrice(), orderTrackInfo.getOrderDate());
+                this.totalTrackSalesInfos.add(temp);
+            }
+        }
     }
 
     /**
      * Get the total value of the order
      *
-     * @param id
-     * @param username
+     * @return
      */
-    private double getTotalSales(int id, String albumtitle) {
+    public double getTotalAlbumSales() {
         double amount = 0;
-        for (OrderAlbumInfo orderalbumInfo : this.orderalbumsInfos) {
+        for (OrderAlbumInfo orderalbumInfo : this.totalAlbumSalesInfos) {
             if (orderalbumInfo.getSalePrice() != 0) {
                 amount += orderalbumInfo.getSalePrice();
             } else {
                 amount += orderalbumInfo.getListPrice();
+            }
+        }
+        return amount;
+    }
+
+    public double getTotalTrackSales() {
+        double amount = 0;
+        for (OrderTrackInfo ordertrackInfo : this.totalTrackSalesInfos) {
+            if (ordertrackInfo.getSalePrice() != 0) {
+                amount += ordertrackInfo.getSalePrice();
+            } else {
+                amount += ordertrackInfo.getListPrice();
             }
         }
         return amount;
