@@ -158,6 +158,11 @@ public class AlbumBean implements Serializable {
         Collections.shuffle(albumsGenre);
         return albumsGenre;
     }
+    
+    public boolean isEmptyCart(){
+        
+        return albumController.retrieveAllAlbumsInTheCart().size() <= 0;
+    }
 
     public String toString(){
      
