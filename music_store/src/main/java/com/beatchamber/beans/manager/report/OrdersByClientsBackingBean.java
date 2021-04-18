@@ -41,6 +41,7 @@ public class OrdersByClientsBackingBean implements Serializable {
     private List<OrderClientInfo> ordersInfos;
     private List<TotalSaleAndClientsInfo> totalSaleAndClientsInfos = new ArrayList<>();
     private List<TotalSaleAndClientsInfo> zeroSaleAndClientsInfos = new ArrayList<>();
+    private List<TotalSaleAndClientsInfo> saleByClientsInfos = new ArrayList<>();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -50,7 +51,8 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Get the client id
-     * @return 
+     *
+     * @return
      */
     public int getClientID() {
         return this.clientID;
@@ -58,7 +60,8 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Set the client id
-     * @param id 
+     *
+     * @param id
      */
     public void setClientId(int id) {
         this.clientID = id;
@@ -66,7 +69,8 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Get the start date of the search
-     * @return 
+     *
+     * @return
      */
     public Date getSaleStartDate() {
         return this.saleStartDate;
@@ -74,7 +78,8 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Set the start date of the search
-     * @param date 
+     *
+     * @param date
      */
     public void setSaleStartDate(Date date) {
         this.saleStartDate = date;
@@ -82,7 +87,8 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Get the end date of the search
-     * @return 
+     *
+     * @return
      */
     public Date getSaleEndDate() {
         return saleEndDate;
@@ -90,14 +96,16 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Set the end date of the search
-     * @param date 
+     *
+     * @param date
      */
     public void setSaleEndDate(Date date) {
         this.saleEndDate = date;
     }
-    
+
     /**
      * get TotalSales of the client
+     *
      * @return the client info
      */
     public List<TotalSaleAndClientsInfo> getTotalSales() {
@@ -105,11 +113,21 @@ public class OrdersByClientsBackingBean implements Serializable {
     }
 
     /**
-     * get the zero value purchased clients
+     * get Zero value purchased client
+     *
      * @return the client info
      */
     public List<TotalSaleAndClientsInfo> getZeroTotalSales() {
         return this.zeroSaleAndClientsInfos;
+    }
+
+    /**
+     * get all the info and items purchased by the client
+     *
+     * @return the client info
+     */
+    public List<TotalSaleAndClientsInfo> getSalesByClient() {
+        return this.saleByClientsInfos;
     }
 
     /**
@@ -131,9 +149,10 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Get all the orders by using the client id.
+     *
      * @param saleStartDate the start date
      * @param saleEndDate the end date
-     * @param clientID  the client id
+     * @param clientID the client id
      */
     private void getAllOrdersByClientID(Date saleStartDate, Date saleEndDate, int clientID) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -164,8 +183,9 @@ public class OrdersByClientsBackingBean implements Serializable {
 
     /**
      * Get the order total value of the order
+     *
      * @param id
-     * @param username 
+     * @param username
      */
     private void calculateTotalSalesEachClient(int id, String username) {
         if (this.ordersInfos.isEmpty()) {
