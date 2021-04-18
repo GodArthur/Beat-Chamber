@@ -495,6 +495,7 @@ public class CheckoutBean implements Serializable {
 
     /**
      * Sending an email of the order for the customer
+     * Source: https://www.codespeedy.com/how-to-send-email-in-java-using-javax-mail-api/
      * @param order The client's order
      * @author Susan Vuu - 1735488
      */
@@ -503,6 +504,7 @@ public class CheckoutBean implements Serializable {
         ResourceBundle languageBundle = ResourceBundle.getBundle("com.beatchamber.bundles.messages", localeChanger.getLocale());
         
         String toEmail = userLoginBean.getClient().getEmail();
+        //Email from last semester
         String fromEmail = "svsender989@gmail.com";
         String fromPassword = "LeL9yq3nYvz867u";
         
@@ -512,10 +514,12 @@ public class CheckoutBean implements Serializable {
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
+        
+        //Authenticate the sender
         Session session = Session.getInstance(properties, new Authenticator(){
             @Override
             protected PasswordAuthentication getPasswordAuthentication(){
-                return new PasswordAuthentication(fromEmail, fromPassword);  //pass your email id and password here
+                return new PasswordAuthentication(fromEmail, fromPassword);
          
             }
         });
