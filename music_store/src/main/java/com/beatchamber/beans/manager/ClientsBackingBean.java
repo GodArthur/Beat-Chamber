@@ -345,6 +345,11 @@ public class ClientsBackingBean implements Serializable {
                 || client.getCellPhone().toLowerCase().contains(filterText);
     }
     
+    /**
+     * Ger the total value of purchase of the client
+     * @param client
+     * @return the amount the client purchased
+     */
     public double getTotalConsumption(Clients client){
         double totalConsumption = 0;
         for(Orders order: client.getOrdersCollection()){

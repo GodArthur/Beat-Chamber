@@ -312,7 +312,7 @@ insert into Artist_Albums (artist_id,album_number) values
 
 
 insert into Tracks (album_number,track_title,play_length,selection_number,music_category,cost_price,list_price,sale_price,entry_date,removed,pst,gst,hst) values
-(1,'The Box','9:10',1,'Hip Hop',5.00,'7.44',15.00,'2020-01-01',false,0,0,0),
+(1,'The Box','9:10',1,'Hip Hop',5.00,'7.44',0,'2020-01-01',false,0,0,0),
 (1,'Boom Boom Room','9:10',2,'Hip Hop',5.00,'5.62',15.00,'2020-01-01',false,0,0,0),
 (1,'Roll Dice','9:10',3,'Hip Hop',5.00,'4.80',15.00,'2020-01-01',false,0,0,0),
 (1,'High Fashion','9:10',4,'Hip Hop',5.00,'5.44',15.00,'2020-01-01',false,0,0,0),
@@ -838,17 +838,17 @@ insert into Customer_reviews(review_number, track_id, client_number, review_date
 (3, 6, 7, '2020-05-15', 5, 'This song is so good but I also hate it', true);
 
 insert into Orders (order_total,order_gross_total,pst,gst,hst,client_number,order_date,visible) values
-(100, 102.25, 1,5,9,1,'2021-03-02', true),
+(100, 102.25, 1,5,9,1,'2021-03-01', true),
 (100, 102.25, 2,6,8,1,'2021-03-02', true),
-(100, 102.25, 3,7,7,1,'2021-03-02', true),
+(100, 102.25, 3,7,7,1,'2021-03-03', true),
 (100, 102.25, 4,8,6,2,'2021-03-02', true),
 (100, 102.25, 5,9,5,2,'2021-03-02', true),
-(100, 102.25, 6,1,4,1,'2021-03-02', true),
-(100, 102.25, 7,2,3,1,'2021-03-02', true),
-(100, 102.25, 8,3,2,1,'2021-03-02', true),
-(100, 102.25, 9,4,1,2,'2021-03-02', true),
-(100, 102.25, 1,1,9,1,'2021-03-02', true),
-(100, 102.25, 2,2,8,1,'2021-03-02', true);
+(100, 102.25, 6,1,4,1,'2021-04-02', true),
+(100, 102.25, 7,2,3,1,'2021-04-02', true),
+(100, 102.25, 8,3,2,1,'2021-04-02', true),
+(100, 102.25, 9,4,1,2,'2021-04-02', true),
+(100, 102.25, 1,1,9,1,'2021-02-02', true),
+(100, 102.25, 2,2,8,1,'2021-02-02', true);
 
 
 
@@ -871,4 +871,5 @@ insert into order_track (order_id,track_id) values
 (6,3),
 (7,5),
 (8,1),
-(9,4);
+(9,10),
+(10,4);

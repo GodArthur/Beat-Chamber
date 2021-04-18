@@ -172,6 +172,11 @@ public class RSSFeedsBackingBean implements Serializable {
         }
     }
 
+    /**
+     * Update the enabled button in the ad table.
+     *
+     * @param ad
+     */
     public void updateEnabled(RssFeeds rssfeed) {
         try {
             rssfeedsJpaController.edit(rssfeed);
