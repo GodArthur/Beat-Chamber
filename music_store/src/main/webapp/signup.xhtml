@@ -137,7 +137,7 @@
                                 </h:inputText>
                                 <h:message for="postalCode" styleClass="errorMessage" style="color:red"/>
                             </h:panelGrid>
-                            <p:commandButton type="submit" update="form" 
+                            <p:commandButton id="registerSubmitBtn" type="submit" update="form" 
                                              action="#{theLoginRegister.doCreateUser()}" 
                                              value="#{msgs.register}"/>
                         </h:form>
