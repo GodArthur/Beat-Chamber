@@ -17,7 +17,9 @@ import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -35,6 +37,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Massimo Di Girolamo
  */
+@Named
+@SessionScoped
 public class OrdersJpaController implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(OrdersJpaController.class);
@@ -328,5 +332,12 @@ public class OrdersJpaController implements Serializable {
         }
         
         return foundTracks;
+    }
+    
+    /**
+     * @return The client who recently made a purchase
+     */
+    public Clients findRecentClient() {
+        return findOrders(this.getOrdersCount()).getClientNumber();
     }
 }
