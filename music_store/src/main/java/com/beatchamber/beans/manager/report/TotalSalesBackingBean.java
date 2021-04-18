@@ -7,6 +7,7 @@ package com.beatchamber.beans.manager.report;
 
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Clients;
+import com.beatchamber.entities.OrderAlbum;
 import com.beatchamber.entities.Orders;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.ClientsJpaController;
@@ -145,8 +146,9 @@ public class TotalSalesBackingBean implements Serializable {
         CriteriaQuery<OrderAlbumInfo> cq = cb.createQuery(OrderAlbumInfo.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        Root<Orders> orders = cq.from(Orders.class);
-        Join albums = orders.join("orderId");
+        Root<OrderAlbum> orderalbum = cq.from(OrderAlbum.class);
+        Join albums = orderalbum.join("albumId");
+        Join orders = orderalbum.join("orderId");
         if (saleStartDate != null && saleEndDate != null) {
             predicates.add(cb.between(orders.get("orderDate"), this.saleStartDate, this.saleEndDate));
         }
