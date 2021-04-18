@@ -373,26 +373,8 @@ public class CheckoutBean implements Serializable {
                 LOG.error("order rollback error");
             }
         }
-
-        /**
-        LOG.info("Amount of tracks in the cart: " + trackController.retrieveAllTracksInTheCart().size());
-        //creating the orderTrack
-        for (Tracks item : trackController.retrieveAllTracksInTheCart()) {
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(order);
-            orderTrack.setPriceDuringOrder(item.getListPrice());
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order track error");
-            }
-        }
-        * 
-        */
         
         sendEmailToCustomer(order);
-        
         
         
         //All the tracks from different purchased albums
@@ -408,6 +390,7 @@ public class CheckoutBean implements Serializable {
 
         cookiesManager.clearTheCartWithoutRefresh();
 
+        
         return "index.xhtml?faces-redirect=true";
     }
     
