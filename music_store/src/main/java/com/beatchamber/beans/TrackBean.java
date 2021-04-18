@@ -178,6 +178,10 @@ public class TrackBean implements Serializable {
         return "track.xhtml?faces-redirect=true";
     }
 
+    /**
+     * Method stores albums that are of a similar genre to the
+     * displayed track into the album bean
+     */
     private void storeSimilarAlbums() {
 
         LOG.info("album bean: " + album);

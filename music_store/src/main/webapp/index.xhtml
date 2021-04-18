@@ -157,7 +157,7 @@
                             <p:selectOneRadio value="#{surveyBean.selectedChoice}" rendered="#{surveyBean.survey != null}">
                                 <f:selectItems value="#{surveyBean.surveyChoices}" var="surveyChoice" itemLabel="#{surveyChoice.choiceName} - #{surveyChoice.votes}"/>
                             </p:selectOneRadio>
-                            <p:commandButton value="#{msgs.vote}" action="#{surveyBean.voteSurvey()}" update="growl" rendered="#{surveyBean.survey != null}"/>
+                            <p:commandButton id="completeSurvey" value="#{msgs.vote}" action="#{surveyBean.voteSurvey()}" update="growl" rendered="#{surveyBean.survey != null}"/>
                         </div>
                         <div class="rss-display flow-root">
                             <p:feedReader value="#{rssFeedsJpaController.randomRssFeed}" var="feed" size="3">

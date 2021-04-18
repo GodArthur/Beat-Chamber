@@ -259,7 +259,7 @@ public class SearchEngine implements Serializable {
            return trackBean.sendTrack(sendComponent.getId(), sendComponent.getTitle());
         }
 
-        return albumBean.sendAlbum(sendComponent.getId(), sendComponent.getTitle());
+        return albumBean.sendAlbum(sendComponent.getId());
     }
         
                
@@ -281,27 +281,23 @@ public class SearchEngine implements Serializable {
             albumComponents.add(albumBackingBean);
         }
         
-        //Looping through every album
-        //Creating a bean with the album
-        //Storing the bean in the interface
-//        albums.stream().map((var album) -> {
-//            var albumBackingBean = new AlbumBackingBean(album);
-//            albumBackingBean.setCoverPath(albumController.getAlbumPath(album.getAlbumNumber(), true));
-//            albumBackingBean.setArtists(albumController.findArtists(album.getAlbumNumber()));
-//            return albumBackingBean;
-//        }).forEachOrdered((var albumBackingBean) -> {
-//            albumComponents.add(albumBackingBean);
-//        });
     }
     
     
+    /**
+     * Method checks if there's any music content (tracks or albums) found
+     * @return 
+     */
     public boolean isEmptyList(){
-        
-        LOG.info("Album size: " + albumComponents.size() + " || Track size: " + trackComponents.size());
-        
+                
         return albumComponents.size() <= 0 && trackComponents.size() <= 0;
     }
     
+    
+    /**
+     * Method finds albums by genre
+     * @return 
+     */
     public String findAlbumsByGenre(){
         
         albumComponents = new ArrayList<>();

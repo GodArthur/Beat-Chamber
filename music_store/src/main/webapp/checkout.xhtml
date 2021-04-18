@@ -85,7 +85,7 @@
                                     <br/>
 
                                  <!--<h:commandButton action="{checkoutData.addOrdersToTable(theLoginRegister.client.clientNumber,albumsJpaController.retrieveAllAlbumsInTheCart(),tracksController.retrieveAllTracksInTheCart(),checkoutData.getTotalPriceWithTax(checkoutData.computePrices(tracksController.totalPrice,albumsJpaController.totalPrice),provincesJpaController.findProvinces(checkoutData.province).pst,provincesJpaController.findProvinces(checkoutData.province).gst,provincesJpaController.findProvinces(checkoutData.province).hst))}" styleClass="validationBTN" value="{msgs.completeCheckout}" type="submit"/>-->
-                                 <h:commandButton action="#{checkoutData.addOrders(theLoginRegister.client.clientNumber)}" styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/>
+                                 <button><h:commandButton action="#{checkoutData.addOrders()}" styleClass="validationBTN" value="#{msgs.completeCheckout}" type="submit"/></button>
                                     <!--<h:commandButton action="#{checkoutData.addOrders}" value="#{msgs.completeCheckout}" type="submit"/>-->
 				</h:form>
                             
@@ -110,7 +110,7 @@
                                 <p>
                                     <c:forEach var="trackItem" items="#{tracksController.retrieveAllTracksInTheCart()}">
                                         <h3>#{trackItem.trackTitle} #{trackItem.listPrice}$</h3><br/>
-                                </c:forEach>
+                                    </c:forEach>
                                 </p>
 				<hr class="hrColor" />
                                 <h3>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice)}$</h3><br/>

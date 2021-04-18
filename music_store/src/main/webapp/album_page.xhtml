@@ -44,7 +44,7 @@
                         </div>
 
                         <h:form styleClass=""><!-- @author Ibrahim -->
-                            <p:commandButton icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart,theLoginRegister.client.clientNumber)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}"/>
+                            <p:commandButton id="addToCartAlbum" icon="pi pi-shopping-cart" action="#{cookies.addAlbumToCart(album.albumId)}" value="#{cookies.adjustDisplay(album.albumId, msgs.addToCart,theLoginRegister.client.clientNumber)}" disabled="#{cookies.shouldTheAddToCartBeDisabled(album.albumId,theLoginRegister.client.clientNumber)}"/>
                         </h:form>
                         <br/>
                         <h:form><!--@author Korjon Chang-Jones and Ibrahim Kebe-->
@@ -64,7 +64,7 @@
                                 <div class="album-cover-group">
                                     <div>
                                         <h:form>
-                                            <h:commandLink action="#{album.sendAlbum(albumItem.albumNumber)}">
+                                            <h:commandLink action="#{album.sendAlbum}">
                                                 <f:param name="albumId" value="#{albumItem.albumNumber}"/>
 
                                                 <h:graphicImage
@@ -77,7 +77,7 @@
                                         </h:form>
                                     </div>
                                     <h:form>
-                                        <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum(albumItem.albumNumber)}">
+                                        <h:commandLink value="#{albumItem.albumTitle}" action="#{album.sendAlbum}">
                                             <f:param name="albumId" value="#{albumItem.albumNumber}"/>
                                         </h:commandLink>
                                     </h:form>

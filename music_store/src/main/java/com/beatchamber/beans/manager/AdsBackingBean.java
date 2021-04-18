@@ -199,6 +199,11 @@ public class AdsBackingBean implements Serializable {
             }
         }
     }
+    
+    /**
+     * Update the enabled button in the ad table.
+     * @param ad 
+     */
     public void updateEnabled(Ads ad) {
         try {
             this.adsJpaController.edit(ad);

@@ -8,12 +8,12 @@
         <title>#{msgs.viewPurchases}</title>
         <h:outputStylesheet library="styles" name="main.css"/>
     </h:head>
-    <h:body>
+    <h:body style="background: purple">
         <!-- Base template of the page -->
         <ui:composition template="templates/master_template.xhtml">
             <ui:define name="content">
                 <h2>#{msgs.viewPurchases}</h2>
-                <p:dataView var="items" value="#{ordersJpaController.getClientOrders(theLoginRegister.clientId)}" 
+                <p:dataView var="items" value="#{ordersController.getClientOrders(theLoginRegister.client.clientNumber)}" 
                             multiViewState="true" gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                     <p:dataViewGridItem>
                         <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(items.trackId.albumNumber.albumNumber, true)}" styleClass="album-img-small"/>
@@ -36,6 +36,7 @@
                         <p:media value="audio/fireflies.mp3" width="100%" height="300px">
                             <h:outputLink value="#{request.contextPath}/audio/fireflies.mp3">Download</h:outputLink>
                         </p:media>
+                        
                     </p:dataViewListItem>
                 </p:dataView>
             </ui:define>

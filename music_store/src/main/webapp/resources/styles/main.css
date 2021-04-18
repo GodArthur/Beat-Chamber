@@ -314,10 +314,6 @@ a:visited {
     max-width: 300px;
 }
 
-.album-list-price {
-
-}
-
 /*Ibrahim was here*/
 .sub_title{
     text-align: left;
@@ -370,14 +366,12 @@ a:visited {
     color:black;
     font-size: 20px;
     font-weight:bold;
-    opacity: 0.5;
-    transition: 0.3s;
 }
 
-/*Ibrahim was here*/
+/*Ibrahim was here
 .validationBTN:hover {
     opacity: 1
-}
+}*/
 
 /*Ibrahim was here*/
 .hrColor{
@@ -655,6 +649,7 @@ div.stars {
 
 
 .input-style {
+    
     outline: none;
     border: none;
     margin: 0px;
@@ -686,6 +681,7 @@ div.stars {
 
 
 /*****TRACKS PAGE By Korjon Chang-Jones*****/
+
 
 #album-section{
 
