@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.beatchamber.beans;
 
 import com.beatchamber.entities.Albums;
@@ -75,6 +71,9 @@ public class CheckoutBean implements Serializable {
 
     @Inject
     private LoginRegisterBean userLoginBean;
+    
+    @Inject
+    private InvoiceBean invoice;
 
     @Inject
     private OrdersJpaController orderController;
@@ -328,65 +327,7 @@ public class CheckoutBean implements Serializable {
         }
     }
 
-    /**
-     * This method will add the orders in the appropriate order tables
-     *
-     * @param ClientNumber
-     * @param albumList
-     * @param trackList
-     * @param totalPrice
-     * @return String
-     * @author Ibrahim
-     */
-    public String addOrdersToTable(int ClientNumber, ArrayList<Albums> albumList, ArrayList<Tracks> trackList, double totalPrice) {
-        //set variables
-        Orders order = new Orders();
-        Date date = new Date();
-        CookieManager cookiesManager = new CookieManager();
-        int newOrderId = orderController.getOrdersCount() + 1;
-        //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
-        //creating the order
-        order.setOrderDate(date);
-        order.setClientNumber(clientController.findClients(ClientNumber));
-        order.setVisible(true);
-        order.setOrderId(newOrderId);
-        order.setOrderTotal(totalPrice);
-        try {
-            orderController.create(order);
-        } catch (RollbackFailureException ex) {
-            LOG.error("orders order roll back error");
-        } catch (SystemException ex) {
-            java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        //creating the orderAlbums
-        for (Albums item : albumList) {
-            OrderAlbum orderAlbum = new OrderAlbum();
-            orderAlbum.setAlbumId(item);
-            orderAlbum.setOrderId(orderController.findOrders(newOrderId));
-            try {
-                orderAlbumController.create(orderAlbum);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order rollback error");
-            }
-        }
-
-        //creating the orderTrack
-        for (Tracks item : trackList) {
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderController.findOrders(newOrderId));
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order track error");
-            }
-        }
-
-        cookiesManager.clearTheCartWithoutRefresh();
-
-        return "index.xhtml";
-    }
+   
 
     
     /**
@@ -407,20 +348,11 @@ public class CheckoutBean implements Serializable {
 
         //Creating an order entity
         Orders order = new Orders();
-        Date date = new Date();
+        
         CookieManager cookiesManager = new CookieManager();
-        //int newOrderId = orderController.getOrdersCount() + 1;
 
-        order.setOrderDate(date);
-        order.setGst(this.gstVal);
-        order.setPst(this.pstVal);
-        order.setHst(this.hstVal);
-        order.setClientNumber(clientController.findClients(userLoginBean.getClient().getClientNumber()));
-        order.setVisible(true);
-        //order.setOrderId(newOrderId);
-        order.setOrderTotal(convertStringToDouble(computePrices(trackController.getTotalPrice(), albumController.getTotalPrice())));
-        order.setOrderGrossTotal(totalTaxedPrice);
-
+        setOrderFields(order);
+        
         try {
             orderController.create(order);
         } catch (RollbackFailureException ex) {
@@ -429,8 +361,7 @@ public class CheckoutBean implements Serializable {
             java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        LOG.info("ID of the order created: " + order.getOrderId());
-        
+        //Creating order album
         for (Albums item : albumController.retrieveAllAlbumsInTheCart()) {
             OrderAlbum orderAlbum = new OrderAlbum();
             orderAlbum.setAlbumId(item);
@@ -442,37 +373,47 @@ public class CheckoutBean implements Serializable {
                 LOG.error("order rollback error");
             }
         }
-
-        //creating the orderTrack
-        for (Tracks item : trackController.retrieveAllTracksInTheCart()) {
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderController.findOrders(order.getOrderId()));
-            orderTrack.setPriceDuringOrder(item.getListPrice());
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order track error");
-            }
-        }
         
-
         sendEmailToCustomer(order);
         
-        /*//All the tracks from different purchased albums
+        
+        //All the tracks from different purchased albums
         List<List<Tracks>> albumTracks = getTracksFromAlbums(albums);
         
         //storing randomly purchased songs
-        storeOrderTracks(tracks, newOrderId);
+        storeOrderTracks(tracks, order);
 
         //storing songs from purchased albums
         albumTracks.forEach(trackList -> {
-            storeOrderTracks(trackList, newOrderId);
-        });*/
+            storeOrderTracks(trackList, order);
+        });
 
         cookiesManager.clearTheCartWithoutRefresh();
 
+        
         return "index.xhtml?faces-redirect=true";
+    }
+    
+    
+    /**
+     * Method sets the fields and information for a new order
+     * @param order 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    private void setOrderFields(Orders order){
+        
+        Date date = new Date();
+        double totalTaxedPrice = combinePrices();
+
+        order.setOrderDate(date);
+        order.setGst(this.gstVal);
+        order.setPst(this.pstVal);
+        order.setHst(this.hstVal);
+        order.setClientNumber(clientController.findClients(userLoginBean.getClient().getClientNumber()));
+        order.setVisible(true);
+        order.setOrderTotal(convertStringToDouble(computePrices(trackController.getTotalPrice(), albumController.getTotalPrice())));
+        order.setOrderGrossTotal(totalTaxedPrice);
     }
 
     /**
@@ -499,12 +440,13 @@ public class CheckoutBean implements Serializable {
      * 
      * @Korjon Chang-Jones Ibrahim Kebe
      */
-    private void storeOrderTracks(List<Tracks> trackList, int orderId) {
+    private void storeOrderTracks(List<Tracks> trackList, Orders order) {
 
         //creating the orderTrack
         for (Tracks track : trackList) {
             OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderController.findOrders(orderId));
+            orderTrack.setOrderId(order);
+            orderTrack.setPriceDuringOrder(track.getListPrice());
             orderTrack.setTrackId(track);
             try {
                 orderTrackController.create(orderTrack);
