@@ -39,6 +39,8 @@ public class AlbumBean implements Serializable {
     @Inject
     private AlbumsJpaController albumController;
     
+    @Inject TracksJpaController trackController;
+    
     @Inject
     private GenresJpaController genreController;
     
@@ -67,6 +69,14 @@ public class AlbumBean implements Serializable {
         this.albumId = albumId;
     }
     
+    /**
+     * Method gets the first 3 similar albums to the
+     * album being displayed
+     * 
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
     public List<Albums> getSimilarAlbums(){
         
         LOG.info("Similar albums amount in album bean: " + similarAlbums.size());
@@ -75,42 +85,46 @@ public class AlbumBean implements Serializable {
     
     /**
      * Stores the sent param in albumId, and navigates to the album page
-     * @param currentAlbumId
      * @return The album page
+     * 
+     * @author Susan Vuu - 1735488
      */
-    public String sendAlbum(int currentAlbumId){
-        
-        cookies.addAlbumGenreToCookies(currentAlbumId);
-        
+    public String sendAlbum(){
+                
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
         this.albumId = Integer.parseInt(params.get("albumId"));
+        
+        cookies.addAlbumGenreToCookies(albumId);
         
         storeSimilarAlbums(albumController.findGenre(albumId));
         return "album_page.xhtml?faces-redirect=true";
     }
     
-    public String sendAlbum(){
-        
-        FacesContext fc = FacesContext.getCurrentInstance();
-        Map<String,String> params = fc.getExternalContext().getRequestParameterMap();
-        this.albumId = Integer.parseInt(params.get("albumId"));
-        
-        storeSimilarAlbums(albumController.findGenre(albumId));
-        return "album_page.xhtml?faces-redirect=true";
-    }
     
     public String sendAlbum(Albums album){
         
         LOG.info("send alum is called from browse music");
         this.albumId = album.getAlbumNumber();
+        cookies.addAlbumGenreToCookies(albumId);
+
         storeSimilarAlbums(albumController.findGenre(albumId));
         return "album_page.xhtml?faces-redirect=true";
     }
     
-    public String sendAlbum(int id, String title){
+    
+    /**
+     * Stores the sent param in albumId, and navigates to the album page
+     * @param id
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public String sendAlbum(int id){
         
         this.albumId = id;
+        cookies.addAlbumGenreToCookies(albumId);
+
         storeSimilarAlbums(albumController.findGenre(albumId));
         
         return "album_page.xhtml?faces-redirect=true";
@@ -155,8 +169,20 @@ public class AlbumBean implements Serializable {
             albumsGenre = albumController.findAlbumsByGenre(lastViewedGenre);
         }
         
-        Collections.shuffle(albumsGenre);
+        //Collections.shuffle(albumsGenre);
         return albumsGenre;
+    }
+    
+    
+    /**
+     * Method checks if the cart is empty
+     * @return 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    public boolean isEmptyCart(){
+        
+        return albumController.retrieveAllAlbumsInTheCart().size() <= 0 && trackController.retrieveAllTracksInTheCart().size() <= 0;
     }
 
     public String toString(){

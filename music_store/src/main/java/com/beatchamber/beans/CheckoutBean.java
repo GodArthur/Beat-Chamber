@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.beatchamber.beans;
 
 import com.beatchamber.entities.Albums;
@@ -31,8 +27,17 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javax.inject.Inject;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.*;
 import javax.transaction.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +71,9 @@ public class CheckoutBean implements Serializable {
 
     @Inject
     private LoginRegisterBean userLoginBean;
+    
+    @Inject
+    private InvoiceBean invoice;
 
     @Inject
     private OrdersJpaController orderController;
@@ -87,6 +95,9 @@ public class CheckoutBean implements Serializable {
 
     @Inject
     private ProvincesJpaController provinceController;
+    
+    @Inject
+    private LocaleChanger localeChanger;
 
     private final static Logger LOG = LoggerFactory.getLogger(OrdersJpaController.class);
 
@@ -316,65 +327,7 @@ public class CheckoutBean implements Serializable {
         }
     }
 
-    /**
-     * This method will add the orders in the appropriate order tables
-     *
-     * @param ClientNumber
-     * @param albumList
-     * @param trackList
-     * @param totalPrice
-     * @return String
-     * @author Ibrahim
-     */
-    public String addOrdersToTable(int ClientNumber, ArrayList<Albums> albumList, ArrayList<Tracks> trackList, double totalPrice) {
-        //set variables
-        Orders order = new Orders();
-        Date date = new Date();
-        CookieManager cookiesManager = new CookieManager();
-        int newOrderId = orderController.getOrdersCount() + 1;
-        //clientNumber = em.getReference(clientNumber.getClass(), clientNumber.getClientNumber());
-        //creating the order
-        order.setOrderDate(date);
-        order.setClientNumber(clientController.findClients(ClientNumber));
-        order.setVisible(true);
-        order.setOrderId(newOrderId);
-        order.setOrderTotal(totalPrice);
-        try {
-            orderController.create(order);
-        } catch (RollbackFailureException ex) {
-            LOG.error("orders order roll back error");
-        } catch (SystemException ex) {
-            java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        //creating the orderAlbums
-        for (Albums item : albumList) {
-            OrderAlbum orderAlbum = new OrderAlbum();
-            orderAlbum.setAlbumId(item);
-            orderAlbum.setOrderId(orderController.findOrders(newOrderId));
-            try {
-                orderAlbumController.create(orderAlbum);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order rollback error");
-            }
-        }
-
-        //creating the orderTrack
-        for (Tracks item : trackList) {
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderController.findOrders(newOrderId));
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order track error");
-            }
-        }
-
-        cookiesManager.clearTheCartWithoutRefresh();
-
-        return "index.xhtml";
-    }
+   
 
     
     /**
@@ -384,7 +337,7 @@ public class CheckoutBean implements Serializable {
      * 
      * @Korjon Chang-Jones Ibrahim Kebe
      */
-    public String addOrders(int clientId) {
+    public String addOrders() {
 
         //getting the tracks and albums from a cart
         List<Albums> albums = albumController.retrieveAllAlbumsInTheCart();
@@ -395,20 +348,11 @@ public class CheckoutBean implements Serializable {
 
         //Creating an order entity
         Orders order = new Orders();
-        Date date = new Date();
+        
         CookieManager cookiesManager = new CookieManager();
-        int newOrderId = orderController.getOrdersCount() + 1;
 
-        order.setOrderDate(date);
-        order.setGst(this.gstVal);
-        order.setPst(this.pstVal);
-        order.setHst(this.hstVal);
-        order.setClientNumber(clientController.findClients(clientId));
-        order.setVisible(true);
-        order.setOrderId(newOrderId);
-        order.setOrderTotal(convertStringToDouble(computePrices(trackController.getTotalPrice(), albumController.getTotalPrice())));
-        order.setOrderGrossTotal(totalTaxedPrice);
-
+        setOrderFields(order);
+        
         try {
             orderController.create(order);
         } catch (RollbackFailureException ex) {
@@ -417,10 +361,11 @@ public class CheckoutBean implements Serializable {
             java.util.logging.Logger.getLogger(CheckoutBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        //Creating order album
         for (Albums item : albumController.retrieveAllAlbumsInTheCart()) {
             OrderAlbum orderAlbum = new OrderAlbum();
             orderAlbum.setAlbumId(item);
-            orderAlbum.setOrderId(orderController.findOrders(newOrderId));
+            orderAlbum.setOrderId(orderController.findOrders(order.getOrderId()));
             orderAlbum.setPriceDuringOrder(item.getListPrice());
             try {
                 orderAlbumController.create(orderAlbum);
@@ -428,34 +373,47 @@ public class CheckoutBean implements Serializable {
                 LOG.error("order rollback error");
             }
         }
-
-        //creating the orderTrack
-        for (Tracks item : trackController.retrieveAllTracksInTheCart()) {
-            OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderController.findOrders(newOrderId));
-            orderTrack.setPriceDuringOrder(item.getListPrice());
-            orderTrack.setTrackId(trackController.findTracks(item.getTrackId()));
-            try {
-                orderTrackController.create(orderTrack);
-            } catch (RollbackFailureException ex) {
-                LOG.error("order track error");
-            }
-        }
-
-        /*//All the tracks from different purchased albums
+        
+        sendEmailToCustomer(order);
+        
+        
+        //All the tracks from different purchased albums
         List<List<Tracks>> albumTracks = getTracksFromAlbums(albums);
         
         //storing randomly purchased songs
-        storeOrderTracks(tracks, newOrderId);
+        storeOrderTracks(tracks, order);
 
         //storing songs from purchased albums
         albumTracks.forEach(trackList -> {
-            storeOrderTracks(trackList, newOrderId);
-        });*/
+            storeOrderTracks(trackList, order);
+        });
 
         cookiesManager.clearTheCartWithoutRefresh();
 
-        return "index.xhtml";
+        
+        return "index.xhtml?faces-redirect=true";
+    }
+    
+    
+    /**
+     * Method sets the fields and information for a new order
+     * @param order 
+     * 
+     * @author Korjon Chang-Jones
+     */
+    private void setOrderFields(Orders order){
+        
+        Date date = new Date();
+        double totalTaxedPrice = combinePrices();
+
+        order.setOrderDate(date);
+        order.setGst(this.gstVal);
+        order.setPst(this.pstVal);
+        order.setHst(this.hstVal);
+        order.setClientNumber(clientController.findClients(userLoginBean.getClient().getClientNumber()));
+        order.setVisible(true);
+        order.setOrderTotal(convertStringToDouble(computePrices(trackController.getTotalPrice(), albumController.getTotalPrice())));
+        order.setOrderGrossTotal(totalTaxedPrice);
     }
 
     /**
@@ -482,12 +440,13 @@ public class CheckoutBean implements Serializable {
      * 
      * @Korjon Chang-Jones Ibrahim Kebe
      */
-    private void storeOrderTracks(List<Tracks> trackList, int orderId) {
+    private void storeOrderTracks(List<Tracks> trackList, Orders order) {
 
         //creating the orderTrack
         for (Tracks track : trackList) {
             OrderTrack orderTrack = new OrderTrack();
-            orderTrack.setOrderId(orderController.findOrders(orderId));
+            orderTrack.setOrderId(order);
+            orderTrack.setPriceDuringOrder(track.getListPrice());
             orderTrack.setTrackId(track);
             try {
                 orderTrackController.create(orderTrack);
@@ -517,4 +476,69 @@ public class CheckoutBean implements Serializable {
         return allTracks;
     }
 
+    /**
+     * Sending an email of the order for the customer
+     * Source: https://www.codespeedy.com/how-to-send-email-in-java-using-javax-mail-api/
+     * @param order The client's order
+     * @author Susan Vuu - 1735488
+     */
+    private void sendEmailToCustomer(Orders order){
+        //Get the locale to display with the right language
+        ResourceBundle languageBundle = ResourceBundle.getBundle("com.beatchamber.bundles.messages", localeChanger.getLocale());
+        
+        String toEmail = userLoginBean.getClient().getEmail();
+        //Email from last semester
+        String fromEmail = "svsender989@gmail.com";
+        String fromPassword = "LeL9yq3nYvz867u";
+        
+        //Set up the gmail properties to send
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.auth","true");
+        properties.put("mail.smtp.starttls.enable","true");
+        properties.put("mail.smtp.host","smtp.gmail.com");
+        properties.put("mail.smtp.port","587");
+        
+        //Authenticate the sender
+        Session session = Session.getInstance(properties, new Authenticator(){
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication(){
+                return new PasswordAuthentication(fromEmail, fromPassword);
+         
+            }
+        });
+        
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(fromEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+            message.setSubject(languageBundle.getString("emailSubject") + this.orderController.getOrdersCount());
+            message.setText(buildContent(languageBundle, order));
+            
+            Transport.send(message);
+            LOG.debug(languageBundle.getString("emailSent"));
+        } catch (MessagingException e) {
+            LOG.error("sendEmailToCustomer():" + e.toString());
+        }
+    }
+    
+    /**
+     * @param languageBundle The current language of the website
+     * @param order The client's order
+     * @return The content of the email
+     * @author Susan Vuu - 1735488
+     */
+    private String buildContent(ResourceBundle languageBundle, Orders order){
+        List<Tracks> purchasedTracks = this.trackController.retrieveAllTracksInTheCart();
+        
+        String content = languageBundle.getString("emailContentStart");
+        for(Tracks track : purchasedTracks) {
+            content = content + "\n" + track.getTrackTitle() + " " + languageBundle.getString("ofAlbum") + 
+                    track.getAlbumNumber().getAlbumTitle() + " " + languageBundle.getString("by") +
+                    track.getAlbumNumber().getArtistAlbumsList().get(0).getArtistId().getArtistName() +
+                    " - " + track.getListPrice();
+        }
+        content = content + "\n" + languageBundle.getString("totalPrice") + order.getOrderGrossTotal();
+        
+        return content;
+    }
 }

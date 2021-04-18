@@ -17,7 +17,7 @@ and open the template in the editor.
                 
                 <div id="cartPage">
                     <h:form>
-                        <h:commandLink action="#{cookies.clearTheCart()}" >
+                        <h:commandLink action="#{cookies.clearTheCart()}" rendered="#{albumsJpaController.retrieveAllAlbumsInTheCart().size() > 0 || tracksController.retrieveAllTracksInTheCart().size() > 0}">
                             <p:button value="#{msgs.clearCart}"  />
                         </h:commandLink>
                     </h:form>
@@ -26,7 +26,7 @@ and open the template in the editor.
                     <c:forEach var="albumItem" items="#{albumsJpaController.retrieveAllAlbumsInTheCart()}">
                         <!-- This is a div that will be created for every album made -->
                         <div class="itemList" style="display:#{cookies.checkIfAlbumIsInCart(albumItem.albumNumber)}">
-                            <!-- The form tag is being use so that we do not get the warning mesage -->
+                            <!-- The form tag is being use so that we do not get the warning message -->
                             <h:form>
                                 <div class="itemPicture"><h:graphicImage  library="images" name="#{albumsJpaController.getAlbumPath(albumItem.albumNumber, true)}" styleClass="album-img-small"/></div>
                                 <div class="dataInformation">
@@ -75,11 +75,19 @@ and open the template in the editor.
                     
                     <!-- Button that will allow the user to get to the checkout page -->
                     <h:form>
-                    <h:commandLink action="#{checkoutData.checkoutRedirect('checkout.xhtml')}"  >
+                    <h:commandLink action="#{checkoutData.checkoutRedirect('checkout.xhtml')}"  rendered="#{albumsJpaController.retrieveAllAlbumsInTheCart().size() > 0 || tracksController.retrieveAllTracksInTheCart().size() > 0}">
                         <p:button value="#{msgs.goToCheckout}" class="roundedButton2" />
                     </h:commandLink>
                     </h:form>
                     
+                    <h:panelGroup rendered="#{album.emptyCart}">
+                    <div id="no-results-container">
+                    <h:panelGroup id="no-results-container-span" >
+                        <h2 id="browse-no-results">#{msgs.noCartItems}</h2>
+                    </h:panelGroup>
+                    </div>
+                </h:panelGroup>
+                   
                 </div>
                 
             </ui:define>
