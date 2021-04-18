@@ -1,6 +1,9 @@
 USE CSgb1w21;
 
+SELECT * FROM ORDERS;
+SELECT * FROM ORDER_TRACK;
 
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS order_album;
 DROP TABLE IF EXISTS order_track;
 DROP TABLE IF EXISTS Provinces;
@@ -20,6 +23,7 @@ DROP TABLE IF EXISTS Artists_to_tracks;
 DROP TABLE IF EXISTS Tracks;
 DROP TABLE IF EXISTS Albums;
 DROP TABLE IF EXISTS Artists;
+SET FOREIGN_KEY_CHECKS = 1;
 
 create table Artists (
 artist_id int not null primary key auto_increment,

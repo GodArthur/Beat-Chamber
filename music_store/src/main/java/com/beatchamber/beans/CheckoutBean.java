@@ -31,8 +31,17 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javax.inject.Inject;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.*;
 import javax.transaction.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +96,9 @@ public class CheckoutBean implements Serializable {
 
     @Inject
     private ProvincesJpaController provinceController;
+    
+    @Inject
+    private LocaleChanger localeChanger;
 
     private final static Logger LOG = LoggerFactory.getLogger(OrdersJpaController.class);
 
@@ -445,6 +457,8 @@ public class CheckoutBean implements Serializable {
         }
         
 
+        sendEmailToCustomer(order);
+        
         /*//All the tracks from different purchased albums
         List<List<Tracks>> albumTracks = getTracksFromAlbums(albums);
         
@@ -520,4 +534,65 @@ public class CheckoutBean implements Serializable {
         return allTracks;
     }
 
+    /**
+     * Sending an email of the order for the customer
+     * @param order The client's order
+     * @author Susan Vuu - 1735488
+     */
+    private void sendEmailToCustomer(Orders order){
+        //Get the locale to display with the right language
+        ResourceBundle languageBundle = ResourceBundle.getBundle("com.beatchamber.bundles.messages", localeChanger.getLocale());
+        
+        String toEmail = userLoginBean.getClient().getEmail();
+        String fromEmail = "svsender989@gmail.com";
+        String fromPassword = "LeL9yq3nYvz867u";
+        
+        //Set up the gmail properties to send
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.auth","true");
+        properties.put("mail.smtp.starttls.enable","true");
+        properties.put("mail.smtp.host","smtp.gmail.com");
+        properties.put("mail.smtp.port","587");
+        Session session = Session.getInstance(properties, new Authenticator(){
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication(){
+                return new PasswordAuthentication(fromEmail, fromPassword);  //pass your email id and password here
+         
+            }
+        });
+        
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(fromEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+            message.setSubject(languageBundle.getString("emailSubject") + this.orderController.getOrdersCount());
+            message.setText(buildContent(languageBundle, order));
+            
+            Transport.send(message);
+            LOG.debug(languageBundle.getString("emailSent"));
+        } catch (MessagingException e) {
+            LOG.error("sendEmailToCustomer():" + e.toString());
+        }
+    }
+    
+    /**
+     * @param languageBundle The current language of the website
+     * @param order The client's order
+     * @return The content of the email
+     * @author Susan Vuu - 1735488
+     */
+    private String buildContent(ResourceBundle languageBundle, Orders order){
+        List<Tracks> purchasedTracks = this.trackController.retrieveAllTracksInTheCart();
+        
+        String content = languageBundle.getString("emailContentStart");
+        for(Tracks track : purchasedTracks) {
+            content = content + "\n" + track.getTrackTitle() + " " + languageBundle.getString("ofAlbum") + 
+                    track.getAlbumNumber().getAlbumTitle() + " " + languageBundle.getString("by") +
+                    track.getAlbumNumber().getArtistAlbumsList().get(0).getArtistId().getArtistName() +
+                    " - " + track.getListPrice();
+        }
+        content = content + "\n" + languageBundle.getString("totalPrice") + order.getOrderGrossTotal();
+        
+        return content;
+    }
 }
