@@ -110,7 +110,7 @@
                                 <p>
                                     <c:forEach var="trackItem" items="#{tracksController.retrieveAllTracksInTheCart()}">
                                         <h3>#{trackItem.trackTitle} #{trackItem.listPrice}$</h3><br/>
-                                </c:forEach>
+                                    </c:forEach>
                                 </p>
 				<hr class="hrColor" />
                                 <h3>#{msgs.subTotal} #{checkoutData.computePrices(tracksController.totalPrice, albumsJpaController.totalPrice)}$</h3><br/>
