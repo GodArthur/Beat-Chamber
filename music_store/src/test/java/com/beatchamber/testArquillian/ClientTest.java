@@ -42,6 +42,7 @@ import org.junit.runner.RunWith;
  *
  * @author kibra
  */
+@Ignore
 @RunWith(Arquillian.class)
 public class ClientTest {
     @Deployment
