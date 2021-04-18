@@ -18,7 +18,7 @@
                     <p:dataViewGridItem>
                         <p:graphicImage library="images" name="#{albumsJpaController.getAlbumPath(items.trackId.albumNumber.albumNumber, true)}" styleClass="album-img-small"/>
                         <br/>
-                        <p:outputLabel>#{items}</p:outputLabel>
+                        <p:outputLabel>#{items.trackId.albumNumber.albumTitle}</p:outputLabel>
                         <br/>
                         <p:outputLabel>#{items.trackId.trackTitle}</p:outputLabel>
                         <br/>
