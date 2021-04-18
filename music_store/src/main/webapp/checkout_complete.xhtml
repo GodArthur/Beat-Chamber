@@ -6,7 +6,14 @@
     <h:body>
         <!-- Base template of the page -->
         <ui:composition template="templates/master_template.xhtml">
-            
+            <ui:define name="content">
+                <section>
+                    <h1>#{ordersJpaController.findOrders(ordersJpaController.ordersCount)}</h1>
+                    <p:repeat value="#{ordersJpaController.getClientOrders(ordersJpaController.findRecentClient().clientNumber)}" var="recentOrders">
+                        <p>#{recentOrders.trackId.trackTitle}</p>
+                    </p:repeat>
+                </section>
+            </ui:define>
         </ui:composition>
     </h:body>
 </html>

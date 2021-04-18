@@ -333,5 +333,11 @@ public class OrdersJpaController implements Serializable {
         return foundTracks;
 
     }
-
+    
+    /**
+     * @return The client who recently made a purchase
+     */
+    public Clients findRecentClient() {
+        return findOrders(this.getOrdersCount()).getClientNumber();
+    }
 }
