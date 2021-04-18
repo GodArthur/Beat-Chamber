@@ -2,9 +2,12 @@ package com.beatchamber.beans.manager;
 
 import com.beatchamber.entities.OrderTrack;
 import com.beatchamber.entities.Orders;
+import com.beatchamber.entities.Tracks;
+import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.jpacontroller.OrderAlbumJpaController;
 import com.beatchamber.jpacontroller.OrderTrackJpaController;
 import com.beatchamber.jpacontroller.OrdersJpaController;
+import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,11 @@ public class OrderBean implements Serializable {
     @Inject
     private OrderTrackJpaController orderTrackJpaController;
     
+    @Inject
+    private TracksJpaController tracksJpaController;
+    
+    private String trackName;
+    
     private List<OrderTrack> orderTrackList;
     
     private List<Orders> ordersList;
@@ -45,7 +53,6 @@ public class OrderBean implements Serializable {
     private List<Orders> filteredOrdersList;
     
     //All the db values
-    private int tableKey;
     private int order_id;
     private double order_total;
     private int client_number;
@@ -64,7 +71,7 @@ public class OrderBean implements Serializable {
     @PostConstruct
     public void init() {
         this.ordersList = ordersJpaController.findOrdersEntities();
-        this.orderTrackList = orderTrackJpaController.findOrderTrackEntities();
+        //this.orderTrackList = orderTrackJpaController.findOrderTrackEntities();
     }
     
     /**
@@ -75,13 +82,6 @@ public class OrderBean implements Serializable {
     }
     
     //Getters and setters for all the dv values
-    public int getTableKey(){
-        return this.tableKey;
-    }
-    
-    public void setTableKey(int tblKey){
-        this.tableKey = tblKey;
-    }
     
     public int getOrder_id(){
         return this.order_id;
@@ -131,6 +131,14 @@ public class OrderBean implements Serializable {
         this.orderTrackId = trackId;
     }
     
+    public String getTrackName(){
+        return this.trackName;
+    }
+    
+    public void setTrackName(String trckName){
+        this.trackName = trckName;
+    }
+    
     public int getOrderAlbumId(){
         return this.orderAlbumId;
     }
@@ -148,6 +156,16 @@ public class OrderBean implements Serializable {
     public List<Orders> getOrdersList() {
 
         return ordersList;
+    }
+    
+    /**
+     * Method that gets all the tracks in an order
+     * @param intOrderId
+     * @return 
+     */
+    public List<OrderTrack> getOrderTrackList(int intOrderId){
+        Orders specificOrder = this.ordersJpaController.findOrders(intOrderId);
+        return this.orderTrackList = this.orderTrackJpaController.getOrderTracksByOrderId(specificOrder);
     }
 
     /**
@@ -186,6 +204,7 @@ public class OrderBean implements Serializable {
         this.filteredOrdersList = filteredOrdersList;
     }
     
+    
     /**
      * The message that shows when visibility changes
      */
@@ -198,6 +217,44 @@ public class OrderBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The order is no longer visible"));
         }
         
+    }
+    
+    public void changeVisibility(Orders order) throws NonexistentEntityException, Exception{
+        
+        this.selectedOrder = order;
+        this.visible = order.getVisible();
+        LOG.debug("Log order track collection " + order.getOrderId());
+        LOG.debug("About to change the visibility of the order");
+        LOG.debug("Order visibility is currently: " + order.getVisible());
+        
+        boolean newVis = changeVis(this.visible);
+        
+        //this.selectedOrder.setVisible(newVis);
+        this.selectedOrder.setPst(20.0);
+        this.ordersJpaController.edit(this.selectedOrder);
+        LOG.debug("Visibility is now " + newVis);
+    }
+    
+    /**
+     * Private method that takes the visibility and changes its value
+     * @param bool
+     * @return 
+     */
+    private boolean changeVis(boolean bool){
+        if(bool){
+            return false;
+        }
+        
+        else{
+            return true;
+        }
+    }
+    
+    public String returnTrackName(int trackId){
+         //to display for review page
+            Tracks track = (tracksJpaController.findTracks(trackId));
+            this.trackName = track.getTrackTitle();
+            return this.trackName;
     }
     
     
