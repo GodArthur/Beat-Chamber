@@ -6,7 +6,6 @@ import com.beatchamber.jpacontroller.ChoicesJpaController;
 import com.beatchamber.jpacontroller.SurveysJpaController;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;

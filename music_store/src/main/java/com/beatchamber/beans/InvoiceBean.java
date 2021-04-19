@@ -1,7 +1,6 @@
 
 package com.beatchamber.beans;
 
-import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Tracks;
 import java.io.Serializable;
 import java.util.*;
