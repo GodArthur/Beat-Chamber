@@ -17,7 +17,7 @@
         <!-- While you should always run tests if there are any there are any -->
         <!-- at every build, sometimes there are circumstances such as just   -->
         <!-- working on the UI when testing can be turned off temporarily.    -->
-        <skipTests>false</skipTests>
+        <skipTests>true</skipTests>
     </properties>
 
     <!-- All of the sample code shares the same dependencies and build         -->
