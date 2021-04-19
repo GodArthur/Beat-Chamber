@@ -21,7 +21,6 @@
                     
                     <p:toolbar style="width: 80%; margin-left: 10%">
                         <p:toolbarGroup id="barGroup">  
-                            <p:growl id="messages" showDetail="true"/>
                             <p:outputLabel for="clientid" value="Client Id"/>
                             <p:inputText id="clientid" value="#{SaleByClient.clientId}" 
                                          required="true" requiredMessage="#{msgs.clientIdRequired}"
@@ -43,11 +42,11 @@
                                 <p:menuitem value="Total Sales" outcome="totalSales"/>
                                 <p:menuitem value="Sales by Client" outcome="salesByClient"/>
                                 <p:menuitem value="Sales by Artist"/>
-                                <p:menuitem value="Sales by Track"/>
+                                <p:menuitem value="Sales by Track" outcome="salesByTracks"/>
                                 <p:menuitem value="Sales by Album"/>
                                 <p:menuitem value="Top Sellers"/>
                                 <p:menuitem value="Top Clients"  outcome="topClients"/>
-                                <p:menuitem value="Zero Tracks"/>
+                                <p:menuitem value="Zero Tracks" outcome="zeroTracks"/>
                                 <p:menuitem value="Zero Clients" outcome="zeroClients"/>
                             </p:tieredMenu>
                         </p:splitterPanel>

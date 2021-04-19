@@ -25,6 +25,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -32,24 +33,40 @@ import javax.persistence.criteria.Root;
  *
  * @author Yan Tang
  */
-@Named("TotalSales")
+@Named("SalesByTrack")
 @ViewScoped
-public class TotalSalesBackingBean implements Serializable {
+public class SalesByTrackBackingBean implements Serializable {
 
+    private String trackId;
     private Date saleStartDate;
     private Date saleEndDate;
-    private List<OrderAlbumInfo> totalAlbumSalesInfos = new ArrayList<>();
-    private List<OrderTrackInfo> totalTrackSalesInfos = new ArrayList<>();
-    private final String[] category = {"Album", "Track"};
+    private List<OrderTrackInfo> trackSalesInfos = new ArrayList<>();
+    private List<OrderTrackInfo> ordersTrackInfos = new ArrayList<>();
+    ;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Inject
-    AlbumsJpaController albumsJpaController;
-
-    @Inject
     TracksJpaController tracksJpaController;
+
+    /**
+     * get the track id
+     *
+     * @return
+     */
+    public String getTrackId() {
+        return trackId;
+    }
+
+    /**
+     * Set the track id
+     *
+     * @param trackId
+     */
+    public void setTrackId(String trackId) {
+        this.trackId = trackId;
+    }
 
     /**
      * Get the start date of the search
@@ -87,93 +104,22 @@ public class TotalSalesBackingBean implements Serializable {
         this.saleEndDate = date;
     }
 
-    public String[] getCategory() {
-        return category;
-    }
-
-    /**
-     * get TotalSales of the albums
-     *
-     * @return the album order info
-     */
-    public List<OrderAlbumInfo> getTotalAlbumSalesInfos() {
-        return this.totalAlbumSalesInfos;
-    }
-
     /**
      * get TotalSales of the track
      *
      * @return the track order info
      */
-    public List<OrderTrackInfo> getTotalTrackSalesInfos() {
-        return this.totalTrackSalesInfos;
+    public List<OrderTrackInfo> getTrackSalesInfos() {
+        return this.trackSalesInfos;
     }
 
     /**
      * Retrieve all the client orders.
      */
     public void retrieveAllOrders() {
-        totalAlbumSalesInfos = new ArrayList<>();
-        totalTrackSalesInfos = new ArrayList<>();
+        trackSalesInfos = new ArrayList<>();
+        this.getAllTracksByID(saleStartDate, saleEndDate, Integer.parseInt(trackId));
 
-        List<Albums> albums = this.albumsJpaController.findAlbumsEntities();
-        for (Albums album : albums) {
-            int id = album.getAlbumNumber();
-            String albumtitle = album.getAlbumTitle();
-            this.getAllAlbumsByID(saleStartDate, saleEndDate, id);
-        }
-
-        List<Tracks> tracks = this.tracksJpaController.findTracksEntities();
-        for (Tracks track : tracks) {
-            int id = track.getTrackId();
-            String tracktitle = track.getTrackTitle();
-            this.getAllTracksByID(saleStartDate, saleEndDate, id);
-        }
-
-    }
-
-    /**
-     * Get all the orders by using the album id.
-     *
-     * @param saleStartDate the start date
-     * @param saleEndDate the end date
-     * @param AlbumNumber the client id
-     */
-    private void getAllAlbumsByID(Date saleStartDate, Date saleEndDate, int AlbumNumber) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<OrderAlbumInfo> cq = cb.createQuery(OrderAlbumInfo.class);
-        List<Predicate> predicates = new ArrayList<>();
-
-        Root<OrderAlbum> orderalbum = cq.from(OrderAlbum.class);
-        Join albums = orderalbum.join("albumId");
-        Join orders = orderalbum.join("orderId");
-        if (saleStartDate != null && saleEndDate != null) {
-            predicates.add(cb.between(orders.get("orderDate"), this.saleStartDate, this.saleEndDate));
-        }
-        predicates.add(cb.equal(albums.get("albumNumber"), AlbumNumber));
-        cq.where(predicates.toArray(new Predicate[]{}));
-        try {
-            cq.select(cb.construct(OrderAlbumInfo.class,
-                    albums.get("albumNumber"),
-                    albums.get("albumTitle"),
-                    albums.get("listPrice"),
-                    albums.get("salePrice"),
-                    orders.get("orderDate")
-            ));
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(TotalSalesBackingBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        final TypedQuery<OrderAlbumInfo> typedQuery = entityManager.createQuery(cq);
-        List<OrderAlbumInfo> value = typedQuery.getResultList();
-        if (!value.isEmpty()) {
-            for (OrderAlbumInfo orderAlbumInfo : value) {
-                OrderAlbumInfo temp = new OrderAlbumInfo(orderAlbumInfo.getAlbumId(),
-                        orderAlbumInfo.getAlbumTitle(), orderAlbumInfo.getListPrice(),
-                        orderAlbumInfo.getSalePrice(), orderAlbumInfo.getOrderDate());
-                this.totalAlbumSalesInfos.add(temp);
-            }
-        }
     }
 
     /**
@@ -192,6 +138,7 @@ public class TotalSalesBackingBean implements Serializable {
         Join tracks = ordertrack.join("trackId");
         Join orders = ordertrack.join("orderId");
         Join albums = tracks.join("albumNumber");
+
         if (saleStartDate != null && saleEndDate != null) {
             predicates.add(cb.between(orders.get("orderDate"), this.saleStartDate, this.saleEndDate));
         }
@@ -208,7 +155,7 @@ public class TotalSalesBackingBean implements Serializable {
                     orders.get("orderDate")
             ));
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(TotalSalesBackingBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OrdersByClientsBackingBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         final TypedQuery<OrderTrackInfo> typedQuery = entityManager.createQuery(cq);
@@ -219,28 +166,11 @@ public class TotalSalesBackingBean implements Serializable {
                         orderTrackInfo.getAlbumNumber(), orderTrackInfo.getAlbumTitle(),
                         orderTrackInfo.getTrackTitle(), orderTrackInfo.getListPrice(),
                         orderTrackInfo.getSalePrice(), orderTrackInfo.getOrderDate());
-                this.totalTrackSalesInfos.add(temp);
+                this.trackSalesInfos.add(temp);
             }
         }
     }
-
-    /**
-     * Get the total value of the album orders
-     *
-     * @return
-     */
-    public double getTotalAlbumSales() {
-        double amount = 0;
-        for (OrderAlbumInfo orderalbumInfo : this.totalAlbumSalesInfos) {
-            if (orderalbumInfo.getSalePrice() != 0) {
-                amount += orderalbumInfo.getSalePrice();
-            } else {
-                amount += orderalbumInfo.getListPrice();
-            }
-        }
-        return amount;
-    }
-
+    
     /**
      * Get the total value of the track orders
      *
@@ -248,7 +178,7 @@ public class TotalSalesBackingBean implements Serializable {
      */
     public double getTotalTrackSales() {
         double amount = 0;
-        for (OrderTrackInfo ordertrackInfo : this.totalTrackSalesInfos) {
+        for (OrderTrackInfo ordertrackInfo : this.trackSalesInfos) {
             if (ordertrackInfo.getSalePrice() != 0) {
                 amount += ordertrackInfo.getSalePrice();
             } else {
