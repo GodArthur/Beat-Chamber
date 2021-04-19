@@ -57,6 +57,13 @@
             <artifactId>rome</artifactId>
             <version>1.15.0</version>
         </dependency>
+        <!-- Firefox Driver Dependency for Firefox users -->
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-firefox-driver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>3.141.59</version>
+        </dependency>
     </dependencies>
 
 </project>

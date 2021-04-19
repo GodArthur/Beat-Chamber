@@ -1,10 +1,16 @@
 
 package com.beatchamber.beans;
 
+import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.OrderTrack;
+import com.beatchamber.entities.Orders;
 import com.beatchamber.entities.Tracks;
+import com.beatchamber.jpacontroller.OrderTrackJpaController;
+import com.beatchamber.jpacontroller.OrdersJpaController;
 import java.io.Serializable;
 import java.util.*;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -16,6 +22,11 @@ import javax.inject.Named;
 @SessionScoped
 public class InvoiceBean implements Serializable{
     
+    @Inject
+    private OrdersJpaController ordersJpaController;
+    
+    @Inject
+    private OrderTrackJpaController orderTrackJpaController;
     
     private List<Tracks> tracks;
     
@@ -82,6 +93,24 @@ public class InvoiceBean implements Serializable{
         this.grossTotal = grossTotal;
     }
     
+    /**
+     * @param clientNumber
+     * @return The order id of the client's most recent purchase
+     * @author Susan Vuu
+     */
+    public int getClientRecentOrderId(Integer clientNumber) {
+        if (ordersJpaController.findClientRecentOrder(clientNumber) == null){
+            return 0;
+        }
+        return ordersJpaController.findClientRecentOrder(clientNumber).getOrderId();
+    }
     
-    
+    /**
+     * @param clientNumber
+     * @return The ordered tracks of the logged in client's recent purchase
+     */
+    public List<OrderTrack> getClientRecentOrderTracks(Integer clientNumber) {
+        Orders recentOrder = ordersJpaController.findClientRecentOrder(clientNumber);
+        return orderTrackJpaController.getOrderTracksByOrderId(recentOrder);
+    }
 }

@@ -16,6 +16,7 @@ import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.NonexistentEntityException;
 import com.beatchamber.exceptions.RollbackFailureException;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -32,7 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * The new invoices table
+ * 
  * @author Massimo Di Girolamo
  */
 @Named("ordersController")
@@ -314,28 +316,41 @@ public class OrdersJpaController implements Serializable {
 
     /**
      * @param clientNumber
-     * @return The current logged in client's purchases
+     * @return The currently logged in client's purchases
+     * @author Susan Vuu
      */
     public List<OrderTrack> getClientOrders(int clientNumber) {
 
         List<OrderTrack> allTracks = orderTrackController.findOrderTrackEntities();
-        List<OrderTrack> foundTracks = new ArrayList<OrderTrack>();
+        List<OrderTrack> foundTracks = new ArrayList<>();
 
         //find all of the tracks from the user
-        for (OrderTrack item : allTracks) {
-            if (item.getOrderId().getClientNumber().getClientNumber() == clientNumber) {
-                foundTracks.add(item);
-            }
-        }
+        allTracks.stream().filter(item -> (item.getOrderId().getClientNumber().getClientNumber() == clientNumber)).forEachOrdered(item -> {
+            foundTracks.add(item);
+        });
 
         return foundTracks;
 
     }
     
     /**
-     * @return The client who recently made a purchase
+     * @param clientNumber
+     * @return The recent order made by the client
      */
-    public Clients findRecentClient() {
-        return findOrders(this.getOrdersCount()).getClientNumber();
+    public Orders findClientRecentOrder(Integer clientNumber) {
+        List<Orders> allOrders = findOrdersEntities();
+        List<Orders> clientOrders = new ArrayList<>();
+        
+        for(Orders order : allOrders) {
+            if(Objects.equals(order.getClientNumber().getClientNumber(), clientNumber)) {
+                clientOrders.add(order);
+            }
+        }
+        
+        if(clientOrders.isEmpty()){
+            return null;
+        }
+        
+        return clientOrders.get(clientOrders.size() - 1);
     }
 }

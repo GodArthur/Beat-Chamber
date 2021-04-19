@@ -20,6 +20,7 @@ import com.beatchamber.exceptions.RollbackFailureException;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -50,6 +51,9 @@ public class AlbumsJpaController implements Serializable {
 
     @PersistenceContext(unitName = "music_store_persistence")
     private EntityManager em;
+    
+    @Inject
+    private TracksJpaController tracksJpaController;
     
     private ArrayList<Albums> listOfAlbumsInTheCart = new ArrayList<Albums>();
 
@@ -606,7 +610,20 @@ public class AlbumsJpaController implements Serializable {
         return query.getSingleResult();
     }
     
+    /**
+     * @param albumId
+     * @return If the album is on sale
+     * @author Susan Vuu
+     */
+    public boolean isAlbumOnSale(Integer albumId) {
+        return findAlbums(albumId).getSalePrice() > 0;
+    }
+    
+    /**
+     * @param albumId
+     * @return The album's price - the album's sale price
+     */
+    public Double getAlbumPrice(Integer albumId) {
+        return findAlbums(albumId).getListPrice() - findAlbums(albumId).getSalePrice();
+    }
 }
-
-
-

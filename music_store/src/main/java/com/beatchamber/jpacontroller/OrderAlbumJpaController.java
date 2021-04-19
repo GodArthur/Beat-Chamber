@@ -17,8 +17,11 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
@@ -201,4 +204,19 @@ public class OrderAlbumJpaController implements Serializable {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+    /**
+     * @param orderId
+     * @return All order albums by order id
+     * @author Susan Vuu
+     */
+    public List<OrderAlbum> getOrderAlbumsByOrderId(Orders orderId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<OrderAlbum> cq = cb.createQuery(OrderAlbum.class);
+        Root<OrderAlbum> rt = cq.from(OrderAlbum.class);
+        
+        cq.where(cb.equal(rt.get("orderId"), orderId));
+        TypedQuery<OrderAlbum> query = em.createQuery(cq);
+        
+        return query.getResultList();
+    }
 }

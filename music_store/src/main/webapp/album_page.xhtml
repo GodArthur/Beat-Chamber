@@ -34,13 +34,15 @@
                             <br/>
                             <h:outputText value="#{albumsJpaController.findAlbums(album.albumId).releaseDate}"/>
                             <br/>
-                            <a href="../java/com/beatchamber/beans/AlbumBean.java"></a>
-                            <h:outputText value="#{albumsJpaController.findAlbums(album.albumId).listPrice}" styleClass="album-price">
+                            <h:outputText value="#{albumsJpaController.getAlbumPrice(album.albumId)}" styleClass="album-price">
                                 <f:convertNumber currencySymbol="$" type="currency"/>
                             </h:outputText>
-                            <h:form>
-                                <p:rating readonly="true" value="4"/>
-                            </h:form>
+                            <br/>
+                            <h:outputText value="#{msgs.onSale} - #{msgs.previously}" rendered="#{albumsJpaController.isAlbumOnSale(album.albumId)}"/>
+                            <h:outputText value="#{albumsJpaController.findAlbums(album.albumId).listPrice}" 
+                                          rendered="#{albumsJpaController.isAlbumOnSale(album.albumId)}">
+                                <f:convertNumber currencySymbol="$" type="currency"/>
+                            </h:outputText>
                         </div>
 
                         <h:form styleClass=""><!-- @author Ibrahim -->
