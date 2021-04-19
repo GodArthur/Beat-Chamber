@@ -2,7 +2,6 @@ package com.beatchamber.beans;
 
 import com.beatchamber.entities.Albums;
 import com.beatchamber.entities.Artists;
-import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import java.io.Serializable;
 import java.util.List;

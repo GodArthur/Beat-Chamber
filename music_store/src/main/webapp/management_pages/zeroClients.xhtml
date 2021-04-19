@@ -34,11 +34,11 @@
                             <p:menuitem value="Total Sales" outcome="totalSales"/>
                             <p:menuitem value="Sales by Client" outcome="salesByClient"/>
                             <p:menuitem value="Sales by Artist" outcome="salesByArtist"/>
-                            <p:menuitem value="Sales by Track"/>
+                            <p:menuitem value="Sales by Track" outcome="salesByTracks"/>
                             <p:menuitem value="Sales by Album" outcome="salesByAlbum"/>
                             <p:menuitem value="Top Sellers" outcome="topSellers"/>
                             <p:menuitem value="Top Clients"  outcome="topClients"/>
-                            <p:menuitem value="Zero Tracks"/>
+                            <p:menuitem value="Zero Tracks" outcome="zeroTracks"/>
                             <p:menuitem value="Zero Clients"  outcome="zeroClients"/>
                         </p:tieredMenu>
 
@@ -52,13 +52,13 @@
                                 </div>
                             </f:facet>
 
-                            <p:column headerText="Client ID" sortBy="#{item.clientID}" filterBy="#{item.clientID}">
+                            <p:column headerText="Client ID" sortBy="#{item.clientID}" >
                                 <h:outputText value="#{item.clientID}"/>
                             </p:column>
-                            <p:column headerText="Client User Name" sortBy="#{item.username}" filterBy="#{item.username}">
+                            <p:column headerText="Client User Name" sortBy="#{item.username}" >
                                 <h:outputText value="#{item.username}"/>
                             </p:column>
-                            <p:column headerText="Amount" sortBy="#{item.total}" filterBy="#{item.total}">
+                            <p:column headerText="Amount" sortBy="#{item.total}" >
                                 <h:outputText value="#{item.total}">
                                     <f:convertNumber pattern="$#,##0.00" currencySymbol="$" />
                                 </h:outputText>
