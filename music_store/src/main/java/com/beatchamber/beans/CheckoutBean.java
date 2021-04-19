@@ -391,7 +391,7 @@ public class CheckoutBean implements Serializable {
         cookiesManager.clearTheCartWithoutRefresh();
 
         
-        return "index.xhtml?faces-redirect=true";
+        return "checkout_complete.xhtml?faces-redirect=true";
     }
     
     

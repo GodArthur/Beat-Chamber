@@ -59,72 +59,45 @@ public class SeleniumTest {
         
         WebElement inputElement = null;
         
-         //              select survey              
-        
-        //select survey answer
-        /*
-        inputElement = driver.findElement(By.className("ui-radiobutton-icon"));
-        inputElement.click();
-        
-        inputElement = driver.findElement(By.id("j_idt36:completeSurvey"));
-        inputElement.click();*/
         
         
         //              add item to cart              
         
-        inputElements = driver.findElements(By.tagName("button"));
-        inputElements.get(3).click();
+        inputElements = driver.findElements(By.tagName("a"));
+        inputElements.get(15).click();
         
         inputElements = driver.findElements(By.tagName("button"));
-        wait.until(ExpectedConditions.urlToBe("http://localhost:8080/music_store/browse_music.xhtml"));
-        System.out.println(inputElements.get(0).getText()+" ###");
-        inputElements.get(0).click();
+        inputElements.get(1).click();
         
-        /*
-        //inputElement = driver.findElement(By.id("j_idt50:addToCartAlbum"));
-        inputElement = getButton("Add to Cart");
-        inputElement.click();
-        
-        //return to home
-        inputElement = driver.findElement(By.className("j_idt9:logo-Icon"));
-        inputElement.click();
+        inputElements = driver.findElements(By.tagName("button"));
+        inputElements.get(1).click();
         
         
-        //select the album Bones in the Ocean
-        selected = null ;
-        inputElements = driver.findElements(By.className("p"));
-        for(WebElement item:inputElements){
-            if(item.getText().equals("Bones in the Ocean")){
-                selected = item;
-            }
-        }
+        driver.navigate().to("http://localhost:8080/music_store/index.xhtml");
+        inputElements = driver.findElements(By.tagName("a"));
+        inputElements.get(15).click();
         
-        if(selected != null){
-            selected.click();
-        }
+        inputElements = driver.findElements(By.tagName("button"));
+        inputElements.get(1).click();
         
+        inputElements = driver.findElements(By.tagName("button"));
+        inputElements.get(2).click();
         
-        
-        
-        inputElement = driver.findElement(By.id("j_idt51:addToCartAlbum"));
-        inputElement.click();
-        
-        
-        //return to home
-        inputElement = driver.findElement(By.className("j_idt9:logo-Icon"));
-        inputElement.click();
+        driver.navigate().to("http://localhost:8080/music_store/index.xhtml");
         
         
         //              create user              
         
         //go to log in page
-        inputElement = driver.findElement(By.id("j_idt9:loginBtnNavBar"));
-        inputElement.click();
+        inputElements = driver.findElements(By.tagName("a"));
+        inputElements.get(3).click();
         
         
-        inputElement = driver.findElement(By.id("j_idt39:redirectToSignupId"));
-        inputElement.click();
+        inputElements = driver.findElements(By.tagName("a"));
+        inputElements.get(6).click();
         
+        
+        //make user
         inputElement = driver.findElement(By.id("form:username"));
         inputElement.sendKeys("dawsonTestUser");
         
@@ -147,58 +120,60 @@ public class SeleniumTest {
         inputElement.click();
         
         
-        //              making an order              
-        
-        inputElement = driver.findElement(By.id("j_idt9:cartIconNav"));
-        inputElement.click();
-        
-        inputElement = driver.findElement(By.id("j_idt44:j_idt46"));
-        inputElement.click();
-        
-        inputElement = driver.findElement(By.id("j_idt38:creditC"));
-        inputElement.sendKeys("4111111111111111");
-        
-        inputElement = driver.findElement(By.id("j_idt38:expDate"));
-        inputElement.sendKeys("12/2222");
-        
-        inputElement = driver.findElement(By.id("j_idt38:cvv"));
-        inputElement.sendKeys("123");
-        
-        inputElement = driver.findElement(By.id("j_idt38:nameCard"));
-        inputElement.sendKeys("Bobby");
-        
-        inputElement = driver.findElement(By.id("j_idt38:address"));
-        inputElement.sendKeys("dawson 3223");
-        
-        inputElement = driver.findElement(By.id("j_idt38:City"));
-        inputElement.sendKeys("Montreal");
         
         
-        inputElement = driver.findElement(By.className("j_idt38:j_idt74"));
-        inputElement.click();
-        
-        
-        inputElement = driver.findElement(By.className("j_idt9:cartIconNav"));
-        inputElement.click();
-        
-        */
-        wait.until(ExpectedConditions.urlToBe("http://localhost:8080/music_store/index.xxhtml"));
-
-    }
-    
-    private WebElement getButton(String text){
-        WebElement selected = null ;
-        
-        List<WebElement> inputElements = new ArrayList<WebElement>();
         inputElements = driver.findElements(By.tagName("a"));
+        inputElements.get(4).click();
         
-        for(WebElement item:inputElements){
-            if(item.getText().equals("")){
-                selected = item;
-            }
-        }
+        driver.navigate().to("http://localhost:8080/music_store/login.xhtml");
         
-        return selected;
+        //complete login
+        inputElements = driver.findElements(By.className("login-input"));
+        inputElements.get(0).clear();
+        inputElements.get(0).sendKeys("dawsonTestUser");
+        inputElements.get(1).clear();
+        inputElements.get(1).sendKeys("thisIsMyPassword2021");
+        
+        inputElements = driver.findElements(By.className("loginButton"));
+        inputElements.get(0).click();
+        
+        driver.navigate().to("http://localhost:8080/music_store/checkout.xhtml");
+        
+        
+        
+        //fill the checkout
+        inputElements = driver.findElements(By.className("input_info"));
+        inputElements.get(0).sendKeys("4111111111111111");
+        
+        inputElements = driver.findElements(By.className("input_info"));
+        inputElements.get(1).sendKeys("12/2022");
+        
+        inputElements = driver.findElements(By.className("input_info"));
+        inputElements.get(2).sendKeys("123");
+        
+        inputElements = driver.findElements(By.className("input_info"));
+        inputElements.get(3).sendKeys("bobby");
+        
+        inputElements = driver.findElements(By.className("input_info"));
+        inputElements.get(4).sendKeys("dawson 123");
+        
+        inputElements = driver.findElements(By.className("input_info"));
+        inputElements.get(5).sendKeys("Monttreal");
+        
+        inputElements = driver.findElements(By.tagName("button"));
+        inputElements.get(0).click();
+        
+        
+        inputElement = driver.findElement(By.className("ui-radiobutton-icon"));
+        inputElement.click();
+        
+        inputElements = driver.findElements(By.tagName("button"));
+        inputElements.get(2).click();
+        
+        
+        
+        wait.until(ExpectedConditions.urlToBe("http://localhost:8080/music_store/index.xhtml"));
+
     }
 
     @After

@@ -17,11 +17,11 @@
             <!-- Promotion banner -->
             <ui:define name="dataTableContent">
 
-                <h:form>
+                <h:form id="form">
                     <p:growl id="messages" showDetail="true"/>
                     <p:dataTable id="dt-orders" widgetVar="dtOrders" var="orders" value="#{orderBean.ordersList}"
                                  reflow="true" 
-                                 selection="#{orderBean.selectedOrder}" rowKey="#{orderBean.tableKey}" paginator="true"
+                                 selection="#{orderBean.selectedOrder}" rowKey="#{orderBean.order_id}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  filteredValue="#{orderBean.filteredOrdersList}">
 
@@ -32,37 +32,61 @@
                                 </span>
                             </div>
                         </f:facet>
-                        
-<!--                        <p:column style="width:2rem">
+
+                        <p:column style="width:2rem">
                             <p:rowToggler/>
-                        </p:column>-->
-                        
+                        </p:column>
+
                         <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdId}" sortBy="#{orders.orderId}" 
                                   filterBy="#{orders.orderId}" filterMatchMode="contains">
                             <h:outputText value="#{orders.orderId}" />
                         </p:column> 
-                        
+
                         <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdTotal}" sortBy="#{orders.orderTotal}" 
                                   filterBy="#{orders.orderTotal}" filterMatchMode="contains">
                             <h:outputText value="#{orders.orderTotal}" />
                         </p:column>
-                        
+
                         <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdClntNum}" sortBy="#{orders.clientNumber.clientNumber}" 
                                   filterBy="#{orders.clientNumber.clientNumber}" filterMatchMode="contains">
                             <h:outputText value="#{orders.clientNumber.clientNumber}" />
                         </p:column>
-                        
+
                         <p:column style="width:calc(20px)" headerText="#{msgs.managerOrdDate}" sortBy="#{orders.orderDate}" 
                                   filterBy="#{orders.orderDate}" filterMatchMode="contains">
                             <h:outputText value="#{orders.orderDate}" />
                         </p:column>
-                        
+
                         <p:column style="width:calc(50px)" headerText="#{msgs.managerOrdVisible}">
                             <p:selectBooleanButton id="visible" value="#{orders.visible}" onLabel="Visible" offLabel="Not Visible" style="width:6rem">
                                 <p:ajax update="visible" listener="#{orderBean.showVisibleMessage()}"/>
                             </p:selectBooleanButton>
                         </p:column>
 
+                        <p:rowExpansion styleClass="rowExpan">
+                            <p:dataTable id="dt-OrderTrackList" widgetVar="dtOrderTrackList" style="margin:auto 80px; background:blue"
+                                         var="OrderTrackItem" value="#{orderBean.getOrderTrackList(orders.orderId)}">
+                                
+                                <p:column style="width:calc(20px)" headerText="Order Id">
+                                    <h:outputText value="#{OrderTrackItem.orderId.orderId}"/>
+                                </p:column>
+                                
+                                <p:column style="width:calc(20px)" headerText="Track Id">
+                                    <h:outputText value="#{OrderTrackItem.trackId.trackId}"/>
+                                </p:column>
+                                
+                                <p:column style="width:calc(20px)" headerText="Track Name">
+                                    <h:outputText value="#{orderBean.returnTrackName(OrderTrackItem.trackId.trackId)}"/>
+                                </p:column>
+                                
+                                <p:column style="width:calc(50px)" headerText="Order Track Visibility">
+                            <p:selectBooleanButton id="visible" value="#{orders.visible}" onLabel="Visible" offLabel="Not Visible" style="width:6rem">
+                                <p:ajax update="visible" listener="#{orderBean.showVisibleMessage()}"/>
+                            </p:selectBooleanButton>
+                        </p:column>
+
+                            </p:dataTable>
+                        </p:rowExpansion>
                     </p:dataTable>
 
                 </h:form>

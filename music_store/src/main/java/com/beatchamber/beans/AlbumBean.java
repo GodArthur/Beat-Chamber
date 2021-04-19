@@ -1,12 +1,15 @@
 package com.beatchamber.beans;
 
 import com.beatchamber.entities.Albums;
+import com.beatchamber.entities.CustomerReviews;
 import com.beatchamber.entities.Genres;
+import com.beatchamber.entities.Tracks;
 import com.beatchamber.jpacontroller.AlbumsJpaController;
 import com.beatchamber.jpacontroller.GenreToAlbumJpaController;
 import com.beatchamber.jpacontroller.GenresJpaController;
 import com.beatchamber.jpacontroller.TracksJpaController;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -35,11 +38,11 @@ public class AlbumBean implements Serializable {
     private List<Albums> similarAlbums;
     private MusicComponent sendComponent;
     
-    
     @Inject
     private AlbumsJpaController albumController;
     
-    @Inject TracksJpaController trackController;
+    @Inject 
+    private TracksJpaController trackController;
     
     @Inject
     private GenresJpaController genreController;
@@ -183,6 +186,31 @@ public class AlbumBean implements Serializable {
     public boolean isEmptyCart(){
         
         return albumController.retrieveAllAlbumsInTheCart().size() <= 0 && trackController.retrieveAllTracksInTheCart().size() <= 0;
+    }
+    
+    /**
+     * @return The average rating of all tracks
+     */
+    public int getAlbumRating() {
+        //Getting each average rating of each track in an ArrayList
+        List<Tracks> albumTracks = trackController.findTracksByAlbum(this.albumId);
+        List<Double> tracksAverageRatings = new ArrayList<>();
+        //Using Korjon's method to get the average rating of a track
+        albumTracks.forEach(track -> {
+            tracksAverageRatings.add(track.getCustomerReviewsList().stream()
+                    .filter(review -> review.getApprovalStatus() == true)
+                    .mapToInt(review -> review.getRating()).average()
+                    .orElse(0));
+        });
+        
+        double averageRating = 0;
+        int totalTracks = 0;
+        
+        //Number of tracks that have an average rating
+        totalTracks = tracksAverageRatings.stream().filter(trackAverageRating -> (trackAverageRating > 0)).map(_item -> 1).reduce(totalTracks, Integer::sum);
+        //Getting the average rating of all the rated tracks
+        averageRating = tracksAverageRatings.stream().map(trackRating -> trackRating).reduce(averageRating, (accumulator, _item) -> accumulator + _item);
+        return (int) averageRating / totalTracks;
     }
 
     public String toString(){
