@@ -27,10 +27,16 @@ public class OrderAlbumInfo {
 
     private Date orderDate;
 
+    /**
+     * constructor
+     */
     public OrderAlbumInfo() {
 
     }
 
+    /**
+     * constructor
+     */
     public OrderAlbumInfo(int albumid, String albumTitle, double listPrice, double salePrice, Date orderDate) {
         this.albumid = albumid;
         this.albumTitle = albumTitle;
@@ -39,42 +45,92 @@ public class OrderAlbumInfo {
         this.orderDate = orderDate;
     }
 
+    /**
+     * get the album id
+     *
+     * @return
+     */
     public int getAlbumId() {
         return albumid;
     }
 
+    /**
+     * get the list price
+     *
+     * @return
+     */
     public double getListPrice() {
         return listPrice;
     }
 
+    /**
+     * get the sale price
+     *
+     * @return
+     */
     public double getSalePrice() {
         return salePrice;
     }
 
+    /**
+     * get the album title
+     *
+     * @return
+     */
     public String getAlbumTitle() {
         return albumTitle;
     }
 
+    /**
+     * get the order date
+     *
+     * @return
+     */
     public Date getOrderDate() {
         return orderDate;
     }
 
+    /**
+     * set the album id
+     *
+     * @param albumid
+     */
     public void setAlbumid(int albumid) {
         this.albumid = albumid;
     }
 
+    /**
+     * set the sales price
+     *
+     * @param salePrice
+     */
     public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
     }
 
+    /**
+     * set the list price
+     *
+     * @param listPrice
+     */
     public void setListPrice(double listPrice) {
         this.listPrice = listPrice;
     }
 
+    /**
+     * set the album title
+     *
+     * @param albumTitle
+     */
     public void setAlbumTitle(String albumTitle) {
         this.albumTitle = albumTitle;
     }
 
+    /**
+     * set the order date
+     *
+     * @param orderDate
+     */
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
