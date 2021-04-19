@@ -19,7 +19,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- *
+ *This is the backing bean for the top seller tab in the report page
  * @author Massimo Di Girolamo
  */
 @Named("TopSellersBean")
