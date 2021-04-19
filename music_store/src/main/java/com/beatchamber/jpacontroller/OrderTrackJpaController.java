@@ -10,7 +10,7 @@ import javax.persistence.criteria.Root;
 import com.beatchamber.entities.Tracks;
 import com.beatchamber.exceptions.IllegalOrphanException;
 import com.beatchamber.exceptions.RollbackFailureException;
-import com.beatchamber.jpacontroller.exceptions.NonexistentEntityException;
+import com.beatchamber.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -180,7 +180,7 @@ public class OrderTrackJpaController implements Serializable {
     }
 
     
-    public List<OrderTrack> getOrderTracksByOrderId(Integer orderId) {
+    public List<OrderTrack> getOrderTracksByOrderId(Orders orderId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<OrderTrack> cq = cb.createQuery(OrderTrack.class);
         Root<OrderTrack> rt = cq.from(OrderTrack.class);
